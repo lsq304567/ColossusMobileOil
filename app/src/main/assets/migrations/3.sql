@@ -1,0 +1,1 @@
+alter table TripStock add CustomerCode TEXT;

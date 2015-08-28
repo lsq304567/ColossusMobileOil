@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="#000000"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+    
+    <LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_margin="1dp"
+		android:orientation="vertical"
+		android:background="#ffffff">
+    
+        <com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line
+            android:id="@+id/setup_license_device_infoview"
+			android:layout_width="fill_parent"
+			android:layout_height="40dp" />
+        
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dip"
+	        android:layout_weight="1"
+	        android:orientation="vertical">
+
+			<TextView
+			    android:id="@+id/setup_license_device_message"
+			    android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="30dp"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp"
+				android:gravity="center_horizontal"
+				android:text="Message"
+				android:textSize="16sp"
+				android:textStyle="bold"
+				android:textColor="#000000" />
+						
+			<TableLayout
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_margin="10dp"
+			    android:stretchColumns="0,2">
+			    
+			    <TableRow
+					android:layout_marginTop="10dp">
+		
+					<TextView
+						android:layout_width="0dip"
+						android:layout_height="wrap_content"
+						android:gravity="right"
+						android:text="Serial no."
+						android:textSize="14sp"
+						android:textColor="#000000" />
+			
+					<TextView android:layout_width="20dp" />
+								
+					<TextView 
+						android:id="@+id/setup_license_device_serial_no"
+						android:layout_width="0dip"
+						android:layout_height="wrap_content"
+						android:text="BBCD1234"
+						android:textSize="14sp"
+						android:textColor="#000000" />
+			        
+			    </TableRow>
+			    
+			    <TableRow 
+					android:layout_marginTop="10dp">
+		
+					<TextView
+						android:id="@+id/setup_license_device_pin_tv"
+						android:layout_width="0dip"
+						android:layout_height="wrap_content"
+						android:gravity="right"
+						android:text="Company PIN"
+						android:textSize="14sp"
+						android:textColor="#000000" />
+
+					<TextView android:layout_width="20dp" />
+								
+					<com.swiftsoft.colossus.mobileoil.view.MyEditText 
+						android:id="@+id/setup_license_device_pin_et"
+						android:layout_width="0dip"
+						android:layout_height="wrap_content"
+						android:singleLine="true" />
+			        
+			    </TableRow>
+			    
+			</TableLayout>
+				
+			<TextView
+			    android:id="@+id/setup_license_device_error"
+			    android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="30dp"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp"
+				android:gravity="center_horizontal"
+				android:text="Error message"
+				android:textSize="16sp"
+				android:textStyle="bold"
+				android:textColor="#000000" />
+			
+		</LinearLayout>
+
+    	<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/copyright"
+			android:gravity="center" />
+	        	
+	    <com.swiftsoft.colossus.mobileoil.view.MyNumericKeypad
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent" />
+	    	   	
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			style="@android:style/ButtonBar"
+			android:background="#343234">
+	
+			<Button
+		        android:id="@+id/setup_license_device_retry"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Retry"
+				android:textSize="18sp"
+				android:padding="20sp" />
+	
+			<Button
+		        android:id="@+id/setup_license_device_next"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Next"
+				android:textSize="18sp" 
+				android:padding="20sp" />
+	
+		</LinearLayout>
+	
+	</LinearLayout>
+	
+</LinearLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:background="#000000"
+    android:orientation="vertical">
+    
+	<TextView 
+     android:layout_width="fill_parent"
+     android:layout_height="wrap_content"
+     android:gravity="center"
+     android:text="1 unread message"
+     android:textColor="#ffffff"
+     android:textSize="14sp"
+     android:textStyle="bold" />
+
+	<TextView 
+     android:layout_width="fill_parent"
+     android:layout_height="wrap_content"
+     android:gravity="center"
+     android:text="Touch for more"
+     android:textColor="#ffffff"
+     android:textSize="12sp"
+     android:textStyle="bold" />
+		
+</LinearLayout>

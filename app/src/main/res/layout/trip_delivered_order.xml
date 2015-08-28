@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="#000000"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+    
+    <LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_margin="1dp"
+		android:orientation="vertical"
+		android:background="#ffffff">
+    
+        <TextView 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+	        android:background="#444444"
+	        android:gravity="center_horizontal"
+            android:text="Delivered order"
+            android:textSize="20sp"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
+        
+    	<TextView 
+	        android:id="@+id/trip_delivered_order_no"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:background="#444444"
+	        android:gravity="center_horizontal"
+	        android:text="12345"
+	        android:textColor="#ffffff"
+	        android:textSize="20sp"
+	        android:textStyle="bold" />
+	    
+		<ScrollView
+			android:id="@android:id/list"
+			android:layout_width="match_parent"
+			android:layout_height="0dip"
+			android:layout_weight="1"
+			android:drawSelectorOnTop="false"
+			android:padding="10sp">
+	
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+	
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:paddingTop="3dip"
+					android:text="Customer name"
+					android:textColor="#0000ff" />
+	
+				<TextView
+					android:id="@+id/trip_delivered_order_customer"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:singleLine="false"
+					android:text="Joe Bloggs\nMountain view\nCalifornia"
+					android:padding="3dip"
+					android:layout_margin="0sp" />
+	
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:paddingTop="3dip"
+					android:text="Delivery address"
+					android:textColor="#0000ff" />
+	
+				<TextView
+					android:id="@+id/trip_delivered_order_delAddress"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:singleLine="false"
+					android:text="Main street\nUSA"
+					android:padding="3dip" />
+	
+				<TableLayout
+					android:id="@+id/trip_delivered_order_product_table"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="10dp"
+					android:background="@android:color/black"
+					android:stretchColumns="*">
+	
+					<TableRow>
+						<TextView
+							android:layout_width="0px"
+							android:layout_weight="2"
+							android:layout_marginTop="1dp"
+							android:layout_marginLeft="1dp"
+							android:layout_marginBottom="1dp"
+							android:background="@android:color/white"
+							android:gravity="center_horizontal"
+							android:text="Product"
+							android:textSize="16sp"
+							android:textColor="#0000ff" />
+						<TextView
+							android:layout_width="0px"
+							android:layout_weight="1"
+							android:layout_marginTop="1dp"
+							android:layout_marginLeft="1dp"
+							android:layout_marginBottom="1dp"
+							android:background="@android:color/white"
+							android:gravity="center_horizontal"
+							android:text="Delivered"
+							android:textSize="16sp"
+							android:textColor="#0000ff" />
+						<TextView
+							android:layout_width="0px"
+							android:layout_weight="1"
+							android:layout_marginTop="1dp"
+							android:layout_marginLeft="1dp"
+							android:layout_marginRight="1dp"
+							android:layout_marginBottom="1dp"
+							android:background="@android:color/white"
+							android:gravity="center_horizontal"
+							android:text="Value"
+							android:textSize="16sp"
+							android:textColor="#0000ff" />
+					</TableRow>
+	
+				</TableLayout>
+	
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="10dp" />
+	
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal">
+	
+					<TableLayout
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:stretchColumns="*">
+	
+						<TableRow>
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.75" />
+							
+							<TextView
+								android:textColor="#0000ff"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="VAT" />
+							
+							<TextView
+								android:id="@+id/trip_delivered_order_vat"
+								android:gravity="right"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="0.00"
+								android:paddingRight="10dp" />
+						</TableRow>
+	
+						<TableRow android:id="@+id/trip_delivered_order_acc_balance_row">
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.75" />
+							
+							<TextView
+								android:textColor="#0000ff"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="A/c balance" />
+							
+							<TextView
+								android:id="@+id/trip_delivered_order_acc_balance"
+								android:gravity="right"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="0.00"
+								android:paddingRight="10dp" />
+						</TableRow>
+	
+						<TableRow>
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.75" />
+							
+							<TextView
+								android:textColor="#0000ff"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="Total" />
+							
+							<TextView
+								android:id="@+id/trip_delivered_order_total"
+								android:gravity="right"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="0.00"
+								android:paddingRight="10dp" />
+						</TableRow>
+	
+						<TableRow
+						    android:paddingTop="10dp">
+						    
+						</TableRow>
+						
+						<TableRow android:id="@+id/trip_delivered_order_paid_office_row">
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.75" />
+							
+							<TextView
+								android:textColor="#0000ff"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="Paid office" />
+							
+							<TextView
+								android:id="@+id/trip_delivered_order_paid_office"
+								android:gravity="right"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="0.00"
+								android:paddingRight="10dp" />
+						</TableRow>
+						
+						<TableRow android:id="@+id/trip_delivered_order_paid_driver_row">
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.75" />
+							
+							<TextView
+								android:textColor="#0000ff"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="Paid driver" />
+	
+							<TextView
+								android:id="@+id/trip_delivered_order_paid_driver"
+								android:gravity="right"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="0.00"
+								android:paddingRight="10dp" />
+						</TableRow>
+						
+						<TableRow android:id="@+id/trip_delivered_order_discount_row">
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.75" />
+							
+							<TextView
+								android:textColor="#0000ff"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="Discount" />
+							
+							<TextView
+								android:id="@+id/trip_delivered_order_discount"
+								android:gravity="right"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="0.00"
+								android:paddingRight="10dp" />
+						</TableRow>
+											
+						<TableRow android:id="@+id/trip_delivered_order_subtotal_row">
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.75" />
+							
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.5" />
+	
+							<TextView
+								android:gravity="right"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="14sp"
+								android:text="----------------"
+								android:paddingRight="10dp" />
+						</TableRow>
+						
+						<TableRow android:id="@+id/trip_delivered_order_outstanding_row">
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.75" />
+							
+							<TextView
+								android:textColor="#0000ff"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="Outstanding" />
+							
+							<TextView
+								android:id="@+id/trip_delivered_order_outstanding"
+								android:gravity="right"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="0.00"
+								android:paddingRight="10dp" />
+						</TableRow>
+	
+					</TableLayout>
+				</LinearLayout>
+	
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:paddingTop="3dip"
+					android:text="Terms"
+					android:textColor="#0000ff" />
+	
+				<TextView
+					android:id="@+id/trip_delivered_order_terms"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:singleLine="false"
+					android:text="terms"
+					android:padding="3dip" />
+	
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:paddingTop="3dip"
+					android:text="Notes"
+					android:textColor="#0000ff" />
+	
+				<TextView
+					android:id="@+id/trip_delivered_order_notes"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:singleLine="false"
+					android:text="notes"
+					android:padding="3dip" />
+				
+				<TableLayout
+					android:id="@+id/trip_delivered_order_signature"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="20sp"
+					android:stretchColumns="2">
+				
+					<TableRow>
+					   
+						<LinearLayout
+							android:layout_width="0dp"
+							android:layout_weight="2"
+							android:layout_height="wrap_content"
+							android:orientation="vertical">
+						    
+		   					<TextView
+								android:layout_width="match_parent"
+								android:layout_height="wrap_content"
+								android:paddingTop="3dip"
+								android:text="Customer signature"
+								android:textColor="#0000ff" />
+	
+		   					<LinearLayout
+								android:layout_width="match_parent"
+								android:layout_height="wrap_content"
+								android:background="#7f7f7f"
+								android:padding="1dp">
+		
+								<ImageView
+									android:id="@+id/trip_delivered_order_signature_image"
+									android:layout_width="match_parent"
+									android:layout_height="wrap_content"
+									android:adjustViewBounds="true"
+									android:background="#ffffff"
+									android:contentDescription="Signature" />
+		
+							</LinearLayout>
+		   					
+		   						   					
+	   					</LinearLayout>
+	
+						<LinearLayout
+							android:layout_width="0dp"
+							android:layout_weight="1"
+							android:layout_height="wrap_content"
+							android:paddingLeft="5dp"
+							android:orientation="vertical">
+						
+							<TextView
+								android:layout_width="match_parent"
+								android:layout_height="wrap_content"
+								android:paddingTop="3dip"
+								android:text="Name"
+								android:textColor="#0000ff" />
+	
+				    		<TextView
+								android:id="@+id/trip_delivered_order_signature_name"
+								android:layout_width="match_parent"
+								android:layout_height="wrap_content"
+								android:singleLine="false"
+								android:text="customer signature name"
+								android:padding="3dip" />
+		
+							<TextView
+								android:layout_width="match_parent"
+								android:layout_height="wrap_content"
+								android:paddingTop="3dip"
+								android:text="Date"
+								android:textColor="#0000ff" />
+		
+							<TextView
+								android:id="@+id/trip_delivered_order_signature_datetime"
+								android:layout_width="match_parent"
+								android:layout_height="wrap_content"
+								android:singleLine="false"
+								android:text="customer signature datetime"
+								android:padding="3dip" />
+	
+						</LinearLayout>   										    					    
+					    
+					</TableRow>									    
+									    
+			    </TableLayout>
+				
+			</LinearLayout>
+			
+		</ScrollView>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			style="@android:style/ButtonBar"
+			android:background="#444444">
+	
+			<Button
+		        android:id="@+id/trip_delivered_order_back"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Back"
+				android:textSize="18sp"
+				android:padding="20sp" />
+	
+			<Button
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text=""
+				android:textSize="18sp"
+				android:padding="20sp"
+				android:visibility="invisible" />
+	
+			<Button
+		        android:id="@+id/trip_delivered_order_reprint"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Reprint"
+				android:textSize="18sp"
+				android:padding="20sp" />
+	
+		</LinearLayout>
+	
+	</LinearLayout>
+	
+</LinearLayout>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="#000000"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+    
+    <LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_margin="1dp"
+		android:orientation="vertical"
+		android:background="#ffffff">
+    
+        <com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line
+            android:id="@+id/trip_undelivered_lc_duringdelivery_infoview"
+			android:layout_width="fill_parent"
+			android:layout_height="40dp" />
+        
+		<ScrollView
+			android:id="@android:id/list"
+			android:layout_width="match_parent"
+			android:layout_height="0dip"
+			android:layout_weight="1"
+			android:drawSelectorOnTop="false"
+			android:padding="10sp">
+	
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+	
+				<TextView
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content"
+				    android:layout_marginTop="10dp"
+				    android:layout_marginLeft="20dp"
+				    android:layout_marginRight="20dp"
+				    android:text="Did the line product change during the last delivery?\n\nIf so please update it below."
+				    android:textSize="20sp"
+				    android:gravity="center_horizontal" 
+				    />
+				
+				<LinearLayout 
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content"
+				    android:orientation="horizontal"
+				    android:layout_marginTop="30dp">
+							    	
+				    <LinearLayout 
+		                android:layout_width="0px"
+		                android:layout_height="wrap_content"
+		                android:layout_gravity="center_vertical"
+		                android:layout_weight="1"
+		                android:orientation="vertical">
+		            
+			            <TextView
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:text="Line product"
+			                android:textSize="16sp" />
+		
+			            <TextView
+			                android:id="@+id/trip_undelivered_lc_duringdelivery_line_product"
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:text="(none)"
+			                android:textSize="16sp"
+			                android:textStyle="bold" />
+	
+		            </LinearLayout>
+				    
+				    <Button 
+				        android:id="@+id/trip_undelivered_lc_duringdelivery_line_product_change"
+				        android:layout_width="0dp"
+				        android:layout_weight="1"
+				        android:layout_height="wrap_content"
+				        android:text="Change" />
+				
+			    </LinearLayout>
+				
+			</LinearLayout>
+			
+		</ScrollView>
+	
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			style="@android:style/ButtonBar"
+			android:background="#343234">
+	
+			<Button
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Back"
+				android:textSize="18sp"
+				android:padding="20sp"
+				android:visibility="invisible" />
+	
+			<Button
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Spare"
+				android:textSize="18sp"
+				android:padding="20sp"
+				android:visibility="invisible" />
+	
+			<Button
+		        android:id="@+id/trip_undelivered_lc_duringdelivery_next"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Next"
+				android:padding="20sp"
+				android:textSize="18sp" />
+	
+		</LinearLayout>
+	
+	</LinearLayout>
+	
+</LinearLayout>

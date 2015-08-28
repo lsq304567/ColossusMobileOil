@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="0dip"
+		android:layout_weight="1"
+		android:layout_margin="10dp"
+		android:orientation="vertical"
+		android:background="@drawable/black_rectangle"
+		android:padding="10dp">
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="Signature capture"
+			android:textSize="24sp"
+			android:textStyle="bold"
+			android:textColor="#000000"
+			android:gravity="center" />
+
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="10sp"
+			android:orientation="vertical" >
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Type name of person signing."
+				android:textSize="18sp"
+				android:textColor="#000000" />
+
+			<EditText
+				android:id="@+id/signature_name_name"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="5sp"
+				android:textSize="18sp"
+				android:inputType="textCapWords" />
+
+		</LinearLayout>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="40sp"
+			android:text="Then tap 'OK' to record signature"
+			android:textSize="18sp"
+			android:textColor="#000000" />
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		style="@android:style/ButtonBar"
+		android:background="#343234">
+
+		<Button
+			android:id="@+id/signature_name_ok"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:text="OK"
+			android:textSize="18sp"
+			android:padding="20sp" />
+
+		<Button
+			android:id="@+id/signature_name_cancel"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:text="Cancel"
+			android:textSize="18sp"
+			android:padding="20sp" />
+
+	</LinearLayout>
+
+</LinearLayout>

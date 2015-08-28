@@ -1,0 +1,1 @@
+alter table Trip add LoadingNotes TEXT;

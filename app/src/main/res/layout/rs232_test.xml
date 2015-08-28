@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@drawable/background_gradient">
+
+	<TextView
+		android:id="@+id/rs232_message"
+		android:text="Message"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="5dp"
+		android:paddingBottom="5dp"
+		android:gravity="center"
+		android:layout_gravity="center"
+		android:background="#000000"
+		android:textSize="24sp"
+		android:textColor="#ffffff"
+		android:layout_marginTop="10sp"
+		android:layout_marginBottom="10sp" />
+
+
+	<LinearLayout
+		android:id="@+id/rs232_connect"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+	
+		<Button 
+			android:id="@+id/rs232_connect_button"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="Connect to RS232 device"
+			android:textSize="18sp"
+			android:onClick="onConnectClicked"/>
+		
+	</LinearLayout>
+
+	<LinearLayout
+		android:id="@+id/rs232_send_data"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="3">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="10dp"
+				android:text="Data to send"
+				android:paddingRight="10dp" />
+
+			<EditText
+				android:id="@+id/rs232_data"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:singleLine="true" />
+
+		</LinearLayout>
+
+		<Button
+			android:layout_width="130dp"
+			android:layout_height="wrap_content"
+			android:text="GO"
+			android:layout_weight="1"
+			android:onClick="onSendData"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp" />
+
+		<Button
+			android:layout_width="130dp"
+			android:layout_height="wrap_content"
+			android:text="NUL"
+			android:layout_weight="1"
+			android:onClick="onSendNUL"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp" />
+
+		<Button
+			android:layout_width="130dp"
+			android:layout_height="wrap_content"
+			android:text="ETX"
+			android:layout_weight="1"
+			android:onClick="onSendETX"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp" />
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<Button
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="Cmd 50"
+			android:layout_weight="1"
+			android:onClick="onCmd50"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp" />
+
+		<Button
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="Cmd 51"
+			android:layout_weight="1"
+			android:onClick="onCmd51"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp" />
+
+		<Button
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="Cmd 53"
+			android:layout_weight="1"
+			android:onClick="onCmd53"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp" />
+
+		<Button
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="Cmd 54"
+			android:layout_weight="1"
+			android:onClick="onCmd54"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp" />
+
+	</LinearLayout>
+	
+	<ScrollView
+		android:id="@+id/rs232_ascii_scrollview"
+		android:layout_width="match_parent"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:layout_margin="10dp"
+		android:orientation="vertical"
+		android:background="@drawable/black_rectangle"
+		android:padding="5dp">
+		
+		<TextView
+			android:id="@+id/rs232_ascii_textview"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:background="#ffffff"
+			android:text="ASCII view"
+			android:textSize="18sp"
+			android:textColor="#000000" />
+	</ScrollView>
+	
+	<ScrollView
+		android:id="@+id/rs232_hex_scrollview"
+		android:layout_width="match_parent"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:layout_marginLeft="10dp"
+		android:layout_marginRight="10dp"
+		android:layout_marginBottom="10dp"
+		android:orientation="vertical"
+		android:background="@drawable/black_rectangle"
+		android:padding="5dp">
+		
+		<TextView
+			android:id="@+id/rs232_hex_textview"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:background="#ffffff"
+			android:text="HEX view"
+			android:textSize="18sp"
+			android:textColor="#000000" />
+	</ScrollView>
+
+</LinearLayout>

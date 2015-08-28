@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+	android:background="@drawable/background_gradient"
+	android:orientation="vertical"
+	android:padding="10sp">
+	
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="#000000">
+
+        <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dip"
+	        android:layout_weight="1"
+	        android:layout_margin="1dp"
+	        android:orientation="vertical"
+	        android:background="#ffffff">
+
+            <TextView 
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#000000"
+                android:text="Settings"
+                android:textColor="#ffffff"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:gravity="center_horizontal"
+                android:padding="20dp" />
+            
+            <TableLayout 
+                android:layout_width="fill_parent"
+                android:layout_height="0dip"
+                android:layout_weight="1"
+                android:layout_margin="10dp"
+                android:stretchColumns="*">
+                
+                <TableRow android:layout_marginBottom="10dp">
+                    
+					<LinearLayout
+					    android:layout_width="0px"
+					    android:layout_height="match_parent"
+					    android:layout_weight="2"
+					    android:orientation="vertical" >
+					    
+					    <TextView
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:text="Printer"
+			                android:textSize="18sp"
+							android:textStyle="bold"
+							android:textColor="#0000ff" />
+				    
+					    <TextView
+					        android:id="@+id/settings_printer_name"
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:text="(None)" />
+			    					    					    
+					    <TextView
+					        android:id="@+id/settings_printer_address"
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:text="" />
+			    					    					    
+					</LinearLayout>
+					
+				    <Button
+				        android:layout_width="0px"
+		        		android:layout_weight="1.5"
+				        android:layout_height="wrap_content"
+				        android:text="Change"
+				        android:textSize="18sp"
+				        android:padding="20sp"
+				        android:onClick="onPrinterChange" />
+                    
+				</TableRow>
+
+                <TableRow android:layout_marginBottom="50dp">
+
+                    <TextView 
+					    android:layout_width="0px"
+					    android:layout_weight="2"
+					    android:layout_height="match_parent" />
+                    
+				    <Button
+				        android:id="@+id/settings_printer_test"
+				        android:layout_width="0px"
+		        		android:layout_weight="1.5"
+				        android:layout_height="wrap_content"
+				        android:text="Test"
+				        android:textSize="18sp"
+				        android:padding="20sp"
+				        android:onClick="onPrinterTest" />
+                    
+				</TableRow>
+                				
+                <TableRow android:layout_marginBottom="10dp">
+                    
+					<LinearLayout
+					    android:layout_width="0px"
+					    android:layout_height="match_parent"
+					    android:layout_weight="2"
+					    android:orientation="vertical" >
+					    
+					    <TextView
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:text="MeterMate"
+			                android:textSize="18sp"
+							android:textStyle="bold"
+							android:textColor="#0000ff" />
+				    
+					    <TextView
+					        android:id="@+id/settings_metermate_name"
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:text="(None)" />
+			    					    					    
+					    <TextView
+					        android:id="@+id/settings_metermate_address"
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:text="" />
+			    					    					    
+					</LinearLayout>
+					
+				    <Button
+				        android:layout_width="0px"
+		        		android:layout_weight="1.5"
+				        android:layout_height="wrap_content"
+				        android:text="Change"
+				        android:textSize="18sp"
+				        android:padding="20sp"
+				        android:onClick="onMeterMateChange" />
+                    
+				</TableRow>
+
+				<LinearLayout
+				    android:layout_width="0px"
+				    android:layout_height="match_parent"
+				    android:layout_weight="2"
+				    android:orientation="vertical" >
+				    
+				    <TextView
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:text="URL"
+		                android:textSize="18sp"
+						android:textStyle="bold"
+						android:textColor="#0000ff" />
+
+				    <TextView
+				        android:id="@+id/settings_url_tv"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:text="(None)" />
+		    					    
+				    <EditText
+				        android:id="@+id/settings_url_et"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:text="(None)"
+				        android:inputType="textUri" />
+		    					    					    
+				</LinearLayout>
+				    				    					
+				<LinearLayout
+				    android:layout_width="0px"
+				    android:layout_height="match_parent"
+				    android:layout_weight="2"
+				    android:orientation="vertical" >
+				    
+				    <TextView
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:text="Serial no"
+		                android:textSize="18sp"
+						android:textStyle="bold"
+						android:textColor="#0000ff" />
+			    
+				    <TextView
+				        android:id="@+id/settings_serial_no"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:text="(None)" />
+		    					    					    
+				</LinearLayout>
+					
+			</TableLayout>
+            
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				style="@android:style/ButtonBar"
+				android:background="#343234">
+		
+				<Button
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:text="OK"
+					android:textSize="18sp"
+					android:padding="20sp"
+					android:onClick="onOKClicked"  />
+
+				<Button
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:text="Cancel"
+					android:textSize="18sp"
+					android:padding="20sp"
+					android:onClick="onCancelClicked" />		
+				
+			</LinearLayout>
+
+		</LinearLayout>
+			
+	</LinearLayout>
+
+</LinearLayout>

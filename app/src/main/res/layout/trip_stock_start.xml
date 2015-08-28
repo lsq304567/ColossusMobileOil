@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="#000000"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+    
+    <LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_margin="1dp"
+		android:orientation="vertical"
+		android:background="#ffffff">
+    
+        <com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line
+            android:id="@+id/trip_stock_start_infoview"
+			android:layout_width="fill_parent"
+			android:layout_height="40dp" />
+        
+	    <TextView 
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="10dp"
+	        android:gravity="center_horizontal"
+	        android:text="Start of trip"
+	        android:textSize="20sp"
+	        android:textStyle="bold" />
+	    	    
+	    <ScrollView 
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dip"
+	        android:layout_weight="1">
+
+	        <LinearLayout 
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:orientation="vertical">
+			    
+				<com.swiftsoft.colossus.mobileoil.view.MyStockSummary
+					android:id="@+id/trip_stock_start_summary"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content" />
+				
+	            <TextView 
+	                android:id="@+id/trip_stock_start_loading_note1"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_gravity="center"
+	                android:text="Loading notes"
+	                android:textSize="16sp"
+					android:textColor="#000000" />
+	        	    
+	            <TextView 
+	                android:id="@+id/trip_stock_start_loading_note2"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_gravity="center"
+	                android:text="Loading notes 222"
+	                android:textSize="14sp"
+					android:textColor="#000000" />
+	        	    
+	            <LinearLayout 
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content"
+				    android:orientation="horizontal">
+
+				    <Button
+				        android:id="@+id/trip_stock_start_load"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:layout_weight="1"
+						android:layout_margin="7dp"
+						android:text="Load product"
+						android:textSize="16sp"
+						android:padding="20sp" />
+				        
+				    <Button
+				        android:id="@+id/trip_stock_start_return"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:layout_weight="1"
+						android:layout_margin="7dp"
+						android:text="Return product"
+						android:textSize="16sp"
+						android:padding="20sp" />
+
+				</LinearLayout>
+
+				<Button
+				    android:visibility="invisible"
+					android:layout_width="match_parent"
+					android:layout_height="0dip"
+					android:layout_weight="1"
+					android:layout_margin="7dp"
+					android:text="Other stock actions"
+					android:textSize="16sp"
+					android:padding="20sp" />
+								    				        		    
+			</LinearLayout>
+	
+		</ScrollView>
+		
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			style="@android:style/ButtonBar"
+			android:background="#343234">
+	
+			<Button
+		        android:id="@+id/trip_stock_start_back"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Back"
+				android:textSize="18sp"
+				android:padding="20sp" />
+	
+			<Button
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Spare"
+				android:textSize="18sp"
+				android:padding="20sp"
+				android:visibility="invisible" />
+	
+			<Button
+		        android:id="@+id/trip_stock_start_next"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Next"
+				android:padding="20sp"
+				android:textSize="18sp" />
+	
+		</LinearLayout>
+	
+	</LinearLayout>
+	
+</LinearLayout>

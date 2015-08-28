@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:padding="5sp">
+
+	<TextView
+		android:id="@+id/trips_row1"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Trip no and date"
+		android:textSize="18sp"
+		android:textStyle="bold"
+		android:textColor="#0000ff" />
+
+	<TextView
+		android:id="@+id/trips_row2"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="number of orders" 
+		android:textSize="14sp" />
+
+	<TextView
+		android:id="@+id/trips_row3"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="product(s) delivered"
+		android:textSize="14sp" />
+
+</LinearLayout>

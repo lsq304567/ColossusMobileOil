@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="0dip"
+		android:layout_weight="1"
+		android:layout_marginTop="10dp"
+		android:layout_marginBottom="10dp"
+		android:orientation="vertical"
+		android:paddingTop="10dp"
+		android:paddingBottom="10dp">
+
+		<ScrollView
+			android:id="@android:id/list"
+			android:layout_width="match_parent"
+			android:layout_height="0dip"
+			android:layout_weight="1">
+
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
+
+				<com.swiftsoft.colossus.mobileoil.view.MyTankerImageView
+					android:id="@+id/stock_summary_tanker"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center"
+					android:scaleType="centerCrop"
+					android:src="@drawable/tanker" />
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center"
+					android:text="Stock by product"
+					android:textSize="16sp"
+					android:textColor="#000000" />
+
+				<TableLayout
+					android:id="@+id/stock_summary_by_product_table"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="2sp"
+					android:layout_marginLeft="10dp"
+					android:layout_marginRight="10dp"
+					android:stretchColumns="*"
+					android:background="#000000">
+
+					<TableRow>
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginTop="1dp"
+							android:layout_marginLeft="1dp"
+							android:layout_marginBottom="1dp"
+							android:background="@android:color/white"
+							android:gravity="center_horizontal"
+							android:text="Product"
+							android:textSize="14sp"
+							android:textColor="#0000ff" />
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginTop="1dp"
+							android:layout_marginLeft="1dp"
+							android:layout_marginBottom="1dp"
+							android:background="@android:color/white"
+							android:gravity="center_horizontal"
+							android:text="On board"
+							android:textSize="14sp"
+							android:textColor="#0000ff" />
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginTop="1dp"
+							android:layout_marginLeft="1dp"
+							android:layout_marginBottom="1dp"
+							android:background="@android:color/white"
+							android:gravity="center_horizontal"
+							android:text="Required"
+							android:textSize="14sp"
+							android:textColor="#0000ff" />
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_margin="1dp"
+							android:background="@android:color/white"
+							android:gravity="center_horizontal"
+							android:text="Spare"
+							android:textSize="14sp"
+							android:textColor="#0000ff" />
+
+					</TableRow>
+
+				</TableLayout>
+
+				<TextView
+					android:id="@+id/stock_summary_by_compartment"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center"
+					android:layout_marginTop="10dp"
+					android:text="Stock by compartment"
+					android:textSize="16sp"
+					android:textColor="#000000" />
+
+				<TableLayout
+					android:id="@+id/stock_summary_by_compartment_table"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="2sp"
+					android:layout_marginLeft="10dp"
+					android:layout_marginRight="10dp"
+					android:stretchColumns="*"
+					android:background="#000000">
+
+					<TableRow>
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginTop="1dp"
+							android:layout_marginLeft="1dp"
+							android:layout_marginBottom="1dp"
+							android:background="@android:color/white"
+							android:gravity="center_horizontal"
+							android:text="Comp."
+							android:textSize="14sp"
+							android:textColor="#0000ff" />
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginTop="1dp"
+							android:layout_marginLeft="1dp"
+							android:layout_marginBottom="1dp"
+							android:background="@android:color/white"
+							android:gravity="center_horizontal"
+							android:text="Product"
+							android:textSize="14sp"
+							android:textColor="#0000ff" />
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginTop="1dp"
+							android:layout_marginLeft="1dp"
+							android:layout_marginBottom="1dp"
+							android:background="@android:color/white"
+							android:gravity="center_horizontal"
+							android:text="Capacity"
+							android:textSize="14sp"
+							android:textColor="#0000ff" />
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_margin="1dp"
+							android:background="@android:color/white"
+							android:gravity="center_horizontal"
+							android:text="On board"
+							android:textSize="14sp"
+							android:textColor="#0000ff" />
+
+					</TableRow>
+
+				</TableLayout>
+
+			</LinearLayout>
+
+		</ScrollView>
+
+	</LinearLayout>
+
+</LinearLayout>

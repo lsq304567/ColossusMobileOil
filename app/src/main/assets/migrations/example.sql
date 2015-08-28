@@ -1,0 +1,6 @@
+alter table TABLENAME add COLUMN1 INTEGER;
+alter table TABLENAME add COLUMN2 TEXT;
+alter table TABLENAME add COLUMN3 REAL;
+alter table TABLENAME add COLUMN4 NUMERIC;
+
+

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="#000000"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+    
+    <LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_margin="1dp"
+		android:orientation="vertical"
+		android:background="#ffffff">
+    
+        <com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line
+            android:id="@+id/setup_register_device_infoview"
+			android:layout_width="fill_parent"
+			android:layout_height="40dp" />
+        
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dip"
+	        android:layout_weight="1"
+	        android:orientation="vertical">
+
+			<TextView
+			    android:id="@+id/setup_register_device_message"
+			    android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="30dp"
+				android:layout_marginLeft="10dp"
+				android:layout_marginRight="10dp"
+				android:layout_marginBottom="10dp"
+				android:gravity="center_horizontal"
+				android:text="Downloading data"
+				android:textSize="16sp"
+				android:textStyle="bold"
+				android:textColor="#000000" />
+
+				<TableLayout
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content"
+				    android:stretchColumns="0,2">
+				    
+				    <TableRow>
+
+				        <TextView
+							android:layout_width="0dip"
+							android:layout_height="wrap_content"
+							android:gravity="right"
+							android:text="Vehicles"
+							android:textSize="14sp"
+							android:textColor="#000000" />
+				
+						<TextView android:layout_width="20dp" />
+						
+						<CheckBox 
+							android:id="@+id/setup_register_device_vehicles"
+							android:layout_width="0dip"
+							android:layout_height="35dp"
+							android:enabled="false"
+							android:checked="true" />
+				        
+				    </TableRow>
+				    
+				    <TableRow>
+			
+						<TextView
+							android:layout_width="0dip"
+							android:layout_height="wrap_content"
+							android:gravity="right"
+							android:text="Drivers"
+							android:textSize="14sp"
+							android:textColor="#000000" />
+						
+						<TextView android:layout_width="20dp" />
+										
+						<CheckBox 
+							android:id="@+id/setup_register_device_drivers"
+							android:layout_width="0dip"
+							android:layout_height="35dp"
+							android:enabled="false"
+							android:checked="true" />
+				        
+				    </TableRow>
+				    
+				    <TableRow>
+			
+						<TextView
+							android:layout_width="0dip"
+							android:layout_height="wrap_content"
+							android:gravity="right"
+							android:text="Products"
+							android:textSize="14sp"
+							android:textColor="#000000" />
+
+						<TextView android:layout_width="20dp" />
+										
+						<CheckBox 
+							android:id="@+id/setup_register_device_products"
+							android:layout_width="0dip"
+							android:layout_height="35dp"
+							android:enabled="false"
+							android:checked="true" />
+				        
+				    </TableRow>
+				    
+				    <TableRow>
+			
+						<TextView
+							android:layout_width="0dip"
+							android:layout_height="wrap_content"
+							android:gravity="right"
+							android:text="Brands"
+							android:textSize="14sp"
+							android:textColor="#000000" />
+				
+						<TextView android:layout_width="20dp" />
+						
+						<CheckBox 
+							android:id="@+id/setup_register_device_brands"
+							android:layout_width="0dip"
+							android:layout_height="35dp"
+							android:enabled="false"
+							android:checked="true" />
+				        
+				    </TableRow>
+
+				</TableLayout>
+			
+		</LinearLayout>
+
+    	<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/copyright"
+			android:gravity="center" />
+	        	
+	    <com.swiftsoft.colossus.mobileoil.view.MyNumericKeypad
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent" />
+	    	   	
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			style="@android:style/ButtonBar"
+			android:background="#343234">
+	
+			<Button
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text=""
+				android:textSize="18sp"
+				android:padding="20sp"
+				android:visibility="invisible" />
+	
+			<Button
+		        android:id="@+id/setup_register_device_next"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Next"
+				android:textSize="18sp" 
+				android:padding="20sp" />
+	
+		</LinearLayout>
+	
+	</LinearLayout>
+	
+</LinearLayout>

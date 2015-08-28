@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:gravity="center"
+	android:layout_margin="1dp"
+	android:orientation="vertical"
+	android:background="#000000">
+
+    <TextView 
+        android:id="@+id/infoview_default_3_line_tv1"
+    	android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:text="Trip list"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:paddingTop="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        />
+            
+	<TextView 
+        android:id="@+id/infoview_default_3_line_tv2"
+		android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:text="Vehicle details"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        android:gravity="center_horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        />
+            
+	<TextView 
+        android:id="@+id/infoview_default_3_line_tv3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:text="Driver details"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        android:gravity="center_horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        />
+	
+ </LinearLayout>

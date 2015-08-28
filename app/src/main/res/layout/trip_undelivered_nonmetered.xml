@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="#000000"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+    
+    <LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_margin="1dp"
+		android:orientation="vertical"
+		android:background="#ffffff">
+    
+        <com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line
+            android:id="@+id/trip_undelivered_nonmetered_infoview"
+			android:layout_width="fill_parent"
+			android:layout_height="40dp" />
+        
+	    <TableLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dip"
+	        android:layout_weight="1"
+	        android:layout_marginTop="5dp"
+	        android:padding="10dp">
+	        
+	        <TableRow android:layout_marginTop="20dp" >
+
+	            <TextView
+	                android:layout_width="0px"
+	                android:layout_weight="1"
+	                android:layout_height="wrap_content"
+	                android:text="Product"
+	                android:textSize="16sp" />
+
+	            <TextView
+	                android:id="@+id/trip_undelivered_nonmetered_product"
+	                android:layout_width="0px"
+	                android:layout_weight="1"
+	                android:layout_height="wrap_content"
+	                android:text="None"
+	                android:textSize="16sp"
+	                android:textStyle="bold" />
+	            
+	        </TableRow>
+	        
+	        <TableRow android:layout_marginTop="20dp" >
+
+	            <TextView
+	                android:layout_width="0px"
+	                android:layout_weight="1"
+	                android:layout_height="wrap_content"
+	                android:text="Ordered quantity"
+	                android:textSize="16sp" />
+
+	            <TextView
+	                android:id="@+id/trip_undelivered_nonmetered_ordered_qty"
+	                android:layout_width="0px"
+	                android:layout_weight="1"
+	                android:layout_height="wrap_content"
+	                android:text="0"
+	                android:textSize="16sp"
+	                android:textStyle="bold" />
+	            
+	        </TableRow>
+	        
+	        <TableRow android:layout_marginTop="20dp">
+
+				<TextView
+					android:layout_width="0px"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:layout_gravity="center_vertical"
+					android:text="Delivered quantity"
+					android:textSize="16sp" />
+	            	        
+				<com.swiftsoft.colossus.mobileoil.view.MyEditText
+					android:id="@+id/trip_undelivered_nonmetered_delivered_qty"
+					android:layout_width="0px"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:singleLine="true" />
+					
+	        </TableRow>
+
+	    </TableLayout>
+
+	    <com.swiftsoft.colossus.mobileoil.view.MyNumericKeypad
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent" />
+	    	   	
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			style="@android:style/ButtonBar"
+			android:background="#343234">
+	
+			<Button
+				android:id="@+id/trip_undelivered_nonmetered_ok"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="OK"
+				android:textSize="18sp"
+				android:padding="20sp" />
+	
+			<Button
+				android:id="@+id/trip_undelivered_nonmetered_cancel"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Cancel"
+				android:padding="20sp"
+				android:textSize="18sp" />
+	
+		</LinearLayout>
+
+	</LinearLayout>
+	
+</LinearLayout>

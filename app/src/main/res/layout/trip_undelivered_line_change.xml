@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="#000000"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+    
+    <LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_margin="1dp"
+		android:orientation="vertical"
+		android:background="#ffffff">
+    
+        <com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line
+            android:id="@+id/trip_undelivered_lc_infoview"
+			android:layout_width="fill_parent"
+			android:layout_height="40dp" />
+        
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dip"
+	        android:layout_weight="1"
+	        android:orientation="vertical">
+	    
+		    <TableLayout
+		        android:id="@+id/trip_undelivered_lc_bycompartment"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="5dp"
+		        android:padding="10dp">
+		        
+		        <TableRow>
+	
+					<TextView
+						android:layout_width="0px"
+						android:layout_height="wrap_content"
+						android:layout_weight="1.4"
+						android:layout_gravity="center_vertical"
+						android:text="Source"
+						android:textSize="16sp" />
+		            	        
+					<LinearLayout
+					    android:layout_width="0px"
+					    android:layout_height="wrap_content"
+					    android:layout_weight="2.6"
+					    android:orientation="horizontal">
+					    
+					    <Button
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:paddingLeft="20dp"
+							android:paddingRight="20dp"
+							android:text="-"
+							android:textSize="16sp"
+							android:onClick="onDrivingUndeliveredLcFromMinusClicked" />
+			
+						<TextView
+							android:id="@+id/trip_undelivered_lc_from_no"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_gravity="center_vertical"
+							android:paddingLeft="5dp"
+							android:paddingRight="5dp"
+							android:text="1"
+							android:textSize="16sp"
+							android:textStyle="bold" />
+			
+						<Button
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:paddingLeft="20dp"
+							android:paddingRight="20dp"
+							android:text="+"
+							android:textSize="16sp"
+							android:onClick="onDrivingUndeliveredLcFromPlusClicked" />
+			
+					</LinearLayout>
+		
+					<LinearLayout
+					    android:layout_width="0px"
+					    android:layout_height="wrap_content"
+					    android:layout_weight="4"
+					    android:orientation="vertical">
+					
+					    <TextView
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:text="Onboard:"
+							android:textSize="16sp" />			
+	
+						<TextView
+						    android:id="@+id/trip_undelivered_lc_from_onboard"
+							android:layout_width="fill_parent"
+						    android:layout_height="wrap_content"
+						    android:text="1,500 l of Kero"
+						    android:textSize="16sp"
+						    android:textStyle="bold" />
+	
+					</LinearLayout>
+							    
+		        </TableRow>
+		        
+	
+		        <TableRow android:layout_marginTop="10dp">
+	
+					<TextView
+						android:layout_width="0px"
+						android:layout_height="wrap_content"
+						android:layout_weight="1.4"
+						android:layout_gravity="center_vertical"
+						android:text="Return"
+						android:textSize="16sp" />
+		            	        
+					<LinearLayout
+					    android:layout_width="0px"
+					    android:layout_height="wrap_content"
+					    android:layout_weight="2.6"
+					    android:orientation="horizontal">
+					    
+					    <Button
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:paddingLeft="20dp"
+							android:paddingRight="20dp"
+							android:text="-"
+							android:textSize="16sp"
+							android:onClick="onDrivingUndeliveredLcToMinusClicked" />
+			
+						<TextView
+							android:id="@+id/trip_undelivered_lc_to_no"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_gravity="center_vertical"
+							android:paddingLeft="5dp"
+							android:paddingRight="5dp"
+							android:text="2"
+							android:textSize="16sp"
+							android:textStyle="bold" />
+			
+						<Button
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:paddingLeft="20dp"
+							android:paddingRight="20dp"
+							android:text="+"
+							android:textSize="16sp"
+							android:onClick="onDrivingUndeliveredLcToPlusClicked" />
+			
+					</LinearLayout>
+		
+					<LinearLayout
+					    android:layout_width="0px"
+					    android:layout_height="wrap_content"
+					    android:layout_weight="4"
+					    android:orientation="vertical">
+					
+					    <TextView
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:text="Ullage:"
+							android:textSize="16sp" />			
+	
+						<TextView
+						    android:id="@+id/trip_undelivered_lc_to_ullage"
+							android:layout_width="fill_parent"
+						    android:layout_height="wrap_content"
+						    android:text="4,500 l"
+						    android:textSize="16sp"
+						    android:textStyle="bold" />
+	
+					</LinearLayout>
+							    
+		        </TableRow>
+	
+		    </TableLayout>
+		    
+		    <TableLayout
+		        android:id="@+id/trip_undelivered_lc_notbycompartment"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="5dp"
+		        android:padding="10dp">
+		        
+		        <TableRow>
+	
+					<TextView
+						android:layout_width="0px"
+						android:layout_height="wrap_content"
+						android:layout_weight="1.5"
+						android:layout_gravity="center_vertical"
+						android:text="From"
+						android:textSize="16sp" />
+		            	        
+					<TextView
+					    android:id="@+id/trip_undelivered_lc_from_product"
+					    android:layout_width="0px"
+					    android:layout_height="wrap_content"
+					    android:layout_weight="6.5"
+					    android:text="Kero"
+					    android:textSize="16sp"
+					    android:textStyle="bold" />
+						
+				</TableRow>
+		        
+	
+		        <TableRow android:layout_marginTop="10dp">
+		            
+					<TextView
+						android:layout_width="0px"
+						android:layout_height="wrap_content"
+						android:layout_weight="1.5"
+						android:layout_gravity="center_vertical"
+						android:text="To"
+						android:textSize="16sp" />
+		            	        
+					<TextView
+					    android:id="@+id/trip_undelivered_lc_to_product"
+					    android:layout_width="0px"
+					    android:layout_height="wrap_content"
+					    android:layout_weight="6.5"
+					    android:text="Gas oil"
+					    android:textSize="16sp"
+					    android:textStyle="bold" />
+	
+		        </TableRow>
+	
+		    </TableLayout>
+		    
+		    <TableLayout
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp"
+		        android:paddingLeft="10dp"
+		        android:paddingRight="10dp">
+	
+		        <TableRow>
+	
+					<TextView
+				        android:layout_width="0px"
+				        android:layout_weight="1.5"
+						android:layout_height="wrap_content"
+						android:text="Preset"
+						android:textSize="16sp" />
+			
+					<com.swiftsoft.colossus.mobileoil.view.MyEditText
+						android:id="@+id/trip_undelivered_lc_preset"
+				        android:layout_width="0px"
+				        android:layout_weight="2.5"
+						android:layout_height="wrap_content"
+						android:singleLine="true" />
+					
+					<TextView
+					    android:layout_width="0px"
+					    android:layout_weight="4"
+					    android:layout_height="wrap_content" />
+					
+			    </TableRow>
+				
+			</TableLayout>
+
+		</LinearLayout>
+		
+	    <com.swiftsoft.colossus.mobileoil.view.MyNumericKeypad
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent" />
+	    	   	
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			style="@android:style/ButtonBar"
+			android:background="#343234">
+	
+			<Button
+		        android:id="@+id/trip_undelivered_lc_back"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Back"
+				android:textSize="18sp"
+				android:padding="20sp" />
+	
+			<Button
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Spare"
+				android:textSize="18sp"
+				android:padding="20sp"
+				android:visibility="invisible" />
+	
+			<Button
+		        android:id="@+id/trip_undelivered_lc_next"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Next"
+				android:padding="20sp"
+				android:textSize="18sp" />
+	
+		</LinearLayout>
+	
+	</LinearLayout>
+	
+</LinearLayout>

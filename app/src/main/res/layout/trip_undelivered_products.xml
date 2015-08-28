@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="#000000"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+    
+    <LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_margin="1dp"
+		android:orientation="vertical"
+		android:background="#ffffff">
+    
+        <com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line
+            android:id="@+id/trip_undelivered_products_infoview"
+			android:layout_width="fill_parent"
+			android:layout_height="40dp" />
+        
+		<ScrollView
+			android:id="@android:id/list"
+			android:layout_width="match_parent"
+			android:layout_height="0dip"
+			android:layout_weight="1"
+			android:drawSelectorOnTop="false"
+			android:padding="10sp">
+	
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+	
+				<TableLayout
+					android:id="@+id/trip_undelivered_products_table"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="25dp"
+					android:stretchColumns="*"
+					android:background="@android:color/black">
+	
+					<TableRow>
+	
+						<TextView
+							android:layout_width="0px"
+							android:layout_weight="2"
+							android:layout_marginLeft="1dp"
+							android:layout_marginTop="1dp"
+							android:layout_marginBottom="1dp"
+							android:background="@android:color/white"
+							android:textColor="#0000ff"
+							android:gravity="center_horizontal"
+							android:text="Product"
+							android:textSize="16sp" />
+	
+						<TextView
+							android:layout_width="0px"
+							android:layout_weight="1"
+							android:layout_marginLeft="1dp"
+							android:layout_marginTop="1dp"
+							android:layout_marginBottom="1dp"
+							android:background="@android:color/white"
+							android:textColor="#0000ff"
+							android:gravity="center_horizontal"
+							android:text="Ordered"
+							android:textSize="16sp" />
+	
+						<TextView
+							android:layout_width="0px"
+							android:layout_weight="1"
+							android:layout_marginLeft="1dp"
+							android:layout_marginRight="1dp"
+							android:layout_marginTop="1dp"
+							android:layout_marginBottom="1dp"
+							android:background="@android:color/white"
+							android:textColor="#0000ff"
+							android:gravity="center_horizontal"
+							android:text="Delivered"
+							android:textSize="16sp" />
+	
+					</TableRow>
+	
+				</TableLayout>
+	
+				<LinearLayout 
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content"
+				    android:orientation="horizontal"
+				    android:layout_marginBottom="20dp">
+					
+				    <LinearLayout 
+		                android:layout_width="0px"
+		                android:layout_height="wrap_content"
+		                android:layout_gravity="center_vertical"
+		                android:layout_weight="1"
+		                android:orientation="vertical">
+		            
+			            <TextView
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:text="Delivery method"
+			                android:textSize="16sp" />
+		
+			            <TextView
+			                android:id="@+id/trip_undelivered_products_delivery_method"
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:text="Hose"
+			                android:textSize="16sp"
+			                android:textStyle="bold" />
+	
+		            </LinearLayout>
+				    
+				    <Button 
+				        android:id="@+id/trip_undelivered_products_delivery_method_change"
+				        android:layout_width="0dp"
+				        android:layout_weight="1"
+				        android:layout_height="wrap_content"
+				        android:text="Change" />"
+				
+				</LinearLayout>
+				
+				<LinearLayout 
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content"
+				    android:orientation="horizontal"
+				    android:layout_marginBottom="20dp">
+					
+				    <LinearLayout 
+		                android:layout_width="0px"
+		                android:layout_height="wrap_content"
+		                android:layout_gravity="center_vertical"
+		                android:layout_weight="1"
+		                android:orientation="vertical">
+		            
+			            <TextView
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:text="Line product"
+			                android:textSize="16sp" />
+		
+			            <TextView
+			                android:id="@+id/trip_undelivered_products_line_product"
+			                android:layout_width="wrap_content"
+			                android:layout_height="wrap_content"
+			                android:text="Kero"
+			                android:textSize="16sp"
+			                android:textStyle="bold" />
+	
+		            </LinearLayout>
+				    
+				    <Button 
+				        android:id="@+id/trip_undelivered_products_line_product_change"
+				        android:layout_width="0dp"
+				        android:layout_weight="1"
+				        android:layout_height="wrap_content"
+				        android:text="Change" />"
+				
+				</LinearLayout>
+				
+				<LinearLayout 
+				    android:id="@+id/trip_undelivered_products_line_change"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:orientation="vertical"
+				    android:background="#000000"
+				    android:padding="10dp">
+								
+					<TextView
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:layout_gravity="center_horizontal"
+					    android:text="Line change required"
+					    android:textSize="18sp"
+					    android:textColor="#ffffff"
+					    />
+								
+					<TextView
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:layout_gravity="center_horizontal"
+					    android:text="Tap Next to continue"
+					    android:textSize="18sp"
+					    android:textColor="#ffffff"
+					    />
+					
+				</LinearLayout>
+				
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="25dp"
+					android:padding="3dip"
+					android:text="Terms"
+					android:textColor="#0000ff" />
+	
+				<TextView
+					android:id="@+id/trip_undelivered_products_terms"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:singleLine="false"
+					android:text="terms"
+					android:padding="3dip" />
+	
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:padding="3dip"
+					android:text="Notes"
+					android:textColor="#0000ff" />
+	
+				<TextView
+					android:id="@+id/trip_undelivered_products_notes"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:singleLine="false"
+					android:text="notes"
+					android:padding="3dip" />
+	
+			</LinearLayout>
+			
+		</ScrollView>
+	
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			style="@android:style/ButtonBar"
+			android:background="#343234">
+	
+			<Button
+		        android:id="@+id/trip_undelivered_products_back"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Back"
+				android:textSize="18sp"
+				android:padding="20sp" />
+	
+			<Button
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Spare"
+				android:textSize="18sp"
+				android:padding="20sp"
+				android:visibility="invisible" />
+	
+			<Button
+		        android:id="@+id/trip_undelivered_products_next"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Next"
+				android:padding="20sp"
+				android:textSize="18sp" />
+	
+		</LinearLayout>
+	
+	</LinearLayout>
+	
+</LinearLayout>

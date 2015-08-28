@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="#000000"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+    
+    <LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_margin="1dp"
+		android:orientation="vertical"
+		android:background="#ffffff">
+    
+        <com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line
+            android:id="@+id/trip_undelivered_delivery_note_infoview"
+			android:layout_width="fill_parent"
+			android:layout_height="40dp" />
+        
+		<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="0dip"
+			android:layout_weight="1"
+			android:drawSelectorOnTop="false">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:padding="10dp">
+
+				<TableLayout
+					android:id="@+id/trip_undelivered_delivery_note_table"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:background="@android:color/black"
+					android:stretchColumns="*">
+
+					<TableRow
+					    android:layout_width="match_parent"
+						android:layout_height="match_parent">
+						
+						<TextView
+							android:layout_width="0px"
+							android:layout_weight="2"
+							android:layout_height="fill_parent"
+							android:layout_marginTop="1dp"
+							android:layout_marginLeft="1dp"
+							android:layout_marginBottom="1dp"
+							android:background="@android:color/white"
+							android:gravity="center_horizontal"
+							android:text="Product"
+							android:textSize="16sp"
+							android:textColor="#0000ff" />
+						<TextView
+							android:layout_width="0px"
+							android:layout_weight="1"
+							android:layout_height="fill_parent"
+							android:layout_marginTop="1dp"
+							android:layout_marginLeft="1dp"
+							android:layout_marginBottom="1dp"
+							android:background="@android:color/white"
+							android:gravity="center_horizontal"
+							android:text="Delivered"
+							android:textSize="16sp"
+							android:textColor="#0000ff" />
+						<TextView
+							android:layout_width="0px"
+							android:layout_weight="1"
+							android:layout_height="fill_parent"
+							android:layout_marginTop="1dp"
+							android:layout_marginLeft="1dp"
+							android:layout_marginRight="1dp"
+							android:layout_marginBottom="1dp"
+							android:background="@android:color/white"
+							android:gravity="center_horizontal"
+							android:text="Value"
+							android:textSize="16sp"
+							android:textColor="#0000ff" />
+						
+					</TableRow>
+
+				</TableLayout>
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="10dp" />
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical">
+
+					<TableLayout
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:stretchColumns="*">
+
+						<TableRow>
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.75" />
+							
+							<TextView
+								android:textColor="#0000ff"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="VAT" />
+							
+							<TextView
+								android:id="@+id/trip_undelivered_delivery_note_vat"
+								android:gravity="right"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="0.00"
+								android:paddingRight="10dp" />
+						</TableRow>
+
+						<TableRow android:id="@+id/trip_undelivered_delivery_note_acc_balance_row">
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.75" />
+							
+							<TextView
+								android:textColor="#0000ff"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="A/c balance" />
+							
+							<TextView
+								android:id="@+id/trip_undelivered_delivery_note_acc_balance"
+								android:gravity="right"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="0.00"
+								android:paddingRight="10dp" />
+						</TableRow>
+
+						<TableRow>
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.75" />
+							
+							<TextView
+								android:textColor="#0000ff"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="Total" />
+							
+							<TextView
+								android:id="@+id/trip_undelivered_delivery_note_total"
+								android:gravity="right"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="0.00"
+								android:paddingRight="10dp" />
+						</TableRow>
+
+						<TableRow
+						    android:paddingTop="10dp">
+						    
+						</TableRow>
+						
+						<TableRow android:id="@+id/trip_undelivered_delivery_note_paid_office_row">
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.75" />
+							
+							<TextView
+								android:textColor="#0000ff"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="Paid office" />
+							
+							<TextView
+								android:id="@+id/trip_undelivered_delivery_note_paid_office"
+								android:gravity="right"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="0.00"
+								android:paddingRight="10dp" />
+						</TableRow>
+						
+						<TableRow android:id="@+id/trip_undelivered_delivery_note_paid_driver_row">
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.75" />
+							
+							<TextView
+								android:textColor="#0000ff"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="Paid driver" />
+
+							<TextView
+								android:id="@+id/trip_undelivered_delivery_note_paid_driver"
+								android:gravity="right"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="0.00"
+								android:paddingRight="10dp" />
+						</TableRow>
+						
+						<TableRow android:id="@+id/trip_undelivered_delivery_note_discount_row">
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.75" />
+							
+							<TextView
+								android:textColor="#0000ff"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="Discount" />
+							
+							<TextView
+								android:id="@+id/trip_undelivered_delivery_note_discount"
+								android:gravity="right"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="0.00"
+								android:paddingRight="10dp" />
+						</TableRow>
+
+						<TableRow android:id="@+id/trip_undelivered_delivery_note_subtotal_row">
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.75" />
+							
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.5" />
+
+							<TextView
+								android:gravity="right"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="14sp"
+								android:text="----------------"
+								android:paddingRight="10dp" />
+						</TableRow>
+						
+						<TableRow android:id="@+id/trip_undelivered_delivery_note_outstanding_row">
+							<TextView
+								android:layout_width="0px"
+								android:layout_weight="1.75" />
+							
+							<TextView
+								android:textColor="#0000ff"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="Outstanding" />
+							
+							<TextView
+								android:id="@+id/trip_undelivered_delivery_note_outstanding"
+								android:gravity="right"
+								android:layout_width="0px"
+								android:layout_weight="1.5"
+								android:textSize="16sp"
+								android:text="0.00"
+								android:paddingRight="10dp" />
+						</TableRow>
+
+					</TableLayout>
+					
+				</LinearLayout>
+
+				<LinearLayout
+				    android:id="@+id/trip_undelivered_delivery_note_cash_discount_msg"				    
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content"
+				    android:orientation="vertical"
+				    android:paddingLeft="3dip"
+				    android:paddingRight="3dip"
+				    android:paddingTop="10dip"
+				    android:paddingBottom="10dip">
+				
+					<TextView
+					    android:id="@+id/trip_undelivered_delivery_note_cash_discount_msg1"
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:text="Please pay driver 89.63"
+						android:textSize="14sp"
+						android:textStyle="bold"
+						android:textColor="#000000" />
+	
+					<TextView
+					    android:id="@+id/trip_undelivered_delivery_note_cash_discount_msg2"
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:text="to receive a cash discount of 4.85"
+						android:textSize="14sp"
+						android:textStyle="bold"
+						android:textColor="#000000" />
+									
+				</LinearLayout>
+						
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:paddingTop="3dip"
+					android:text="Terms"
+					android:textColor="#0000ff" />
+
+				<TextView
+					android:id="@+id/trip_undelivered_delivery_note_terms"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:singleLine="false"
+					android:text="terms"
+					android:padding="3dip" />
+
+				<TableLayout
+					android:id="@+id/trip_undelivered_delivery_note_signature_table"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="20sp"
+					android:stretchColumns="2">
+				
+					<TableRow>
+					   
+						<LinearLayout
+							android:layout_width="0dp"
+							android:layout_weight="2"
+							android:layout_height="wrap_content"
+							android:orientation="vertical">
+						    
+		   					<TextView
+								android:layout_width="match_parent"
+								android:layout_height="wrap_content"
+								android:paddingTop="3dip"
+								android:text="Customer signature"
+								android:textColor="#0000ff" />
+
+		   					<LinearLayout
+								android:layout_width="match_parent"
+								android:layout_height="wrap_content"
+								android:background="#7f7f7f"
+								android:padding="1dp">
+		
+								<ImageView
+									android:id="@+id/trip_undelivered_delivery_note_signature_image"
+									android:layout_width="match_parent"
+									android:layout_height="wrap_content"
+									android:adjustViewBounds="true"
+									android:background="#ffffff" 
+									android:contentDescription="Signature"/>
+		
+							</LinearLayout>
+		   					
+		   						   					
+	   					</LinearLayout>
+	
+						<LinearLayout
+							android:layout_width="0dp"
+							android:layout_weight="1"
+							android:layout_height="wrap_content"
+							android:paddingLeft="5dp"
+							android:orientation="vertical">
+						
+							<TextView
+								android:layout_width="match_parent"
+								android:layout_height="wrap_content"
+								android:paddingTop="3dip"
+								android:text="Name"
+								android:textColor="#0000ff" />
+	
+				    		<TextView
+								android:id="@+id/trip_undelivered_delivery_note_signature_name"
+								android:layout_width="match_parent"
+								android:layout_height="wrap_content"
+								android:singleLine="false"
+								android:text="customer signature name"
+								android:padding="3dip" />
+		
+							<TextView
+								android:layout_width="match_parent"
+								android:layout_height="wrap_content"
+								android:paddingTop="3dip"
+								android:text="Date"
+								android:textColor="#0000ff" />
+		
+							<TextView
+								android:id="@+id/trip_undelivered_delivery_note_signature_datetime"
+								android:layout_width="match_parent"
+								android:layout_height="wrap_content"
+								android:singleLine="false"
+								android:text="customer signature datetime"
+								android:padding="3dip" />
+
+						</LinearLayout>   										    					    
+					    
+					</TableRow>									    
+									    
+			    </TableLayout>
+				
+			</LinearLayout>
+
+		</ScrollView>
+	    	    
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			style="@android:style/ButtonBar"
+			android:background="#343234">
+	
+			<Button
+		        android:id="@+id/trip_undelivered_delivery_note_payment"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Payment"
+				android:textSize="18sp"
+				android:padding="20sp" />
+	
+			<Button
+		        android:id="@+id/trip_undelivered_delivery_note_signature"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Signature"
+				android:textSize="18sp"
+				android:padding="20sp" />
+	
+			<Button
+		        android:id="@+id/trip_undelivered_delivery_note_next"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Next"
+				android:padding="20sp"
+				android:textSize="18sp" />
+	
+		</LinearLayout>
+	
+	</LinearLayout>
+	
+</LinearLayout>

@@ -1,0 +1,1 @@
+alter table TripOrderLine add DeliveredPrice REAL;

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="0dip"
+		android:layout_weight="1"
+		android:orientation="vertical">
+		
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:background="#000000"
+	        android:orientation="horizontal"
+	        android:padding="5dp">
+	        
+	    	<TextView 
+		        android:layout_width="0px"
+		        android:layout_weight="1"
+		        android:layout_height="wrap_content"
+		        android:text="Dip product"
+		        android:textColor="#ffffff"
+		        android:textSize="20sp"
+		        android:textStyle="bold" />
+	
+	        <TextView 
+	            android:id="@+id/driving_stock_dip_line"
+		        android:layout_width="0px"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:gravity="right"
+		        android:text="Line: Kero"
+		        android:textColor="#ffffff"
+		        android:textSize="20sp"
+		        android:textStyle="bold" />
+	    	
+		</LinearLayout>
+	    
+	    <TableLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="5dp"
+	        android:padding="10dp">
+	        
+	        <TableRow>
+
+				<TextView
+					android:layout_width="0px"
+					android:layout_height="wrap_content"
+					android:layout_weight="1.4"
+					android:layout_gravity="center_vertical"
+					android:text="Comp."
+					android:textSize="16sp" />
+	            	        
+				<LinearLayout
+				    android:layout_width="0px"
+				    android:layout_height="wrap_content"
+				    android:layout_weight="2.6"
+				    android:orientation="horizontal">
+				    
+				    <Button
+						android:id="@+id/driving_stock_dip_minus"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:paddingLeft="20dp"
+						android:paddingRight="20dp"
+						android:text="-"
+						android:textSize="16sp"
+						android:onClick="onDrivingStockDipMinusClicked" />
+		
+					<TextView
+						android:id="@+id/driving_stock_dip_no"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_gravity="center_vertical"
+						android:paddingLeft="5dp"
+						android:paddingRight="5dp"
+						android:text="1"
+						android:textSize="16sp"
+						android:textStyle="bold" />
+		
+					<Button
+						android:id="@+id/driving_stock_dip_plus"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:paddingLeft="20dp"
+						android:paddingRight="20dp"
+						android:text="+"
+						android:textSize="16sp"
+						android:onClick="onDrivingStockDipPlusClicked" />
+		
+				</LinearLayout>
+	
+				<LinearLayout
+				    android:layout_width="0px"
+				    android:layout_height="wrap_content"
+				    android:layout_weight="4"
+				    android:orientation="vertical">
+				
+				    <TextView
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:text="Onboard:"
+						android:textSize="16sp" />			
+
+					<TextView
+					    android:id="@+id/driving_stock_dip_onboard"
+						android:layout_width="fill_parent"
+					    android:layout_height="wrap_content"
+					    android:text="1,500 l of Kero"
+					    android:textSize="16sp"
+					    android:textStyle="bold" />
+
+				</LinearLayout>
+						    
+	        </TableRow>
+	        
+
+	        <TableRow android:layout_marginTop="20dp">
+
+				<TextView
+					android:layout_width="0px"
+					android:layout_height="wrap_content"
+					android:layout_weight="1.4"
+					android:layout_gravity="center_vertical"
+					android:text="Litres"
+					android:textSize="16sp" />
+	            	        
+				<LinearLayout
+				    android:layout_width="0px" 
+				    android:layout_weight="2.6"
+				    android:layout_height="wrap_content"
+				    android:paddingRight="10dp">
+				
+					<com.swiftsoft.colossus.mobileoil.view.MyEditText
+						android:id="@+id/driving_stock_dip_litres"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:singleLine="true" />
+					
+				</LinearLayout>
+				
+				<TextView
+				    android:layout_width="0px"
+				    android:layout_weight="4"
+				    android:layout_height="wrap_content"/>
+						    
+	        </TableRow>
+	        
+	    </TableLayout>
+	    
+	</LinearLayout>	    
+
+	
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:paddingLeft="4dp"
+		android:paddingRight="4dp"
+		android:paddingTop="4dp"
+		android:paddingBottom="0dp">
+
+		<Button
+			android:id="@+id/driving_stock_dip_ok"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:text="OK"
+			android:textSize="18sp"
+			android:padding="20sp"
+			android:onClick="onDrivingStockDipOKClicked" />
+
+		<Button
+			android:id="@+id/driving_stock_dip_cancel"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:text="Cancel"
+			android:textSize="18sp"
+			android:padding="20sp"
+			android:onClick="onDrivingStockDipCancelClicked" />
+
+	</LinearLayout>
+
+	<com.swiftsoft.colossus.mobileoil.view.MyNumericKeypad
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent" />
+
+</LinearLayout>

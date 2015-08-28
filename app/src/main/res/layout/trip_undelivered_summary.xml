@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="#000000"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+    
+    <LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_margin="1dp"
+		android:orientation="vertical"
+		android:background="#ffffff">
+    
+        <com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line
+            android:id="@+id/trip_undelivered_summary_infoview"
+			android:layout_width="fill_parent"
+			android:layout_height="40dp" />
+        
+		<ScrollView
+			android:id="@android:id/list"
+			android:layout_width="match_parent"
+			android:layout_height="0dip"
+			android:layout_weight="1"
+			android:drawSelectorOnTop="false"
+			android:padding="10sp">
+	
+			<LinearLayout
+				android:orientation="vertical"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+	
+				<TextView
+				    android:id="@+id/trip_undelivered_summary_delAddress_label"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:paddingTop="3dip"
+					android:text="Delivery address"
+					android:textColor="#0000ff" />
+	
+				<TextView
+					android:id="@+id/trip_undelivered_summary_delAddress"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:singleLine="false"
+					android:text="Main street\nUSA"
+					android:textStyle="bold"
+					android:padding="3dip" />
+	
+			    <TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:paddingTop="3dip"
+					android:text="Customer name"
+					android:textColor="#0000ff" />
+	
+				<TextView
+					android:id="@+id/trip_undelivered_summary_customer"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:singleLine="false"
+					android:text="Joe Bloggs\nMountain view\nCalifornia"
+					android:padding="3dip"
+					android:layout_margin="0sp" />
+	
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:paddingTop="3dip"
+					android:text="Phone number(s)"
+					android:textColor="#0000ff" />
+	
+				<TextView
+					android:id="@+id/trip_undelivered_summary_phone_nos"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:singleLine="false"
+					android:text="028 6638 8833"
+					android:padding="3dip"
+					android:layout_margin="0sp" />
+	
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:paddingTop="3dip"
+					android:text="Required by"
+					android:textColor="#0000ff" />
+	
+				<TextView
+					android:id="@+id/trip_undelivered_summary_requiredBy"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:text="4pm or after"
+					android:padding="3dip" />
+	
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:paddingTop="3dip"
+					android:text="Products"
+					android:textColor="#0000ff" />
+	
+				<TextView
+					android:id="@+id/trip_undelivered_summary_products"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:singleLine="false"
+					android:text="products"
+					android:padding="3dip" />
+	
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:paddingTop="3dip"
+					android:text="Terms"
+					android:textColor="#0000ff" />
+	
+				<TextView
+					android:id="@+id/trip_undelivered_summary_terms"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:singleLine="false"
+					android:text="terms"
+					android:padding="3dip" />
+	
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:paddingTop="3dip"
+					android:text="Notes"
+					android:textColor="#0000ff" />
+	
+				<TextView
+					android:id="@+id/trip_undelivered_summary_notes"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:singleLine="false"
+					android:text="notes"
+					android:padding="3dip" />
+				
+			</LinearLayout>
+			
+		</ScrollView>
+	
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			style="@android:style/ButtonBar"
+			android:background="#343234">
+	
+			<Button
+		        android:id="@+id/trip_undelivered_summary_back"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Back"
+				android:textSize="18sp"
+				android:padding="20sp" />
+	
+			<Button
+		        android:id="@+id/trip_undelivered_summary_skip"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Skip"
+				android:textSize="18sp"
+				android:padding="20sp" />
+	
+			<Button
+		        android:id="@+id/trip_undelivered_summary_next"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Next"
+				android:padding="20sp"
+				android:textSize="18sp" />
+	
+		</LinearLayout>
+	
+	</LinearLayout>
+	
+</LinearLayout>

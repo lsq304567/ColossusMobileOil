@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="0dip"
+		android:layout_weight="1"
+		android:background="#ffffff"
+		android:orientation="vertical">
+		
+		<LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginBottom="10dp"
+	        android:background="#000000"
+	        android:orientation="horizontal"
+	        android:padding="5dp">
+	        
+	    	<TextView 
+		        android:layout_width="0px"
+		        android:layout_weight="1"
+		        android:layout_height="wrap_content"
+		        android:text="Accept payment"
+		        android:textColor="#ffffff"
+		        android:textSize="20sp"
+		        android:textStyle="bold" />
+
+	    </LinearLayout>
+    
+		<TableLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:stretchColumns="*">
+
+				<TableRow android:id="@+id/trip_undelivered_payment_cash">
+				    
+				    <TextView
+						android:layout_width="0px"
+						android:layout_weight="0.5"
+						android:text="" /> 
+				    
+				    <TextView
+						android:layout_width="0px"
+						android:layout_weight="1"
+						android:layout_gravity="center_vertical"
+						android:gravity="right"
+						android:text="Cash received" 
+						android:textSize="16sp"
+						android:textColor="#0000ff" />
+					
+					<com.swiftsoft.colossus.mobileoil.view.MyEditText
+						android:id="@+id/trip_undelivered_payment_cash_received"
+						android:layout_width="0px"
+						android:layout_weight="1"
+						android:layout_marginLeft="10dp"
+						android:layout_marginRight="10dp"
+						android:gravity="right"
+						android:textSize="18sp"
+						android:singleLine="true" />
+								
+				</TableRow>
+
+				<TableRow android:id="@+id/trip_undelivered_payment_cheque">
+				    
+				    <TextView
+						android:layout_width="0px"
+						android:layout_weight="0.5"
+						android:text="" /> 
+				    
+				    <TextView
+						android:layout_width="0px"
+						android:layout_weight="1"
+						android:layout_gravity="center_vertical"
+						android:gravity="right"
+						android:text="Cheque received" 
+						android:textSize="16sp"
+						android:textColor="#0000ff" />
+					
+					<com.swiftsoft.colossus.mobileoil.view.MyEditText
+						android:id="@+id/trip_undelivered_payment_cheque_received"
+						android:layout_width="0px"
+						android:layout_weight="1"
+						android:layout_marginLeft="10dp"
+						android:layout_marginRight="10dp"
+						android:gravity="right"
+						android:textSize="18sp"
+						android:singleLine="true" />
+								
+				</TableRow>
+
+				<TableRow android:id="@+id/trip_undelivered_payment_voucher">
+				    
+				    <TextView
+						android:layout_width="0px"
+						android:layout_weight="0.5"
+						android:text="" /> 
+				    
+					<TextView
+						android:layout_width="0px"
+						android:layout_weight="1"
+						android:layout_gravity="center_vertical"
+						android:gravity="right"
+						android:text="Voucher received" 
+						android:textSize="16sp"
+						android:textColor="#0000ff" />
+					
+					<com.swiftsoft.colossus.mobileoil.view.MyEditText
+						android:id="@+id/trip_undelivered_payment_voucher_received"
+						android:layout_width="0px"
+						android:layout_weight="1"
+						android:layout_marginLeft="10dp"
+						android:layout_marginRight="10dp"
+						android:gravity="right"
+						android:textSize="18sp"
+						android:singleLine="true" />
+								
+				</TableRow>
+
+				<TableRow>
+				    
+				    <TextView
+						android:layout_width="0px"
+						android:layout_weight="0.5"
+    					android:layout_height="1dip"
+						android:text="" /> 
+				    
+				    <TextView
+						android:layout_width="0px"
+						android:layout_weight="1"
+    					android:layout_height="1dip"
+						android:text="" 
+						android:textSize="16sp"
+						android:textColor="#0000ff" />
+					
+				 	<View
+						android:layout_width="0px"
+						android:layout_weight="1"
+    					android:layout_height="1dip"
+						android:layout_marginLeft="10dp"
+						android:layout_marginRight="10dp"
+						android:paddingRight="20dp"
+    					android:background="#000000" />
+				 
+				</TableRow>
+				
+				<TableRow>
+				    
+				    <TextView
+						android:layout_width="0px"
+						android:layout_weight="0.5"
+						android:text="" /> 
+				    
+				    <TextView
+						android:layout_width="0px"
+						android:layout_weight="1"
+						android:layout_gravity="center_vertical"
+						android:gravity="right"
+						android:text="Paid driver"
+						android:textSize="16sp"
+						android:textColor="#0000ff" />
+					
+					<TextView
+						android:id="@+id/trip_undelivered_payment_paid_driver"
+						android:layout_width="0px"
+						android:layout_weight="1"
+						android:layout_marginLeft="10dp"
+						android:layout_marginRight="10dp"
+						android:paddingRight="20dp"
+						android:gravity="right"
+						android:text="0.00"
+						android:textSize="18sp"
+						android:textColor="#000000" />
+					
+				</TableRow>
+				
+		    	<TableRow android:id="@+id/trip_undelivered_payment_paid_office_row">
+				    
+				    <TextView
+						android:layout_width="0px"
+						android:layout_weight="0.5"
+						android:text="" /> 
+				    
+				    <TextView
+						android:layout_width="0px"
+						android:layout_weight="1"
+						android:layout_gravity="center_vertical"
+						android:gravity="right"
+						android:text="Paid office"
+						android:textSize="16sp"
+						android:textColor="#0000ff" />
+					
+					<TextView
+						android:id="@+id/trip_undelivered_payment_paid_office"
+						android:layout_width="0px"
+						android:layout_weight="1"
+						android:layout_marginLeft="10dp"
+						android:layout_marginRight="10dp"
+						android:paddingRight="20dp"
+						android:gravity="right"
+						android:text="0.00"
+						android:textSize="18sp"
+						android:textColor="#000000" />
+					
+				</TableRow>
+				
+		</TableLayout>
+
+		<LinearLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:orientation="vertical"
+		    android:padding="8dip"
+		    >
+		
+			<TextView 
+			    android:layout_height="0dip" 
+				android:layout_width="fill_parent"
+				android:layout_weight="1" />
+			
+			<TextView
+			    android:id="@+id/trip_undelivered_payment_message"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_horizontal"
+				android:text="Pay driver 89.63 for cash discount of 4.85"
+				android:textSize="16sp"
+				android:textColor="#000000" />
+			
+			<TextView
+			    android:id="@+id/trip_undelivered_payment_terms"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_horizontal"
+				android:text="Terms: 7 days"
+				android:textSize="16sp"
+				android:textColor="#000000" />
+		
+		</LinearLayout>
+		
+	</LinearLayout>
+
+	<com.swiftsoft.colossus.mobileoil.view.MyNumericKeypad
+	    android:id="@+id/trip_undelivered_payment_keypad"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent" />
+	
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		style="@android:style/ButtonBar"
+		android:background="#343234">
+
+		<Button
+			android:id="@+id/trip_undelivered_payment_ok"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:text="OK"
+			android:textSize="18sp"
+			android:padding="20sp" />
+
+		<Button
+			android:id="@+id/trip_undelivered_payment_cancel"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:text="Cancel"
+			android:textSize="18sp"
+			android:padding="20sp" />
+
+	</LinearLayout>
+
+</LinearLayout>

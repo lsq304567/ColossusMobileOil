@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="#000000"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+    
+    <LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_margin="1dp"
+		android:orientation="vertical"
+		android:background="#ffffff">
+    
+        <com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line
+            android:id="@+id/trip_undelivered_metermate_infoview"
+			android:layout_width="fill_parent"
+			android:layout_height="40dp" />
+        
+    	<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="0dip"
+			android:layout_weight="1"
+			android:layout_margin="10dp"
+			android:orientation="vertical"
+			android:background="@drawable/black_rectangle"
+			android:padding="10dp">
+	
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="25dp"
+				android:text="MeterMate status:"
+				android:textSize="24sp"
+				android:textStyle="bold"
+				android:gravity="center" />
+		
+			<TextView
+				android:id="@+id/trip_undelivered_metermate_comms_status"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="15dp"
+				android:text="Disconnected"
+				android:textSize="24sp"
+				android:textStyle="bold"
+				android:gravity="center" />
+	
+			<TableLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:stretchColumns="*">
+		
+				<TableRow>
+		
+					<TextView
+						android:layout_width="0px"
+						android:layout_weight="1.3"
+						android:paddingLeft="60dp"
+						android:text="Delivery mode:" 
+						android:textSize="16sp" />
+						
+					<TextView
+						android:id="@+id/trip_undelivered_metermate_delivery_mode"
+						android:layout_width="0px"
+						android:layout_weight="1"
+						android:paddingLeft="50dp"
+						android:text="No"
+						android:textSize="16sp"
+						android:textStyle="bold" />
+		
+				</TableRow>
+	
+				<TableRow>
+		
+					<TextView
+						android:layout_width="0px"
+						android:layout_weight="1.3"
+						android:paddingLeft="60dp"
+						android:text="Product flowing:"
+						android:textSize="16sp" />
+		
+					<TextView
+						android:id="@+id/trip_undelivered_metermate_product_flowing"
+						android:layout_width="0px"
+						android:layout_weight="1"
+						android:paddingLeft="50dp"
+						android:text="No"
+						android:textSize="16sp"
+						android:textStyle="bold" />
+		
+				</TableRow>
+	
+				<TableRow android:layout_marginTop="20dp">
+				    
+	   				<TextView
+						android:layout_width="0px"
+						android:layout_weight="1.3"
+						android:paddingLeft="60dp"
+						android:text="Product:" 
+						android:textSize="16sp" />
+	   					
+					<TextView
+						android:id="@+id/trip_undelivered_metermate_product"
+						android:layout_width="0px"
+						android:layout_weight="1"
+						android:paddingLeft="50dp"
+						android:text=""
+						android:textSize="16sp"
+						android:textStyle="bold" />
+				    
+				</TableRow>
+
+				<TableRow>
+				    
+	   				<TextView
+						android:layout_width="0px"
+						android:layout_weight="1.3"
+						android:paddingLeft="60dp"
+						android:text="Preset litres:" 
+						android:textSize="16sp" />
+	   					
+					<TextView
+						android:id="@+id/trip_undelivered_metermate_preset_litres"
+						android:layout_width="0px"
+						android:layout_weight="1"
+						android:paddingLeft="50dp"
+						android:text=""
+						android:textSize="16sp"
+						android:textStyle="bold" />
+				    
+				</TableRow>
+	
+					
+				<TableRow>
+				    
+					<TextView
+						android:layout_width="0px"
+						android:layout_weight="1.3"
+						android:paddingLeft="60dp"
+						android:text="Delivered litres:" 
+						android:textSize="16sp" />
+		
+					<TextView
+						android:id="@+id/trip_undelivered_metermate_delivered_litres"
+						android:layout_width="0px"
+						android:layout_weight="1"
+						android:paddingLeft="50dp"
+						android:text=""
+						android:textSize="16sp"
+						android:textStyle="bold" />
+		
+				</TableRow>
+					
+				<TableRow android:layout_marginTop="20dp">
+						
+					<TextView
+						android:layout_width="0px"
+						android:layout_weight="1.3"
+						android:paddingLeft="60dp"
+						android:text="Temperature:" 
+						android:textSize="16sp" />
+		
+					<TextView
+						android:id="@+id/trip_undelivered_metermate_temperature"
+						android:layout_width="0px"
+						android:layout_weight="1"
+						android:paddingLeft="50dp"
+						android:text=""
+						android:textSize="16sp"
+						android:textStyle="bold" />
+		
+				</TableRow>
+		
+			</TableLayout>
+			
+			<TextView
+				android:id="@+id/trip_undelivered_metermate_reading_ticket"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="25dp"
+				android:text="Reading Ticket"
+				android:textSize="18sp"
+				android:textStyle="bold"
+				android:gravity="center" />
+
+			<LinearLayout
+			    android:id="@+id/trip_undelivered_metermate_demo_mode"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_marginTop="20dp"
+			    android:orientation="horizontal">
+			
+				<Button
+			        android:id="@+id/trip_undelivered_metermate_start"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:text="Start"
+					android:textSize="18sp"
+					android:padding="20sp" />
+		
+				<Button
+			        android:id="@+id/trip_undelivered_metermate_stop"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:text="Stop"
+					android:textSize="18sp"
+					android:padding="20sp" />
+		
+			</LinearLayout>
+								
+		</LinearLayout>
+	    
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			style="@android:style/ButtonBar"
+			android:background="#343234">
+	
+			<Button
+		        android:id="@+id/trip_undelivered_metermate_back"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Back"
+				android:textSize="18sp"
+				android:padding="20sp" />
+	
+			<Button
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Spare"
+				android:textSize="18sp"
+				android:padding="20sp"
+				android:visibility="invisible" />
+	
+			<Button
+		        android:id="@+id/trip_undelivered_metermate_next"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Next"
+				android:padding="20sp"
+				android:textSize="18sp" />
+	
+		</LinearLayout>
+	
+	</LinearLayout>
+	
+</LinearLayout>

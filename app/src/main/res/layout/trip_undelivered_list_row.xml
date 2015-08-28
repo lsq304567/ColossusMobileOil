@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:padding="5sp">
+
+	<TextView
+		android:id="@+id/trip_undelivered_row1"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="customer name"
+		android:textSize="14sp"
+		android:textStyle="bold"
+		android:textColor="#0000ff" />
+
+	<TextView
+		android:id="@+id/trip_undelivered_row2"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="delivery address" />
+
+	<TextView
+		android:id="@+id/trip_undelivered_row3"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="product(s) required" />
+
+	<TextView
+		android:id="@+id/trip_undelivered_row4"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:text="notes" />
+
+</LinearLayout>

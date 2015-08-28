@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/background_gradient"
+	android:orientation="vertical"
+	android:padding="10sp">
+
+    <LinearLayout
+		android:background="#000000"
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+    
+    	<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:layout_margin="1dp"
+			android:orientation="vertical"
+			android:background="#ffffff">
+    
+    		<TextView
+				android:id="@+id/bluetooth_discovery_message"
+				android:text="Message"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:paddingTop="5dp"
+				android:paddingBottom="5dp"
+				android:gravity="center"
+				android:layout_gravity="center"
+				android:background="#000000"
+				android:textSize="24sp"
+				android:textColor="#ffffff" />				
+
+			<LinearLayout
+				android:layout_width="fill_parent"
+				android:layout_height="0dip"
+				android:layout_weight="1"
+				android:layout_margin="10dp"
+				android:orientation="vertical"
+				android:background="@drawable/black_rectangle"
+				android:padding="10dp">
+		
+				<ListView
+					android:id="@+id/bluetooth_discovery_devices"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent"
+					android:choiceMode="singleChoice" />
+		
+			</LinearLayout>
+		
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				style="@android:style/ButtonBar"
+				android:background="#545254">
+		
+				<Button
+					android:id="@+id/bluetooth_discovery_ok"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:text="OK"
+					android:textSize="18sp"
+					android:padding="20sp" 
+					android:onClick="onOKClicked" />
+		
+				<Button
+					android:id="@+id/bluetooth_discovery_cancel"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:text="Cancel"
+					android:textSize="18sp"
+					android:padding="20sp"
+					android:onClick="onCancelClicked" />
+		
+			</LinearLayout>
+
+		</LinearLayout>
+		
+   	</LinearLayout>
+   	
+</LinearLayout>
