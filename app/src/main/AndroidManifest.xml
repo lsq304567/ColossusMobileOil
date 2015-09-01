@@ -48,7 +48,7 @@
 		    android:name=".Setup"
 			android:theme="@android:style/Theme.Light.NoTitleBar"
 			android:windowSoftInputMode="stateHidden"
-			android:screenOrientation="portrait">
+			android:screenOrientation="unspecified">
 
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />

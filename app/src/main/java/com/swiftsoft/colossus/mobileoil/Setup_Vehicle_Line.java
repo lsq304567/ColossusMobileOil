@@ -3,6 +3,7 @@ package com.swiftsoft.colossus.mobileoil;
 import java.util.List;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,43 @@ public class Setup_Vehicle_Line extends MyFlipperView
 	{
 		super(context, attrs);
 		init(context);
+	}
+
+	public void saveState(Bundle state)
+	{
+        state.putString("Vehicle.Line.Info.TV1", infoview.getDefaultTv1());
+        state.putString("Vehicle.Line.Info.TV2", infoview.getDefaultTv2());
+
+        state.putString("Vehicle.Line.Product.Text", tvLineProduct.getText().toString());
+        state.putBoolean("Vehicle.Line.Product.Enabled", tvLineProduct.isEnabled());
+        state.putInt("Vehicle.Line.Product.Visibility", tvLineProduct.getVisibility());
+
+        state.putString("Vehicle.Line.Change.Text", btnChange.getText().toString());
+        state.putBoolean("Vehicle.Line.Change.Enabled", btnChange.isEnabled());
+        state.putInt("Vehicle.Line.Change.Visibility", btnChange.getVisibility());
+
+        state.putString("Vehicle.Line.Next.Text", btnNext.getText().toString());
+        state.putBoolean("Vehicle.Line.Next.Enabled", btnNext.isEnabled());
+        state.putInt("Vehicle.Line.Next.Visibility", btnNext.getVisibility());
+	}
+
+	@SuppressWarnings("ResourceType")
+    public void restoreState(Bundle state)
+	{
+        infoview.setDefaultTv1(state.getString("Vehicle.Line.Info.TV1"));
+        infoview.setDefaultTv2(state.getString("Vehicle.Line.Info.TV2"));
+
+        tvLineProduct.setText(state.getString("Vehicle.Line.Product.Text"));
+        tvLineProduct.setEnabled(state.getBoolean("Vehicle.Line.Product.Enabled"));
+        tvLineProduct.setVisibility(state.getInt("Vehicle.Line.Product.Visibility"));
+
+        btnChange.setText(state.getString("Vehicle.Line.Change.Text"));
+        btnChange.setEnabled(state.getBoolean("Vehicle.Line.Change.Enabled"));
+        btnChange.setVisibility(state.getInt("Vehicle.Line.Change.Visibility"));
+
+        btnNext.setText(state.getString("Vehicle.Line.Next.Text"));
+        btnNext.setEnabled(state.getBoolean("Vehicle.Line.Next.Enabled"));
+        btnNext.setVisibility(state.getInt("Vehicle.Line.Next.Visibility"));
 	}
 	
 	private void init(Context context)

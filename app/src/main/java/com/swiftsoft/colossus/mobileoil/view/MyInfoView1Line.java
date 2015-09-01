@@ -149,8 +149,32 @@ public class MyInfoView1Line extends ViewFlipper
 			infoView_default_1_line_tv1.setText(text);
 		else
 			infoView_default_3_line_tv1.setText(text);
-	}	
-	
+	}
+
+	public String getDefaultTv1()
+	{
+		if (defaultViewResource == R.layout.infoview_default_1_line)
+		{
+			return infoView_default_1_line_tv1.getText().toString();
+		}
+		else
+		{
+			return infoView_default_3_line_tv1.getText().toString();
+		}
+	}
+
+	public String getDefaultTv2()
+	{
+		if (defaultViewResource == R.layout.infoview_default_1_line)
+		{
+			return infoView_default_1_line_tv2.getText().toString();
+		}
+		else
+		{
+			return infoView_default_3_line_tv2.getText().toString();
+		}
+	}
+
 	public void setDefaultTv2(String text)
 	{
 		if (defaultViewResource == R.layout.infoview_default_1_line)

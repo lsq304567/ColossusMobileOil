@@ -135,7 +135,30 @@ public class Setup extends Activity
 	private RegisterDeviceReceiver registerDeviceReceiver;
 	private RegisterVehicleReceiver registerVehicleReceiver;
 
-	/** Called when the activity is first created. */
+	@Override
+	protected void onSaveInstanceState(Bundle outState)
+	{
+        setupLicenseDevice.saveState(outState);
+        setupRegisterDevice.saveState(outState);
+        setupRegisterVehicle.saveState(outState);
+        setupVehicleLine.saveState(outState);
+
+		// Call the super class
+		super.onSaveInstanceState(outState);
+	}
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        setupLicenseDevice.restoreState(savedInstanceState);
+        setupRegisterDevice.restoreState(savedInstanceState);
+        setupRegisterVehicle.restoreState(savedInstanceState);
+        setupVehicleLine.restoreState(savedInstanceState);
+    }
+
+    /** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -155,31 +178,31 @@ public class Setup extends Activity
 			// Start services.
 			startService(new Intent(this, GpsService.class));
 			startService(new Intent(this, TimerService.class));
-	
+
 			// Check if setup is already complete.
 			if (!isSetupComplete())
-			{
-				// Setup view.
-				setContentView(R.layout.setup);
-			
-				// Create views.
-				setupLicenseDevice = new Setup_License_Device(this);
-				setupRegisterDevice = new Setup_Register_Device(this);
-				setupRegisterVehicle = new Setup_Register_Vehicle(this);
-				setupVehicleLine = new Setup_Vehicle_Line(this);
-			
-				vf = (ViewFlipper) findViewById(R.id.setup_flipper);
+            {
+                // Setup view.
+                setContentView(R.layout.setup);
 
-				vf.removeAllViews();
+                // Create views.
+                setupLicenseDevice = new Setup_License_Device(this);
+                setupRegisterDevice = new Setup_Register_Device(this);
+                setupRegisterVehicle = new Setup_Register_Vehicle(this);
+                setupVehicleLine = new Setup_Vehicle_Line(this);
 
-				vf.addView(setupLicenseDevice);					// Index 0
-				vf.addView(setupRegisterDevice);				// Index 1
-				vf.addView(setupRegisterVehicle); 				// Index 2
-				vf.addView(setupVehicleLine);                   // Index 3
-			
-				// Select the initial view.
-				selectInitView();
-			}
+                vf = (ViewFlipper) findViewById(R.id.setup_flipper);
+
+                vf.removeAllViews();
+
+                vf.addView(setupLicenseDevice);                    // Index 0
+                vf.addView(setupRegisterDevice);                // Index 1
+                vf.addView(setupRegisterVehicle);                // Index 2
+                vf.addView(setupVehicleLine);                   // Index 3
+
+                // Select the initial view.
+                selectInitView();
+            }
 		}
 		catch (Exception e)
 		{
@@ -203,28 +226,28 @@ public class Setup extends Activity
 		{
 			// Leave breadcrumb.
 			CrashReporter.leaveBreadcrumb("Setup: onResume");
-	
+
 			// Update Active.activity
 			Active.activity = this;
-			
-			// Create IntentFilter for broadcasts we are interested in.
-			IntentFilter registerDeviceFilter = new IntentFilter();
-			registerDeviceFilter.addAction(ColossusIntentService.BroadcastNewVehicles);
-			registerDeviceFilter.addAction(ColossusIntentService.BroadcastNewDrivers);
-			registerDeviceFilter.addAction(ColossusIntentService.BroadcastNewProducts);
-			registerDeviceFilter.addAction(ColossusIntentService.BroadcastNewBrands);
-	
-			IntentFilter registerVehicleFilter = new IntentFilter();
-			registerVehicleFilter.addAction(ColossusIntentService.BroadcastRegisterVehicleOK);
-			registerVehicleFilter.addAction(ColossusIntentService.BroadcastRegisterVehicleNOK);
-	
-			// Create the BroadcastReceiver.
-			registerDeviceReceiver = new RegisterDeviceReceiver();
-			registerVehicleReceiver = new RegisterVehicleReceiver();
-			
-			// Register BroadcastReceiver.
-			registerReceiver(registerDeviceReceiver, registerDeviceFilter);
-			registerReceiver(registerVehicleReceiver, registerVehicleFilter);
+
+            // Create IntentFilter for broadcasts we are interested in.
+            IntentFilter registerDeviceFilter = new IntentFilter();
+            registerDeviceFilter.addAction(ColossusIntentService.BroadcastNewVehicles);
+            registerDeviceFilter.addAction(ColossusIntentService.BroadcastNewDrivers);
+            registerDeviceFilter.addAction(ColossusIntentService.BroadcastNewProducts);
+            registerDeviceFilter.addAction(ColossusIntentService.BroadcastNewBrands);
+
+            IntentFilter registerVehicleFilter = new IntentFilter();
+            registerVehicleFilter.addAction(ColossusIntentService.BroadcastRegisterVehicleOK);
+            registerVehicleFilter.addAction(ColossusIntentService.BroadcastRegisterVehicleNOK);
+
+            // Create the BroadcastReceiver.
+            registerDeviceReceiver = new RegisterDeviceReceiver();
+            registerVehicleReceiver = new RegisterVehicleReceiver();
+
+            // Register BroadcastReceiver.
+            registerReceiver(registerDeviceReceiver, registerDeviceFilter);
+            registerReceiver(registerVehicleReceiver, registerVehicleFilter);
 		}
 		catch (Exception e)
 		{
@@ -416,29 +439,22 @@ public class Setup extends Activity
     {
     	try
     	{
-			if (!isDeviceLicensed())
-			{
-				selectView(Setup.ViewLicenseDevice, 0);
-				return;
-			}
-			
-			if (!isDeviceRegistered())
-			{
-				selectView(Setup.ViewRegisterDevice, 0);
-				return;
-			}
-			
-			if (!isVehicleRegistered())
-			{
-				selectView(Setup.ViewRegisterVehicle, 0);
-				return;
-			}    
-			
-			if (!isVehicleLineSetup())
-			{
-				selectView(Setup.ViewVehicleLine, 0);
-				return;
-			}
+            if (!isDeviceLicensed())
+            {
+                selectView(Setup.ViewLicenseDevice, 0);
+            }
+            else if (!isDeviceRegistered())
+            {
+                selectView(Setup.ViewRegisterDevice, 0);
+            }
+            else if (!isVehicleRegistered())
+            {
+                selectView(Setup.ViewRegisterVehicle, 0);
+            }
+            else if (!isVehicleLineSetup())
+            {
+                selectView(Setup.ViewVehicleLine, 0);
+            }
 		}
 		catch (Exception e)
 		{

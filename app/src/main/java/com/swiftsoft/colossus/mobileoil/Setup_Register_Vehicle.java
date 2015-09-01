@@ -43,6 +43,59 @@ public class Setup_Register_Vehicle extends MyFlipperView
 		super(context, attrs);
 		init(context);
 	}
+
+	public void saveState(Bundle state)
+	{
+		state.putString("Register.Vehicle.Info.TV1", infoview.getDefaultTv1());
+		state.putString("Register.Vehicle.Info.TV2", infoview.getDefaultTv2());
+
+		state.putString("Register.Vehicle.Message.Text", tvMessage.getText().toString());
+		state.putBoolean("Register.Vehicle.Message.Enabled", tvMessage.isEnabled());
+		state.putInt("Register.Vehicle.Message.Visibility", tvMessage.getVisibility());
+
+		state.putString("Register.Vehicle.Reg.Text", tvVehicleReg.getText().toString());
+		state.putBoolean("Register.Vehicle.Reg.Enabled", tvVehicleReg.isEnabled());
+		state.putInt("Register.Vehicle.Reg.Visibility", tvVehicleReg.getVisibility());
+
+		state.putString("Register.Vehicle.Error.Text", tvError.getText().toString());
+		state.putBoolean("Register.Vehicle.Error.Enabled", tvError.isEnabled());
+		state.putInt("Register.Vehicle.Error.Visibility", tvError.getVisibility());
+
+		state.putString("Register.Vehicle.No.Text", etVehicleNo.getText().toString());
+		state.putBoolean("Register.Vehicle.No.Enabled", etVehicleNo.isEnabled());
+		state.putInt("Register.Vehicle.No.Visibility", etVehicleNo.getVisibility());
+
+		state.putString("Register.Vehicle.Next.Text", btnNext.getText().toString());
+		state.putBoolean("Register.Vehicle.Next.Enabled", btnNext.isEnabled());
+		state.putInt("Register.Vehicle.Next.Visibility", btnNext.getVisibility());
+	}
+
+	@SuppressWarnings("ResourceType")
+    public void restoreState(Bundle state)
+	{
+        infoview.setDefaultTv1(state.getString("Register.Vehicle.Info.TV1"));
+        infoview.setDefaultTv2(state.getString("Register.Vehicle.Info.TV2"));
+
+        tvMessage.setText(state.getString("Register.Vehicle.Message.Text"));
+        tvMessage.setEnabled(state.getBoolean("Register.Vehicle.Message.Enabled"));
+        tvMessage.setVisibility(state.getInt("Register.Vehicle.Message.Visibility"));
+
+        tvVehicleReg.setText(state.getString("Register.Vehicle.Reg.Text"));
+        tvVehicleReg.setEnabled(state.getBoolean("Register.Vehicle.Reg.Enabled"));
+        tvVehicleReg.setVisibility(state.getInt("Register.Vehicle.Reg.Visibility"));
+
+        tvError.setText(state.getString("Register.Vehicle.Error.Text"));
+        tvError.setEnabled(state.getBoolean("Register.Vehicle.Error.Enabled"));
+        tvError.setVisibility(state.getInt("Register.Vehicle.Error.Visibility"));
+
+        etVehicleNo.setText(state.getString("Register.Vehicle.No.Text"));
+        etVehicleNo.setEnabled(state.getBoolean("Register.Vehicle.No.Enabled"));
+        etVehicleNo.setVisibility(state.getInt("Register.Vehicle.No.Visibility"));
+
+        btnNext.setText(state.getString("Register.Vehicle.Next.Text"));
+        btnNext.setEnabled(state.getBoolean("Register.Vehicle.Next.Enabled"));
+        btnNext.setVisibility(state.getInt("Register.Vehicle.Next.Visibility"));
+	}
 	
 	private void init(Context context)
 	{
