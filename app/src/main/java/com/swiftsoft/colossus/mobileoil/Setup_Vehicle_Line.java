@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
 import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicle;
+import com.swiftsoft.colossus.mobileoil.utilities.ControlSaver;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 
@@ -43,39 +44,19 @@ public class Setup_Vehicle_Line extends MyFlipperView
 
 	public void saveState(Bundle state)
 	{
-        state.putString("Vehicle.Line.Info.TV1", infoview.getDefaultTv1());
-        state.putString("Vehicle.Line.Info.TV2", infoview.getDefaultTv2());
-
-        state.putString("Vehicle.Line.Product.Text", tvLineProduct.getText().toString());
-        state.putBoolean("Vehicle.Line.Product.Enabled", tvLineProduct.isEnabled());
-        state.putInt("Vehicle.Line.Product.Visibility", tvLineProduct.getVisibility());
-
-        state.putString("Vehicle.Line.Change.Text", btnChange.getText().toString());
-        state.putBoolean("Vehicle.Line.Change.Enabled", btnChange.isEnabled());
-        state.putInt("Vehicle.Line.Change.Visibility", btnChange.getVisibility());
-
-        state.putString("Vehicle.Line.Next.Text", btnNext.getText().toString());
-        state.putBoolean("Vehicle.Line.Next.Enabled", btnNext.isEnabled());
-        state.putInt("Vehicle.Line.Next.Visibility", btnNext.getVisibility());
+		ControlSaver.save(infoview, "Vehicle.Line.Info", state);
+		ControlSaver.save(tvLineProduct, "Vehicle.Line.Product", state);
+		ControlSaver.save(btnChange, "Vehicle.Line.Change", state);
+		ControlSaver.save(btnNext, "Vehicle.Line.Next", state);
 	}
 
 	@SuppressWarnings("ResourceType")
     public void restoreState(Bundle state)
 	{
-        infoview.setDefaultTv1(state.getString("Vehicle.Line.Info.TV1"));
-        infoview.setDefaultTv2(state.getString("Vehicle.Line.Info.TV2"));
-
-        tvLineProduct.setText(state.getString("Vehicle.Line.Product.Text"));
-        tvLineProduct.setEnabled(state.getBoolean("Vehicle.Line.Product.Enabled"));
-        tvLineProduct.setVisibility(state.getInt("Vehicle.Line.Product.Visibility"));
-
-        btnChange.setText(state.getString("Vehicle.Line.Change.Text"));
-        btnChange.setEnabled(state.getBoolean("Vehicle.Line.Change.Enabled"));
-        btnChange.setVisibility(state.getInt("Vehicle.Line.Change.Visibility"));
-
-        btnNext.setText(state.getString("Vehicle.Line.Next.Text"));
-        btnNext.setEnabled(state.getBoolean("Vehicle.Line.Next.Enabled"));
-        btnNext.setVisibility(state.getInt("Vehicle.Line.Next.Visibility"));
+		ControlSaver.restore(infoview, "Vehicle.Line.Info", state);
+		ControlSaver.restore(tvLineProduct, "Vehicle.Line.Product", state);
+		ControlSaver.restore(btnChange, "Vehicle.Line.Change", state);
+		ControlSaver.restore(btnNext, "Vehicle.Line.Next", state);
 	}
 	
 	private void init(Context context)

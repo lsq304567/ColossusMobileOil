@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
 import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
+import com.swiftsoft.colossus.mobileoil.utilities.ControlSaver;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 
@@ -47,71 +48,25 @@ public class Setup_Register_Device extends MyFlipperView
 
 	public void saveState(Bundle state)
 	{
-		state.putString("Register.Device.Info.TV1", infoview.getDefaultTv1());
-        state.putString("Register.Device.Info.TV2", infoview.getDefaultTv2());
-
-        state.putString("Register.Device.Message.Text", tvMessage.getText().toString());
-        state.putBoolean("Register.Device.Message.Enabled", tvMessage.isEnabled());
-        state.putInt("Register.Device.Message.Visibility", tvMessage.getVisibility());
-
-        state.putString("Register.Device.Next.Text", btnNext.getText().toString());
-        state.putBoolean("Register.Device.Next.Enabled", btnNext.isEnabled());
-        state.putInt("Register.Device.Next.Visibility", btnNext.getVisibility());
-
-        state.putString("Register.Device.Vehicles.Text", ckbVehicles.getText().toString());
-        state.getBoolean("Register.Device.Vehicles.Enabled", ckbVehicles.isEnabled());
-        state.getInt("Register.Device.Vehicles.Visibility", ckbVehicles.getVisibility());
-        state.getBoolean("Register.Device.Vehicles.Checked", ckbVehicles.isChecked());
-
-        state.putString("Register.Device.Drivers.Text", ckbDrivers.getText().toString());
-        state.getBoolean("Register.Device.Drivers.Enabled", ckbDrivers.isEnabled());
-        state.getInt("Register.Device.Drivers.Visibility", ckbDrivers.getVisibility());
-        state.getBoolean("Register.Device.Drivers.Checked", ckbDrivers.isChecked());
-
-        state.putString("Register.Device.Products.Text", ckbProducts.getText().toString());
-        state.getBoolean("Register.Device.Products.Enabled", ckbProducts.isEnabled());
-        state.getInt("Register.Device.Products.Visibility", ckbProducts.getVisibility());
-        state.getBoolean("Register.Device.Products.Checked", ckbProducts.isChecked());
-
-        state.putString("Register.Device.Brands.Text", ckbBrands.getText().toString());
-        state.getBoolean("Register.Device.Brands.Enabled", ckbBrands.isEnabled());
-        state.getInt("Register.Device.Brands.Visibility", ckbBrands.getVisibility());
-        state.getBoolean("Register.Device.Brands.Checked", ckbBrands.isChecked());
+		ControlSaver.save(infoview, "Register.Device.Info", state);
+		ControlSaver.save(tvMessage, "Register.Device.Message", state);
+		ControlSaver.save(btnNext, "Register.Device.Next", state);
+		ControlSaver.save(ckbVehicles, "Register.Device.Vehicles", state);
+		ControlSaver.save(ckbDrivers, "Register.Device.Drivers", state);
+		ControlSaver.save(ckbProducts, "Register.Device.Products", state);
+		ControlSaver.save(ckbBrands, "Register.Device.Brands", state);
     }
 
 	@SuppressWarnings("ResourceType")
     public void restoreState(Bundle state)
 	{
-        infoview.setDefaultTv1(state.getString("Register.Device.Info.TV1"));
-        infoview.setDefaultTv2(state.getString("Register.Device.Info.TV2"));
-
-        tvMessage.setText(state.getString("Register.Device.Message.Text"));
-        tvMessage.setEnabled(state.getBoolean("Register.Device.Message.Enabled"));
-        tvMessage.setVisibility(state.getInt("Register.Device.Message.Visibility"));
-
-        btnNext.setText(state.getString("Register.Device.Next.Text"));
-        btnNext.setEnabled(state.getBoolean("Register.Device.Next.Enabled"));
-        btnNext.setVisibility(state.getInt("Register.Device.Next.Visibility"));
-
-        ckbVehicles.setText(state.getString("Register.Device.Vehicles.Text"));
-        ckbVehicles.setEnabled(state.getBoolean("Register.Device.Vehicles.Enabled"));
-        ckbVehicles.setVisibility(state.getInt("Register.Device.Vehicles.Visibility"));
-        ckbVehicles.setChecked(state.getBoolean("Register.Device.Vehicles.Checked"));
-
-        ckbDrivers.setText(state.getString("Register.Device.Drivers.Text"));
-        ckbDrivers.setEnabled(state.getBoolean("Register.Device.Drivers.Enabled"));
-        ckbDrivers.setVisibility(state.getInt("Register.Device.Drivers.Visibility"));
-        ckbDrivers.setChecked(state.getBoolean("Register.Device.Drivers.Checked"));
-
-        ckbProducts.setText(state.getString("Register.Device.Products.Text"));
-        ckbProducts.setEnabled(state.getBoolean("Register.Device.Products.Enabled"));
-        ckbProducts.setVisibility(state.getInt("Register.Device.Products.Visibility"));
-        ckbProducts.setChecked(state.getBoolean("Register.Device.Products.Checked"));
-
-        ckbBrands.setText(state.getString("Register.Device.Brands.Text"));
-        ckbBrands.setEnabled(state.getBoolean("Register.Device.Brands.Enabled"));
-        ckbBrands.setVisibility(state.getInt("Register.Device.Brands.Visibility"));
-        ckbBrands.setChecked(state.getBoolean("Register.Device.Brands.Checked"));
+        ControlSaver.restore(infoview, "Register.Device.Info", state);
+        ControlSaver.restore(tvMessage, "Register.Device.Message", state);
+        ControlSaver.restore(btnNext, "Register.Device.Next", state);
+        ControlSaver.restore(ckbVehicles, "Register.Device.Vehicles", state);
+        ControlSaver.restore(ckbDrivers, "Register.Device.Drivers", state);
+        ControlSaver.restore(ckbProducts, "Register.Device.Products", state);
+        ControlSaver.restore(ckbBrands, "Register.Device.Brands", state);
 	}
 	
 	private void init(Context context)

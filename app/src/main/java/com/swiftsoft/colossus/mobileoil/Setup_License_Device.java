@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.swiftsoft.colossus.mobileoil.utilities.ControlSaver;
 import com.swiftsoft.colossus.mobileoil.view.MyEditText;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
@@ -44,77 +45,26 @@ public class Setup_License_Device extends MyFlipperView
     @SuppressWarnings("ResourceType")
     public void restoreState(Bundle state)
     {
-        tvMessage.setText(state.getString("License.Device.Message.Text"));
-        tvMessage.setEnabled(state.getBoolean("License.Device.Message.Enabled"));
-        tvMessage.setVisibility(state.getInt("License.Device.Message.Visibility"));
-
-        tvSerialNo.setText(state.getString("License.Device.SerialNo.Text"));
-        tvSerialNo.setEnabled(state.getBoolean("License.Device.SerialNo.Enabled"));
-        tvSerialNo.setVisibility(state.getInt("License.Device.SerialNo.Visibility"));
-
-        tvPin.setText(state.getString("License.Device.Pin.Text"));
-        tvPin.setEnabled(state.getBoolean("License.Device.Pin.Enabled"));
-        tvPin.setVisibility(state.getInt("License.Device.Pin.Visibility"));
-
-        tvError.setText(state.getString("License.Device.Error.Text"));
-        tvError.setEnabled(state.getBoolean("License.Device.Error.Enabled"));
-        tvError.setVisibility(state.getInt("License.Device.Error.Visibility"));
-
-        etPin.setText(state.getString("License.Device.Pin.Edit,Text"));
-        etPin.setEnabled(state.getBoolean("License.Device.Pin.Edit.Enabled"));
-        etPin.setVisibility(state.getInt("License.Device.Pin.Edit.Visibility"));
-
-        btnRetry.setText(state.getString("License.Device.Retry.Text"));
-        btnRetry.setEnabled(state.getBoolean("License.Device.Retry.Enabled"));
-        btnRetry.setVisibility(state.getInt("License.Device.Retry.Visibility"));
-
-        btnNext.setText(state.getString("License.Device.Next.Text"));
-        btnNext.setEnabled(state.getBoolean("License.Device.Next.Enabled"));
-        btnNext.setVisibility(state.getInt("License.Device.Next.Visibility"));
-
-        infoview.setDefaultTv1(state.getString("License.Device.Info.TV1"));
-        infoview.setDefaultTv2(state.getString("License.Device.Info.TV2"));
+		ControlSaver.restore(tvMessage, "License.Device.Message", state);
+		ControlSaver.restore(tvSerialNo, "License.Device.SerialNo", state);
+		ControlSaver.restore(tvPin, "License.Device.Pin", state);
+		ControlSaver.restore(tvError, "License.Device.Error", state);
+		ControlSaver.restore(etPin, "License.Device.Pin.Edit", state);
+		ControlSaver.restore(btnRetry, "License.Device.Retry", state);
+		ControlSaver.restore(btnNext, "License.Device.Next", state);
+		ControlSaver.restore(infoview, "License.Device.Info", state);
     }
 
-    public void saveState(Bundle savedState) {
-        // Save Message TextView
-        savedState.putString("License.Device.Message.Text", tvMessage.getText().toString());
-        savedState.putBoolean("License.Device.Message.Enabled", tvMessage.isEnabled());
-        savedState.putInt("License.Device.Message.Visibility", tvMessage.getVisibility());
-
-        // Save Serial No TextView
-        savedState.putString("License.Device.SerialNo.Text", tvSerialNo.getText().toString());
-        savedState.putBoolean("License.Device.SerialNo.Enabled", tvSerialNo.isEnabled());
-        savedState.putInt("License.Device.SerialNo.Visibility", tvSerialNo.getVisibility());
-
-        // Save Pin TextView
-        savedState.putString("License.Device.Pin.Text", tvPin.getText().toString());
-        savedState.putBoolean("License.Device.Pin.Enabled", tvPin.isEnabled());
-        savedState.putInt("License.Device.Pin.Visibility", tvPin.getVisibility());
-
-        // Save Error TextView
-        savedState.putString("License.Device.Error.Text", tvError.getText().toString());
-        savedState.putBoolean("License.Device.Error.Enabled", tvError.isEnabled());
-        savedState.putInt("License.Device.Error.Visibility", tvError.getVisibility());
-
-        // Save Pin EditText
-        savedState.putString("License.Device.Pin.Edit.Text", etPin.getText().toString());
-        savedState.putBoolean("License.Device.Pin.Edit.Enabled", etPin.isEnabled());
-        savedState.putInt("License.Device.Pin.Edit.Visibility", etPin.getVisibility());
-
-        // Save Retry Button
-        savedState.putString("License.Device.Retry.Text", btnRetry.getText().toString());
-        savedState.putBoolean("License.Device.Retry.Enabled", btnRetry.isEnabled());
-        savedState.putInt("License.Device.Retry.Visibility", btnRetry.getVisibility());
-
-        // Save Next Button
-        savedState.putString("License.Device.Next.Text", btnNext.getText().toString());
-        savedState.putBoolean("License.Device.Next.Enabled", btnNext.isEnabled());
-        savedState.putInt("License.Device.Next.Visibility", btnNext.getVisibility());
-
-        // Save the InfoView state
-        savedState.putString("License.Device.Info.TV1", infoview.getDefaultTv1());
-        savedState.putString("License.Device.Info.TV2", infoview.getDefaultTv2());
+    public void saveState(Bundle savedState)
+    {
+        ControlSaver.save(tvMessage, "License.Device.Message", savedState);
+        ControlSaver.save(tvSerialNo, "License.Device.SerialNo", savedState);
+        ControlSaver.save(tvPin, "License.Device.Pin", savedState);
+        ControlSaver.save(tvError, "License.Device.Error", savedState);
+        ControlSaver.save(etPin, "License.Device.Pin.Edit", savedState);
+        ControlSaver.save(btnRetry, "License.Device.Retry", savedState);
+        ControlSaver.save(btnNext, "License.Device.Next", savedState);
+        ControlSaver.save(infoview, "License.Device.Info", savedState);
     }
 
 	private void init(Context context)

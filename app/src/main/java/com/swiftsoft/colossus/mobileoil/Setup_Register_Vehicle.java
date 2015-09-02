@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicle;
 import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
+import com.swiftsoft.colossus.mobileoil.utilities.ControlSaver;
 import com.swiftsoft.colossus.mobileoil.view.MyEditText;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
@@ -46,55 +47,23 @@ public class Setup_Register_Vehicle extends MyFlipperView
 
 	public void saveState(Bundle state)
 	{
-		state.putString("Register.Vehicle.Info.TV1", infoview.getDefaultTv1());
-		state.putString("Register.Vehicle.Info.TV2", infoview.getDefaultTv2());
-
-		state.putString("Register.Vehicle.Message.Text", tvMessage.getText().toString());
-		state.putBoolean("Register.Vehicle.Message.Enabled", tvMessage.isEnabled());
-		state.putInt("Register.Vehicle.Message.Visibility", tvMessage.getVisibility());
-
-		state.putString("Register.Vehicle.Reg.Text", tvVehicleReg.getText().toString());
-		state.putBoolean("Register.Vehicle.Reg.Enabled", tvVehicleReg.isEnabled());
-		state.putInt("Register.Vehicle.Reg.Visibility", tvVehicleReg.getVisibility());
-
-		state.putString("Register.Vehicle.Error.Text", tvError.getText().toString());
-		state.putBoolean("Register.Vehicle.Error.Enabled", tvError.isEnabled());
-		state.putInt("Register.Vehicle.Error.Visibility", tvError.getVisibility());
-
-		state.putString("Register.Vehicle.No.Text", etVehicleNo.getText().toString());
-		state.putBoolean("Register.Vehicle.No.Enabled", etVehicleNo.isEnabled());
-		state.putInt("Register.Vehicle.No.Visibility", etVehicleNo.getVisibility());
-
-		state.putString("Register.Vehicle.Next.Text", btnNext.getText().toString());
-		state.putBoolean("Register.Vehicle.Next.Enabled", btnNext.isEnabled());
-		state.putInt("Register.Vehicle.Next.Visibility", btnNext.getVisibility());
+		ControlSaver.save(infoview, "Register.Vehicle.Info", state);
+		ControlSaver.save(tvMessage, "Register.Vehicle.Message", state);
+		ControlSaver.save(tvVehicleReg, "Register.Vehicle.Reg", state);
+		ControlSaver.save(tvError, "Register.Vehicle.Error", state);
+		ControlSaver.save(etVehicleNo, "Register.Vehicle.No", state);
+		ControlSaver.save(btnNext, "Register.Vehicle.Next", state);
 	}
 
 	@SuppressWarnings("ResourceType")
     public void restoreState(Bundle state)
 	{
-        infoview.setDefaultTv1(state.getString("Register.Vehicle.Info.TV1"));
-        infoview.setDefaultTv2(state.getString("Register.Vehicle.Info.TV2"));
-
-        tvMessage.setText(state.getString("Register.Vehicle.Message.Text"));
-        tvMessage.setEnabled(state.getBoolean("Register.Vehicle.Message.Enabled"));
-        tvMessage.setVisibility(state.getInt("Register.Vehicle.Message.Visibility"));
-
-        tvVehicleReg.setText(state.getString("Register.Vehicle.Reg.Text"));
-        tvVehicleReg.setEnabled(state.getBoolean("Register.Vehicle.Reg.Enabled"));
-        tvVehicleReg.setVisibility(state.getInt("Register.Vehicle.Reg.Visibility"));
-
-        tvError.setText(state.getString("Register.Vehicle.Error.Text"));
-        tvError.setEnabled(state.getBoolean("Register.Vehicle.Error.Enabled"));
-        tvError.setVisibility(state.getInt("Register.Vehicle.Error.Visibility"));
-
-        etVehicleNo.setText(state.getString("Register.Vehicle.No.Text"));
-        etVehicleNo.setEnabled(state.getBoolean("Register.Vehicle.No.Enabled"));
-        etVehicleNo.setVisibility(state.getInt("Register.Vehicle.No.Visibility"));
-
-        btnNext.setText(state.getString("Register.Vehicle.Next.Text"));
-        btnNext.setEnabled(state.getBoolean("Register.Vehicle.Next.Enabled"));
-        btnNext.setVisibility(state.getInt("Register.Vehicle.Next.Visibility"));
+        ControlSaver.restore(infoview, "Register.Vehicle.Info", state);
+        ControlSaver.restore(tvMessage, "Register.Vehicle.Message", state);
+        ControlSaver.restore(tvVehicleReg, "Register.Vehicle.Reg", state);
+        ControlSaver.restore(tvError, "Register.Vehicle.Error", state);
+        ControlSaver.restore(etVehicleNo, "Register.Vehicle.No", state);
+        ControlSaver.restore(btnNext, "Register.Vehicle.Next", state);
 	}
 	
 	private void init(Context context)
