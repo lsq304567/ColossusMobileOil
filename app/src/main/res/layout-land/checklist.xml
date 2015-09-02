@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/background_gradient"
+	android:orientation="horizontal"
+	android:padding="10sp">
+
+	<!-- Layout to divide into 2 panes left for text and right for numeric keypad -->
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="fill_parent"
+		android:orientation="horizontal"
+		android:layout_weight="3">
+
+		<LinearLayout
+			android:background="#000000"
+			android:orientation="vertical"
+			android:layout_width="0dp"
+			android:layout_weight="2"
+			android:layout_height="fill_parent">
+    
+    		<LinearLayout
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:layout_margin="1dp"
+				android:orientation="vertical"
+				android:background="#ffffff">
+    
+        		<com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line
+            		android:id="@+id/checklist_infoview"
+					android:layout_width="fill_parent"
+					android:layout_height="40dp" />
+        
+                <LinearLayout
+                    android:id="@+id/checklist_layout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <ListView
+                        android:id="@android:id/list"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_weight="1"
+                        android:layout_margin="10dp"
+                        android:drawSelectorOnTop="false"
+                        android:background="@drawable/checklist_preferences_background" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/checklist_layout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center"
+                        android:text="Describe unsatisfactory item(s) for transport manager"
+                        android:textSize="20sp"
+                        android:textColor="#000000" />
+
+                    <EditText
+                        android:id="@+id/checklist_issues"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_weight="1"
+                        android:layout_margin="10dp"
+                        android:inputType="textCapSentences"
+                        android:gravity="top"
+                        android:singleLine="false" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+		
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="10sp"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                style="@android:style/ButtonBar"
+                android:background="#ffffff">
+
+                <TextView
+                    android:id="@+id/checklist_message"
+                    android:text="Message text prompting the user to confirm something"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:textSize="15sp"
+                    android:textColor="#000000" />
+
+                <Button
+                    android:id="@+id/checklist_button1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Yes"
+                    android:textSize="15sp"
+                    android:padding="20sp"
+                    android:onClick="onButton1Clicked" />
+
+                <Button
+                    android:id="@+id/checklist_button2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="No"
+                    android:textSize="15sp"
+                    android:padding="20sp"
+                    android:onClick="onButton2Clicked" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+	</LinearLayout>
+
+</LinearLayout>

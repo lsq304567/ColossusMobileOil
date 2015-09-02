@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.swiftsoft.colossus.mobileoil.view.MyEditText;
@@ -46,6 +47,11 @@ public class ControlSaver
             bundle.getInt(baseName + ".Visibility", control.getVisibility());
             bundle.getBoolean(baseName + ".Checked", ((CheckBox) control).isChecked());
         }
+        else if (control instanceof LinearLayout)
+        {
+            bundle.putBoolean(baseName + ".Enabled", control.isEnabled());
+            bundle.putInt(baseName + ".Visibility", control.getVisibility());
+        }
     }
 
     @SuppressWarnings("ResourceType")
@@ -80,6 +86,11 @@ public class ControlSaver
             control.setEnabled(bundle.getBoolean(baseName + ".Enabled"));
             control.setVisibility(bundle.getInt(baseName + ".Visibility"));
             ((CheckBox) control).setChecked(bundle.getBoolean(baseName + ".Checked"));
+        }
+        else if (control instanceof LinearLayout)
+        {
+            control.setEnabled(bundle.getBoolean(baseName + ".Enabled"));
+            control.setVisibility(bundle.getInt(baseName + ".Visibility"));
         }
     }
 }

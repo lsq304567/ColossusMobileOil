@@ -64,7 +64,7 @@
 				
 		<activity
 			android:name=".Checklist"
-			android:screenOrientation="portrait"
+			android:screenOrientation="unspecified"
 			android:theme="@android:style/Theme.Light.NoTitleBar"
 			android:windowSoftInputMode="adjustResize" />
 

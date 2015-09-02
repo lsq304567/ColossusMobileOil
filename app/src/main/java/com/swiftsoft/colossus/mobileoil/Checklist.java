@@ -8,6 +8,7 @@ import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleChecklist;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleChecklistSection;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleChecklistSectionItem;
 import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
+import com.swiftsoft.colossus.mobileoil.utilities.ControlSaver;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 
 import android.app.AlertDialog;
@@ -41,6 +42,34 @@ public class Checklist extends PreferenceActivity
 	private static final String msgEverythingSatisfactory = "Are all items\nsatisfactory?";
 	private static final String msgReportIssues = "Describe unsatisfactory item(s) for transport manager";
 	private static final String msgCompleteDefectSheet = "Please also complete a defect sheet";
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState)
+	{
+        ControlSaver.save(infoview, "Checklist.Info", outState);
+        ControlSaver.save(message, "Checklist.Message", outState);
+        ControlSaver.save(issues, "Checklist.Issues", outState);
+        ControlSaver.save(button1, "Checklist.Button1", outState);
+        ControlSaver.save(button2, "Checklist.Button2", outState);
+        ControlSaver.save(ll1, "Checklist.Layout1", outState);
+        ControlSaver.save(ll2, "Checklist.Layout2", outState);
+
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle state)
+	{
+		super.onRestoreInstanceState(state);
+
+        ControlSaver.restore(infoview, "Checklist.Indo", state);
+        ControlSaver.restore(message, "Checklist.Message", state);
+        ControlSaver.restore(issues, "Checklist.Issues", state);
+        ControlSaver.restore(button1, "Checklist.Button1", state);
+        ControlSaver.restore(button2, "Checklist.Button2", state);
+        ControlSaver.restore(ll1, "Checklist.Layout1", state);
+        ControlSaver.restore(ll2, "Checklist.Layout2", state);
+	}
 
 	/** Called when the activity is first created. */
 	@Override
