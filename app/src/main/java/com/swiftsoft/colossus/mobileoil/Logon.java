@@ -52,7 +52,7 @@ public class Logon extends Activity
 		ControlSaver.save(driverPINMessage, "Logon.DriverPin.Message", outState);
 		ControlSaver.save(logon, "Logon.Logon", outState);
 
-        // Save the orientation
+        // Save the  orientation
         outState.putInt("Logon.Orientation", orientation);
 
 		super.onSaveInstanceState(outState);
