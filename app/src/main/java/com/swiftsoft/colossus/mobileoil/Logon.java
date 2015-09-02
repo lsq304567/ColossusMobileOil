@@ -6,10 +6,13 @@ import com.swiftsoft.colossus.mobileoil.database.model.dbDriver;
 import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicle;
 import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
+import com.swiftsoft.colossus.mobileoil.utilities.ControlSaver;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -33,7 +36,47 @@ public class Logon extends Activity
 	boolean isDriverValid;
 	boolean isDriverPINValid;
 
-    boolean onOrientationChanged = false;
+	int orientation;
+
+    boolean orientationChanged = false;
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState)
+	{
+		ControlSaver.save(infoview, "Logon.Info", outState);
+		ControlSaver.save(vehicleNo, "Logon.VehicleNo", outState);
+		ControlSaver.save(vehicleDesc, "Logon.VehicleDescription", outState);
+		ControlSaver.save(driverNo, "Logon.DriverNo", outState);
+		ControlSaver.save(driverDesc, "Logon.DriverDescription", outState);
+		ControlSaver.save(driverPIN, "Logon.DriverPin", outState);
+		ControlSaver.save(driverPINMessage, "Logon.DriverPin.Message", outState);
+		ControlSaver.save(logon, "Logon.Logon", outState);
+
+        // Save the orientation
+        outState.putInt("Logon.Orientation", orientation);
+
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState)
+	{
+		super.onRestoreInstanceState(savedInstanceState);
+
+		ControlSaver.restore(infoview, "Logon.Info", savedInstanceState);
+		ControlSaver.restore(vehicleNo, "Logon.VehicleNo", savedInstanceState);
+		ControlSaver.restore(vehicleDesc, "Logon.VehicleDescription", savedInstanceState);
+		ControlSaver.restore(driverNo, "Logon.DriverNo", savedInstanceState);
+		ControlSaver.restore(driverDesc, "Logon.DriverDescription", savedInstanceState);
+		ControlSaver.restore(driverPIN, "Logon.DriverPin", savedInstanceState);
+		ControlSaver.restore(driverPINMessage, "Logon.DriverPin.Message", savedInstanceState);
+		ControlSaver.restore(logon, "Logon.Logon", savedInstanceState);
+
+        if (orientation != savedInstanceState.getInt("Logon.Orientation"))
+        {
+            orientationChanged = true;
+        }
+	}
 
 	/** Called when the activity is first created. */
 	@Override
@@ -45,6 +88,8 @@ public class Logon extends Activity
 		{
 			// Leave breadcrumb.
 			CrashReporter.leaveBreadcrumb("Logon: onCreate");
+
+            orientation = getResources().getConfiguration().orientation;
 
 			// Setup view.
 			setContentView(R.layout.logon);
@@ -62,11 +107,6 @@ public class Logon extends Activity
 			// Initialise infoview.
 			infoview.setDefaultTv1(getResources().getString(R.string.app_name));
 			infoview.setDefaultTv2(getResources().getString(R.string.version));
-
-            if (savedInstanceState != null)
-            {
-                onOrientationChanged = true;
-            }
 
 			// Add validation.
 			vehicleNo.addTextChangedListener(twVehicle);
@@ -143,18 +183,18 @@ public class Logon extends Activity
 		vehicleNo.setEnabled(false);
 		vehicleDesc.setText("");
 
-        if (!onOrientationChanged)
+        if (!orientationChanged)
         {
             driverNo.setText("");
             driverNo.requestFocus();
             driverDesc.setText("");
             driverPIN.setText("");
             driverPINMessage.setText("");
-
-            logon.setEnabled(false);
         }
 
-        onOrientationChanged = false;
+        orientationChanged = false;
+
+		logon.setEnabled(false);
 
 		// Update UI.
 		validateVehicle();
