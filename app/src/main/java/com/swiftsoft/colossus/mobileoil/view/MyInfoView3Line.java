@@ -23,4 +23,16 @@ public class MyInfoView3Line extends MyInfoView1Line
 		
 		super.init(context);
 	}
+
+	public String getDefaultTv3()
+	{
+		if (defaultViewResource == R.layout.infoview_default_1_line)
+		{
+			return infoView_default_1_line_tv2.getText().toString();
+		}
+		else
+		{
+			return infoView_default_3_line_tv3.getText().toString();
+		}
+	}
 }

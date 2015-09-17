@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.swiftsoft.colossus.mobileoil.view.MyEditText;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
+import com.swiftsoft.colossus.mobileoil.view.MyInfoView3Line;
 
 /**
  * Created by Alan on 02/09/2015.
@@ -39,6 +40,12 @@ public class ControlSaver
         {
             bundle.putString(baseName + ".TV1", ((MyInfoView1Line) control).getDefaultTv1());
             bundle.putString(baseName + ".TV2", ((MyInfoView1Line) control).getDefaultTv2());
+        }
+        else if (control instanceof MyInfoView3Line)
+        {
+            bundle.putString(baseName + ".TV1", ((MyInfoView3Line) control).getDefaultTv1());
+            bundle.putString(baseName + ".TV2", ((MyInfoView3Line) control).getDefaultTv2());
+            bundle.putString(baseName + ".TV3", ((MyInfoView3Line) control).getDefaultTv3());
         }
         else if (control instanceof CheckBox)
         {
@@ -79,6 +86,12 @@ public class ControlSaver
         {
             ((MyInfoView1Line) control).setDefaultTv1(bundle.getString(baseName + ".TV1"));
             ((MyInfoView1Line) control).setDefaultTv2(bundle.getString(baseName + ".TV2"));
+        }
+        else if (control instanceof MyInfoView3Line)
+        {
+            ((MyInfoView3Line) control).setDefaultTv1(bundle.getString(baseName + ".TV1"));
+            ((MyInfoView3Line) control).setDefaultTv2(bundle.getString(baseName + ".TV2"));
+            ((MyInfoView3Line) control).setDefaultTv3(bundle.getString(baseName + ".TV3"));
         }
         else if (control instanceof CheckBox)
         {
