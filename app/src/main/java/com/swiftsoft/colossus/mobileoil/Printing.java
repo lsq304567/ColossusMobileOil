@@ -1043,7 +1043,7 @@ public class Printing
 			DecimalFormat decf2 = new DecimalFormat("#,##0.00");
 
 			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
-			printer.addTextRight(Size.Large, 400, finalPosition, 250, title);
+			printer.addTextRight(Size.Large, 300, finalPosition, 250, title);
 			finalPosition = printer.addTextRight(Size.Large, 590, finalPosition, 180, decf2.format(amount));
 		}
 
