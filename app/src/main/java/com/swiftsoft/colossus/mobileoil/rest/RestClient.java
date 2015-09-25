@@ -1,9 +1,5 @@
 package com.swiftsoft.colossus.mobileoil.rest;
 
-import java.io.*;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -18,8 +14,15 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
-public class RestClient {
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 
+public class RestClient implements IRestClient
+{
     private ArrayList <NameValuePair> params;
     private ArrayList <NameValuePair> headers;
     private String body;
@@ -30,11 +33,11 @@ public class RestClient {
     private String message;
     private String response;
 
-    public enum RequestMethod
-    {
-     GET,
-     POST
-    }
+//    public enum RequestMethod
+//    {
+//     GET,
+//     POST
+//    }
     
     public String getResponse()
     {
@@ -58,22 +61,22 @@ public class RestClient {
         headers = new ArrayList<NameValuePair>();
     }
 
-    public void AddParam(String name, String value)
+    public void addParameter(String name, String value)
     {
         params.add(new BasicNameValuePair(name, value));
     }
 
-    public void AddHeader(String name, String value)
+    public void addHeader(String name, String value)
     {
         headers.add(new BasicNameValuePair(name, value));
     }
     
-    public void AddBody(String value)
+    public void addBody(String value)
     {
     	body = value;
     }
 
-    public void Execute(RequestMethod method) throws Exception
+    public void execute(RequestMethod method) throws Exception
     {
         switch(method)
         {
@@ -199,6 +202,7 @@ public class RestClient {
                 e.printStackTrace();
             }
         }
+
         return sb.toString();
     }
 }

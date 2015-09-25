@@ -1,11 +1,8 @@
 package com.swiftsoft.colossus.mobileoil.service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import android.app.IntentService;
+import android.content.Intent;
+import android.os.Bundle;
 
 import com.activeandroid.ActiveAndroid;
 import com.swiftsoft.colossus.mobileoil.Active;
@@ -23,11 +20,15 @@ import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleChecklist;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleChecklistSection;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleChecklistSectionItem;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleStock;
+import com.swiftsoft.colossus.mobileoil.rest.IRestClient;
 import com.swiftsoft.colossus.mobileoil.rest.RestClient;
 
-import android.app.IntentService;
-import android.content.Intent;
-import android.os.Bundle;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 public class ColossusIntentService extends IntentService
 {
@@ -201,10 +202,10 @@ public class ColossusIntentService extends IntentService
 			String colossusURL = dbSetting.FindByKey("ColossusURL").StringValue;
 			
 			// Create RESTful client.
-			RestClient client = new RestClient(colossusURL + "/MessageExchange");
+			IRestClient client = new RestClient(colossusURL + "/MessageExchange");
 			
 			// JSON header.
-			client.AddHeader("Content-type", "application/json");
+			client.addHeader("Content-type", "application/json");
 			
 			// JSON body.
 			JSONObject jsonIn = new JSONObject();
@@ -215,12 +216,12 @@ public class ColossusIntentService extends IntentService
 				jsonIn.put("Body", bodyIn);
 			}
 
-			client.AddBody(jsonIn.toString());
+			client.addBody(jsonIn.toString());
 
 			try
 			{
 				// Call Mobile WebService.
-			    client.Execute(RestClient.RequestMethod.POST);
+			    client.execute(RestClient.RequestMethod.POST);
 			} 
 			catch (Exception e1)
 			{
@@ -266,18 +267,18 @@ public class ColossusIntentService extends IntentService
 				        min.save();
 				        
 				        // Confirm message received.
-						RestClient client2 = new RestClient(colossusURL + "/MessageReceived");
+						IRestClient client2 = new RestClient(colossusURL + "/MessageReceived");
 						
 						// JSON header.
-						client2.AddHeader("Content-type", "application/json");
+						client2.addHeader("Content-type", "application/json");
 						
 						// JSON body.
-						client2.AddBody(Integer.toString(min.MessageID));
+						client2.addBody(Integer.toString(min.MessageID));
 
 						try
 						{
 							// Call Mobile WebService.
-						    client2.Execute(RestClient.RequestMethod.POST);
+						    client2.execute(RestClient.RequestMethod.POST);
 						} 
 						catch (Exception e2)
 						{

@@ -1,7 +1,5 @@
 package com.swiftsoft.colossus.mobileoil.service;
 
-import org.json.JSONObject;
-
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +10,10 @@ import android.os.RemoteException;
 import com.swiftsoft.colossus.mobileoil.CrashReporter;
 import com.swiftsoft.colossus.mobileoil.R;
 import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
+import com.swiftsoft.colossus.mobileoil.rest.IRestClient;
 import com.swiftsoft.colossus.mobileoil.rest.RestClient;
+
+import org.json.JSONObject;
 
 
 public class LicensingIntentService extends IntentService
@@ -48,18 +49,18 @@ public class LicensingIntentService extends IntentService
 			String body = json.toString();
 			
 			// Create RESTful client.
-			RestClient client = new RestClient(getResources().getString(R.string.licensing_url) + type);
+			IRestClient client = new RestClient(getResources().getString(R.string.licensing_url) + type);
 			
 			// JSON header.
-			client.AddHeader("Content-type", "application/json");
+			client.addHeader("Content-type", "application/json");
 			
 			// JSON body.
-			client.AddBody(body);
+			client.addBody(body);
 			
 			try
 			{
 				// Call Licensing WebService.
-			    client.Execute(RestClient.RequestMethod.POST);
+			    client.execute(RestClient.RequestMethod.POST);
 			}
 			catch (Exception e1)
 			{

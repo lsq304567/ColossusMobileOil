@@ -1,0 +1,27 @@
+package com.swiftsoft.colossus.mobileoil.rest;
+
+/**
+ * Created by Alan on 25/09/2015.
+ */
+public interface IRestClient
+{
+    enum RequestMethod
+    {
+        GET,
+        POST
+    }
+
+    String getResponse();
+
+    String getErrorMessage();
+
+    int getResponseCode();
+
+    void addParameter(String name, String value);
+
+    void addHeader(String name, String value);
+
+    void addBody(String value);
+
+    void execute(RequestMethod method) throws Exception;
+}
