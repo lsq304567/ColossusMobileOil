@@ -1,6 +1,14 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import org.json.JSONObject;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.swiftsoft.colossus.mobileoil.database.model.dbDriver;
 import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
@@ -9,17 +17,7 @@ import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
 import com.swiftsoft.colossus.mobileoil.utilities.ControlSaver;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.drawable.GradientDrawable;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import org.json.JSONObject;
 
 public class Logon extends Activity
 {
