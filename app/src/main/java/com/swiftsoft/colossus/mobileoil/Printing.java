@@ -306,13 +306,13 @@ public class Printing
 			finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, getCustomerDetails(order));
 
             // Print the delivery address
-			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
+			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 			finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, order.DeliveryAddress.replace("\n", ", "));
 
 			// Print description of each of the undelivered products
 			for (String productOrdered : order.getProductsOrdered("\n").split("\n"))
 			{
-				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
+				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 				finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, productOrdered);
 			}
 		}
