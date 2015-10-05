@@ -271,7 +271,7 @@ public class Printing
 			// Print Undelivered Orders header
 			finalPosition = printTitle(printer, finalPosition, "Undelivered orders");
 
-			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
+			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
 			// Process all the Undelivered Orders
 			finalPosition = printAllUndeliveredOrders(printer, finalPosition, orders);
@@ -301,17 +301,18 @@ public class Printing
 		// Process the output of each undelivered order
 		for (dbTripOrder order : orders)
 		{
+			// Print theCustomer Details
+			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
 			finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, getCustomerDetails(order));
 
+            // Print the delivery address
 			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
-
 			finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, order.DeliveryAddress.replace("\n", ", "));
 
 			// Print description of each of the undelivered products
 			for (String productOrdered : order.getProductsOrdered("\n").split("\n"))
 			{
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
-
 				finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, productOrdered);
 			}
 		}
