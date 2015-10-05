@@ -1135,44 +1135,44 @@ public class Printing
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 
 				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Ticket number");
-				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 200, line.ticketNo);
+				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, line.ticketNo);
 
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
 				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Product Desc");
-				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 200, line.ticketProductDesc);
+				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, line.ticketProductDesc);
 
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
 				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Start");
-				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 200, line.ticketStartTime);
+				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, line.ticketStartTime);
 
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
 				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Finish");
-				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 200, line.ticketFinishTime);
+				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, line.ticketFinishTime);
 
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
 				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Totalizer start");
-				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 200, decf0.format(line.ticketStartTotaliser));
+				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, decf0.format(line.ticketStartTotaliser));
 
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
 				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Totalizer end");
-				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 200, decf0.format(line.ticketEndTotaliser));
+				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, decf0.format(line.ticketEndTotaliser));
 
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
 				if (line.ticketAt15Degrees)
 				{
 					printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Volume delivered @ 15.0 C");
-					finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 200, decf0.format(line.ticketNetVolume));
+					finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, decf0.format(line.ticketNetVolume));
 				}
 				else
 				{
 					printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Volume delivered @ " + decf1.format(line.ticketTemperature) + " C");
-					finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 200, decf0.format(line.ticketGrossVolume));
+					finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, decf0.format(line.ticketGrossVolume));
 				}
 			}
 		}
