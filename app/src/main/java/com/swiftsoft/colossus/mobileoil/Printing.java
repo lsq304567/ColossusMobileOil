@@ -1,14 +1,5 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.zip.GZIPOutputStream;
-
 import android.content.Context;
 import android.content.Intent;
 import android.util.Base64;
@@ -26,6 +17,15 @@ import com.swiftsoft.colossus.mobileoil.printingsystem.BitmapPrinter;
 import com.swiftsoft.colossus.mobileoil.printingsystem.Printer;
 import com.swiftsoft.colossus.mobileoil.printingsystem.Printer.Size;
 import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
+
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.zip.GZIPOutputStream;
 
 public class Printing
 {
@@ -1101,7 +1101,7 @@ public class Printing
 		printer.addTextLeft(Size.Large, 20, finalPosition, 400, "Product");
 		printer.addTextRight(Size.Large, 300, finalPosition, 100, "Litres");
 		printer.addTextRight(Size.Large, 490, finalPosition, 100, "Price");
-		finalPosition = printer.addTextRight(Size.Large, 680, finalPosition, 100, "Value");
+		finalPosition = printer.addTextRight(Size.Large, 600, finalPosition, 180, "Value");
 
 		finalPosition = printer.addLine(finalPosition + 10);
 
@@ -1127,7 +1127,7 @@ public class Printing
 
 			if (deliveredValue != 0)
 			{
-				finalPosition = printer.addTextRight(Size.Large, 680, finalPosition, 100, decf2.format(deliveredValue));
+				finalPosition = printer.addTextRight(Size.Large, 600, finalPosition, 180, decf2.format(deliveredValue));
 			}
 
 			if (line.ticketNo != null)
