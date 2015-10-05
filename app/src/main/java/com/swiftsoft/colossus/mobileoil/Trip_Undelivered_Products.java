@@ -1,7 +1,5 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,8 +17,11 @@ import android.widget.TextView;
 import com.swiftsoft.colossus.mobileoil.bluetooth.MeterMate;
 import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrderLine;
+import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
+
+import org.json.JSONObject;
 
 public class Trip_Undelivered_Products extends MyFlipperView
 {
@@ -496,12 +497,43 @@ public class Trip_Undelivered_Products extends MyFlipperView
 				
 				// Update stock on server.
 				trip.sendVehicleStock();
+
+                // Save MeterMate data to Colossus Server
+                saveMeterMateData();
 			}
 			catch (Exception e)
 			{
 				CrashReporter.logHandledException(e);
 			}
 		}
+
+        private void saveMeterMateData() throws Exception
+        {
+            Intent i = new Intent(getContext(), ColossusIntentService.class);
+
+            // Set the type of the data being stored
+            i.putExtra("Type", "MeterMate_Data");
+
+            // Construct the data to be stored as JSON
+            JSONObject json = new JSONObject();
+
+            json.put("Number", MeterMate.getTicketNo());
+            json.put("ProductDescrition", MeterMate.getTicketProductDesc());
+            json.put("StartTime", MeterMate.getTicketStartTime());
+            json.put("FinishTime", MeterMate.getTicketFinishTime());
+            json.put("StartTotaliser", MeterMate.getTicketStartTotaliser());
+            json.put("EndTotaliser", MeterMate.getTicketEndTotaliser());
+            json.put("GrossVolume", MeterMate.getTicketGrossVolume());
+            json.put("NetVolume", MeterMate.getTicketNetVolume());
+            json.put("Temperature", MeterMate.getTicketTemperature());
+            json.put("At15Degress", MeterMate.getTicketAt15Degrees());
+
+            // Set the content
+            i.putExtra("Content", json.toString());
+
+            // Perform the storage
+            getContext().startService(i);
+        }
 
 		@Override
 		public void onNextClicked()
