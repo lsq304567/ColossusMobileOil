@@ -518,7 +518,7 @@ public class Trip_Undelivered_Products extends MyFlipperView
             JSONObject json = new JSONObject();
 
             json.put("Number", MeterMate.getTicketNo());
-            json.put("ProductDescrition", MeterMate.getTicketProductDesc());
+            json.put("ProductDescription", MeterMate.getTicketProductDesc());
             json.put("StartTime", MeterMate.getTicketStartTime());
             json.put("FinishTime", MeterMate.getTicketFinishTime());
             json.put("StartTotaliser", MeterMate.getTicketStartTotaliser());
