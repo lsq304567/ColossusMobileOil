@@ -1,17 +1,20 @@
 package com.swiftsoft.colossus.mobileoil.bluetooth;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import org.json.JSONObject;
-
-//import com.swiftsoft.colossus.mobileoil.R;
-
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
+
+import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Date;
+//import com.swiftsoft.colossus.mobileoil.R;
 
 public class MeterMate
 {
@@ -70,8 +73,28 @@ public class MeterMate
 	// Demo simulator.
 	static boolean demoMode = false;
 	static boolean demoPumping = false;
+
+    // Private member holding Bluetooth messages sent/received
+	static ArrayList<BluetoothMessage> btMessages;
+
+	static boolean logBluetoothData = false;
 	
 	// Public comms status
+
+	public static boolean getLogBluetoothData()
+	{
+		return logBluetoothData;
+	}
+
+	public static void setLogBluetoothData(boolean logData)
+	{
+		logBluetoothData = logData;
+	}
+
+    public static ArrayList<BluetoothMessage> getMessages()
+    {
+        return btMessages;
+    }
 	
 	public static synchronized int getCommsStatus()
 	{
@@ -464,6 +487,9 @@ public class MeterMate
 						}
 						else
 						{
+                            // Create object for holding sent/received BT messages
+                            btMessages =  new ArrayList<BluetoothMessage>();
+
 							// Check MeterMate version is ok.
 							SendMessage("Gv");
 						
@@ -569,7 +595,14 @@ public class MeterMate
 				outStream.write(buffer);
 				outStream.write(ETX);
 				outStream.flush();
-				
+
+                if (getLogBluetoothData())
+                {
+                    BluetoothMessage btMessage = new BluetoothMessage(BluetoothMessage.Direction.Outgoing, message, new Date().getTime());
+
+                    btMessages.add(btMessage);
+                }
+
 				return true;
 			}
 		}
@@ -598,6 +631,13 @@ public class MeterMate
 	{
 		try
 		{
+            if (getLogBluetoothData())
+            {
+                BluetoothMessage btMessage = new BluetoothMessage(BluetoothMessage.Direction.Incoming, message, new Date().getTime());
+
+                btMessages.add(btMessage);
+            }
+
 			// Parse message into a JSON array.
 			JSONObject json = new JSONObject(message);
 			
@@ -676,5 +716,16 @@ public class MeterMate
 		// Start background thread.
 		Thread thread = new Thread(runnable);
 		thread.start();
+
+        dbSetting dbLogBluetoothData = dbSetting.FindByKey("LogBluetoothData");
+
+        if (dbLogBluetoothData != null)
+        {
+            logBluetoothData = dbLogBluetoothData.IntValue == 0 ? false : true;
+        }
+        else
+        {
+            logBluetoothData = false;
+        }
 	}
 }

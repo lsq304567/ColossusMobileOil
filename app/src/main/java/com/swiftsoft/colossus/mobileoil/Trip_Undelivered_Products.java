@@ -14,6 +14,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.swiftsoft.colossus.mobileoil.bluetooth.BluetoothMessage;
 import com.swiftsoft.colossus.mobileoil.bluetooth.MeterMate;
 import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrderLine;
@@ -21,6 +22,7 @@ import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Trip_Undelivered_Products extends MyFlipperView
@@ -498,8 +500,11 @@ public class Trip_Undelivered_Products extends MyFlipperView
 				// Update stock on server.
 				trip.sendVehicleStock();
 
-                // Save MeterMate data to Colossus Server
-                saveMeterMateData();
+				if (MeterMate.getLogBluetoothData())
+				{
+					// Save MeterMate data to Colossus Server
+					saveMeterMateData();
+				}
 			}
 			catch (Exception e)
 			{
@@ -514,19 +519,35 @@ public class Trip_Undelivered_Products extends MyFlipperView
             // Set the type of the data being stored
             i.putExtra("Type", "MeterMate_Data");
 
+			// Put the Bluetooth messages in a JSONArray
+			JSONArray jsonArray = new JSONArray();
+
+			for (BluetoothMessage message : MeterMate.getMessages())
+			{
+				JSONObject jo = new JSONObject();
+
+				jo.put("Direction", message.getMessageDirection() == BluetoothMessage.Direction.Incoming ? "In" : "Out");
+				jo.put("Content", message.getMessageContent());
+				jo.put("Date", "/Date(" + message.getMessageDate() + ")/");
+
+				jsonArray.put(jo);
+			}
+
             // Construct the data to be stored as JSON
             JSONObject json = new JSONObject();
 
-            json.put("Number", MeterMate.getTicketNo());
-            json.put("ProductDescription", MeterMate.getTicketProductDesc());
-            json.put("StartTime", MeterMate.getTicketStartTime());
-            json.put("FinishTime", MeterMate.getTicketFinishTime());
-            json.put("StartTotaliser", MeterMate.getTicketStartTotaliser());
-            json.put("EndTotaliser", MeterMate.getTicketEndTotaliser());
-            json.put("GrossVolume", MeterMate.getTicketGrossVolume());
-            json.put("NetVolume", MeterMate.getTicketNetVolume());
-            json.put("Temperature", MeterMate.getTicketTemperature());
-            json.put("At15Degress", MeterMate.getTicketAt15Degrees());
+			json.put("BluetoothMessages", jsonArray);
+
+//            json.put("Number", MeterMate.getTicketNo());
+//            json.put("ProductDescription", MeterMate.getTicketProductDesc());
+//            json.put("StartTime", MeterMate.getTicketStartTime());
+//            json.put("FinishTime", MeterMate.getTicketFinishTime());
+//            json.put("StartTotaliser", MeterMate.getTicketStartTotaliser());
+//            json.put("EndTotaliser", MeterMate.getTicketEndTotaliser());
+//            json.put("GrossVolume", MeterMate.getTicketGrossVolume());
+//            json.put("NetVolume", MeterMate.getTicketNetVolume());
+//            json.put("Temperature", MeterMate.getTicketTemperature());
+//            json.put("At15Degress", MeterMate.getTicketAt15Degrees());
 
             // Set the content
             i.putExtra("Content", json.toString());

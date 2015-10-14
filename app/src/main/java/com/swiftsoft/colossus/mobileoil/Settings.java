@@ -1,10 +1,5 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import java.util.List;
-
-import com.swiftsoft.colossus.mobileoil.bluetooth.Discovery;
-import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.swiftsoft.colossus.mobileoil.bluetooth.Discovery;
+import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
+
+import java.util.List;
 
 public class Settings extends Activity
 {
@@ -42,6 +42,12 @@ public class Settings extends Activity
 	
 	private dbSetting colossusURL;
 	private String colossusURLValue;
+
+    private dbSetting logBluetoothData;
+    private Button btnLogData;
+
+    private final String DATA_LOGGED = "Logging";
+    private final String DATA_NOT_LOGGED = "Not Logging";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -71,6 +77,8 @@ public class Settings extends Activity
 			tvURL = (TextView) this.findViewById(R.id.settings_url_tv);
 			etURL = (EditText) this.findViewById(R.id.settings_url_et);
 			tvSerialNo = (TextView) this.findViewById(R.id.settings_serial_no);
+
+            btnLogData = (Button)this.findViewById(R.id.settings_log_data);
 			
 			// Find/Create settings in database.
 			printerName = dbSetting.FindByKeyOrCreate("PrinterName");
@@ -84,6 +92,17 @@ public class Settings extends Activity
 			
 			metermateAddress = dbSetting.FindByKeyOrCreate("MeterMateAddress");
 			metermateOldAddressStringValue = metermateAddress.StringValue;
+
+            logBluetoothData = dbSetting.FindByKeyOrCreate("LogBluetoothData");
+
+            if (logBluetoothData.IntValue == 0)
+            {
+                btnLogData.setText(DATA_NOT_LOGGED);
+            }
+            else
+            {
+                btnLogData.setText(DATA_LOGGED);
+            }
 			
 			colossusURL = dbSetting.FindByKey("ColossusURL");
 			colossusURLValue = colossusURL.StringValue;
@@ -276,6 +295,34 @@ public class Settings extends Activity
 	    	}
 		}
 	};
+
+	public void onLogDataClick(View v)
+	{
+		try
+        {
+            // Leave Breadcrub
+            CrashReporter.leaveBreadcrumb("Settings: onLogDataClick");
+
+            if (btnLogData.getText() == DATA_NOT_LOGGED)
+            {
+                logBluetoothData.IntValue = 1;
+                logBluetoothData.save();
+
+                btnLogData.setText(DATA_LOGGED);
+            }
+            else
+            {
+                logBluetoothData.IntValue = 0;
+                logBluetoothData.save();
+
+                btnLogData.setText(DATA_NOT_LOGGED);
+            }
+        }
+        catch (Exception e)
+        {
+            CrashReporter.logHandledException(e);
+        }
+	}
 
 	public void onMeterMateChange(View v)
     {
