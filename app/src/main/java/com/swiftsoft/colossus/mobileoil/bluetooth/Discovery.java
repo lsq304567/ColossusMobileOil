@@ -1,10 +1,5 @@
 package com.swiftsoft.colossus.mobileoil.bluetooth;
 
-import com.swiftsoft.colossus.mobileoil.CrashReporter;
-import com.swiftsoft.colossus.mobileoil.R;
-
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -18,11 +13,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.swiftsoft.colossus.mobileoil.CrashReporter;
+import com.swiftsoft.colossus.mobileoil.R;
+
+import java.util.ArrayList;
 
 public class Discovery extends Activity
 {
@@ -383,7 +383,7 @@ public class Discovery extends Activity
 				
 				discoveredDevices.add(dd);
 				
-				RefreshData();
+				refreshData();
 			}
 			catch (Exception e)
 			{
@@ -392,7 +392,7 @@ public class Discovery extends Activity
 		}
 	};
 	
-	void RefreshData()
+	void refreshData()
 	{
 		try
 		{
