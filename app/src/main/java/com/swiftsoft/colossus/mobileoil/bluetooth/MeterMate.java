@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
+import com.swiftsoft.colossus.mobileoil.CrashReporter;
 import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
 
 import org.json.JSONObject;
@@ -408,6 +409,8 @@ public class MeterMate
 			{
 				try
 				{
+                    CrashReporter.leaveBreadcrumb("MeterMate: runnable.run");
+
 					// Determine if in demo simulator mode.
 					demoMode = deviceAddress.equals("00:00:00:00:00");
 					
@@ -569,7 +572,9 @@ public class MeterMate
 				{
 					// Log exception.
 					if (D)
-						Log.d(TAG, "Run exception " + e.getMessage());
+                    {
+                        Log.d(TAG, "Run exception " + e.getMessage());
+                    }
 
 					// Set status to Disconnected.
 					setCommsStatus(COMMS_DISCONNECTED);
@@ -578,6 +583,8 @@ public class MeterMate
 					socket = null;
 					inStream = null;
 					outStream = null;
+
+                    CrashReporter.logHandledException(e);
 				}
 			}
 		}
