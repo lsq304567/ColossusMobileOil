@@ -214,38 +214,43 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 	{
 		try
 		{
-			// Update comms status.
-			if (MeterMate.getCommsStatus() == MeterMate.COMMS_CONNECTED)
-			{
-				tvStatus.setText("Connected");
-	
-				// Update demo buttons.
-	    		btnStart.setEnabled(true);
-	    		btnStop.setEnabled(false);
-				
-				// Now preset the meter.
-				if (presetLitres != 0)
-				{
-					MeterMate.setPreset(presetLitres);
-					
-					// Reset to zero again.
-					presetLitres = 0;
-				}
-			}
-			
-			if (MeterMate.getCommsStatus() == MeterMate.COMMS_CONNECTING)
-			{
-				tvStatus.setText("Connecting");
-			}
-	
-			if (MeterMate.getCommsStatus() == MeterMate.COMMS_DISCONNECTED)
-			{
-				tvStatus.setText("Disconnected");
-	
-				// Update demo buttons.
-	    		btnStart.setEnabled(false);
-	    		btnStop.setEnabled(false);
-			}
+            switch (MeterMate.getCommsStatus())
+            {
+                case MeterMate.COMMS_CONNECTED:
+
+                    tvStatus.setText("Connected");
+
+                    // Update demo buttons.
+                    btnStart.setEnabled(true);
+                    btnStop.setEnabled(false);
+
+                    // Now preset the meter.
+                    if (presetLitres != 0)
+                    {
+                        MeterMate.setPreset(presetLitres);
+
+                        // Reset to zero again.
+                        presetLitres = 0;
+                    }
+
+                    break;
+
+                case MeterMate.COMMS_CONNECTING:
+
+                    tvStatus.setText("Connecting");
+
+                    break;
+
+                case MeterMate.COMMS_DISCONNECTED:
+
+                    tvStatus.setText("Disconnected");
+
+                    // Update demo buttons.
+                    btnStart.setEnabled(false);
+                    btnStop.setEnabled(false);
+
+                    break;
+            }
 		}
 		catch (Exception e)
 		{
