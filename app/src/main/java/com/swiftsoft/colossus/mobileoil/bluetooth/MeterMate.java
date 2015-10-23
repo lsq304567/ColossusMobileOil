@@ -522,7 +522,8 @@ public class MeterMate
 											if (byteIn[i] == ETX)
 											{
 												// End of message.
-												ProcessMessage(message);
+												processMessage(message);
+                                                
 												continue;
 											}
 											
@@ -628,7 +629,7 @@ public class MeterMate
 	}
 
 	// Process message from MeterMate.
-	static void ProcessMessage(String message)
+	static void processMessage(String message)
 	{
 		try
 		{
