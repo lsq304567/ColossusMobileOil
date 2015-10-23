@@ -179,7 +179,7 @@ public class ColossusIntentService extends IntentService
 				dbMessageIn min = messagesIn.get(j);
 
 				// Process inbound message.
-				ProcessMessage(min);
+				processMessage(min);
 			
 				// Delete inbound message.
 				dbMessageIn.delete(dbMessageIn.class, min.getId());
@@ -310,7 +310,7 @@ public class ColossusIntentService extends IntentService
 		return false;
 	}
 	
-	private boolean ProcessMessage(dbMessageIn messageIn)
+	private boolean processMessage(dbMessageIn messageIn)
 	{
 		try
 		{
