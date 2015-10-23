@@ -1,3 +1,9 @@
+V0.99t7
+=======
+
+Added some Crashltics stuff
+Corrected casing of some of the methods to comply with Java standards
+
 V0.99t6
 =======
 
