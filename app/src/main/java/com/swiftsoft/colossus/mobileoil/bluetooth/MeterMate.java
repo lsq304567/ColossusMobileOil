@@ -426,7 +426,7 @@ public class MeterMate
 						if (!demoMode)
 						{
 							// Disable Bluetooth to flush old connections.
-							Bluetooth.Disable();
+							Bluetooth.disable();
 							
 							// Ensure Bluetooth is enabled.
 							Bluetooth.enable();
@@ -562,7 +562,7 @@ public class MeterMate
 						if (!demoMode)
 						{
 							// Disable Bluetooth.
-							Bluetooth.Disable();
+							Bluetooth.disable();
 						}
 					}
 					

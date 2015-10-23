@@ -68,7 +68,7 @@ public class Bluetooth
 		return socket;
 	}
 	
-	public static void Disable() throws InterruptedException
+	public static void disable() throws InterruptedException
 	{
 		if (bluetooth.isEnabled())
 		{
@@ -81,7 +81,9 @@ public class Bluetooth
 				Thread.sleep(500);
 		
 				if (bluetooth.getState() == BluetoothAdapter.STATE_OFF)
+				{
 					break;
+				}
 			}
 		}
 	}
