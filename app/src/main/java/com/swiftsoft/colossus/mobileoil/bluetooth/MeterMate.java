@@ -384,7 +384,7 @@ public class MeterMate
 		}
 		else
 		{
-			SendMessage("Sp," + Integer.toString(litres));
+			sendMessage("Sp," + Integer.toString(litres));
 		}
 	}
 	
@@ -491,7 +491,7 @@ public class MeterMate
                             btMessages =  new ArrayList<BluetoothMessage>();
 
 							// Check MeterMate version is ok.
-							SendMessage("Gv");
+							sendMessage("Gv");
 						
 							// Await messages.
 							String message = "";
@@ -537,7 +537,8 @@ public class MeterMate
 								if (keepAlive++ > 40)
 								{
 									keepAlive = 0;
-									SendMessage("NOP");
+
+									sendMessage("NOP");
 								}
 								
 								Thread.sleep(250);
@@ -582,7 +583,7 @@ public class MeterMate
 	};
 
 	// Send message to MeterMate.
-	static synchronized boolean SendMessage(String message)
+	static synchronized boolean sendMessage(String message)
 	{
 		try
 		{
@@ -658,7 +659,7 @@ public class MeterMate
 				// Read last ticket.
 				if (readTicket)
 				{
-					SendMessage("Gtr,0");
+					sendMessage("Gtr,0");
 				}
 			}
 
