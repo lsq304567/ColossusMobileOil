@@ -226,7 +226,7 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 				// Now preset the meter.
 				if (presetLitres != 0)
 				{
-					MeterMate.SetPreset(presetLitres);
+					MeterMate.setPreset(presetLitres);
 					
 					// Reset to zero again.
 					presetLitres = 0;

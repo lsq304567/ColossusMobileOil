@@ -371,7 +371,7 @@ public class MeterMate
 		running = false;
 	}
 
-	public static void SetPreset(int litres)
+	public static void setPreset(int litres)
 	{
 		if (D)
 		{
