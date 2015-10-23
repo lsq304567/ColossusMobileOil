@@ -379,7 +379,9 @@ public class Discovery extends Activity
 				dd.remoteDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 				
 				if (dd.remoteDevice.getAddress().equals(oldAddress))
+				{
 					dd.current = true;
+				}
 				
 				discoveredDevices.add(dd);
 				
