@@ -135,7 +135,7 @@ public class ColossusIntentService extends IntentService
 			if (messagesOut.size() == 0)
 			{
 				// No outgoing messages.
-				ExchangeMessages(DeviceNo, null);
+				exchangeMessages(DeviceNo, null);
 			}
 			else
 			{
@@ -152,7 +152,7 @@ public class ColossusIntentService extends IntentService
 					json.put("Guid", mout.Guid);
 
 					// Send/Receive messages.
-					if (!ExchangeMessages(DeviceNo, json))
+					if (!exchangeMessages(DeviceNo, json))
 					{
 						// Update debug UI.
 						sendDebugMessage("Send failed");
@@ -191,7 +191,7 @@ public class ColossusIntentService extends IntentService
 		}
 	}
 
-	private boolean ExchangeMessages(int deviceNo, JSONObject bodyIn)
+	private boolean exchangeMessages(int deviceNo, JSONObject bodyIn)
 	{
 		try
 		{		
