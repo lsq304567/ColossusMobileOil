@@ -290,7 +290,7 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 					tvReadingTicket.setVisibility(View.VISIBLE);
 					
 					// Read last ticket.
-					MeterMate.ReadTicket();
+					MeterMate.readTicket();
 				}
 							
 				if (MeterMate.hasTicket())

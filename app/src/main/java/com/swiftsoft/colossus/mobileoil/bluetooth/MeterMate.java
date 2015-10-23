@@ -388,7 +388,7 @@ public class MeterMate
 		}
 	}
 	
-	public static void ReadTicket()
+	public static void readTicket()
 	{
 		if (D)
 		{
@@ -523,7 +523,7 @@ public class MeterMate
 											{
 												// End of message.
 												processMessage(message);
-                                                
+
 												continue;
 											}
 											
