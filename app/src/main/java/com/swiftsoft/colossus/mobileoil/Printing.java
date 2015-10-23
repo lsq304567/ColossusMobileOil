@@ -394,7 +394,7 @@ public class Printing
 	{
 		PrintingService service = new PrintingService(context, "Printing");
 
-		service.Print(printer.getPrinterData());
+		service.print(printer.getPrinterData());
 	}
 
 	public static void tripReport(Context context)

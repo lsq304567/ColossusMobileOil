@@ -1,7 +1,5 @@
 package com.swiftsoft.colossus.mobileoil.bluetooth;
 
-import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -11,6 +9,8 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+
+import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
 
 public class PrintingService
 {
@@ -38,7 +38,7 @@ public class PrintingService
 		this.title = title;
 	}
 	
-	public void Print(String data)
+	public void print(String data)
 	{
 		// Print data without brand logo.
 		internalPrint(data, 0);
