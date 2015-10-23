@@ -1,11 +1,11 @@
 package com.swiftsoft.colossus.mobileoil.bluetooth;
 
-import java.lang.reflect.Method;
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
+
+import java.lang.reflect.Method;
 
 public class Bluetooth
 {
@@ -16,7 +16,7 @@ public class Bluetooth
 	// Must be initialised from UI thread.
 	public static BluetoothAdapter bluetooth;
 	
-	public static void Enable() throws InterruptedException
+	public static void enable() throws InterruptedException
 	{
 		if (!bluetooth.isEnabled())
 		{

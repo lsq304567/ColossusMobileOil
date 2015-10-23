@@ -429,7 +429,7 @@ public class MeterMate
 							Bluetooth.Disable();
 							
 							// Ensure Bluetooth is enabled.
-							Bluetooth.Enable();
+							Bluetooth.enable();
 
 							// Try to connect to MeterMate.
 							socket = Bluetooth.Connect(deviceAddress);
