@@ -238,11 +238,6 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 				tvStatus.setText("Connecting");
 			}
 	
-//			if (MeterMate.getCommsStatus() == MeterMate.COMMS_UPGRADING)
-//			{
-//				tvStatus.setText("Upgrading " + MeterMate.getUpgradePercentage() + "%");
-//			}
-	
 			if (MeterMate.getCommsStatus() == MeterMate.COMMS_DISCONNECTED)
 			{
 				tvStatus.setText("Disconnected");
@@ -313,9 +308,13 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 			tvPresetLitres.setText(MeterMate.getPresetLitres());
 			
 			if (btnBack.isEnabled())
+			{
 				tvDeliveredLitres.setText("");
+			}
 			else
+			{
 				tvDeliveredLitres.setText(MeterMate.getRealtimeLitres());
+			}
 			
 			tvTemperature.setText(MeterMate.getTemperature());
 		}
