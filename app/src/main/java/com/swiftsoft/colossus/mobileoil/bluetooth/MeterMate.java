@@ -334,7 +334,7 @@ public class MeterMate
 		ticketAt15Degrees = false;
 	}	
 	
-	public static boolean Startup(Handler myHandler, Context myContext, String myDeviceAddress)
+	public static boolean startup(Handler myHandler, Context myContext, String myDeviceAddress)
 	{
 		if (inUse)
 		{
