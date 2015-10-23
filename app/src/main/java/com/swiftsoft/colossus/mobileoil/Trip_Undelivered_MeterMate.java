@@ -305,7 +305,7 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 					btnNext.setEnabled(true);
 					
 					// Shutdown MeterMate connection.
-					MeterMate.Shutdown();
+					MeterMate.shutdown();
 				}
 			}
 	
@@ -401,7 +401,7 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 				CrashReporter.leaveBreadcrumb("Trip_Undelivered_MeterMate: onBack");
 
 				// Shutdown MeterMate.
-				MeterMate.Shutdown();
+				MeterMate.shutdown();
 				
 				// Switch to previous view.
 				trip.selectView(previousViewName, -1);

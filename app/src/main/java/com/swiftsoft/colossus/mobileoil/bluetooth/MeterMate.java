@@ -365,7 +365,7 @@ public class MeterMate
 		return true;
 	}
 	
-	public static void Shutdown()
+	public static void shutdown()
 	{
 		// Stop comms thread running.
 		running = false;
