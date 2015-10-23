@@ -36,14 +36,16 @@ public class Bluetooth
 		}
 	}
 	
-	public static BluetoothSocket Connect(String deviceAddress) throws Exception
+	public static BluetoothSocket connect(String deviceAddress) throws Exception
 	{
 		BluetoothSocket socket = null;
 		
 		if (bluetooth.isEnabled())
 		{
 			if (D)
-				Log.d(TAG, "Connecting to " + deviceAddress);
+            {
+                Log.d(TAG, "Connecting to " + deviceAddress);
+            }
 			
 			BluetoothDevice device = bluetooth.getRemoteDevice(deviceAddress);
 			
@@ -59,7 +61,9 @@ public class Bluetooth
 			socket.connect();
 
 			if (D)
-				Log.d(TAG, "Connected to " + deviceAddress);
+            {
+                Log.d(TAG, "Connected to " + deviceAddress);
+            }
 
 			// Wait a moment.
 			Thread.sleep(200);

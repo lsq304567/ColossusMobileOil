@@ -432,7 +432,7 @@ public class MeterMate
 							Bluetooth.enable();
 
 							// Try to connect to MeterMate.
-							socket = Bluetooth.Connect(deviceAddress);
+							socket = Bluetooth.connect(deviceAddress);
 
 							// Get the in & out streams.
 							inStream = socket.getInputStream();
