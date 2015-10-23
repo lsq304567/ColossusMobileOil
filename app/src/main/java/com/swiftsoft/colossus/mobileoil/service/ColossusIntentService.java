@@ -316,57 +316,57 @@ public class ColossusIntentService extends IntentService
 		{
 			if (messageIn.Type.equals("Vehicles"))
 			{
-				ProcessVehicles(messageIn.Content);
+				processVehicles(messageIn.Content);
 			}
 			
 			if (messageIn.Type.equals("Drivers"))
 			{
-				ProcessDrivers(messageIn.Content);
+				processDrivers(messageIn.Content);
 			}
 			
 			if (messageIn.Type.equals("Products"))
 			{
-				ProcessProducts(messageIn.Content);
+				processProducts(messageIn.Content);
 			}
 			
 			if (messageIn.Type.equals("Brands"))
 			{
-				ProcessBrands(messageIn.Content);
+				processBrands(messageIn.Content);
 			}
 			
 			if (messageIn.Type.equals("Register_Vehicle_OK"))
 			{
-				ProcessRegisterVehicleOK(messageIn.Content);
+				processRegisterVehicleOK(messageIn.Content);
 			}
 			
 			if (messageIn.Type.equals("Register_Vehicle_NOK"))
 			{
-				ProcessRegisterVehicleNOK(messageIn.Content);
+				processRegisterVehicleNOK(messageIn.Content);
 			}
 			
 			if (messageIn.Type.equals("Trip_Add"))
 			{
-				ProcessTripAdd(messageIn.Content);
+				processTripAdd(messageIn.Content);
 			}
 
 			if (messageIn.Type.equals("Trip_Remove"))
 			{
-				ProcessTripRemove(messageIn.Content);
+				processTripRemove(messageIn.Content);
 			}
 			
 			if (messageIn.Type.equals("Trip_Reverse"))
 			{
-				ProcessTripReverse(messageIn.Content);
+				processTripReverse(messageIn.Content);
 			}
 			
 			if (messageIn.Type.equals("Order_Add"))
 			{
-				ProcessOrderAdd(messageIn.Content);
+				processOrderAdd(messageIn.Content);
 			}
 			
 			if (messageIn.Type.equals("Order_Remove"))
 			{
-				ProcessOrderRemove(messageIn.Content);
+				processOrderRemove(messageIn.Content);
 			}
 		}
 		catch (Exception e)
@@ -379,7 +379,7 @@ public class ColossusIntentService extends IntentService
 		return true;
 	}
 
-	private void ProcessVehicles(String content)
+	private void processVehicles(String content)
 	{
 		try
 		{
@@ -475,7 +475,7 @@ public class ColossusIntentService extends IntentService
 		}
 	}
 
-	private void ProcessDrivers(String content)
+	private void processDrivers(String content)
 	{
 		try
 		{
@@ -512,7 +512,7 @@ public class ColossusIntentService extends IntentService
 		}
 	}
 
-	private void ProcessProducts(String content)
+	private void processProducts(String content)
 	{
 		try
 		{
@@ -550,7 +550,7 @@ public class ColossusIntentService extends IntentService
 		}
 	}
 
-	private void ProcessBrands(String content)
+	private void processBrands(String content)
 	{
 		try
 		{
@@ -592,7 +592,7 @@ public class ColossusIntentService extends IntentService
 		}
 	}
 	
-	private void ProcessRegisterVehicleOK(String content)
+	private void processRegisterVehicleOK(String content)
 	{
 		int vehicleID = -1;
 		
@@ -650,7 +650,7 @@ public class ColossusIntentService extends IntentService
 		}
 	}
 	
-	private void ProcessRegisterVehicleNOK(String content)
+	private void processRegisterVehicleNOK(String content)
 	{
 		try
 		{
@@ -668,7 +668,7 @@ public class ColossusIntentService extends IntentService
 		}
 	}
 	
-	private void ProcessTripAdd(String content)
+	private void processTripAdd(String content)
 	{
 		int tripID = -1;
 		JSONArray orderIDs = new JSONArray();
@@ -842,7 +842,7 @@ public class ColossusIntentService extends IntentService
 		}
 	}
 
-	private void ProcessTripRemove(String content)
+	private void processTripRemove(String content)
 	{
 		int tripID = -1;
 		JSONArray orderIDs = new JSONArray();
@@ -972,7 +972,7 @@ public class ColossusIntentService extends IntentService
 		}
 	}
 
-	private void ProcessTripReverse(String content)
+	private void processTripReverse(String content)
 	{
 		int tripID = -1;
 		String resultType = "Trip_Reverse_NOK";
@@ -1050,7 +1050,7 @@ public class ColossusIntentService extends IntentService
 		}
 	}
 
-	private void ProcessOrderAdd(String content)
+	private void processOrderAdd(String content)
 	{
 		int tripID = -1;
 		int operatorID = -1;
@@ -1214,7 +1214,7 @@ public class ColossusIntentService extends IntentService
 		}
 	}
 
-	private void ProcessOrderRemove(String content)
+	private void processOrderRemove(String content)
 	{
 		int tripID = -1;
 		int orderID = -1;
