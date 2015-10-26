@@ -67,8 +67,9 @@ public class Trip_Undelivered_Summary extends MyFlipperView
 			btnBack = (Button)this.findViewById(R.id.trip_undelivered_summary_back);
 			btnSkip = (Button)this.findViewById(R.id.trip_undelivered_summary_skip);
 			btnNext = (Button)this.findViewById(R.id.trip_undelivered_summary_next);
-			
-			btnSkip.setVisibility(View.INVISIBLE);
+
+			// Commented this line to make the Skip button visible
+			// btnSkip.setVisibility(View.INVISIBLE);
 			
 			btnBack.setOnClickListener(onBack);
 			btnSkip.setOnClickListener(onSkip);
