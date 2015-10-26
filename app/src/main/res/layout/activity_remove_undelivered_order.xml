@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:background="@drawable/black_rectangle"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Do you wish to remove this order from the schedule completely?\r\nClick Yes to remove\r\nClick No to reschedule"
+            android:id="@+id/tvRemoveQuery"
+            android:layout_weight="0.5"
+            android:textSize="30sp"
+            android:gravity="center_vertical|center_horizontal"
+            android:paddingTop="40dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        style="@android:style/ButtonBar"
+        android:background="#343234">
+
+        <Button
+            android:id="@+id/remove_undelivered_no"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="No"
+            android:textSize="18sp"
+            android:padding="20sp"
+             />
+
+        <Button
+            android:id="@+id/remove_undelivered_yes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Yes"
+            android:textSize="18sp"
+            android:padding="20sp"
+             />
+
+    </LinearLayout>
+
+</LinearLayout>

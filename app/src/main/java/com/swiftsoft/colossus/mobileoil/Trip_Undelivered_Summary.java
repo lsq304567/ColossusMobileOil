@@ -197,8 +197,15 @@ public class Trip_Undelivered_Summary extends MyFlipperView
 		@Override
 		public void onClick(View paramView)
 		{
-			// Leave breadcrumb.
-			CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: onSkip");
+            try
+            {
+                // Leave breadcrumb.
+                CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: onSkip");
+            }
+            catch (Exception e)
+            {
+                CrashReporter.logHandledException(e);
+            }
 		}
 	};
 
