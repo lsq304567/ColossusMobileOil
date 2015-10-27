@@ -760,6 +760,9 @@ public class Printing
 
 						if (type.length() > 0)
 						{
+							// Add small spacer to give some space between lines
+							finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+							
 							printer.addTextLeft(Size.Normal, 50, finalPosition, 200, stockTran.InvoiceNo);
 							printer.addTextLeft(Size.Normal, 250, finalPosition, 200, stockTran.CustomerCode);
 							printer.addTextLeft(Size.Normal, 450, finalPosition, 100, type);
