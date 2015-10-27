@@ -581,8 +581,8 @@ public class Printing
 				{
 					if (line3.length() > 0)
 					{
-						finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 						finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, line3);
+                        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 					}
 				}
 			}
@@ -762,7 +762,7 @@ public class Printing
 						{
 							// Add small spacer to give some space between lines
 							finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-							
+
 							printer.addTextLeft(Size.Normal, 50, finalPosition, 200, stockTran.InvoiceNo);
 							printer.addTextLeft(Size.Normal, 250, finalPosition, 200, stockTran.CustomerCode);
 							printer.addTextLeft(Size.Normal, 450, finalPosition, 100, type);
