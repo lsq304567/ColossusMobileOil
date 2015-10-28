@@ -1,3 +1,8 @@
+V0.99t8
+=======
+
+Added spacing on trip reports so that print is not so crowded.
+
 V0.99t7
 =======
 
