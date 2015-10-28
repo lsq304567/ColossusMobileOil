@@ -780,18 +780,27 @@ public class Printing
 			{
 				printer.addTextLeft(Size.Large, 200, finalPosition, 180, "Cash");
 				finalPosition = printer.addTextRight(Size.Large, 400, finalPosition, 200, decf2.format(cash));
+
+                // Add small spacer
+                finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 			}
 
 			if (cheques != 0)
 			{
 				printer.addTextLeft(Size.Large, 200, finalPosition, 180, "Cheques");
 				finalPosition = printer.addTextRight(Size.Large, 400, finalPosition, 200, decf2.format(cheques));
+
+                // Add small spacer
+                finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 			}
 
 			if (vouchers != 0)
 			{
 				printer.addTextLeft(Size.Large, 200, finalPosition, 180, "Vouchers");
 				finalPosition = printer.addTextRight(Size.Large, 400, finalPosition, 200, decf2.format(vouchers));
+
+                // Add small spacer
+                finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 			}
 
 			// Print total.
