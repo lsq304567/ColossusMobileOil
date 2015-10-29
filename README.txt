@@ -1,3 +1,9 @@
+V0.99t10
+========
+
+Decrease the increment by which a printer bitmap is extended
+This is to try and reduce memory pressure
+
 V0.99t9
 =======
 
