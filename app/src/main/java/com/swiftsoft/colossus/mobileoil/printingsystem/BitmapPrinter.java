@@ -21,7 +21,7 @@ import java.util.Hashtable;
  */
 public class BitmapPrinter extends Printer
 {
-    private final int HEIGHT_INCREMENT = 2000;
+    private final int HEIGHT_INCREMENT = 400;
 
     // Constant to hold the printer width (in pixels)
     private static final int PRINTER_WIDTH = 800;
