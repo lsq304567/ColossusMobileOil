@@ -440,18 +440,6 @@ public class Printing
 		else
 		{
 			stockList = dbVehicleStock.GetStockByProduct(vehicle);
-
-			if (lineProduct != null)
-			{
-				// Subtract line stock.
-				for (dbVehicleStock vehicleStock : stockList)
-				{
-					if (vehicleStock.Product.getId().equals(lineProduct.getId()))
-					{
-						vehicleStock.CurrentStock -= Active.vehicle.getHosereelCapacity();
-					}
-				}
-			}
 		}
 
 		for (dbVehicleStock vehicleStock : stockList)
@@ -472,21 +460,7 @@ public class Printing
 					printer.addTextLeft(Size.Large, 300, finalPosition, 250, Integer.toString(vehicleStock.Compartment));
 				}
 
-				finalPosition = printer.addTextLeft(Size.Large, 550, finalPosition, 250, Integer.toString(vehicleStock.CurrentStock));
-			}
-		}
-
-		if (!vehicle.StockByCompartment)
-		{
-			if (lineProduct != null)
-			{
-				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
-
-				finalPosition = printTitle(printer, finalPosition, "Line stock");
-
-				printer.addTextLeft(Size.Large, 80, finalPosition, 470, lineProduct.Desc);
-
-				finalPosition = printer.addTextLeft(Size.Large, 550, finalPosition, 250, Integer.toString(Active.vehicle.getHosereelCapacity()));
+				finalPosition = printer.addTextLeft(Size.Large, 550, finalPosition, 250, Integer.toString(vehicleStock.OpeningStock));
 			}
 		}
 
@@ -611,9 +585,6 @@ public class Printing
 
 		finalPosition = printer.addTextLeft(Size.Large, 550, titlePosition, 250, "On board");
 
-		// Get the product that is in the hosereel - if any
-		dbProduct lineProduct = Active.vehicle.getHosereelProduct();
-
 		List<dbVehicleStock> stockList;
 
 		if (vehicle.StockByCompartment)
@@ -623,18 +594,6 @@ public class Printing
 		else
 		{
 			stockList = dbVehicleStock.GetStockByProduct(vehicle);
-
-			if (lineProduct != null)
-			{
-				// Subtract line stock.
-				for (dbVehicleStock vehicleStock : stockList)
-				{
-					if (vehicleStock.Product.getId().equals(lineProduct.getId()))
-					{
-						vehicleStock.CurrentStock -= Active.vehicle.getHosereelCapacity();
-					}
-				}
-			}
 		}
 
 		for (dbVehicleStock vehicleStock : stockList)
@@ -656,20 +615,6 @@ public class Printing
 				}
 
 				finalPosition = printer.addTextLeft(Size.Large, 550, finalPosition, 250, Integer.toString(vehicleStock.CurrentStock));
-			}
-		}
-
-		if (!vehicle.StockByCompartment)
-		{
-			if (lineProduct != null)
-			{
-				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
-
-				finalPosition = printTitle(printer, finalPosition, "Line stock");
-
-				printer.addTextLeft(Size.Large, 80, finalPosition, 470, lineProduct.Desc);
-
-				finalPosition = printer.addTextLeft(Size.Large, 550, finalPosition, 250, Integer.toString(Active.vehicle.getHosereelCapacity()));
 			}
 		}
 

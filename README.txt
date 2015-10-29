@@ -1,3 +1,8 @@
+V0.99t9
+=======
+
+Corrected error on Trip Report were the opening stock was not peinting correctly
+
 V0.99t8
 =======
 
