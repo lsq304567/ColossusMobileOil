@@ -315,6 +315,28 @@ public class Printing
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 				finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, productOrdered);
 			}
+
+            // Print Required by details if present
+            if (order.RequiredBy.length() > 0)
+            {
+                // Add small spacer befor "Required by" line
+                finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+
+                // Now output the Required by details
+                finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, "Required by : " + order.RequiredBy);
+            }
+
+            // Print delivery instructions if available
+            if (order.Notes.length() > 0)
+            {
+                // Add small space before the delivery instructions
+                finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+
+                String deliveryInstructions = order.Notes.replace("\n", ", ");
+
+                // Print the delivery instructions
+                finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, deliveryInstructions);
+            }
 		}
 
 		return finalPosition;

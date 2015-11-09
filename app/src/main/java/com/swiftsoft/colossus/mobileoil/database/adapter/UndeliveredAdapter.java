@@ -1,18 +1,18 @@
 package com.swiftsoft.colossus.mobileoil.database.adapter;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import com.swiftsoft.colossus.mobileoil.CrashReporter;
-import com.swiftsoft.colossus.mobileoil.R;
-import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrder;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.swiftsoft.colossus.mobileoil.CrashReporter;
+import com.swiftsoft.colossus.mobileoil.R;
+import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrder;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class UndeliveredAdapter extends BaseAdapter
 {
@@ -55,6 +55,8 @@ public class UndeliveredAdapter extends BaseAdapter
 	{
 		try
 		{
+            CrashReporter.leaveBreadcrumb("UndeliveredAdapter : getView()");
+
 			ViewHolder holder;
 	
 			if (convertView == null)
@@ -68,7 +70,8 @@ public class UndeliveredAdapter extends BaseAdapter
 				holder.tv4 = (TextView) convertView.findViewById(R.id.trip_undelivered_row4);
 	
 				convertView.setTag(holder);
-			} else
+			}
+            else
 			{
 				holder = (ViewHolder) convertView.getTag();
 			}
@@ -77,22 +80,11 @@ public class UndeliveredAdapter extends BaseAdapter
 			dbTripOrder order = mItems.get(position);
 	
 			// Build line 4.
-			String line4 = "";
-			if (order.RequiredBy.length() > 0)
-			{
-				line4 = "Required by " + order.RequiredBy;
-				
-				if (order.Notes.length() > 0)
-					line4 += "\n";
-			}
-			line4 += order.Notes.replace("\n", ", ");
-	
+			String line4 = constructLine4(order);
+
 			// Show/hide line 4.
-			if (line4.length() > 0)
-				holder.tv4.setVisibility(View.VISIBLE);
-			else
-				holder.tv4.setVisibility(View.GONE);
-	
+            holder.tv4.setVisibility(line4.length() > 0 ? View.VISIBLE : View.GONE);
+
 			// Set all text values.
 			holder.tv1.setText("#" + String.valueOf(order.DeliveryOrder) + " - " + order.InvoiceNo + "  " + order.DeliveryName);
 			holder.tv2.setText(order.DeliveryAddress.replace("\n", ", ") + " " + order.DeliveryPostcode);
@@ -104,9 +96,29 @@ public class UndeliveredAdapter extends BaseAdapter
 		catch (Exception e)
 		{
 			CrashReporter.logHandledException(e);
+
 			return null;
 		}
 	}
+
+    private static String constructLine4(dbTripOrder order)
+    {
+        String line4 = "";
+
+        if (order.RequiredBy.length() > 0)
+        {
+            line4 = "Required by " + order.RequiredBy;
+
+            if (order.Notes.length() > 0)
+            {
+                line4 += "\n";
+            }
+        }
+
+        line4 += order.Notes.replace("\n", ", ");
+
+        return line4;
+    }
 
 	class ViewHolder
 	{
