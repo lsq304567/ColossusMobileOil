@@ -299,7 +299,7 @@ public class BitmapPrinter extends Printer
         // Get the total height of the text to be output
         int height = bounds.bottom - bounds.top;
 
-        int maximumHeight = yPosition + height;
+        int maximumHeight = yPosition + height - bounds.bottom;
 
         int bitmapHeight = bitmap.getHeight();
 
@@ -331,12 +331,12 @@ public class BitmapPrinter extends Printer
         Paint paint = createTextPaint(size, "trebuc.ttf", Alignment.Left);
 
         // Get the rectangular bounds of the text
-        Rect bounds = getTextBounds(paint, text); // new Rect();
+        Rect bounds = getTextBounds(paint, text);
 
         // Get the total height of the text to be output
         int height = bounds.bottom - bounds.top;
 
-        int maximumHeight = yPosition + height;
+        int maximumHeight = yPosition + height - bounds.bottom;
 
         int bitmapHeight = bitmap.getHeight();
 
@@ -373,7 +373,7 @@ public class BitmapPrinter extends Printer
         // Get the total height of the text to be output
         int height = bounds.bottom - bounds.top;
 
-        int maximumHeight = yPosition + height;
+        int maximumHeight = yPosition + height - bounds.bottom;
 
         int bitmapHeight = bitmap.getHeight();
 
