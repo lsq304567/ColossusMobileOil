@@ -133,7 +133,7 @@ public class Trip_Stock_Start extends MyFlipperView
 			else
 				infoview.setDefaultTv2("Line: " + lineProduct.Desc);
 	
-			stockSummary.UpdateStock();
+			stockSummary.updateStock();
 		}
 		catch (Exception e)
 		{

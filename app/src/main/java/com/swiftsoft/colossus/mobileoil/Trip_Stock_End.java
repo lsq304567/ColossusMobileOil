@@ -112,7 +112,7 @@ public class Trip_Stock_End extends MyFlipperView
 			else
 				infoview.setDefaultTv2("Line: " + lineProduct.Desc);
 	
-			stockSummary.UpdateStock();
+			stockSummary.updateStock();
 		}
 		catch (Exception e)
 		{

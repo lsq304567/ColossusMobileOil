@@ -78,10 +78,12 @@ public class MyStockSummary extends LinearLayout
 		}
 	}
 	
-	public void UpdateStock()
+	public void updateStock()
 	{
 		try
 		{
+            CrashReporter.leaveBreadcrumb("MyStockSummary : updateStock");
+
 			//
 			// Step 1 - Clear existing data.
 			// 
@@ -110,10 +112,10 @@ public class MyStockSummary extends LinearLayout
 					int onboard = capacity;
 		
 					// Add product to 'by product' table.
-		    		AddByProduct(product, onboard);
+		    		addByProduct(product, onboard);
 		    		
 		    		// Add product to 'by compartment' table.
-		   			AddByCompartment(product, 0, capacity, onboard);
+		   			addByCompartment(product, 0, capacity, onboard);
 				}
 				
 				// Set number of compartments on tanker image.
@@ -135,12 +137,12 @@ public class MyStockSummary extends LinearLayout
 		   			tanker.setCompartmentColour(tankerIdx, colour);
 					
 					// Add product to 'by product' table.
-		    		AddByProduct(product, onboard);
+		    		addByProduct(product, onboard);
 		    		
 		    		// Add product to 'by compartment' table.
 		    		if (Active.vehicle.StockByCompartment)
 					{
-						AddByCompartment(product, no, capacity, onboard);
+						addByCompartment(product, no, capacity, onboard);
 					}
 		    	}
 			}
@@ -151,7 +153,7 @@ public class MyStockSummary extends LinearLayout
 	    	
 			for (dbVehicleStock vs : dbVehicleStock.FindAllNonCompartmentStock(Active.vehicle))
 			{
-				AddByProduct(vs.Product, vs.CurrentStock);
+				addByProduct(vs.Product, vs.CurrentStock);
 			}
 			
 			if (!Active.vehicle.StockByCompartment)
@@ -162,7 +164,7 @@ public class MyStockSummary extends LinearLayout
 				if (Active.vehicle.getHasHosereel())
 				{
 					// Add product to 'by product' table.
-		    		AddByProduct(Active.vehicle.getHosereelProduct(), Active.vehicle.getHosereelCapacity());
+		    		addByProduct(Active.vehicle.getHosereelProduct(), Active.vehicle.getHosereelCapacity());
 				}
 			}
 			
@@ -203,7 +205,7 @@ public class MyStockSummary extends LinearLayout
 						// Create new row, if not exists.
 						if (myTr == null)
 						{
-							myTr = CreateByProductRow(orderLine.Product, 0);
+							myTr = createByProductRow(orderLine.Product, 0);
 						}
 	
 						// Find previous required.
@@ -251,85 +253,119 @@ public class MyStockSummary extends LinearLayout
 		}
 	}
 
-    private void AddByProduct(dbProduct product, int onboard)
+    private static TableRow findProductTableRow(TableLayout tableLayout, dbProduct product)
+    {
+        // Get the number of rows in the table
+        int rowCount = tableLayout.getChildCount();
+
+        // Loop through the rows in the table searching for the one
+        // with the matching product
+        for (int rowIndex = 1; rowIndex < rowCount; rowIndex++)
+        {
+            // Get the row at the index
+            TableRow row = (TableRow)tableLayout.getChildAt(rowIndex);
+
+            // Test if the tag matches - if it does return the row
+            if (row.getTag().equals(product))
+            {
+                return row;
+            }
+        }
+
+        // Row was not found therefore return null
+        return null;
+    }
+
+    private void addByProduct(dbProduct product, int onboard)
     {
     	try
     	{
+            CrashReporter.leaveBreadcrumb("MyStockSummary : addByProduct");
+
     		// Check product is valid.
 	    	if (product == null)
 			{
 				return;
 			}
-	    	
-	    	// Check existing rows for this product.
-			for (int row = 1; row < byProductTable.getChildCount(); row++)
-			{
-				TableRow tr = (TableRow) byProductTable.getChildAt(row);
 
-				if (tr.getTag().equals(product))
-				{
-					TextView tvOnboard = (TextView)tr.findViewById(R.id.stock_summary_by_product_tablerow_onboard);
-					TextView tvSpare = (TextView)tr.findViewById(R.id.stock_summary_by_product_tablerow_spare);
-	
-					// Update quantity onboard.
-					int prevOnboard = 0;
+            // Attempt to find the table row showing the product
+            TableRow row = findProductTableRow(byProductTable, product);
 
-					try
-					{
-						prevOnboard = decf.parse((String) tvOnboard.getText()).intValue();
-					}
-					catch (ParseException e)
-					{
-						e.printStackTrace();
-					}
-					
-					tvOnboard.setText(decf.format(onboard + prevOnboard));
-					
-					// Update quantity spare.
-					int prevSpare = 0;
+            if (row != null)
+            {
+                // Get reference to table cell holding the amount of product onboard
+                TextView productOnboard = (TextView)row.findViewById(R.id.stock_summary_by_product_tablerow_onboard);
 
-					try
-					{
-						prevSpare = decf.parse((String) tvSpare.getText()).intValue();
-					}
-					catch (ParseException e)
-					{
-						e.printStackTrace();
-					}
-					
-					tvSpare.setText(decf.format(onboard + prevSpare));
-					
-					return;
-				}
-			}
-	
-			CreateByProductRow(product, onboard);
-		}
+                // Update quantity onboard.
+                int prevOnboard = 0;
+
+                try
+                {
+                    prevOnboard = decf.parse(productOnboard.getText().toString()).intValue();
+                }
+                catch (ParseException e)
+                {
+                    e.printStackTrace();
+                }
+
+                productOnboard.setText(decf.format(onboard + prevOnboard));
+
+                // Get reference to table cell holding the amount of surplus product
+                TextView productSurplus = (TextView)row.findViewById(R.id.stock_summary_by_product_tablerow_spare);
+
+                // Update quantity spare.
+                int prevSpare = 0;
+
+                try
+                {
+                    prevSpare = decf.parse((String) productSurplus.getText()).intValue();
+                }
+                catch (ParseException e)
+                {
+                    e.printStackTrace();
+                }
+
+                productSurplus.setText(decf.format(onboard + prevSpare));
+            }
+            else
+            {
+                // If this point is reached then the row containing the product
+                // could not be found in the table - therefore create a row for it.
+                createByProductRow(product, onboard);
+            }
+        }
 		catch (Exception e)
 		{
 			CrashReporter.logHandledException(e);
 		}
     }
     
-    private TableRow CreateByProductRow(dbProduct product, int onboard)
+    private TableRow createByProductRow(dbProduct product, int onboard)
     {
     	try
     	{
-			// Create new row.
-			TableRow tr = (TableRow)inflater.inflate(R.layout.stock_summary_by_product_tablerow, null);
-			tr.setTag(product);
-			
-			TextView tvProduct = (TextView)tr.findViewById(R.id.stock_summary_by_product_tablerow_product);
-			tvProduct.setText(product.Desc);
-			
-			TextView tvOnboard = (TextView)tr.findViewById(R.id.stock_summary_by_product_tablerow_onboard);
-			tvOnboard.setText(decf.format(onboard));
-	
-			TextView tvSpare = (TextView)tr.findViewById(R.id.stock_summary_by_product_tablerow_spare);
-			tvSpare.setText(decf.format(onboard));
-	
-			byProductTable.addView(tr);
-			return tr;
+            CrashReporter.leaveBreadcrumb("MyStockSummary : createByProductRow");
+
+			// Create new row to show product stock on truck.
+			TableRow row = (TableRow)inflater.inflate(R.layout.stock_summary_by_product_tablerow, null);
+			row.setTag(product);
+
+            // In the row set the cell showing the name of the product
+			TextView productName = (TextView)row.findViewById(R.id.stock_summary_by_product_tablerow_product);
+			productName.setText(product.Desc);
+
+            // In the row set the cell showing the amount of product on board the truck
+			TextView productOnboard = (TextView)row.findViewById(R.id.stock_summary_by_product_tablerow_onboard);
+			productOnboard.setText(decf.format(onboard));
+
+            // In the row set the cell showing the volume of surplus product
+			TextView surplusProduct = (TextView)row.findViewById(R.id.stock_summary_by_product_tablerow_spare);
+			surplusProduct.setText(decf.format(onboard));
+
+            // Add the newly created row to the table
+			byProductTable.addView(row);
+
+            return row;
 		}
 		catch (Exception e)
 		{
@@ -338,7 +374,7 @@ public class MyStockSummary extends LinearLayout
 		}
     }
     
-    private void AddByCompartment(dbProduct product, int compartment, int capacity, int onboard)
+    private void addByCompartment(dbProduct product, int compartment, int capacity, int onboard)
     {
     	try
     	{
