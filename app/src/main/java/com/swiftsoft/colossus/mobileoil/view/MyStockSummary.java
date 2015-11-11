@@ -215,7 +215,12 @@ public class MyStockSummary extends LinearLayout
 
 						try
 						{
-							prevRequired = formatDecimal.parse((String) tvRequired.getText()).intValue();
+                            String text = tvRequired.getText().toString();
+
+                            if (text.length() > 0)
+                            {
+                                prevRequired = formatDecimal.parse(text).intValue();
+                            }
 						}
 						catch (ParseException e)
 						{

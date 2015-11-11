@@ -1,9 +1,5 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.util.List;
-
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,9 +12,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
+import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrder;
+import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrderLine;
+import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleStock;
 import com.swiftsoft.colossus.mobileoil.view.MyEditText;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
+
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.util.Hashtable;
+import java.util.List;
 
 public class Trip_Stock_Load extends MyFlipperView
 {
@@ -37,6 +41,9 @@ public class Trip_Stock_Load extends MyFlipperView
 
 	private DecimalFormat decf;
 	private String previousViewName;
+
+    private Hashtable<String, Integer> requiredProducts;
+    private Hashtable<String, Integer> stockLevels;
 	
 	public Trip_Stock_Load(Context context)
 	{
@@ -91,6 +98,8 @@ public class Trip_Stock_Load extends MyFlipperView
 	{
 		try
 		{
+            CrashReporter.leaveBreadcrumb("Trip_Stock_Load: resumeView");
+
 			// Clear product.
 			product = null;
 			
@@ -108,8 +117,74 @@ public class Trip_Stock_Load extends MyFlipperView
 			btnOK.setEnabled(false);
 			btnCancel.setText("Close");
 			btnCancel.setEnabled(true);
-			
-			return true;
+
+            if (requiredProducts == null)
+            {
+                requiredProducts = new Hashtable<String, Integer>();
+            }
+
+            requiredProducts.clear();
+
+            if (Active.trip != null)
+            {
+                // Get all undelivered orders in the trip
+                for (dbTripOrder order : Active.trip.GetUndelivered())
+                {
+                    // Get all the order lines in each order
+                    for (dbTripOrderLine orderLine : order.GetTripOrderLines())
+                    {
+                        if (orderLine.Product == null || orderLine.Product.MobileOil == 3)
+                        {
+                            continue;
+                        }
+
+                        String productName = orderLine.Product.Desc;
+                        int orderQuantity = orderLine.OrderedQty;
+
+                        if (!requiredProducts.containsKey(productName))
+                        {
+                            requiredProducts.put(productName, 0);
+                        }
+
+                        requiredProducts.put(productName, requiredProducts.get(productName) + orderQuantity);
+                    }
+                }
+            }
+
+            if (stockLevels == null)
+            {
+                stockLevels = new Hashtable<String, Integer>();
+            }
+
+            stockLevels.clear();
+
+            for (dbVehicleStock vs : dbVehicleStock.FindAllNonCompartmentStock(Active.vehicle))
+            {
+                String productName = vs.Product.Desc;
+                int stockLevel = vs.CurrentStock;
+
+                if (!stockLevels.containsKey(productName))
+                {
+                    stockLevels.put(productName, 0);
+                }
+
+                stockLevels.put(productName, stockLevels.get(productName) + stockLevel);
+            }
+
+            if (Active.vehicle.getHasHosereel())
+            {
+                String productName = Active.vehicle.getHosereelProduct().Desc;
+                int hosereelCapacity = Active.vehicle.getHosereelCapacity();
+
+                if (!stockLevels.containsKey(productName))
+                {
+                    stockLevels.put(productName, 0);
+                }
+
+                stockLevels.put(productName, stockLevels.get(productName) + hosereelCapacity);
+            }
+
+            return true;
 		}
 		catch (Exception e)
 		{
@@ -123,6 +198,8 @@ public class Trip_Stock_Load extends MyFlipperView
 	{
 		try
 		{
+            CrashReporter.leaveBreadcrumb("Trip_Stock_Load: pauseView");
+
 			// Pause updating.
 			infoview.pause();
 		}
@@ -144,21 +221,50 @@ public class Trip_Stock_Load extends MyFlipperView
 	{
 		try
 		{
+            CrashReporter.leaveBreadcrumb("Trip_Stock_Load : updateUI");
+
 			// Update the UI.
 			infoview.setDefaultTv1("Load product");
+
+            // Get the product in the hosereel
 			dbProduct lineProduct = Active.vehicle.getHosereelProduct();
 			
-			// Line.
-			if (lineProduct == null)
-				infoview.setDefaultTv2("Line: None");
-			else
-				infoview.setDefaultTv2("Line: " + lineProduct.Desc);
-	
-			// Load product.
-			if (product == null)
-				tvProduct.setText("None");
-			else
-				tvProduct.setText(product.Desc);
+			// Set the Line product in the title bar
+            infoview.setDefaultTv2(lineProduct == null ? "Line: None" : "Line: " + lineProduct.Desc);
+
+            if (product == null)
+            {
+                tvProduct.setText("None");
+            }
+            else
+            {
+                int stockLevel = 0;
+
+                if (stockLevels.containsKey(product.Desc))
+                {
+                    stockLevel = stockLevels.get(product.Desc);
+                }
+
+                int requiredAmount = 0;
+
+                if (requiredProducts.containsKey(product.Desc))
+                {
+                    requiredAmount = requiredProducts.get(product.Desc);
+                }
+
+                if (requiredAmount > stockLevel)
+                {
+                    int toLoad = requiredAmount - stockLevel;
+
+                    // Load product.
+                    tvProduct.setText(product.Desc + " " + toLoad + " litres");
+                }
+                else
+                {
+                    // Load product.
+                    tvProduct.setText(product.Desc + " 0 litres");
+                }
+            }
 		}
 		catch (Exception e)
 		{
@@ -198,8 +304,8 @@ public class Trip_Stock_Load extends MyFlipperView
 				// Check there are products.
 				if (!products.isEmpty())
 				{
-					int idx = -1;
-	
+					int index = -1;
+
 					if (product != null)
 					{
 						// Find currently selected product.
@@ -207,21 +313,19 @@ public class Trip_Stock_Load extends MyFlipperView
 						{
 							if (products.get(i).getId().equals(product.getId()))
 							{
-								idx = i;
+								index = i;
+
 								break;
 							}
 						}
 					}
 	
 					// Move to next product.
-					idx++;
+					index++;
 					
 					// Change to next product.
-					if (idx != products.size())
-						product = products.get(idx);
-					else
-						product = null;
-					
+                    product = index != products.size() ? products.get(index) : null;
+
 					// Validate.
 					validate();
 					
@@ -332,22 +436,27 @@ public class Trip_Stock_Load extends MyFlipperView
     {
 		try
 		{
+            CrashReporter.leaveBreadcrumb("Trip_Stock_Load: validate");
+
 	    	int litres = 0;
 	    	
 	    	// Check if value is valid.
-	    	try {litres = decf.parse((String) etLoaded.getText().toString()).intValue();}
-	    	catch (ParseException e) {e.printStackTrace();}
-	    	   	
-	    	if (litres <= 0)
-	    	{
-	    		btnOK.setEnabled(false);
-	    		btnCancel.setText("Close");
-	    	}
-	    	else
-	    	{
-	    		btnOK.setEnabled(true);
-	    		btnCancel.setText("Cancel");
-	    	}
+	    	try
+            {
+                String text = etLoaded.getText().toString();
+
+                if (text.length() > 0)
+                {
+                    litres = decf.parse(text).intValue();
+                }
+            }
+	    	catch (ParseException e)
+            {
+                e.printStackTrace();
+            }
+
+            btnOK.setEnabled(litres <= 0 ? false : true);
+            btnCancel.setText(litres <= 0 ? "Close" : "Cancel");
 		}
 		catch (Exception e)
 		{
