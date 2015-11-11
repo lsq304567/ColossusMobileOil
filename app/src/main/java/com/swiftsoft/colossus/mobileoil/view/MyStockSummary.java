@@ -1,7 +1,13 @@
 package com.swiftsoft.colossus.mobileoil.view;
 
-import java.text.DecimalFormat;
-import java.text.ParseException;
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.swiftsoft.colossus.mobileoil.Active;
 import com.swiftsoft.colossus.mobileoil.CrashReporter;
@@ -11,14 +17,8 @@ import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrder;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrderLine;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleStock;
 
-import android.content.Context;
-import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 
 public class MyStockSummary extends LinearLayout
 {
@@ -65,6 +65,18 @@ public class MyStockSummary extends LinearLayout
 			CrashReporter.logHandledException(e);
 		}
 	}
+
+    /**
+     * Removes all items from a table layout on screen
+     * @param tableLayout Table that is to be cleared
+     */
+	private static void clearTable(TableLayout tableLayout)
+	{
+		while (tableLayout.getChildCount() > 1)
+		{
+			tableLayout.removeViewAt(1);
+		}
+	}
 	
 	public void UpdateStock()
 	{
@@ -75,17 +87,11 @@ public class MyStockSummary extends LinearLayout
 			// 
 			
 			// Clear 'by product' table.
-			while (byProductTable.getChildCount() > 1)
-			{
-				byProductTable.removeViewAt(1);
-			}
-	
+			clearTable(byProductTable);
+
 	    	// Clear 'by compartment' table.
-			while (tlByCompartmentTable.getChildCount() > 1)
-			{
-				tlByCompartmentTable.removeViewAt(1);
-			}
-	
+			clearTable(tlByCompartmentTable);
+
 			//
 			// Step 2 - Add any compartment stock.
 			//
