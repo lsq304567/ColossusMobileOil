@@ -96,7 +96,7 @@
 							android:layout_margin="1dp"
 							android:background="@android:color/white"
 							android:gravity="center_horizontal"
-							android:text="Spare"
+							android:text="To Load"
 							android:textSize="14sp"
 							android:textColor="#0000ff" />
 

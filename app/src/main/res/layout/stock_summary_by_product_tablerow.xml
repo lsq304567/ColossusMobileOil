@@ -42,7 +42,7 @@
 		android:textColor="@android:color/black" />
 
 	<TextView
-		android:id="@+id/stock_summary_by_product_tablerow_spare"
+		android:id="@+id/stock_summary_by_product_tablerow_to_load"
 		android:layout_width="0px"
 		android:layout_height="fill_parent"
 		android:layout_marginLeft="1dp"

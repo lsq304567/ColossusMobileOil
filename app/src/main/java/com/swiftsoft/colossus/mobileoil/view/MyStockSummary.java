@@ -23,7 +23,7 @@ import java.text.ParseException;
 public class MyStockSummary extends LinearLayout
 {
 	private LayoutInflater inflater;
-	private DecimalFormat decf;
+	private DecimalFormat formatDecimal;
 	private MyTankerImageView tanker;
 	private TableLayout byProductTable;
 	private TextView tvByCompartment;
@@ -51,7 +51,7 @@ public class MyStockSummary extends LinearLayout
 			if (!isInEditMode())
 			{
 				// Setup a standard decimal format.
-				decf = new DecimalFormat("#,##0");
+				formatDecimal = new DecimalFormat("#,##0");
 		
 				// Find UI controls.
 				tanker = (MyTankerImageView)findViewById(R.id.stock_summary_tanker);
@@ -215,7 +215,7 @@ public class MyStockSummary extends LinearLayout
 
 						try
 						{
-							prevRequired = decf.parse((String) tvRequired.getText()).intValue();
+							prevRequired = formatDecimal.parse((String) tvRequired.getText()).intValue();
 						}
 						catch (ParseException e)
 						{
@@ -224,7 +224,7 @@ public class MyStockSummary extends LinearLayout
 	
 						// Update required to include this order line.
 						int required = prevRequired + orderLine.OrderedQty; 
-						tvRequired.setText(decf.format(required));
+						tvRequired.setText(formatDecimal.format(required));
 	
 						// Find total onboard.
 						TextView tvOnboard = (TextView)myTr.findViewById(R.id.stock_summary_by_product_tablerow_onboard);
@@ -233,16 +233,24 @@ public class MyStockSummary extends LinearLayout
 
 						try
 						{
-							onboard = decf.parse((String) tvOnboard.getText()).intValue();
+							onboard = formatDecimal.parse((String) tvOnboard.getText()).intValue();
 						}
 						catch (ParseException e)
 						{
 							e.printStackTrace();
 						}
 						
-						// Update spare.
-						TextView tvSpare = (TextView)myTr.findViewById(R.id.stock_summary_by_product_tablerow_spare);
-						tvSpare.setText(decf.format(onboard - required));
+						// Update the 'To Load' column.
+						TextView toLoad = (TextView)myTr.findViewById(R.id.stock_summary_by_product_tablerow_to_load);
+
+						if (required > onboard)
+						{
+							toLoad.setText(formatDecimal.format(required - onboard));
+						}
+						else
+						{
+							toLoad.setText(formatDecimal.format(0));
+						}
 					}
 				}
 	    	}
@@ -301,31 +309,31 @@ public class MyStockSummary extends LinearLayout
 
                 try
                 {
-                    prevOnboard = decf.parse(productOnboard.getText().toString()).intValue();
+                    prevOnboard = formatDecimal.parse(productOnboard.getText().toString()).intValue();
                 }
                 catch (ParseException e)
                 {
                     e.printStackTrace();
                 }
 
-                productOnboard.setText(decf.format(onboard + prevOnboard));
+                productOnboard.setText(formatDecimal.format(onboard + prevOnboard));
 
                 // Get reference to table cell holding the amount of surplus product
-                TextView productSurplus = (TextView)row.findViewById(R.id.stock_summary_by_product_tablerow_spare);
+                TextView productSurplus = (TextView)row.findViewById(R.id.stock_summary_by_product_tablerow_to_load);
 
                 // Update quantity spare.
                 int prevSpare = 0;
 
                 try
                 {
-                    prevSpare = decf.parse((String) productSurplus.getText()).intValue();
+                    prevSpare = formatDecimal.parse((String) productSurplus.getText()).intValue();
                 }
                 catch (ParseException e)
                 {
                     e.printStackTrace();
                 }
 
-                productSurplus.setText(decf.format(onboard + prevSpare));
+                productSurplus.setText(formatDecimal.format(onboard + prevSpare));
             }
             else
             {
@@ -356,11 +364,11 @@ public class MyStockSummary extends LinearLayout
 
             // In the row set the cell showing the amount of product on board the truck
 			TextView productOnboard = (TextView)row.findViewById(R.id.stock_summary_by_product_tablerow_onboard);
-			productOnboard.setText(decf.format(onboard));
+			productOnboard.setText(formatDecimal.format(onboard));
 
             // In the row set the cell showing the volume of surplus product
-			TextView surplusProduct = (TextView)row.findViewById(R.id.stock_summary_by_product_tablerow_spare);
-			surplusProduct.setText(decf.format(onboard));
+			TextView surplusProduct = (TextView)row.findViewById(R.id.stock_summary_by_product_tablerow_to_load);
+			surplusProduct.setText(formatDecimal.format(0));
 
             // Add the newly created row to the table
 			byProductTable.addView(row);
@@ -395,14 +403,14 @@ public class MyStockSummary extends LinearLayout
 
 			if (capacity != 0)
 			{
-				tvCapacity.setText(decf.format(capacity));
+				tvCapacity.setText(formatDecimal.format(capacity));
 			}
 	
 			TextView tvOnboard = (TextView)tr.findViewById(R.id.stock_summary_by_compartment_tablerow_onboard);
 
 			if (onboard != 0)
 			{
-				tvOnboard.setText(decf.format(onboard));
+				tvOnboard.setText(formatDecimal.format(onboard));
 			}
 			
 			tlByCompartmentTable.addView(tr);
