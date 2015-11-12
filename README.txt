@@ -1,3 +1,13 @@
+V0.99t12
+========
+
+Changed Start of Trip 'Spare' column to 'To Load' column. Values held there are
+the amount of product the driver is required to load to meet trip requirements.
+
+Also Load Product & Return Product screens altered to display the amount of
+product required to be loaded to meet requirements (Load Product) and maximum
+amount of product that can be returned and still meet Trip requirements (Return Product).
+
 V0.99t11
 ========
 
