@@ -1,9 +1,5 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.util.List;
-
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,16 +9,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.swiftsoft.colossus.mobileoil.bluetooth.MeterMate;
 import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
+import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrder;
+import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrderLine;
+import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleStock;
 import com.swiftsoft.colossus.mobileoil.view.MyEditText;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
+
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.util.Hashtable;
+import java.util.List;
 
 public class Trip_Stock_Return extends MyFlipperView
 {
@@ -48,7 +52,10 @@ public class Trip_Stock_Return extends MyFlipperView
 
 	private DecimalFormat decf;
 	private String previousViewName;
-	
+
+	private Hashtable<String, Integer> requiredProducts;
+	private Hashtable<String, Integer> stockLevels;
+
 	public Trip_Stock_Return(Context context)
 	{
 		super(context);
@@ -106,12 +113,94 @@ public class Trip_Stock_Return extends MyFlipperView
 			CrashReporter.logHandledException(e);
 		}
 	}
-	
+
+	private void getRequiredProducts()
+	{
+		CrashReporter.leaveBreadcrumb("Trip_Stock_Return: getRequiredProducts");
+
+		// Create the Hashtable if it does not already exist
+		if (requiredProducts == null)
+		{
+			requiredProducts = new Hashtable<String, Integer>();
+		}
+
+		// Empty it
+		requiredProducts.clear();
+
+		if (Active.trip != null)
+		{
+			// Get all undelivered orders in the trip
+			for (dbTripOrder order : Active.trip.GetUndelivered())
+			{
+				// Get all the order lines in each order
+				for (dbTripOrderLine orderLine : order.GetTripOrderLines())
+				{
+					if (orderLine.Product == null || orderLine.Product.MobileOil == 3)
+					{
+						continue;
+					}
+
+					String productName = orderLine.Product.Desc;
+					int orderQuantity = orderLine.OrderedQty;
+
+					if (!requiredProducts.containsKey(productName))
+					{
+						requiredProducts.put(productName, 0);
+					}
+
+					requiredProducts.put(productName, requiredProducts.get(productName) + orderQuantity);
+				}
+			}
+		}
+	}
+
+	private void getStockLevels()
+	{
+		CrashReporter.leaveBreadcrumb("Trip_Stock_Return: getStockLevels");
+
+		// Create the Hashtable if it does not already exist
+		if (stockLevels == null)
+		{
+			stockLevels = new Hashtable<String, Integer>();
+		}
+
+		// Empty it
+		stockLevels.clear();
+
+		for (dbVehicleStock vs : dbVehicleStock.FindAllNonCompartmentStock(Active.vehicle))
+		{
+			String productName = vs.Product.Desc;
+			int stockLevel = vs.CurrentStock;
+
+			if (!stockLevels.containsKey(productName))
+			{
+				stockLevels.put(productName, 0);
+			}
+
+			stockLevels.put(productName, stockLevels.get(productName) + stockLevel);
+		}
+
+		if (Active.vehicle.getHasHosereel())
+		{
+			String productName = Active.vehicle.getHosereelProduct().Desc;
+			int hosereelCapacity = Active.vehicle.getHosereelCapacity();
+
+			if (!stockLevels.containsKey(productName))
+			{
+				stockLevels.put(productName, 0);
+			}
+
+			stockLevels.put(productName, stockLevels.get(productName) + hosereelCapacity);
+		}
+	}
+
 	@Override
 	public boolean resumeView() 
 	{
 		try
 		{
+			CrashReporter.leaveBreadcrumb("Trip_Stock_Return: resumeView");
+
 			// Clear product.
 			product = null;
 			
@@ -134,7 +223,13 @@ public class Trip_Stock_Return extends MyFlipperView
 			btnOK.setEnabled(false);
 			btnCancel.setText("Close");
 			btnCancel.setEnabled(true);
-			
+
+			// Make sure that the required products Hashtable is populated
+			getRequiredProducts();
+
+			// Make sure that the stock levels Hashtable is populated
+			getStockLevels();
+
 			return true;
 		}
 		catch (Exception e)
@@ -164,27 +259,67 @@ public class Trip_Stock_Return extends MyFlipperView
 		// Store previous view.
 		previousViewName = name;
 	}
+
+    private int getStockLevel(String productName)
+    {
+        if (stockLevels.containsKey(productName))
+        {
+            return stockLevels.get(productName);
+        }
+
+        return 0;
+    }
+
+    private int getRequiredAmount(String productName)
+    {
+        if (requiredProducts.containsKey(productName))
+        {
+            return requiredProducts.get(productName);
+        }
+
+        return 0;
+    }
 	
 	@Override
 	public void updateUI() 
 	{
 		try
 		{
+            CrashReporter.leaveBreadcrumb("Trip_Stock_Return: updateUI");
+
 			// Update the UI.
 			infoview.setDefaultTv1("Return product");
 			dbProduct lineProduct = Active.vehicle.getHosereelProduct();
 			
-			// Line.
-			if (lineProduct == null)
-				infoview.setDefaultTv2("Line: None");
-			else
-				infoview.setDefaultTv2("Line: " + lineProduct.Desc);
-	
-			// Load product.
-			if (product == null)
-				tvProduct.setText("None");
-			else
-				tvProduct.setText(product.Desc);
+			// Set the line product in the title bar.
+            infoview.setDefaultTv2(lineProduct == null ? "Line: None" : "Line: " + lineProduct.Desc);
+
+            // Set the Product name with maximum amount of product that can be returned
+            if (product == null)
+            {
+                tvProduct.setText("None");
+            }
+            else
+            {
+                // Get the stock level of the product
+                int stockLevel = getStockLevel(product.Desc);
+
+                // Get the required amount of the product
+                int requiredAmount = getRequiredAmount(product.Desc);
+
+                if (stockLevel > requiredAmount)
+                {
+                    int toReturn = stockLevel - requiredAmount;
+
+                    // Return product.
+                    tvProduct.setText(product.Desc + " " + toReturn + " litres");
+                }
+                else
+                {
+                    // Return product.
+                    tvProduct.setText(product.Desc + " 0 litres");
+                }
+            }
 		}
 		catch (Exception e)
 		{
@@ -196,6 +331,8 @@ public class Trip_Stock_Return extends MyFlipperView
     {
     	try
     	{
+            CrashReporter.leaveBreadcrumb("Trip_Stock_Return: validate");
+
 	    	litres = 0;
 	    	
 			if (rbMetered.isChecked())

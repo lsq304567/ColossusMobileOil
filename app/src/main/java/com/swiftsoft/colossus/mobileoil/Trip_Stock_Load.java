@@ -92,6 +92,86 @@ public class Trip_Stock_Load extends MyFlipperView
 			CrashReporter.logHandledException(e);
 		}
 	}
+
+	private void getRequiredProducts()
+	{
+        CrashReporter.leaveBreadcrumb("Trip_Stock_Load: getRequiredProducts");
+
+        // Create the Hashtable if it does not already exist
+		if (requiredProducts == null)
+		{
+			requiredProducts = new Hashtable<String, Integer>();
+		}
+
+        // Empty it
+		requiredProducts.clear();
+
+		if (Active.trip != null)
+		{
+			// Get all undelivered orders in the trip
+			for (dbTripOrder order : Active.trip.GetUndelivered())
+			{
+				// Get all the order lines in each order
+				for (dbTripOrderLine orderLine : order.GetTripOrderLines())
+				{
+					if (orderLine.Product == null || orderLine.Product.MobileOil == 3)
+					{
+						continue;
+					}
+
+					String productName = orderLine.Product.Desc;
+					int orderQuantity = orderLine.OrderedQty;
+
+					if (!requiredProducts.containsKey(productName))
+					{
+						requiredProducts.put(productName, 0);
+					}
+
+					requiredProducts.put(productName, requiredProducts.get(productName) + orderQuantity);
+				}
+			}
+		}
+	}
+
+	private void getStockLevels()
+	{
+		CrashReporter.leaveBreadcrumb("Trip_Stock_Load: getStockLevels");
+
+        // Create the Hashtable if it does not already exist
+		if (stockLevels == null)
+		{
+			stockLevels = new Hashtable<String, Integer>();
+		}
+
+        // Empty it
+		stockLevels.clear();
+
+		for (dbVehicleStock vs : dbVehicleStock.FindAllNonCompartmentStock(Active.vehicle))
+		{
+			String productName = vs.Product.Desc;
+			int stockLevel = vs.CurrentStock;
+
+			if (!stockLevels.containsKey(productName))
+			{
+				stockLevels.put(productName, 0);
+			}
+
+			stockLevels.put(productName, stockLevels.get(productName) + stockLevel);
+		}
+
+		if (Active.vehicle.getHasHosereel())
+		{
+			String productName = Active.vehicle.getHosereelProduct().Desc;
+			int hosereelCapacity = Active.vehicle.getHosereelCapacity();
+
+			if (!stockLevels.containsKey(productName))
+			{
+				stockLevels.put(productName, 0);
+			}
+
+			stockLevels.put(productName, stockLevels.get(productName) + hosereelCapacity);
+		}
+	}
 	
 	@Override
 	public boolean resumeView() 
@@ -118,71 +198,11 @@ public class Trip_Stock_Load extends MyFlipperView
 			btnCancel.setText("Close");
 			btnCancel.setEnabled(true);
 
-            if (requiredProducts == null)
-            {
-                requiredProducts = new Hashtable<String, Integer>();
-            }
+			// Make sure that the required products Hashtable is populated
+			getRequiredProducts();
 
-            requiredProducts.clear();
-
-            if (Active.trip != null)
-            {
-                // Get all undelivered orders in the trip
-                for (dbTripOrder order : Active.trip.GetUndelivered())
-                {
-                    // Get all the order lines in each order
-                    for (dbTripOrderLine orderLine : order.GetTripOrderLines())
-                    {
-                        if (orderLine.Product == null || orderLine.Product.MobileOil == 3)
-                        {
-                            continue;
-                        }
-
-                        String productName = orderLine.Product.Desc;
-                        int orderQuantity = orderLine.OrderedQty;
-
-                        if (!requiredProducts.containsKey(productName))
-                        {
-                            requiredProducts.put(productName, 0);
-                        }
-
-                        requiredProducts.put(productName, requiredProducts.get(productName) + orderQuantity);
-                    }
-                }
-            }
-
-            if (stockLevels == null)
-            {
-                stockLevels = new Hashtable<String, Integer>();
-            }
-
-            stockLevels.clear();
-
-            for (dbVehicleStock vs : dbVehicleStock.FindAllNonCompartmentStock(Active.vehicle))
-            {
-                String productName = vs.Product.Desc;
-                int stockLevel = vs.CurrentStock;
-
-                if (!stockLevels.containsKey(productName))
-                {
-                    stockLevels.put(productName, 0);
-                }
-
-                stockLevels.put(productName, stockLevels.get(productName) + stockLevel);
-            }
-
-            if (Active.vehicle.getHasHosereel())
-            {
-                String productName = Active.vehicle.getHosereelProduct().Desc;
-                int hosereelCapacity = Active.vehicle.getHosereelCapacity();
-
-                if (!stockLevels.containsKey(productName))
-                {
-                    stockLevels.put(productName, 0);
-                }
-
-                stockLevels.put(productName, stockLevels.get(productName) + hosereelCapacity);
-            }
+			// Make sure that the stock levels Hashtable is populated
+			getStockLevels();
 
             return true;
 		}
