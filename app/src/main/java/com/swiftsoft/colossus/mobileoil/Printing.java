@@ -18,6 +18,8 @@ import com.swiftsoft.colossus.mobileoil.printingsystem.Printer;
 import com.swiftsoft.colossus.mobileoil.printingsystem.Printer.Size;
 import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
 
+import org.json.JSONObject;
+
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
@@ -1217,8 +1219,29 @@ public class Printing
 
 		CrashReporter.leaveBreadcrumb("Printing : saveLabelImage - Label Type : " + labelType);
 
+		JSONObject json = new JSONObject();
+
+		long now = new Date().getTime();
+
+		json.put("DateTime", "/Date(" + now + ")/");
+		json.put("Image", base64Content);
+
+        if (labelType == "TransportLabel")
+        {
+            json.put("TripID", Active.trip.ColossusID);
+        }
+        else if (labelType == "TripLabel")
+        {
+            json.put("TripID", Active.trip.ColossusID);
+        }
+        else if (labelType == "TicketLabel")
+        {
+            json.put("TripID", Active.trip.ColossusID);
+            json.put("OrderID", Active.order.ColossusID);
+        }
+
 		i.putExtra("Type", labelType);
-		i.putExtra("Content", base64Content);
+		i.putExtra("Content", json.toString());
 
 		CrashReporter.leaveBreadcrumb("Printing : saveLabelImage - Saving Label to DB");
 
