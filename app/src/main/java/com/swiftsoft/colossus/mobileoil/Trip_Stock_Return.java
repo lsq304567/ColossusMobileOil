@@ -342,8 +342,19 @@ public class Trip_Stock_Return extends MyFlipperView
 				etPreset.requestFocus();
 				
 				// Check if preset value is valid.
-				try {litres = decf.parse(etPreset.getText().toString()).intValue();}
-				catch (ParseException e) {e.printStackTrace();}
+				try
+                {
+                    String text = etPreset.getText().toString();
+
+                    if (text.length() > 0)
+                    {
+                        litres = decf.parse(text).intValue();
+                    }
+                }
+				catch (ParseException e)
+                {
+                    e.printStackTrace();
+                }
 			}
 			else
 			{
@@ -358,25 +369,28 @@ public class Trip_Stock_Return extends MyFlipperView
 				etLitres.requestFocus();
 				
 				// Check if unmetered value is valid.
-				try {litres = decf.parse(etLitres.getText().toString()).intValue();}
-				catch (ParseException e) {e.printStackTrace();}
+				try
+                {
+                    String text = etLitres.getText().toString();
+
+                    if (text.length() > 0)
+                    {
+                        litres = decf.parse(text).intValue();
+                    }
+                }
+				catch (ParseException e)
+                {
+                    e.printStackTrace();
+                }
 			}
 			else
 			{
 				tvLitres.setVisibility(View.INVISIBLE);
 				etLitres.setVisibility(View.INVISIBLE);
 			}
-	
-			if (litres <= 0)
-			{
-				btnOK.setEnabled(false);
-				btnCancel.setText("Close");
-			}
-			else
-			{
-				btnOK.setEnabled(true);
-				btnCancel.setText("Cancel");
-			}
+
+            btnOK.setEnabled(litres <= 0 ? false : true);
+            btnCancel.setText(litres <= 0 ? "Close" : "Cancel");
     	}
     	catch (Exception e)
     	{
@@ -396,9 +410,13 @@ public class Trip_Stock_Return extends MyFlipperView
 				
 				// Update other radiobutton.
 				if (v == rbMetered)
-					rbUnmetered.setChecked(false);
+                {
+                    rbUnmetered.setChecked(false);
+                }
 				else
-					rbMetered.setChecked(false);
+                {
+                    rbMetered.setChecked(false);
+                }
 			}
 			catch (Exception e)
 			{
