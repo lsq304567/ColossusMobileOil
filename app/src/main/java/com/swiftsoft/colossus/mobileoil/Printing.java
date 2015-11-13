@@ -946,9 +946,7 @@ public class Printing
 		CrashReporter.leaveBreadcrumb("Printing : printBitmapTicket - Printing Terms");
 
 		// Print Terms
-		finalPosition = printer.addTextLeft(Size.Large, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, "Terms:");
-		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-		finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, order.Terms);
+        finalPosition = printTerms(printer, finalPosition, order.Terms);
 
 		double surcharge = order.getDeliveredSurchargeValue();
 
@@ -1008,6 +1006,17 @@ public class Printing
 		// Save the Ticket Image
 		saveLabelImage(context, "TicketLabel", ticketImage);
 	}
+
+    private static int printTerms(Printer printer, int yPosition, String terms)
+    {
+        int finalPosition = yPosition;
+
+        finalPosition = printer.addTextLeft(Size.Large, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, "Terms:");
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, terms);
+
+        return finalPosition;
+    }
 
 	private static int printCustomsStatement(Printer printer, int yPosition)
 	{
