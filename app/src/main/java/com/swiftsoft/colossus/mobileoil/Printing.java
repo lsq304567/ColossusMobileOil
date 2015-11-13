@@ -904,9 +904,12 @@ public class Printing
 		// Print the Invoice To & Deliver To Addresses
 		finalPosition = printAddresses(printer, finalPosition, order);
 
-		CrashReporter.leaveBreadcrumb("Printing - printBitmapTicket - Printing Order Lines");
+        // Print Terms
+        finalPosition = printTerms(printer, finalPosition, order.Terms);
 
-		// Print the Order Lines
+        CrashReporter.leaveBreadcrumb("Printing - printBitmapTicket - Printing Order Lines");
+
+        // Print the Order Lines
 		finalPosition = printOrderLines(printer, finalPosition, order);
 
 		DecimalFormat decf2 = new DecimalFormat("#,##0.00");
@@ -916,19 +919,19 @@ public class Printing
 		// Print VAT
 		finalPosition = printTitleAndAmount(printer, finalPosition, "VAT", order.getDeliveredVatValue());
 
-		// Print account balance
-		finalPosition = printTitleAndAmount(printer, finalPosition, "A/c balance", order.getCodAccBalance());
+        // Print account balance
+        finalPosition = printTitleAndAmount(printer, finalPosition, "A/c balance", order.getCodAccBalance());
 
 		// Print total
 		finalPosition = printTitleAndAmount(printer, finalPosition, "Total", order.getCreditTotal());
 
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 
-		// Print amount paid at office
-		finalPosition = printTitleAndAmount(printer, finalPosition, "Paid office", order.getPrepaidAmount());
+        // Print amount paid at office
+        finalPosition = printTitleAndAmount(printer, finalPosition, "Paid office", order.getPrepaidAmount());
 
-		// Print amount paid to driver
-		finalPosition = printTitleAndAmount(printer, finalPosition, "Paid driver", order.getPaidDriver());
+        // Print amount paid to driver
+        finalPosition = printTitleAndAmount(printer, finalPosition, "Paid driver", order.getPaidDriver());
 
 		// Print the discount
 		finalPosition = printTitleAndAmount(printer, finalPosition, "Discount", order.Discount);
@@ -942,11 +945,6 @@ public class Printing
 
         // Print the Meter Tickets
         finalPosition = printMeterData(printer, finalPosition, order);
-
-		CrashReporter.leaveBreadcrumb("Printing : printBitmapTicket - Printing Terms");
-
-		// Print Terms
-        finalPosition = printTerms(printer, finalPosition, order.Terms);
 
 		double surcharge = order.getDeliveredSurchargeValue();
 
@@ -1009,13 +1007,15 @@ public class Printing
 
     private static int printTerms(Printer printer, int yPosition, String terms)
     {
+        CrashReporter.leaveBreadcrumb("Printing: printTerms");
+
         int finalPosition = yPosition;
 
         finalPosition = printer.addTextLeft(Size.Large, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, "Terms:");
         finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
         finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, terms);
 
-        return finalPosition;
+        return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
     }
 
 	private static int printCustomsStatement(Printer printer, int yPosition)
@@ -1086,7 +1086,9 @@ public class Printing
 
 	private static int printOrderLines(Printer printer, int yPosition, dbTripOrder order)
 	{
-		int finalPosition = yPosition;
+        CrashReporter.leaveBreadcrumb("Printing: printOrderLines");
+
+        int finalPosition = yPosition;
 
 		DecimalFormat decf0 = new DecimalFormat("#,##0");
 		DecimalFormat decf1 = new DecimalFormat("#,##0.0");
@@ -1127,52 +1129,6 @@ public class Printing
                 // Output the value in pounds to 2 dp
 				finalPosition = printer.addTextRight(Size.Large, 600, finalPosition, 180, decf2.format(deliveredValue));
 			}
-
-//			if (line.ticketNo != null)
-//			{
-//				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
-//
-//				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Ticket number");
-//				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, line.ticketNo);
-//
-//				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-//
-//				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Product Desc");
-//				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, line.ticketProductDesc);
-//
-//				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-//
-//				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Start");
-//				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, line.ticketStartTime);
-//
-//				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-//
-//				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Finish");
-//				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, line.ticketFinishTime);
-//
-//				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-//
-//				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Totalizer start");
-//				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, decf0.format(line.ticketStartTotaliser));
-//
-//				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-//
-//				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Totalizer end");
-//				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, decf0.format(line.ticketEndTotaliser));
-//
-//				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-//
-//				if (line.ticketAt15Degrees)
-//				{
-//					printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Volume delivered @ 15.0 C");
-//					finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, decf0.format(line.ticketNetVolume));
-//				}
-//				else
-//				{
-//					printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Volume delivered @ " + decf1.format(line.ticketTemperature) + " C");
-//					finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, decf0.format(line.ticketGrossVolume));
-//				}
-//			}
 		}
 
 		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
