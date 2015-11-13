@@ -502,8 +502,12 @@ public class Trip_Undelivered_Products extends MyFlipperView
 
 				if (MeterMate.getLogBluetoothData())
 				{
-					// Save MeterMate data to Colossus Server
-					saveMeterMateData();
+                    // Check that there is actually BluetoothMessages to store
+					if (MeterMate.getMessages() != null)
+					{
+						// Save MeterMate data to Colossus Server
+						saveMeterMateData();
+					}
 				}
 			}
 			catch (Exception e)
@@ -537,17 +541,6 @@ public class Trip_Undelivered_Products extends MyFlipperView
             JSONObject json = new JSONObject();
 
 			json.put("BluetoothMessages", jsonArray);
-
-//            json.put("Number", MeterMate.getTicketNo());
-//            json.put("ProductDescription", MeterMate.getTicketProductDesc());
-//            json.put("StartTime", MeterMate.getTicketStartTime());
-//            json.put("FinishTime", MeterMate.getTicketFinishTime());
-//            json.put("StartTotaliser", MeterMate.getTicketStartTotaliser());
-//            json.put("EndTotaliser", MeterMate.getTicketEndTotaliser());
-//            json.put("GrossVolume", MeterMate.getTicketGrossVolume());
-//            json.put("NetVolume", MeterMate.getTicketNetVolume());
-//            json.put("Temperature", MeterMate.getTicketTemperature());
-//            json.put("At15Degress", MeterMate.getTicketAt15Degrees());
 
             // Set the content
             i.putExtra("Content", json.toString());

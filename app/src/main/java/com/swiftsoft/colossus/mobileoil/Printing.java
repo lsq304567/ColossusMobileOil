@@ -899,7 +899,7 @@ public class Printing
 
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 
-		CrashReporter.leaveBreadcrumb("Printing : printBitmapTicket - Printing Inoice & Deliver To Addresses");
+		CrashReporter.leaveBreadcrumb("Printing : printBitmapTicket - Printing Invoice & Deliver To Addresses");
 
 		// Print the Invoice To & Deliver To Addresses
 		finalPosition = printAddresses(printer, finalPosition, order);
@@ -937,6 +937,11 @@ public class Printing
 		finalPosition = printTitleAndAmount(printer, finalPosition, "Outstanding", order.getOutstanding());
 
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+
+        CrashReporter.leaveBreadcrumb("Printing - printBitmapTicket - Printing Meter Data");
+
+        // Print the Meter Tickets
+        finalPosition = printMeterData(printer, finalPosition, order);
 
 		CrashReporter.leaveBreadcrumb("Printing : printBitmapTicket - Printing Terms");
 
@@ -1077,12 +1082,12 @@ public class Printing
 		DecimalFormat decf0 = new DecimalFormat("#,##0");
 		DecimalFormat decf1 = new DecimalFormat("#,##0.0");
 		DecimalFormat decf2 = new DecimalFormat("#,##0.00");
-		DecimalFormat decf4 = new DecimalFormat("#,##0.00##");
+		DecimalFormat decf4 = new DecimalFormat("#,##0.0000");
 
 		// Products
 		printer.addTextLeft(Size.Large, 20, finalPosition, 400, "Product");
 		printer.addTextRight(Size.Large, 300, finalPosition, 100, "Litres");
-		printer.addTextRight(Size.Large, 490, finalPosition, 100, "Price");
+		printer.addTextRight(Size.Large, 490, finalPosition, 100, "PPL");
 		finalPosition = printer.addTextRight(Size.Large, 600, finalPosition, 180, "Value");
 
 		finalPosition = printer.addLine(finalPosition + 10);
@@ -1104,15 +1109,80 @@ public class Printing
 
 			if (deliveredPrice != 0)
 			{
-				printer.addTextRight(Size.Large, 490, finalPosition, 100, decf4.format(deliveredPrice * line.Ratio));
+                // Output the price in ppl to 4 decimal places
+				printer.addTextRight(Size.Large, 450, finalPosition, 140, decf4.format(deliveredPrice * line.Ratio));
 			}
 
 			if (deliveredValue != 0)
 			{
+                // Output the value in pounds to 2 dp
 				finalPosition = printer.addTextRight(Size.Large, 600, finalPosition, 180, decf2.format(deliveredValue));
 			}
 
-			if (line.ticketNo != null)
+//			if (line.ticketNo != null)
+//			{
+//				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+//
+//				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Ticket number");
+//				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, line.ticketNo);
+//
+//				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+//
+//				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Product Desc");
+//				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, line.ticketProductDesc);
+//
+//				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+//
+//				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Start");
+//				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, line.ticketStartTime);
+//
+//				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+//
+//				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Finish");
+//				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, line.ticketFinishTime);
+//
+//				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+//
+//				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Totalizer start");
+//				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, decf0.format(line.ticketStartTotaliser));
+//
+//				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+//
+//				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Totalizer end");
+//				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, decf0.format(line.ticketEndTotaliser));
+//
+//				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+//
+//				if (line.ticketAt15Degrees)
+//				{
+//					printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Volume delivered @ 15.0 C");
+//					finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, decf0.format(line.ticketNetVolume));
+//				}
+//				else
+//				{
+//					printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Volume delivered @ " + decf1.format(line.ticketTemperature) + " C");
+//					finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, decf0.format(line.ticketGrossVolume));
+//				}
+//			}
+		}
+
+		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+	}
+
+    private static int printMeterData(Printer printer, int yPosition, dbTripOrder order)
+    {
+        DecimalFormat decf0 = new DecimalFormat("#,##0");
+        DecimalFormat decf1 = new DecimalFormat("#,##0.0");
+
+        int finalPosition = yPosition;
+
+        // Find order lines.
+        List<dbTripOrderLine> lines = order.GetTripOrderLines();
+
+        // Process each Order Line
+        for (dbTripOrderLine line : lines)
+        {
+            if (line.ticketNo != null)
 			{
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 
@@ -1157,12 +1227,12 @@ public class Printing
 					finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, decf0.format(line.ticketGrossVolume));
 				}
 			}
-		}
+        }
 
-		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
-	}
+        return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+    }
 
-	/**
+    /**
 	 * Method to compress an array of bytes using the GZIP compression
 	 * algorithm.
 	 * @param input A byte array that is to be compressed.

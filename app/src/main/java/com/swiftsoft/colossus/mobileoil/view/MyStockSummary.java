@@ -326,19 +326,19 @@ public class MyStockSummary extends LinearLayout
                 // Get reference to table cell holding the amount of surplus product
                 TextView productSurplus = (TextView)row.findViewById(R.id.stock_summary_by_product_tablerow_to_load);
 
-                // Update quantity spare.
-                int prevSpare = 0;
-
-                try
-                {
-                    prevSpare = formatDecimal.parse((String) productSurplus.getText()).intValue();
-                }
-                catch (ParseException e)
-                {
-                    e.printStackTrace();
-                }
-
-                productSurplus.setText(formatDecimal.format(onboard + prevSpare));
+//                // Update quantity spare.
+//                int prevSpare = 0;
+//
+//                try
+//                {
+//                    prevSpare = formatDecimal.parse((String) productSurplus.getText()).intValue();
+//                }
+//                catch (ParseException e)
+//                {
+//                    e.printStackTrace();
+//                }
+//
+//                productSurplus.setText(formatDecimal.format(onboard + prevSpare));
             }
             else
             {

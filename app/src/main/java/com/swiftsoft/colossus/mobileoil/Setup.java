@@ -88,18 +88,6 @@
 
 package com.swiftsoft.colossus.mobileoil;
 
-import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
-import org.json.JSONObject;
-
-import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
-import com.swiftsoft.colossus.mobileoil.database.model.dbVehicle;
-import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
-import com.swiftsoft.colossus.mobileoil.service.GpsService;
-import com.swiftsoft.colossus.mobileoil.service.LicensingIntentService;
-import com.swiftsoft.colossus.mobileoil.service.TimerService;
-import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -111,6 +99,19 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
 import android.widget.ViewFlipper;
+
+import com.crashlytics.android.Crashlytics;
+import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
+import com.swiftsoft.colossus.mobileoil.database.model.dbVehicle;
+import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
+import com.swiftsoft.colossus.mobileoil.service.GpsService;
+import com.swiftsoft.colossus.mobileoil.service.LicensingIntentService;
+import com.swiftsoft.colossus.mobileoil.service.TimerService;
+import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
+
+import org.json.JSONObject;
+
+import io.fabric.sdk.android.Fabric;
 
 public class Setup extends Activity
 {
@@ -168,7 +169,7 @@ public class Setup extends Activity
 		try
 		{
 			// NOTE: This is the starting point of the App.
-			
+
 			// Start CrashReporter.
 			CrashReporter.onStart(getApplicationContext());
 	
