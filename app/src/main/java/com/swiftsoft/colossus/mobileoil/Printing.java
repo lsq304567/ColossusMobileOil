@@ -1198,7 +1198,7 @@ public class Printing
         int finalPosition = yPosition;
 
         DecimalFormat format2dp = new DecimalFormat("#,##0.00");
-		DecimalFormat format4dp = new DecimalFormat("#,##0.0000");
+		DecimalFormat format3dp = new DecimalFormat("#,##0.000");
 
 		// Product, Litres, PPL, Value, VAT
 		printer.addTextLeft(Size.Large, 40, finalPosition, 150, "Product");
@@ -1228,8 +1228,8 @@ public class Printing
 
 			if (deliveredPrice != 0)
 			{
-                // Output the price in ppl to 4 decimal places
-				printer.addTextRight(Size.Large, 310, finalPosition, 140, format4dp.format(deliveredPrice * line.Ratio));
+                // Output the price in ppl to 3 decimal places
+				printer.addTextRight(Size.Large, 310, finalPosition, 140, format3dp.format(deliveredPrice * line.Ratio));
 			}
 
             // Get the value of the delivered product (in pounds)
@@ -1244,7 +1244,7 @@ public class Printing
             // Get the VAT percentage
             double vatPercentage = getVatPercentage(line);
 
-            finalPosition = printer.addTextRight(Size.Large, 620, finalPosition, 140, format4dp.format(vatPercentage));
+            finalPosition = printer.addTextRight(Size.Large, 620, finalPosition, 140, format2dp.format(vatPercentage));
 		}
 
 		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
