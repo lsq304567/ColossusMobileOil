@@ -857,6 +857,9 @@ public class Printing
 
 		DateFormat df1 = new SimpleDateFormat("dd-MMM-yyyy");
 
+        DecimalFormat format2dp = new DecimalFormat("#,##0.00");
+        DecimalFormat format4dp = new DecimalFormat("#,##0.0000");
+
 		int finalPosition = 0;
 
 		// Create Bitmap printer
@@ -904,6 +907,8 @@ public class Printing
 		// Print the Invoice To & Deliver To Addresses
 		finalPosition = printAddresses(printer, finalPosition, order);
 
+        CrashReporter.leaveBreadcrumb("Printing: printBitmapTicket - Printing Terms");
+
         // Print Terms
         finalPosition = printTerms(printer, finalPosition, order.Terms);
 
@@ -911,8 +916,6 @@ public class Printing
 
         // Print the Order Lines
 		finalPosition = printOrderLines(printer, finalPosition, order);
-
-		DecimalFormat decf2 = new DecimalFormat("#,##0.00");
 
 		CrashReporter.leaveBreadcrumb("Printing - printBitmapTicket - Printing Ticket Amounts");
 
@@ -946,21 +949,21 @@ public class Printing
         // Print the Meter Tickets
         finalPosition = printMeterData(printer, finalPosition, order);
 
+        // Get the first order line - should be the only one present???
+        dbTripOrderLine orderLine = order.GetTripOrderLines().get(0);
+
+        // Get the surcharge amount
 		double surcharge = order.getDeliveredSurchargeValue();
 
+        // Get the amount still to pay
 		double outstanding = order.getOutstanding();
 
+        // Print the surcharge/discount message if necessary
 		if (surcharge != 0 && outstanding > 0)
 		{
-			CrashReporter.leaveBreadcrumb("Printing : printBitmapTicket - Printing Surcharge & Outstanding");
+            CrashReporter.leaveBreadcrumb("Printing: printBitmapTicket - Printing Surcharge/Discount message");
 
-			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
-
-			finalPosition = printer.addTextLeft(Size.Large, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, "Please pay " + decf2.format(outstanding - surcharge) + " by " + df1.format(order.DueDate));
-
-			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
-
-			finalPosition = printer.addTextLeft(Size.Large, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, "to receive a cash discount of " + decf2.format(surcharge));
+            finalPosition = printSurchargeMessage(printer, finalPosition, order);
 		}
 
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
@@ -1004,6 +1007,110 @@ public class Printing
 		// Save the Ticket Image
 		saveLabelImage(context, "TicketLabel", ticketImage);
 	}
+
+    private static double getOrderVat(dbTripOrder order)
+    {
+        dbTripOrderLine orderLine = order.GetTripOrderLines().get(0);
+
+        double nettValue = orderLine.getDeliveredNettValue();
+        double vatRate = getVatPercentage(orderLine);
+
+        return nettValue * vatRate / 100.0;
+    }
+
+    private static double getTotalValue(dbTripOrder order)
+    {
+        dbTripOrderLine orderLine = order.GetTripOrderLines().get(0);
+
+        double nettValue = orderLine.getDeliveredNettValue();
+        double netValueVat = nettValue * getVatPercentage(orderLine) / 100;
+
+        return nettValue + netValueVat;
+    }
+
+    private static int printSurchargeMessage(Printer printer, int yPosition, dbTripOrder order)
+    {
+        DateFormat formatDate = new SimpleDateFormat("dd-MMM-yyyy");
+
+        DecimalFormat format2dp = new DecimalFormat("#,##0.00");
+        DecimalFormat format4dp = new DecimalFormat("#,##0.0000");
+
+        int finalPosition = yPosition;
+
+        CrashReporter.leaveBreadcrumb("Printing: printSurchargeMessage");
+
+        // Get the first Order Line
+        dbTripOrderLine orderLine = order.GetTripOrderLines().get(0);
+
+        // Print line commencing "Deduct x ppl ..."
+        StringBuilder line = new StringBuilder();
+
+        double surcharge = orderLine.Surcharge;
+        double surchargeAmount = surcharge / 100.0 * orderLine.DeliveredQty;
+        double surchargeAmountVat = surchargeAmount * getVatPercentage(orderLine) / 100.0;
+
+        line.append("Deduct ");
+        line.append(format4dp.format(surcharge));
+        line.append(" ppl = £");
+        line.append(format2dp.format(surchargeAmount + surchargeAmountVat));
+        line.append(" (inc. £");
+        line.append(format2dp.format(surchargeAmountVat));
+        line.append(" of VAT)");
+
+        // Print space before the rest of the message
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+
+        finalPosition = printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, 720, line.toString());
+
+        // Print line commencing "from £xx.xx  if paid by ..."
+        line = new StringBuilder();
+
+        line.append("from £");
+        line.append(format2dp.format(order.getCreditTotal()));
+        line.append(" if paid by ");
+        line.append(formatDate.format(order.DueDate));
+
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+
+        finalPosition = printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, 720, line.toString());
+
+        // Print line commencing "No credit note will ..."
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+
+        finalPosition = printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, 720, "No credit note will be issued.");
+
+        // Print line commencing "Only reclaim the VAT ..."
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+
+        finalPosition = printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, 720, "Only reclaim the VAT actually paid.");
+
+        line = new StringBuilder();
+
+        double nettValue = orderLine.getDeliveredNettValue();
+        double nettValueVat = nettValue * getVatPercentage(orderLine) / 100.0;
+
+        line.append("£");
+        line.append(format2dp.format(nettValue));
+        line.append(" + VAT £");
+        line.append(format2dp.format(nettValueVat));
+        line.append(" = £");
+        line.append(format2dp.format(nettValue + nettValueVat));
+
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+
+        finalPosition = printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, 720, line.toString());
+
+        line = new StringBuilder();
+
+        line.append("if paid by ");
+        line.append(formatDate.format(order.DueDate));
+
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+
+        finalPosition = printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, 720, line.toString());
+
+        return finalPosition;
+    }
 
     private static int printTerms(Printer printer, int yPosition, String terms)
     {

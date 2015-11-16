@@ -1,17 +1,17 @@
 package com.swiftsoft.colossus.mobileoil.database.model;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.swiftsoft.colossus.mobileoil.Utils;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Table(name = "TripOrder")
 public class dbTripOrder extends Model
@@ -325,8 +325,11 @@ public class dbTripOrder extends Model
 	public double getDeliveredNettValue()
 	{
 		double value = 0;
+
 		for (dbTripOrderLine line : this.GetTripOrderLines())
-			value += line.getDeliveredNettValue();
+        {
+            value += line.getDeliveredNettValue();
+        }
 		
 		return value;
 	}
@@ -334,8 +337,11 @@ public class dbTripOrder extends Model
 	public double getDeliveredSurchargeValue()
 	{
 		double value = 0;
+
 		for (dbTripOrderLine line : this.GetTripOrderLines())
-			value += line.getDeliveredSurchargeValue();
+        {
+            value += line.getDeliveredSurchargeValue();
+        }
 		
 		return value;
 	}
@@ -350,19 +356,22 @@ public class dbTripOrder extends Model
 			AddToVatTable(vatRows, line.getDeliveredVatPerc(), line.getDeliveredNettValue());
 			
 			if (line.getDeliveredSurchargeValue() != 0)
-				AddToVatTable(vatRows, 0, line.getDeliveredSurchargeValue());
+			{
+				AddToVatTable(vatRows, line.getDeliveredVatPerc(), line.getDeliveredSurchargeValue());
+			}
 		}
 
 		// Calculate VAT value.
 		double vatValue = 0;
+
 		for (int i = 0; i < vatRows.size(); i++)
 		{
 			VatRow vatRow = vatRows.get(i);
 			double vat = vatRow.nettValue * vatRow.vatPerc / 100.0;
-			vatValue += Utils.RoundNearest(vat, 2);
+			vatValue += vat;
 		}		
 		
-		return vatValue;
+		return Utils.RoundNearest(vatValue, 2);
 	}
 
 	//
@@ -400,7 +409,12 @@ public class dbTripOrder extends Model
 	//
 	public double getCreditTotal()
 	{
-		return Utils.RoundNearest(getDeliveredNettValue() + getDeliveredVatValue() + getDeliveredSurchargeValue() + getCodAccBalance(), 2);
+        double deliveredNettValue = getDeliveredNettValue();
+        double deliveredVatValue = getDeliveredVatValue();
+        double deliveredSurchargeValue = getDeliveredSurchargeValue();
+        double codAccBalance = getCodAccBalance();
+
+        return Utils.RoundNearest(deliveredNettValue + deliveredVatValue + deliveredSurchargeValue + codAccBalance, 2);
 	}
 
 	//
@@ -408,10 +422,52 @@ public class dbTripOrder extends Model
 	//
 	public double getCashTotal()
 	{
-		return Utils.RoundNearest(getDeliveredNettValue() + getDeliveredVatValue() + getCodAccBalance(), 2);
+        double deliveredNettValue = getDeliveredNettValue();
+        double deliveredVatValue = getDeliveredVatValue();
+        double codAccBalance = getCodAccBalance();
+
+		return Utils.RoundNearest(deliveredNettValue + deliveredVatValue + codAccBalance, 2);
 	}
-	
-	//
+
+    public double getSurchargeVat()
+    {
+        double surcharge = getDeliveredSurchargeValue();
+        double surchargeVat = 0.0;
+
+        if (surcharge > 0)
+        {
+            dbTripOrderLine orderLine = GetTripOrderLines().get(0);
+
+            double vatPercentage = getVatPercentage(orderLine);
+
+            surchargeVat = surcharge * vatPercentage / 100.0;
+        }
+
+        return surchargeVat;
+    }
+
+
+    private static double getVatPercentage(dbTripOrderLine line)
+    {
+        if (line.VatPerc2Above < 1.0e6)
+        {
+            if (line.DeliveredQty < line.VatPerc2Above)
+            {
+                return line.VatPerc1;
+            }
+            else
+            {
+                return line.VatPerc2;
+            }
+        }
+        else
+        {
+            return line.VatPerc1;
+        }
+    }
+
+
+    //
 	// Return total paid to office.
 	//
 	public double getPrepaidAmount()
@@ -437,7 +493,11 @@ public class dbTripOrder extends Model
 	//
 	public double getOutstanding()
 	{
-		return Utils.RoundNearest(getCreditTotal() - getPrepaidAmount() - getPaidDriver() - Discount, 2);
+        double creditTotal = getCreditTotal();
+        double prepaidAmount = getPrepaidAmount();
+        double paidDriver = getPaidDriver();
+
+		return Utils.RoundNearest(creditTotal - prepaidAmount - paidDriver - Discount, 2);
 	}
 	
 	//

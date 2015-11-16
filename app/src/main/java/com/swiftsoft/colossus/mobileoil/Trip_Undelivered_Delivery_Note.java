@@ -1,9 +1,5 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -21,6 +17,10 @@ import android.widget.TextView;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrderLine;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
+
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 
 public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 {
@@ -232,6 +232,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 				double paidDriver = Active.order.getPaidDriver();
 				double discount = Active.order.Discount;
 				double outstanding = Active.order.getOutstanding();
+				double surchargeVatAmount = Active.order.getSurchargeVat();
 				
 				// Update view.
 				tvVat.setText(decf2.format(vat));
@@ -293,8 +294,8 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 				if (surcharge != 0 && outstanding > 0)
 				{
 					llCashDiscountMsg.setVisibility(View.VISIBLE);
-					tvCashDiscountMsg1.setText("Please pay driver " + decf2.format(cashTotal - paidOffice));
-					tvCashDiscountMsg2.setText("to receive a cash discount of " + decf2.format(surcharge));
+					tvCashDiscountMsg1.setText("Please pay driver " + decf2.format(cashTotal - paidOffice - surchargeVatAmount));
+					tvCashDiscountMsg2.setText("to receive a cash discount of " + decf2.format(surcharge + surchargeVatAmount));
 				}
 				else
 				{
