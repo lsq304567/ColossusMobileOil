@@ -920,7 +920,8 @@ public class Printing
 		CrashReporter.leaveBreadcrumb("Printing - printBitmapTicket - Printing Ticket Amounts");
 
 		// Print VAT
-		finalPosition = printTitleAndAmount(printer, finalPosition, "VAT", order.getDeliveredVatValue());
+        String vatTitle = "VAT @ " + format2dp.format(getVatPercentage(order.GetTripOrderLines().get(0))) + " %";
+		finalPosition = printTitleAndAmount(printer, finalPosition, vatTitle, order.getDeliveredVatValue());
 
         // Print account balance
         finalPosition = printTitleAndAmount(printer, finalPosition, "A/c balance", order.getCodAccBalance());
