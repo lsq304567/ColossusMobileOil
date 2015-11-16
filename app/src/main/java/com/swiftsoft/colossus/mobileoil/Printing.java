@@ -1090,16 +1090,15 @@ public class Printing
 
         int finalPosition = yPosition;
 
-		DecimalFormat decf0 = new DecimalFormat("#,##0");
-		DecimalFormat decf1 = new DecimalFormat("#,##0.0");
-		DecimalFormat decf2 = new DecimalFormat("#,##0.00");
-		DecimalFormat decf4 = new DecimalFormat("#,##0.0000");
+        DecimalFormat format2dp = new DecimalFormat("#,##0.00");
+		DecimalFormat format4dp = new DecimalFormat("#,##0.0000");
 
-		// Products
-		printer.addTextLeft(Size.Large, 20, finalPosition, 400, "Product");
-		printer.addTextRight(Size.Large, 300, finalPosition, 100, "Litres");
-		printer.addTextRight(Size.Large, 490, finalPosition, 100, "PPL");
-		finalPosition = printer.addTextRight(Size.Large, 600, finalPosition, 180, "Value");
+		// Product, Litres, PPL, Value, VAT
+		printer.addTextLeft(Size.Large, 40, finalPosition, 150, "Product");
+		printer.addTextRight(Size.Large, 210, finalPosition, 80, "Litres");
+		printer.addTextRight(Size.Large, 310, finalPosition, 140, "PPL");
+		printer.addTextRight(Size.Large, 470, finalPosition, 130, "Value");
+        finalPosition = printer.addTextRight(Size.Large, 620, finalPosition, 140, "%VAT");
 
 		finalPosition = printer.addLine(finalPosition + 10);
 
@@ -1111,28 +1110,57 @@ public class Printing
 		{
 			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
-			// Delivered price include surcharge.
-			double deliveredPrice = line.getDeliveredPrice();
-			double deliveredValue = line.getDeliveredNettValue() + line.getDeliveredSurchargeValue();
+            // Print the Product Description
+			printer.addTextLeft(Size.Large, 40, finalPosition, 150, line.Product.Desc);
 
-			printer.addTextLeft(Size.Large, LEFT_COLUMN_X, finalPosition, 470, line.Product.Desc);
-			printer.addTextRight(Size.Large, 300, finalPosition, 100, Integer.toString(line.DeliveredQty));
+            // Print the Delivered Quantity in litres
+			printer.addTextRight(Size.Large, 210, finalPosition, 80, Integer.toString(line.DeliveredQty));
+
+            // Get the Delivered price include surcharge (in PPL).
+            double deliveredPrice = line.getDeliveredPrice();
 
 			if (deliveredPrice != 0)
 			{
                 // Output the price in ppl to 4 decimal places
-				printer.addTextRight(Size.Large, 450, finalPosition, 140, decf4.format(deliveredPrice * line.Ratio));
+				printer.addTextRight(Size.Large, 310, finalPosition, 140, format4dp.format(deliveredPrice * line.Ratio));
 			}
 
-			if (deliveredValue != 0)
+            // Get the value of the delivered product (in pounds)
+            double deliveredValue = line.getDeliveredNettValue() + line.getDeliveredSurchargeValue();
+
+            if (deliveredValue != 0)
 			{
                 // Output the value in pounds to 2 dp
-				finalPosition = printer.addTextRight(Size.Large, 600, finalPosition, 180, decf2.format(deliveredValue));
+				 printer.addTextRight(Size.Large, 470, finalPosition, 130, format2dp.format(deliveredValue));
 			}
+
+            // Get the VAT percentage
+            double vatPercentage = getVatPercentage(line);
+
+            finalPosition = printer.addTextRight(Size.Large, 620, finalPosition, 140, format4dp.format(vatPercentage));
 		}
 
 		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 	}
+
+    private static double getVatPercentage(dbTripOrderLine line)
+    {
+        if (line.VatPerc2Above < 1.0e6)
+        {
+            if (line.DeliveredQty < line.VatPerc2Above)
+            {
+                return line.VatPerc1;
+            }
+            else
+            {
+                return line.VatPerc2;
+            }
+        }
+        else
+        {
+            return line.VatPerc1;
+        }
+    }
 
     private static int printMeterData(Printer printer, int yPosition, dbTripOrder order)
     {

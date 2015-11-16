@@ -27,13 +27,13 @@ public class BitmapPrinter extends Printer
     private static final int PRINTER_WIDTH = 800;
 
     // The size of the large font
-    private static final int FONT_SIZE_LARGE = 40;
+    private static final int FONT_SIZE_LARGE = 32;
 
     // The size of the normal font
-    private static final int FONT_SIZE_NORMAL = 25;
+    private static final int FONT_SIZE_NORMAL = 20;
 
     // The size of the small font
-    private static final int FONT_SIZE_SMALL = 18;
+    private static final int FONT_SIZE_SMALL = 14;
 
     Bitmap bitmap = null;
 
