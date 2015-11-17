@@ -200,7 +200,7 @@
 								android:layout_width="0px"
 								android:layout_weight="1.5"
 								android:textSize="16sp"
-								android:text="Paid driver" />
+								android:text="Payment received" />
 
 							<TextView
 								android:id="@+id/trip_undelivered_delivery_note_paid_driver"
