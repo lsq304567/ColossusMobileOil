@@ -1148,7 +1148,7 @@ public class Printing
 
 			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
 			printer.addTextRight(Size.Large, 300, finalPosition, 250, title);
-			finalPosition = printer.addTextRight(Size.Large, 590, finalPosition, 180, decf2.format(amount));
+			finalPosition = printer.addTextRight(Size.Large, 590, finalPosition, 170, decf2.format(amount));
 		}
 
 		return finalPosition;
