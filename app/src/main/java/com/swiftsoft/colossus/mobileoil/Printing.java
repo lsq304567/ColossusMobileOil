@@ -1012,26 +1012,6 @@ public class Printing
 		saveLabelImage(context, "TicketLabel", ticketImage);
 	}
 
-    private static double getOrderVat(dbTripOrder order)
-    {
-        dbTripOrderLine orderLine = order.GetTripOrderLines().get(0);
-
-        double nettValue = orderLine.getDeliveredNettValue();
-        double vatRate = getVatPercentage(orderLine);
-
-        return nettValue * vatRate / 100.0;
-    }
-
-    private static double getTotalValue(dbTripOrder order)
-    {
-        dbTripOrderLine orderLine = order.GetTripOrderLines().get(0);
-
-        double nettValue = orderLine.getDeliveredNettValue();
-        double netValueVat = nettValue * getVatPercentage(orderLine) / 100;
-
-        return nettValue + netValueVat;
-    }
-
     private static int printSurchargeMessage(Printer printer, int yPosition, dbTripOrder order)
     {
         DateFormat formatDate = new SimpleDateFormat("dd-MMM-yyyy");
@@ -1223,11 +1203,11 @@ public class Printing
 		DecimalFormat format3dp = new DecimalFormat("#,##0.000");
 
 		// Product, Litres, PPL, Value, VAT
-		printer.addTextLeft(Size.Large, 40, finalPosition, 150, "Product");
-		printer.addTextRight(Size.Large, 210, finalPosition, 80, "Litres");
-		printer.addTextRight(Size.Large, 310, finalPosition, 140, "PPL");
-		printer.addTextRight(Size.Large, 470, finalPosition, 130, "Value");
-        finalPosition = printer.addTextRight(Size.Large, 620, finalPosition, 140, "%VAT");
+        printer.addTextRight(Size.Large, 40, finalPosition, 110, "Ordered");
+		printer.addTextLeft(Size.Large, 170, finalPosition, 150, "Product");
+		printer.addTextRight(Size.Large, 340, finalPosition, 110, "Delivered");
+		printer.addTextRight(Size.Large, 470, finalPosition, 140, "PPL");
+		finalPosition = printer.addTextRight(Size.Large, 630, finalPosition, 130, "Value");
 
 		finalPosition = printer.addLine(finalPosition + 10);
 
@@ -1239,11 +1219,14 @@ public class Printing
 		{
 			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
+            // Print the volume ordered
+            printer.addTextRight(Size.Large, 40, finalPosition, 110, Integer.toString(line.OrderedQty));
+
             // Print the Product Description
-			printer.addTextLeft(Size.Large, 40, finalPosition, 150, line.Product.Desc);
+			printer.addTextLeft(Size.Large, 170, finalPosition, 150, line.Product.Desc);
 
             // Print the Delivered Quantity in litres
-			printer.addTextRight(Size.Large, 210, finalPosition, 80, Integer.toString(line.DeliveredQty));
+			printer.addTextRight(Size.Large, 340, finalPosition, 110, Integer.toString(line.DeliveredQty));
 
             // Get the Delivered price include surcharge (in PPL).
             double deliveredPrice = line.getDeliveredPrice();
@@ -1251,7 +1234,7 @@ public class Printing
 			if (deliveredPrice != 0)
 			{
                 // Output the price in ppl to 3 decimal places
-				printer.addTextRight(Size.Large, 310, finalPosition, 140, format3dp.format(deliveredPrice * line.Ratio));
+				printer.addTextRight(Size.Large, 470, finalPosition, 140, format3dp.format(deliveredPrice * line.Ratio));
 			}
 
             // Get the value of the delivered product (in pounds)
@@ -1260,13 +1243,8 @@ public class Printing
             if (deliveredValue != 0)
 			{
                 // Output the value in pounds to 2 dp
-				 printer.addTextRight(Size.Large, 470, finalPosition, 130, format2dp.format(deliveredValue));
+				 printer.addTextRight(Size.Large, 630, finalPosition, 130, format2dp.format(deliveredValue));
 			}
-
-            // Get the VAT percentage
-            double vatPercentage = getVatPercentage(line);
-
-            finalPosition = printer.addTextRight(Size.Large, 620, finalPosition, 140, format2dp.format(vatPercentage));
 		}
 
 		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);

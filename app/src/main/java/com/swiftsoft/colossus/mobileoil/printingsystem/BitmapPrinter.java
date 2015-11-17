@@ -27,7 +27,10 @@ public class BitmapPrinter extends Printer
     private static final int PRINTER_WIDTH = 800;
 
     // The size of the large font
-    private static final int FONT_SIZE_LARGE = 32;
+    private static final int FONT_SIZE_LARGE = 30;
+
+    // The size of the medium font
+    private static final int FONT_SIZE_MEDIUM = 26;
 
     // The size of the normal font
     private static final int FONT_SIZE_NORMAL = 20;
@@ -241,6 +244,10 @@ public class BitmapPrinter extends Printer
         {
             case Large:
                 paint.setTextSize(FONT_SIZE_LARGE);
+                break;
+
+            case Medium:
+                paint.setTextSize(FONT_SIZE_MEDIUM);
                 break;
 
             case Normal:
