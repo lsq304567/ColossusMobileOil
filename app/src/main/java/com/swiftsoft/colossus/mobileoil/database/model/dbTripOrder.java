@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 
 @Table(name = "TripOrder")
@@ -159,10 +160,10 @@ public class dbTripOrder extends Model
 
 	// Non-static methods.
 
-	private class VatRow
+	public class VatRow
 	{
-		double vatPerc;
-		double nettValue;
+		public double vatPerc;
+		public double nettValue;
 	};
 
 	// Find all order lines.
@@ -344,6 +345,47 @@ public class dbTripOrder extends Model
         }
 		
 		return value;
+	}
+
+    private static void addRow(Hashtable<Double, VatRow> table, VatRow row)
+    {
+        if (!table.containsKey(row.vatPerc))
+        {
+            table.put(row.vatPerc, row);
+        }
+        else
+        {
+            VatRow foundRow = table.get(row.vatPerc);
+
+            foundRow.nettValue += row.nettValue;
+        }
+    }
+
+	public Hashtable<Double, VatRow> getDeliveredVatValues()
+	{
+		Hashtable<Double, VatRow> vatRows = new Hashtable<Double, VatRow>();
+
+        for (dbTripOrderLine line : GetTripOrderLines())
+        {
+            VatRow row = new VatRow();
+
+            row.nettValue = line.getDeliveredNettValue();
+            row.vatPerc = line.getDeliveredVatPerc();
+
+            addRow(vatRows, row);
+
+            if (line.getDeliveredSurchargeValue() != 0)
+            {
+                row = new VatRow();
+
+                row.nettValue = line.getDeliveredSurchargeValue();
+                row.vatPerc = line.getDeliveredVatPerc();
+
+                addRow(vatRows, row);
+            }
+        }
+
+		return vatRows;
 	}
 	
 	public double getDeliveredVatValue()

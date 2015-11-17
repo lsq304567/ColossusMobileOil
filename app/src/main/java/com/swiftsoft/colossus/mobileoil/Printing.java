@@ -26,6 +26,8 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
@@ -907,12 +909,8 @@ public class Printing
 		// Print the Invoice To & Deliver To Addresses
 		finalPosition = printAddresses(printer, finalPosition, order);
 
-        CrashReporter.leaveBreadcrumb("Printing: printBitmapTicket - Printing Terms");
-
         // Print Terms
         finalPosition = printTerms(printer, finalPosition, order.Terms);
-
-        CrashReporter.leaveBreadcrumb("Printing - printBitmapTicket - Printing Order Lines");
 
         // Print the Order Lines
 		finalPosition = printOrderLines(printer, finalPosition, order);
@@ -920,8 +918,18 @@ public class Printing
 		CrashReporter.leaveBreadcrumb("Printing - printBitmapTicket - Printing Ticket Amounts");
 
 		// Print VAT
-        String vatTitle = "VAT @ " + format2dp.format(getVatPercentage(order.GetTripOrderLines().get(0))) + " %";
-		finalPosition = printTitleAndAmount(printer, finalPosition, vatTitle, order.getDeliveredVatValue());
+        Hashtable<Double, dbTripOrder.VatRow> vatValues = order.getDeliveredVatValues();
+        Enumeration e = vatValues.keys();
+
+        while (e.hasMoreElements())
+        {
+            double key = (Double)e.nextElement();
+
+            dbTripOrder.VatRow row = vatValues.get(key);
+
+            String vatTitle = "VAT @ " + format2dp.format(row.vatPerc) + " %";
+            finalPosition = printTitleAndAmount(printer, finalPosition, vatTitle, row.nettValue * row.vatPerc / 100.0);
+        }
 
         // Print account balance
         finalPosition = printTitleAndAmount(printer, finalPosition, "A/c balance", order.getCodAccBalance());
@@ -950,9 +958,6 @@ public class Printing
         // Print the Meter Tickets
         finalPosition = printMeterData(printer, finalPosition, order);
 
-        // Get the first order line - should be the only one present???
-        dbTripOrderLine orderLine = order.GetTripOrderLines().get(0);
-
         // Get the surcharge amount
 		double surcharge = order.getDeliveredSurchargeValue();
 
@@ -962,8 +967,6 @@ public class Printing
         // Print the surcharge/discount message if necessary
 		if (surcharge != 0 && outstanding > 0)
 		{
-            CrashReporter.leaveBreadcrumb("Printing: printBitmapTicket - Printing Surcharge/Discount message");
-
             finalPosition = printSurchargeMessage(printer, finalPosition, order);
 		}
 
@@ -1040,20 +1043,32 @@ public class Printing
 
         CrashReporter.leaveBreadcrumb("Printing: printSurchargeMessage");
 
-        // Get the first Order Line
-        dbTripOrderLine orderLine = order.GetTripOrderLines().get(0);
+        // Get all the order lines
+        List<dbTripOrderLine> orderLines = order.GetTripOrderLines();
+
+        // Get the surcharge amount (in Pence per Litre)
+        double surcharge = orderLines.get(0).Surcharge;
+
+        double totalSurchargeAmount = 0.0;
+
+        double surchargeAmountVat = 0.0;
+
+        for (dbTripOrderLine line : orderLines)
+        {
+            double surchargeAmount = surcharge / 100.0 * line.OrderedQty;
+
+            totalSurchargeAmount += surchargeAmount;
+
+            surchargeAmountVat += surchargeAmount * (line.OrderedQty > line.VatPerc2Above ? line.VatPerc2 : line.VatPerc1) / 100.0;
+        }
 
         // Print line commencing "Deduct x ppl ..."
         StringBuilder line = new StringBuilder();
 
-        double surcharge = orderLine.Surcharge;
-        double surchargeAmount = surcharge / 100.0 * orderLine.DeliveredQty;
-        double surchargeAmountVat = surchargeAmount * getVatPercentage(orderLine) / 100.0;
-
         line.append("Deduct ");
         line.append(format4dp.format(surcharge));
         line.append(" ppl = £");
-        line.append(format2dp.format(surchargeAmount + surchargeAmountVat));
+        line.append(format2dp.format(totalSurchargeAmount + surchargeAmountVat));
         line.append(" (inc. £");
         line.append(format2dp.format(surchargeAmountVat));
         line.append(" of VAT)");
@@ -1087,8 +1102,14 @@ public class Printing
 
         line = new StringBuilder();
 
-        double nettValue = orderLine.getDeliveredNettValue();
-        double nettValueVat = nettValue * getVatPercentage(orderLine) / 100.0;
+        double nettValue = 0.0;
+        double nettValueVat = 0.0;
+
+        for (dbTripOrderLine orderLine : orderLines)
+        {
+            nettValue += orderLine.getDeliveredNettValue();
+            nettValueVat += order.getDeliveredNettValue() * (orderLine.OrderedQty > orderLine.VatPerc2Above ? orderLine.VatPerc2 : orderLine.VatPerc1) / 100.0;
+        }
 
         line.append("£");
         line.append(format2dp.format(nettValue));
