@@ -909,8 +909,9 @@ public class Printing
 		// Print the Invoice To & Deliver To Addresses
 		finalPosition = printAddresses(printer, finalPosition, order);
 
-        // Print Terms
-        finalPosition = printTerms(printer, finalPosition, order.Terms);
+        // Print Terms & CustomerType
+        printTerms(printer, finalPosition, order.Terms);
+        finalPosition = printCustomerType(printer, finalPosition, order.CustomerType);
 
         // Print the Order Lines
 		finalPosition = printOrderLines(printer, finalPosition, order);
@@ -1112,6 +1113,19 @@ public class Printing
         finalPosition = printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, 720, line.toString());
 
         return finalPosition;
+    }
+
+    private static int printCustomerType(Printer printer, int yPosition, String customerType)
+    {
+        CrashReporter.leaveBreadcrumb("Printing: printCustomerType");
+
+        int finalPosition = yPosition;
+
+        finalPosition = printer.addTextLeft(Size.Large, RIGHT_COLUMN_X, finalPosition, RIGHT_COLUMN_WIDTH, "Customer Type:");
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        finalPosition = printer.addTextLeft(Size.Normal, RIGHT_COLUMN_X, finalPosition, RIGHT_COLUMN_WIDTH, customerType);
+
+        return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
     }
 
     private static int printTerms(Printer printer, int yPosition, String terms)

@@ -115,6 +115,12 @@ public class dbTripOrder extends Model
 	
 	@Column(name = "CustomerSignatureDateTime")
 	public long CustomerSignatureDateTime;
+
+    @Column(name = "CustomerType")
+    public String CustomerType;
+
+    @Column(name = "HidePrices")
+    public boolean HidePrices;
 	
 	@Column(name = "CashReceived")
 	public double CashReceived;

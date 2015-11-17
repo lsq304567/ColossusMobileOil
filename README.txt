@@ -1,3 +1,24 @@
+V0.99t13
+========
+
+Moved the location on docket where Customer Terms are displayed.
+
+Moved location on docket where Meter Data is printed.
+
+Resized fonts to give better output
+
+Changed display of PPL to 3dp and VAT to 2 dp
+
+Removed VAT from docket table and added percentage to the VAT amount field
+
+Added Ordered litres column to the docket table
+
+Print message about discounts if surcharge applied
+
+Altered text on Date title of docket signature panels
+
+Added Vehicle registration to driver signature panel
+
 V0.99t12
 ========
 
