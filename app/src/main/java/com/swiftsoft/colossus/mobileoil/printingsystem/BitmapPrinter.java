@@ -9,7 +9,9 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 
+import com.swiftsoft.colossus.mobileoil.Active;
 import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
+import com.swiftsoft.colossus.mobileoil.database.model.dbVehicle;
 
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
@@ -128,8 +130,8 @@ public class BitmapPrinter extends Printer
 
         int finalPosition  = yPosition;
 
-        DateFormat df1 = new SimpleDateFormat("dd-MMM-yyyy");
-        DateFormat df2 = new SimpleDateFormat("@ HH:mm");
+        DateFormat formatDate = new SimpleDateFormat("dd-MMM-yyyy");
+        DateFormat formatTime = new SimpleDateFormat("@ HH:mm");
 
         // Decode the signature to a Bitmap
         Bitmap signature = BitmapFactory.decodeByteArray(signatureArray, 0, signatureArray.length);
@@ -137,9 +139,8 @@ public class BitmapPrinter extends Printer
         // Resize bitmap.
         signature = getResizedBitmap(signature, 480, 171);
 
-        finalPosition = addSpacer(finalPosition, SpacerHeight.Normal);
-
         // Print title of the signature
+        finalPosition = addSpacer(finalPosition, SpacerHeight.Normal);
         addTextLeft(Size.Large, xLeftColumn, finalPosition, widthLeftColumn, title);
 
         // Print the Name header
@@ -149,29 +150,32 @@ public class BitmapPrinter extends Printer
         // graphic signature
         int signaturePosition = addSpacer(finalPosition, SpacerHeight.Small);
 
-        finalPosition = addSpacer(finalPosition, SpacerHeight.Small);
-
         // Print the actual name
+        finalPosition = addSpacer(finalPosition, SpacerHeight.Small);
         finalPosition = addTextLeft(Size.Normal, xRightColumn, finalPosition, widthRightColumn, name);
 
-        finalPosition = addSpacer(finalPosition, SpacerHeight.Large);
+        // Print the vehicle registration if this was the Driver signature
+        if (title.startsWith("Driver"))
+        {
+            dbVehicle vehicle = dbVehicle.FindByNo(Active.trip.Vehicle.No);
+            finalPosition = addSpacer(finalPosition, SpacerHeight.Small);
+            finalPosition = addTextLeft(Size.Normal, xRightColumn, finalPosition, widthRightColumn, vehicle.Reg);
+        }
 
         // Print the Date header
-        finalPosition = addTextLeft(Size.Large, xRightColumn, finalPosition, widthRightColumn, "Date");
-
-        finalPosition = addSpacer(finalPosition, SpacerHeight.Small);
+        finalPosition = addSpacer(finalPosition, SpacerHeight.Large);
+        finalPosition = addTextLeft(Size.Large, xRightColumn, finalPosition, widthRightColumn, "Date of Supply");
 
         // Print the date
-        finalPosition = addTextLeft(Size.Normal, xRightColumn, finalPosition, widthRightColumn, df1.format(datetime));
-
         finalPosition = addSpacer(finalPosition, SpacerHeight.Small);
+        finalPosition = addTextLeft(Size.Normal, xRightColumn, finalPosition, widthRightColumn, formatDate.format(datetime));
 
         // Print the time
-        finalPosition = addTextLeft(Size.Normal, xRightColumn, finalPosition, widthRightColumn, df2.format(datetime));
+        finalPosition = addSpacer(finalPosition, SpacerHeight.Small);
+        finalPosition = addTextLeft(Size.Normal, xRightColumn, finalPosition, widthRightColumn, formatTime.format(datetime));
 
+        // Print line at bottom of signature
         finalPosition = addSpacer(finalPosition, SpacerHeight.Normal);
-
-        // Pring line at bottom of signature
         finalPosition = addLine(finalPosition);
 
         Canvas c = new Canvas(bitmap);
