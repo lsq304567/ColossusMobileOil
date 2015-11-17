@@ -943,11 +943,11 @@ public class Printing
         // Print amount paid at office
         finalPosition = printTitleAndAmount(printer, finalPosition, "Paid office", order.getPrepaidAmount());
 
-        // Print amount paid to driver
-        finalPosition = printTitleAndAmount(printer, finalPosition, "Paid driver", order.getPaidDriver());
+        // Print the discount
+        finalPosition = printTitleAndAmount(printer, finalPosition, "Discount", order.Discount);
 
-		// Print the discount
-		finalPosition = printTitleAndAmount(printer, finalPosition, "Discount", order.Discount);
+        // Print amount paid to driver
+        finalPosition = printTitleAndAmount(printer, finalPosition, "Payment Received", order.getPaidDriver());
 
 		// Print any payments outstanding
 		finalPosition = printTitleAndAmount(printer, finalPosition, "Outstanding", order.getOutstanding());
