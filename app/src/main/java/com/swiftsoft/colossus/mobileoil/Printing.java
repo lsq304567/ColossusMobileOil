@@ -1205,8 +1205,8 @@ public class Printing
 		// Product, Litres, PPL, Value, VAT
         printer.addTextRight(Size.Large, 40, finalPosition, 110, "Ordered");
 		printer.addTextLeft(Size.Large, 170, finalPosition, 150, "Product");
-		printer.addTextRight(Size.Large, 340, finalPosition, 110, "Delivered");
-		printer.addTextRight(Size.Large, 470, finalPosition, 140, "PPL");
+		printer.addTextRight(Size.Large, 340, finalPosition, 140, "Delivered");
+		printer.addTextRight(Size.Large, 500, finalPosition, 110, "PPL");
 		finalPosition = printer.addTextRight(Size.Large, 630, finalPosition, 130, "Value");
 
 		finalPosition = printer.addLine(finalPosition + 10);
@@ -1226,7 +1226,7 @@ public class Printing
 			printer.addTextLeft(Size.Large, 170, finalPosition, 150, line.Product.Desc);
 
             // Print the Delivered Quantity in litres
-			printer.addTextRight(Size.Large, 340, finalPosition, 110, Integer.toString(line.DeliveredQty));
+			printer.addTextRight(Size.Large, 340, finalPosition, 140, Integer.toString(line.DeliveredQty));
 
             // Get the Delivered price include surcharge (in PPL).
             double deliveredPrice = line.getDeliveredPrice();
@@ -1234,7 +1234,7 @@ public class Printing
 			if (deliveredPrice != 0)
 			{
                 // Output the price in ppl to 3 decimal places
-				printer.addTextRight(Size.Large, 470, finalPosition, 140, format3dp.format(deliveredPrice * line.Ratio));
+				printer.addTextRight(Size.Large, 500, finalPosition, 110, format3dp.format(deliveredPrice * line.Ratio));
 			}
 
             // Get the value of the delivered product (in pounds)
