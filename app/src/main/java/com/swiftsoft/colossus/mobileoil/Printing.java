@@ -418,6 +418,8 @@ public class Printing
 
 	private static void sendToPrinter(Context context, Printer printer) throws Exception
 	{
+        CrashReporter.leaveBreadcrumb("Printing: sendToPrinter");
+
 		PrintingService service = new PrintingService(context, "Printing");
 
 		service.print(printer.getPrinterData());
@@ -919,62 +921,66 @@ public class Printing
         // Print the Order Lines
 		finalPosition = printOrderLines(printer, finalPosition, order);
 
-		CrashReporter.leaveBreadcrumb("Printing - printBitmapTicket - Printing Ticket Amounts");
-
-		// Print VAT
-        Hashtable<Double, dbTripOrder.VatRow> vatValues = order.getDeliveredVatValues();
-        Enumeration e = vatValues.keys();
-
-        while (e.hasMoreElements())
+        if (!order.HidePrices)
         {
-            double key = (Double)e.nextElement();
+            CrashReporter.leaveBreadcrumb("Printing - printBitmapTicket - Printing Ticket Amounts");
 
-            dbTripOrder.VatRow row = vatValues.get(key);
+            // Print VAT
+            Hashtable<Double, dbTripOrder.VatRow> vatValues = order.getDeliveredVatValues();
+            Enumeration e = vatValues.keys();
 
-            String vatTitle = "VAT @ " + format2dp.format(row.vatPerc) + " %";
-            finalPosition = printTitleAndAmount(printer, finalPosition, vatTitle, row.nettValue * row.vatPerc / 100.0);
+            while (e.hasMoreElements())
+            {
+                double key = (Double) e.nextElement();
+
+                dbTripOrder.VatRow row = vatValues.get(key);
+
+                String vatTitle = "VAT @ " + format2dp.format(row.vatPerc) + " %";
+                finalPosition = printTitleAndAmount(printer, finalPosition, vatTitle, row.nettValue * row.vatPerc / 100.0);
+            }
+
+            // Print account balance
+            finalPosition = printTitleAndAmount(printer, finalPosition, "A/c balance", order.getCodAccBalance());
+
+            // Print total
+            finalPosition = printTitleAndAmount(printer, finalPosition, "Total", order.getCreditTotal());
+
+            finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+
+            // Print amount paid at office
+            finalPosition = printTitleAndAmount(printer, finalPosition, "Paid office", order.getPrepaidAmount());
+
+            // Print the discount
+            finalPosition = printTitleAndAmount(printer, finalPosition, "Discount", order.Discount);
+
+            // Print amount paid to driver
+            finalPosition = printTitleAndAmount(printer, finalPosition, "Payment Received", order.getPaidDriver());
+
+            // Print any payments outstanding
+            finalPosition = printTitleAndAmount(printer, finalPosition, "Outstanding", order.getOutstanding());
+
+            finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
         }
-
-        // Print account balance
-        finalPosition = printTitleAndAmount(printer, finalPosition, "A/c balance", order.getCodAccBalance());
-
-		// Print total
-		finalPosition = printTitleAndAmount(printer, finalPosition, "Total", order.getCreditTotal());
-
-		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
-
-        // Print amount paid at office
-        finalPosition = printTitleAndAmount(printer, finalPosition, "Paid office", order.getPrepaidAmount());
-
-        // Print the discount
-        finalPosition = printTitleAndAmount(printer, finalPosition, "Discount", order.Discount);
-
-        // Print amount paid to driver
-        finalPosition = printTitleAndAmount(printer, finalPosition, "Payment Received", order.getPaidDriver());
-
-		// Print any payments outstanding
-		finalPosition = printTitleAndAmount(printer, finalPosition, "Outstanding", order.getOutstanding());
-
-		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
-
-        CrashReporter.leaveBreadcrumb("Printing - printBitmapTicket - Printing Meter Data");
 
         // Print the Meter Tickets
         finalPosition = printMeterData(printer, finalPosition, order);
 
-        // Get the surcharge amount
-		double surcharge = order.getDeliveredSurchargeValue();
+        if (!order.HidePrices)
+        {
+            // Get the surcharge amount
+            double surcharge = order.getDeliveredSurchargeValue();
 
-        // Get the amount still to pay
-		double outstanding = order.getOutstanding();
+            // Get the amount still to pay
+            double outstanding = order.getOutstanding();
 
-        // Print the surcharge/discount message if necessary
-		if (surcharge != 0 && outstanding > 0)
-		{
-            finalPosition = printSurchargeMessage(printer, finalPosition, order);
-		}
+            // Print the surcharge/discount message if necessary
+            if (surcharge != 0 && outstanding > 0)
+            {
+                finalPosition = printSurchargeMessage(printer, finalPosition, order);
+            }
 
-		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+            finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+        }
 
 		finalPosition = printer.addLine(finalPosition);
 
@@ -995,8 +1001,6 @@ public class Printing
 			// Add the signature
 			finalPosition = printer.addSignature("Driver signature", order.DriverSignatureName, finalPosition, order.DriverSignatureImage, order.DriverSignatureDateTime);
 		}
-
-		CrashReporter.leaveBreadcrumb("Printing : printBitmapTicket - Printing Customs Statement");
 
 		// Customs statement.
 		finalPosition = printCustomsStatement(printer, finalPosition);
@@ -1167,6 +1171,8 @@ public class Printing
 
 	private static int printCustomsStatement(Printer printer, int yPosition)
 	{
+        CrashReporter.leaveBreadcrumb("Printing: printCustomsStatement");
+
 		int finalPosition = yPosition;
 
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.XLarge);
@@ -1241,11 +1247,20 @@ public class Printing
 		DecimalFormat format3dp = new DecimalFormat("#,##0.000");
 
 		// Product, Litres, PPL, Value, VAT
-        printer.addTextRight(Size.Large, 40, finalPosition, 110, "Ordered");
-		printer.addTextLeft(Size.Large, 170, finalPosition, 150, "Product");
-		printer.addTextRight(Size.Large, 340, finalPosition, 140, "Delivered");
-		printer.addTextRight(Size.Large, 500, finalPosition, 110, "PPL");
-		finalPosition = printer.addTextRight(Size.Large, 630, finalPosition, 130, "Value");
+		if (!order.HidePrices)
+		{
+			printer.addTextRight(Size.Large, 40, finalPosition, 110, "Ordered");
+			printer.addTextLeft(Size.Large, 170, finalPosition, 150, "Product");
+			printer.addTextRight(Size.Large, 340, finalPosition, 140, "Delivered");
+			printer.addTextRight(Size.Large, 500, finalPosition, 110, "PPL");
+			finalPosition = printer.addTextRight(Size.Large, 630, finalPosition, 130, "Value");
+		}
+		else
+		{
+			printer.addTextRight(Size.Large, 40, finalPosition, 110, "Ordered");
+			printer.addTextLeft(Size.Large, 170, finalPosition, 150, "Product");
+			finalPosition = printer.addTextRight(Size.Large, 340, finalPosition, 140, "Delivered");
+		}
 
 		finalPosition = printer.addLine(finalPosition + 10);
 
@@ -1266,49 +1281,35 @@ public class Printing
             // Print the Delivered Quantity in litres
 			printer.addTextRight(Size.Large, 340, finalPosition, 140, Integer.toString(line.DeliveredQty));
 
-            // Get the Delivered price include surcharge (in PPL).
-            double deliveredPrice = line.getDeliveredPrice();
+            if (!order.HidePrices)
+            {
+                // Get the Delivered price include surcharge (in PPL).
+                double deliveredPrice = line.getDeliveredPrice();
 
-			if (deliveredPrice != 0)
-			{
-                // Output the price in ppl to 3 decimal places
-				printer.addTextRight(Size.Large, 500, finalPosition, 110, format3dp.format(deliveredPrice * line.Ratio));
-			}
+                if (deliveredPrice != 0)
+                {
+                    // Output the price in ppl to 3 decimal places
+                    printer.addTextRight(Size.Large, 500, finalPosition, 110, format3dp.format(deliveredPrice * line.Ratio));
+                }
 
-            // Get the value of the delivered product (in pounds)
-            double deliveredValue = line.getDeliveredNettValue() + line.getDeliveredSurchargeValue();
+                // Get the value of the delivered product (in pounds)
+                double deliveredValue = line.getDeliveredNettValue() + line.getDeliveredSurchargeValue();
 
-            if (deliveredValue != 0)
-			{
-                // Output the value in pounds to 2 dp
-				 printer.addTextRight(Size.Large, 630, finalPosition, 130, format2dp.format(deliveredValue));
-			}
+                if (deliveredValue != 0)
+                {
+                    // Output the value in pounds to 2 dp
+                    printer.addTextRight(Size.Large, 630, finalPosition, 130, format2dp.format(deliveredValue));
+                }
+            }
 		}
 
 		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 	}
 
-    private static double getVatPercentage(dbTripOrderLine line)
-    {
-        if (line.VatPerc2Above < 1.0e6)
-        {
-            if (line.DeliveredQty < line.VatPerc2Above)
-            {
-                return line.VatPerc1;
-            }
-            else
-            {
-                return line.VatPerc2;
-            }
-        }
-        else
-        {
-            return line.VatPerc1;
-        }
-    }
-
     private static int printMeterData(Printer printer, int yPosition, dbTripOrder order)
     {
+        CrashReporter.leaveBreadcrumb("Printing: printMeterData");
+
         DecimalFormat decf0 = new DecimalFormat("#,##0");
         DecimalFormat decf1 = new DecimalFormat("#,##0.0");
 

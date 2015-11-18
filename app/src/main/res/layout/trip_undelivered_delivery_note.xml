@@ -53,6 +53,7 @@
 							android:text="Product"
 							android:textSize="16sp"
 							android:textColor="#0000ff" />
+
 						<TextView
 							android:layout_width="0px"
 							android:layout_weight="1"
@@ -60,12 +61,15 @@
 							android:layout_marginTop="1dp"
 							android:layout_marginLeft="1dp"
 							android:layout_marginBottom="1dp"
+                            android:layout_marginRight="1dp"
 							android:background="@android:color/white"
 							android:gravity="center_horizontal"
 							android:text="Delivered"
 							android:textSize="16sp"
 							android:textColor="#0000ff" />
+
 						<TextView
+                            android:id="@+id/trip_undelivered_delivery_note_table_header_value"
 							android:layout_width="0px"
 							android:layout_weight="1"
 							android:layout_height="fill_parent"
@@ -88,6 +92,7 @@
 					android:layout_height="10dp" />
 
 				<LinearLayout
+					android:id="@+id/trip_undelivered_delivery_note_payments"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="vertical">

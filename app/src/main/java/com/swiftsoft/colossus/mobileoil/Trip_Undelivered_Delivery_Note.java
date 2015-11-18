@@ -54,6 +54,9 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 	private Button btnSignature;
 	private Button btnNext;
 
+    private LinearLayout llPaymentMessages;
+    private TextView tvTableValueHeader;
+
 	private DecimalFormat decf2;
 
 	public Trip_Undelivered_Delivery_Note(Context context)
@@ -110,6 +113,9 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 			btnPayment = (Button)this.findViewById(R.id.trip_undelivered_delivery_note_payment);
 			btnSignature = (Button)this.findViewById(R.id.trip_undelivered_delivery_note_signature);
 			btnNext = (Button)this.findViewById(R.id.trip_undelivered_delivery_note_next);
+
+            llPaymentMessages = (LinearLayout)this.findViewById(R.id.trip_undelivered_delivery_note_payments);
+            tvTableValueHeader = (TextView)this.findViewById(R.id.trip_undelivered_delivery_note_table_header_value);
 			
 			btnPayment.setOnClickListener(onPayment);
 			btnSignature.setOnClickListener(onSignature);
@@ -187,6 +193,10 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 			{
 				tlTable.removeViewAt(1);
 			}
+
+            // Hide or show the value column of the tale
+            // depending on whether or not prices are to be shown
+            tvTableValueHeader.setVisibility(Active.order.HidePrices ? View.GONE : View.VISIBLE);
 			
 			// Create a TableRow for each order line.
 			if (Active.order != null)
@@ -200,11 +210,13 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 					
 					TextView tvDeliveredQty = (TextView) tr.findViewById(R.id.trip_undelivered_delivery_note_tablerow_delivered);
 					tvDeliveredQty.setText(Integer.toString(line.DeliveredQty));
-					
+
 					TextView tvValue = (TextView) tr.findViewById(R.id.trip_undelivered_delivery_note_tablerow_value);
 
 					tvValue.setText(line.getDeliveredQtyVariesFromOrdered() && line.DeliveredPrice == 0 ? "" : "" + decf2.format(line.getDeliveredNettValue() + line.getDeliveredSurchargeValue()));
-				
+
+                    tvValue.setVisibility(Active.order.HidePrices ? View.GONE : View.VISIBLE);
+
 					// Add the TableRow to the TableLayout.
 					tlTable.addView(tr);
 					
@@ -233,6 +245,8 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 				double discount = Active.order.Discount;
 				double outstanding = Active.order.getOutstanding();
 				double surchargeVatAmount = Active.order.getSurchargeVat();
+
+                llPaymentMessages.setVisibility(Active.order.HidePrices ? View.GONE : View.VISIBLE);
 				
 				// Update view.
 				tvVat.setText(decf2.format(vat));
@@ -293,8 +307,9 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 
 				if (surcharge != 0 && outstanding > 0)
 				{
-					llCashDiscountMsg.setVisibility(View.VISIBLE);
-					tvCashDiscountMsg1.setText("Please pay driver " + decf2.format(cashTotal - paidOffice - surchargeVatAmount));
+                    llCashDiscountMsg.setVisibility(Active.order.HidePrices ? View.GONE : View.VISIBLE);
+
+                    tvCashDiscountMsg1.setText("Please pay driver " + decf2.format(cashTotal - paidOffice - surchargeVatAmount));
 					tvCashDiscountMsg2.setText("to receive a cash discount of " + decf2.format(surcharge + surchargeVatAmount));
 				}
 				else
