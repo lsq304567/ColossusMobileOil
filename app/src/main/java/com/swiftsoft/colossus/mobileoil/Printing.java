@@ -913,6 +913,9 @@ public class Printing
         printTerms(printer, finalPosition, order.Terms);
         finalPosition = printCustomerType(printer, finalPosition, order.CustomerType);
 
+		// Print the customer order number
+		finalPosition = printOrderNumber(printer, finalPosition, order.OrderNumber);
+
         // Print the Order Lines
 		finalPosition = printOrderLines(printer, finalPosition, order);
 
@@ -1113,6 +1116,27 @@ public class Printing
         finalPosition = printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, 720, line.toString());
 
         return finalPosition;
+    }
+
+    private static int printOrderNumber(Printer printer, int yPosition, String orderNumber)
+    {
+        CrashReporter.leaveBreadcrumb("Printing: printOrderNumber");
+
+        int finalPosition = yPosition;
+
+        finalPosition = printer.addTextLeft(Size.Large, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Order No:");
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+
+        if (orderNumber != null && orderNumber.length() > 0)
+        {
+            finalPosition = printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, orderNumber);
+        }
+        else
+        {
+            finalPosition = printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "n/a");
+        }
+
+        return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
     }
 
     private static int printCustomerType(Printer printer, int yPosition, String customerType)

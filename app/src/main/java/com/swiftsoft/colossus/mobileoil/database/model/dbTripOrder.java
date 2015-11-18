@@ -119,6 +119,9 @@ public class dbTripOrder extends Model
     @Column(name = "CustomerType")
     public String CustomerType;
 
+	@Column(name = "OrderNumber")
+	public String OrderNumber;
+
     @Column(name = "HidePrices")
     public boolean HidePrices;
 	

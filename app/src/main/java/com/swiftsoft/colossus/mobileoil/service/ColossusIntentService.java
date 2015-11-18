@@ -736,6 +736,7 @@ public class ColossusIntentService extends IntentService
 				tripOrder.CustomerAddress = order.getString("CustomerAddress");
 				tripOrder.CustomerPostcode = order.getString("CustomerPostCode");
 				tripOrder.CustomerType = order.getString("CustomerType");
+				tripOrder.OrderNumber = order.getString("OrderNumber").trim();
                 tripOrder.HidePrices = order.getBoolean("HidePrices");
 				tripOrder.DeliveryName = order.getString("DeliveryName");
 				tripOrder.DeliveryAddress = order.getString("DeliveryAddress");
