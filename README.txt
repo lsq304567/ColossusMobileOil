@@ -1,3 +1,18 @@
+V0.99t14
+========
+
+Addition of Customer Type field
+
+Addition of facility to hide prices if the customer is marked as unpriced
+
+Changed 'Paid driver' message to 'Payment received' on delivery docket
+
+Addition of the Customer Order Number on the Delivery docket
+
+Meter Data output moved beneath Discount message on Delivery Docket
+
+In discount message on delivery docket changed PPL figure to 2 dp from 4 dp
+
 V0.99t13
 ========
 
