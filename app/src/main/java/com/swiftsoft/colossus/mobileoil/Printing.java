@@ -85,6 +85,8 @@ public class Printing
 
 	private static int printTitle(Printer printer, int yPosition, String title)
 	{
+        CrashReporter.leaveBreadcrumb("Printer: printTitle");
+
 		int finalPosition = yPosition;
 
 		finalPosition = printer.addTextCentre(Size.Large, 0, finalPosition, 800, title);
@@ -94,6 +96,8 @@ public class Printing
 
 	private static int printDateAndTripNumber(Printer printer, int yPosition)
 	{
+        CrashReporter.leaveBreadcrumb("Printing: printDateAndTripNumber");
+
 		int finalPosition = yPosition;
 
 		// Print the Date & Trip No. headers
@@ -102,21 +106,22 @@ public class Printing
 
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
-		DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-
+        // Get the current date/time
 		long date = new Date().getTime();
 
-		// Print the actual date & trip number values
-		printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, df.format(date));
+        DateFormat formatDate = new SimpleDateFormat("dd-MMM-yyyy");
+
+        // Print the actual date & trip number values
+		printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, formatDate.format(date));
 		finalPosition = printer.addTextLeft(Size.Normal, RIGHT_COLUMN_X, finalPosition, RIGHT_COLUMN_WIDTH, Integer.toString(Active.trip.No));
 
-		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
-
-		return finalPosition;
+		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 	}
 
 	private static int printVehicleAndDriver(Printer printer, int yPosition)
 	{
+        CrashReporter.leaveBreadcrumb("Printing: printVehicleAndDriver");
+
 		int finalPosition = yPosition;
 
 		// Print the Vehicle & Driver headers
@@ -133,13 +138,13 @@ public class Printing
 		printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, String.format("%d - %s", vehicle.No, vehicle.Reg));
 		finalPosition = printer.addTextLeft(Size.Normal, RIGHT_COLUMN_X, finalPosition, RIGHT_COLUMN_WIDTH, String.format("%d - %s", driver.No, driver.Name));
 
-		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
-
-		return finalPosition;
+		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 	}
 
 	private static int printConsignorConsignee(Printer printer, int yPosition)
 	{
+        CrashReporter.leaveBreadcrumb("Printing: printConsignorConsignee");
+
 		dbSetting consignorName = dbSetting.FindByKey("ConsignorName");
 		dbSetting consignorAdd1 = dbSetting.FindByKey("ConsignorAdd1");
 		dbSetting consignorAdd2 = dbSetting.FindByKey("ConsignorAdd2");
@@ -164,13 +169,13 @@ public class Printing
 
 		printer.addTextLeft(Size.Normal, RIGHT_COLUMN_X, titlePosition, RIGHT_COLUMN_WIDTH, "Various Customers");
 
-		printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
-
-		return finalPosition;
+		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 	}
 
 	private static int printStockOnboard(Printer printer, int yPostion)
 	{
+        CrashReporter.leaveBreadcrumb("Printing: printStockOnboard");
+
 		int finalPosition = yPostion;
 
 		// Print the 'Stock Onboard' title
@@ -251,14 +256,13 @@ public class Printing
 			}
 		}
 
-		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
-		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
-
-		return finalPosition;
+		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 	}
 
 	private static int printUndeliveredOrders(Printer printer, int yPosition)
 	{
+        CrashReporter.leaveBreadcrumb("Printing: printUndeliveredOrders");
+
 		// Retrieve list of undelivered orders
 		List<dbTripOrder> orders = Active.trip.GetUndelivered();
 
@@ -300,6 +304,8 @@ public class Printing
 
 	private static int printAllUndeliveredOrders(Printer printer, int yPosition, List<dbTripOrder> orders)
 	{
+        CrashReporter.leaveBreadcrumb(("Printing: printAllUndeliveredOrders"));
+
 		int finalPosition = yPosition;
 
 		// Process the output of each undelivered order
@@ -323,6 +329,8 @@ public class Printing
             // Print Required by details if present
             if (order.RequiredBy.length() > 0)
             {
+                CrashReporter.leaveBreadcrumb("Printing: printAllUndeliveredOrders - Printing required by details ...");
+
                 // Add small spacer befor "Required by" line
                 finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
@@ -333,6 +341,8 @@ public class Printing
             // Print delivery instructions if available
             if (order.Notes.length() > 0)
             {
+                CrashReporter.leaveBreadcrumb("Printing: printAllUndeliveredOrders - Printing delivery instructions ...");
+
                 // Add small space before the delivery instructions
                 finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
@@ -348,6 +358,8 @@ public class Printing
 
 	private static int printFooter(Printer printer, int yPosition)
 	{
+        CrashReporter.leaveBreadcrumb("Printing: printFooter");
+
 		int finalPosition = yPosition;
 
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.XLarge);
@@ -374,27 +386,17 @@ public class Printing
 			// Output the 'TRANSPORT DOCUMENT' title for the label
 			finalPosition = printTitle(printer, finalPosition, "TRANSPORT DOCUMENT");
 
-			CrashReporter.leaveBreadcrumb("Printing : transportDocument - Printing Date & Trip");
-
 			// Print the Date & Trip
 			finalPosition = printDateAndTripNumber(printer, finalPosition);
-
-			CrashReporter.leaveBreadcrumb("Printing : transportDocument - Printing Vehcle &Driver Details");
 
 			// Print the Vehicle & Driver details
 			finalPosition = printVehicleAndDriver(printer, finalPosition);
 
-			CrashReporter.leaveBreadcrumb("Printing : transportDocument - Printing Consignor & Consinee");
-
 			// Printer Consignor & Consignee details
 			finalPosition = printConsignorConsignee(printer, finalPosition);
 
-			CrashReporter.leaveBreadcrumb("Printing : transportDocument - Printing Stock Onboard");
-
 			// Print the Stock Onboard title
 			finalPosition = printStockOnboard(printer, finalPosition);
-
-			CrashReporter.leaveBreadcrumb("Printing : transportDocument - Printing Undelivered Orders");
 
 			// Print Undelivered Orders
 			finalPosition = printUndeliveredOrders(printer, finalPosition);
@@ -440,6 +442,8 @@ public class Printing
 
 	private static int printOpeningStock(Printer printer, int yPosition)
 	{
+        CrashReporter.leaveBreadcrumb("Printing: printOpeningStock");
+
 		int finalPosition = yPosition;
 
 		// Print the 'Opening Stock' Title
@@ -785,34 +789,13 @@ public class Printing
 			finalPosition = printTitle(printer, finalPosition, "Summary");
 
             // If there was some payments made with cash then output amount
-			if (cash != 0)
-			{
-				printer.addTextLeft(Size.Large, 200, finalPosition, 180, "Cash");
-				finalPosition = printer.addTextRight(Size.Large, 400, finalPosition, 200, formatMoney.format(cash));
-
-                // Add small spacer
-                finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-			}
+            finalPosition = printPaymentAmount(printer, finalPosition, "Cash", cash);
 
             // If there was some payments made with cheques then output amount
-			if (cheques != 0)
-			{
-				printer.addTextLeft(Size.Large, 200, finalPosition, 180, "Cheques");
-				finalPosition = printer.addTextRight(Size.Large, 400, finalPosition, 200, formatMoney.format(cheques));
-
-                // Add small spacer
-                finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-			}
+            finalPosition = printPaymentAmount(printer, finalPosition, "Cheques", cheques);
 
             // If there was some payments made with vouchers then output amount
-			if (vouchers != 0)
-			{
-				printer.addTextLeft(Size.Large, 200, finalPosition, 180, "Vouchers");
-				finalPosition = printer.addTextRight(Size.Large, 400, finalPosition, 200, formatMoney.format(vouchers));
-
-                // Add small spacer
-                finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-			}
+            finalPosition = printPaymentAmount(printer, finalPosition, "Vouchers", vouchers);
 
 			// Print total.
 			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
@@ -823,6 +806,26 @@ public class Printing
 
 		return finalPosition;
 	}
+
+    private static int printPaymentAmount(Printer printer, int yPosition, String type, double amount)
+    {
+        CrashReporter.leaveBreadcrumb("Printing: printPaymentAmount");
+
+        int finalPosition = yPosition;
+
+        DecimalFormat formatMoney = new DecimalFormat("#,##0.00");
+
+        if (amount != 0)
+        {
+            printer.addTextLeft(Size.Large, 200, finalPosition, 180, type);
+            finalPosition = printer.addTextRight(Size.Large, 400, finalPosition, 200, formatMoney.format(amount));
+
+            // Add small spacer
+            finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        }
+
+        return finalPosition;
+    }
 
 	private static void printTripToBitmap(Context context) throws Exception
 	{
@@ -835,17 +838,11 @@ public class Printing
 		// Print the Trip Report title
 		finalPosition = printTitle(printer, finalPosition, "TRIP REPORT");
 
-		CrashReporter.leaveBreadcrumb("Printing : printTripToBitmap - Printing Date & Trip No.");
-
 		// Print the Date & Trip
 		finalPosition = printDateAndTripNumber(printer, finalPosition);
 
-		CrashReporter.leaveBreadcrumb("Printing : printTripToBitmap - Printing Vehicle & Driver Details");
-
 		// Print Vehicle & Driver details
 		finalPosition = printVehicleAndDriver(printer, finalPosition);
-
-		CrashReporter.leaveBreadcrumb("Printing : printTripToBitmap - Printing Opening Stock");
 
 		// Print the Opening Stock Section
 		finalPosition = printOpeningStock(printer, finalPosition);
@@ -938,8 +935,6 @@ public class Printing
 
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 
-		CrashReporter.leaveBreadcrumb("Printing : printBitmapTicket - Printing Invoice & Deliver To Addresses");
-
 		// Print the Invoice To & Deliver To Addresses
 		finalPosition = printAddresses(printer, finalPosition, order);
 
@@ -1019,8 +1014,6 @@ public class Printing
 		// Print the customer signature
 		if (order.CustomerSignature)
 		{
-			CrashReporter.leaveBreadcrumb("Printing : printBitmapTicket - Printing Customer Signature");
-
 			// Add the signature
 			finalPosition = printer.addSignature("Customer signature", order.CustomerSignatureName, finalPosition, order.CustomerSignatureImage, order.CustomerSignatureDateTime);
 		}
@@ -1028,8 +1021,6 @@ public class Printing
 		// Print the driver signature
 		if (order.DriverSignature)
 		{
-			CrashReporter.leaveBreadcrumb("Printing : printBitmapTicket - Printing Driver Signature");
-
 			// Add the signature
 			finalPosition = printer.addSignature("Driver signature", order.DriverSignatureName, finalPosition, order.DriverSignatureImage, order.DriverSignatureDateTime);
 		}
@@ -1054,6 +1045,8 @@ public class Printing
 
     private static int printSurchargeMessage(Printer printer, int yPosition, dbTripOrder order)
     {
+        CrashReporter.leaveBreadcrumb("Printing: printSurchargeMessage");
+
         DateFormat formatDate = new SimpleDateFormat("dd-MMM-yyyy");
 
         DecimalFormat format2dp = new DecimalFormat("#,##0.00");
@@ -1217,6 +1210,8 @@ public class Printing
 
 	private static int printTitleAndAmount(Printer printer, int yPosition, String title, double amount)
 	{
+        CrashReporter.leaveBreadcrumb("Printing: printTitleAndAmount");
+
 		int finalPosition = yPosition;
 
 		if (amount != 0)
@@ -1233,6 +1228,8 @@ public class Printing
 
 	private static int printAddresses(Printer printer, int yPosition, dbTripOrder order)
 	{
+        CrashReporter.leaveBreadcrumb("Printing: printAddresses");
+
 		int finalPosition = yPosition;
 
 		// Print the Invoice & Delivered To
@@ -1257,6 +1254,8 @@ public class Printing
 
 	private static int printAddress(Printer printer, int xPosition,  int yPosition, String[] addresses)
 	{
+        CrashReporter.leaveBreadcrumb("Printing: printAddress");
+
 		int finalPosition = yPosition;
 
 		for (String address : addresses)
@@ -1347,11 +1346,8 @@ public class Printing
 
         int finalPosition = yPosition;
 
-        // Find order lines.
-        List<dbTripOrderLine> lines = order.GetTripOrderLines();
-
         // Process each Order Line
-        for (dbTripOrderLine line : lines)
+        for (dbTripOrderLine line : order.GetTripOrderLines())
         {
             if (line.ticketNo != null)
 			{
@@ -1412,7 +1408,7 @@ public class Printing
 	 */
 	private static byte[] compressBytes(byte[] input) throws Exception
 	{
-		CrashReporter.leaveBreadcrumb("Printing : compressBytes - Starting");
+		CrashReporter.leaveBreadcrumb("Printing : compressBytes");
 
 		// Create ByteArrayOutputStream to hold the compressed data
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -1451,7 +1447,7 @@ public class Printing
 	 */
 	private static void saveLabelImage(Context context, String labelType, byte[] content) throws Exception
 	{
-		CrashReporter.leaveBreadcrumb("Printing : saveLabelImage - Starting");
+		CrashReporter.leaveBreadcrumb("Printing : saveLabelImage");
 
 		Intent i = new Intent(context, ColossusIntentService.class);
 

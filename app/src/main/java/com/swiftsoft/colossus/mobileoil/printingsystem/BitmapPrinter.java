@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 
 import com.swiftsoft.colossus.mobileoil.Active;
+import com.swiftsoft.colossus.mobileoil.CrashReporter;
 import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicle;
 
@@ -122,6 +123,8 @@ public class BitmapPrinter extends Printer
     @Override
     public int addSignature(String title, String name, int yPosition, byte[] signatureArray, long datetime)
     {
+        CrashReporter.leaveBreadcrumb("BitmapPrinter: addSignature");
+
         final int xRightColumn = 560;
         final int widthRightColumn = 220;
 
