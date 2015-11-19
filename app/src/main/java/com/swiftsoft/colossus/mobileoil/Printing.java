@@ -1341,9 +1341,6 @@ public class Printing
     {
         CrashReporter.leaveBreadcrumb("Printing: printMeterData");
 
-        DecimalFormat decf0 = new DecimalFormat("#,##0");
-        DecimalFormat decf1 = new DecimalFormat("#,##0.0");
-
         int finalPosition = yPosition;
 
         // Process each Order Line
@@ -1373,25 +1370,29 @@ public class Printing
 
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
-				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Totalizer start");
-				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, decf0.format(line.ticketStartTotaliser));
+                DecimalFormat formatVolume = new DecimalFormat("#,##0");
+
+                printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Totalizer start");
+				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, formatVolume.format(line.ticketStartTotaliser));
 
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
 				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Totalizer end");
-				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, decf0.format(line.ticketEndTotaliser));
+				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, formatVolume.format(line.ticketEndTotaliser));
 
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
 				if (line.ticketAt15Degrees)
 				{
 					printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Volume delivered @ 15.0 C");
-					finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, decf0.format(line.ticketNetVolume));
+					finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, formatVolume.format(line.ticketNetVolume));
 				}
 				else
 				{
-					printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Volume delivered @ " + decf1.format(line.ticketTemperature) + " C");
-					finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, decf0.format(line.ticketGrossVolume));
+                    DecimalFormat formatTemperature = new DecimalFormat("#,##0.0");
+
+                    printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Volume delivered @ " + formatTemperature.format(line.ticketTemperature) + " C");
+					finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, formatVolume.format(line.ticketGrossVolume));
 				}
 			}
         }
