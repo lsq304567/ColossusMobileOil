@@ -497,23 +497,29 @@ public class Printing
 
 	private static int printStockTransactions(Printer printer, int yPosition)
 	{
+        CrashReporter.leaveBreadcrumb("Printing: printStockTransactions");
+
 		int finalPosition = yPosition;
 
 		// Get the List of Stock Transaction objects
-		List<dbTripStock> stockTrans = Active.trip.GetStockTrans();
+		List<dbTripStock> stockTransactions = Active.trip.GetStockTrans();
 
-		if (stockTrans.size() == 0)
+		if (stockTransactions.size() == 0)
 		{
+            CrashReporter.leaveBreadcrumb("Printing: printStockTransactions - No Transactions present");
+
 			finalPosition = printTitle(printer, finalPosition, "No Transactions");
 		}
 		else
 		{
-			DateFormat df1 = new SimpleDateFormat("dd-MMM-yyyy");
-			DateFormat df2 = new SimpleDateFormat("HH:mm");
+            CrashReporter.leaveBreadcrumb("Printing: printStockTransactions - Printing " + stockTransactions.size() + " transactions ...");
+
+			DateFormat formateDate = new SimpleDateFormat("dd-MMM-yyyy");
+			DateFormat formatTime = new SimpleDateFormat("HH:mm");
 
 			long date = new Date().getTime();
 
-			String lastDate = df1.format(date);
+			String lastDate = formateDate.format(date);
 
 			String lastGroupBy = "";
 			String lastInvoiceNo = "";
@@ -522,68 +528,79 @@ public class Printing
 			finalPosition = printTitle(printer, finalPosition, "Transactions");
 
 			// Print each of the Stock Transactions
-			for (dbTripStock stockTran : stockTrans)
+			for (dbTripStock stockTransaction : stockTransactions)
 			{
 				// Group by InvoiceNo (if available), otherwise Type.
-				String groupBy = stockTran.InvoiceNo;
+				String groupBy = stockTransaction.InvoiceNo;
 
 				if (groupBy.length() == 0)
 				{
-					groupBy = stockTran.Type;
+					groupBy = stockTransaction.Type;
 				}
 
+                // If the group by has changed print a spacer
 				if (!groupBy.equals(lastGroupBy))
 				{
+                    // Save the group by
 					lastGroupBy = groupBy;
 
 					// Add spacer when type changes.
 					finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
 				}
 
-				if (!df1.format(stockTran.Date).equals(lastDate))
+                // Output the date if it is different from that stored in last date
+				if (!formateDate.format(stockTransaction.Date).equals(lastDate))
 				{
-					lastDate = df1.format(stockTran.Date);
+					lastDate = formateDate.format(stockTransaction.Date);
 
 					// Print date, if it has changed.
 					finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, lastDate);
 					finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 				}
 
-				if (!stockTran.InvoiceNo.equals(lastInvoiceNo))
+				if (!stockTransaction.InvoiceNo.equals(lastInvoiceNo))
 				{
-					lastInvoiceNo = stockTran.InvoiceNo;
+					lastInvoiceNo = stockTransaction.InvoiceNo;
 
-					if (stockTran.InvoiceNo.length() > 0)
+                    // If there is an Invoice No present then print out the
+                    // first line of the transaction
+					if (stockTransaction.InvoiceNo.length() > 0)
 					{
-						// Invoice no
-						String line1text = "Invoice " + stockTran.InvoiceNo;
+                        // Print the time of the transaction
+                        printer.addTextLeft(Size.Normal, TX_DATE_X, finalPosition, TX_DATE_WIDTH, formatTime.format(stockTransaction.Date));
 
-						// and Customer code.
-						if (stockTran.CustomerCode != null && stockTran.CustomerCode.length() > 0)
-						{
-							line1text += "  Customer code " + stockTran.CustomerCode;
-						}
+                        StringBuilder builder = new StringBuilder();
 
-						// Print line 1
-						printer.addTextLeft(Size.Normal, TX_DATE_X, finalPosition, TX_DATE_WIDTH, df2.format(stockTran.Date));
-						finalPosition = printer.addTextLeft(Size.Normal, TX_LINE_X, finalPosition, TX_LINE_WIDTH, line1text);
+                        // Add the invoice number
+                        builder.append("Invoice ");
+                        builder.append(stockTransaction.InvoiceNo);
+
+                        // If there is a customer code add it
+                        if (stockTransaction.CustomerCode != null && stockTransaction.CustomerCode.length() > 0)
+                        {
+                            builder.append("  Customer code ");
+                            builder.append(stockTransaction.CustomerCode);
+                        }
+
+						// Print the invoice and customer details
+						finalPosition = printer.addTextLeft(Size.Normal, TX_LINE_X, finalPosition, TX_LINE_WIDTH, builder.toString());
+
+                        // Print small spacer beneath
 						finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 					}
 				}
 
 				// Print line 2 - Description
-				printer.addTextLeft(Size.Normal, TX_DATE_X, finalPosition, TX_DATE_WIDTH, df2.format(stockTran.Date));
-				finalPosition = printer.addTextLeft(Size.Normal, TX_LINE_X, finalPosition, TX_LINE_WIDTH, stockTran.Description.trim());
+				printer.addTextLeft(Size.Normal, TX_DATE_X, finalPosition, TX_DATE_WIDTH, formatTime.format(stockTransaction.Date));
+				finalPosition = printer.addTextLeft(Size.Normal, TX_LINE_X, finalPosition, TX_LINE_WIDTH, stockTransaction.Description.trim());
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
 				// Print lines 3+ - Notes
-				String[] line3s = stockTran.Notes.split("\n");
-
-				for (String line3 : line3s)
+				for (String note : stockTransaction.Notes.split("\n"))
 				{
-					if (line3.length() > 0)
+					if (note.length() > 0)
 					{
-						finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, line3);
+						finalPosition = printer.addTextLeft(Size.Normal, TX_LINE_X, finalPosition, TX_LINE_WIDTH, note.trim());
                         finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 					}
 				}
@@ -595,6 +612,8 @@ public class Printing
 
 	private static int printClosingStock(Printer printer, int yPosition)
 	{
+        CrashReporter.leaveBreadcrumb("Printing: printClosingStock");
+
 		int finalPosition = yPosition;
 
 		finalPosition = printTitle(printer, finalPosition, "Closing Stock");
@@ -651,7 +670,9 @@ public class Printing
 
 	private static int printCashReport(Printer printer, int yPosition)
 	{
-		DecimalFormat decf2 = new DecimalFormat("#,##0.00");
+        CrashReporter.leaveBreadcrumb("Printing: printCashReport");
+
+		DecimalFormat formatMoney = new DecimalFormat("#,##0.00");
 
 		int finalPosition = yPosition;
 
@@ -668,11 +689,13 @@ public class Printing
 
 		int payments = 0;
 
-		List<dbTripStock> stockTrans = Active.trip.GetStockTrans();
+        // Get the stock transactions for the trip
+		List<dbTripStock> stockTransactions = Active.trip.GetStockTrans();
 
-		for (dbTripStock stockTran : stockTrans)
+        // Calculate the number of payment transactions
+		for (dbTripStock stockTransaction : stockTransactions)
 		{
-			if (stockTran.Type.equals("Payment"))
+			if (stockTransaction.Type.equals("Payment"))
 			{
 				payments++;
 			}
@@ -680,14 +703,11 @@ public class Printing
 
 		if (payments == 0)
 		{
+            // There were no payment transactions
 			finalPosition = printer.addTextCentre(Size.Large, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, "No Transactions");
 		}
 		else
 		{
-			double cash = 0;
-			double cheques = 0;
-			double vouchers = 0;
-
 			// Print titles.
 			printer.addTextLeft(Size.Normal, 50, finalPosition, 200, "Invoice no");
 			printer.addTextLeft(Size.Normal, 250, finalPosition, 200, "Customer");
@@ -696,35 +716,50 @@ public class Printing
 
 			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
 
-			for (dbTripStock stockTran : stockTrans)
-			{
-				if (stockTran.Type.equals("Payment"))
-				{
-					String[] plines = (stockTran.Description + "\n" + stockTran.Notes).split("\n");
+            double cash = 0;
+            double cheques = 0;
+            double vouchers = 0;
 
-					for (String pline : plines)
+            // Loop through each transaction looking for payments
+            for (dbTripStock stockTransaction : stockTransactions)
+			{
+                // If it is a payment transaction then print it and
+                // also keep a running total of cash, cheques  or vouchers
+				if (stockTransaction.Type.equals("Payment"))
+				{
+                    // Get all payment information in the transaction
+					String[] paymentLines = (stockTransaction.Description + "\n" + stockTransaction.Notes).split("\n");
+
+					for (String paymentLine : paymentLines)
 					{
-						int idx = pline.indexOf(":") + 1;
-						String strValue = pline.substring(idx).replace(",", "");
+						int idx = paymentLine.indexOf(":") + 1;
+
+                        // Remove all commas from the value field so that parsing does not fail
+						String strValue = paymentLine.substring(idx).replace(",", "");
 
 						String type = "";
+
+                        // Stores the amount of this payment type for the transaction
 						double amount = 0;
 
-						if (pline.startsWith("Cash payment:"))
+                        // Test for cash payment
+						if (paymentLine.startsWith("Cash payment:"))
 						{
 							type = "Cash";
 							amount = Double.parseDouble(strValue);
 							cash += amount;
 						}
 
-						if (pline.startsWith("Cheque payment:"))
+                        // Test for cheque payment
+						if (paymentLine.startsWith("Cheque payment:"))
 						{
 							type = "Cheque";
 							amount = Double.parseDouble(strValue);
 							cheques += amount;
 						}
 
-						if (pline.startsWith("Voucher payment:"))
+                        // Test for voucher payment
+						if (paymentLine.startsWith("Voucher payment:"))
 						{
 							type = "Voucher";
 							amount = Double.parseDouble(strValue);
@@ -736,10 +771,10 @@ public class Printing
 							// Add small spacer to give some space between lines
 							finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
-							printer.addTextLeft(Size.Normal, 50, finalPosition, 200, stockTran.InvoiceNo);
-							printer.addTextLeft(Size.Normal, 250, finalPosition, 200, stockTran.CustomerCode);
+							printer.addTextLeft(Size.Normal, 50, finalPosition, 200, stockTransaction.InvoiceNo);
+							printer.addTextLeft(Size.Normal, 250, finalPosition, 200, stockTransaction.CustomerCode);
 							printer.addTextLeft(Size.Normal, 450, finalPosition, 100, type);
-							finalPosition = printer.addTextRight(Size.Normal, 550, finalPosition, 150, decf2.format(amount));
+							finalPosition = printer.addTextRight(Size.Normal, 550, finalPosition, 150, formatMoney.format(amount));
 						}
 					}
 				}
@@ -749,28 +784,31 @@ public class Printing
 			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 			finalPosition = printTitle(printer, finalPosition, "Summary");
 
+            // If there was some payments made with cash then output amount
 			if (cash != 0)
 			{
 				printer.addTextLeft(Size.Large, 200, finalPosition, 180, "Cash");
-				finalPosition = printer.addTextRight(Size.Large, 400, finalPosition, 200, decf2.format(cash));
+				finalPosition = printer.addTextRight(Size.Large, 400, finalPosition, 200, formatMoney.format(cash));
 
                 // Add small spacer
                 finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 			}
 
+            // If there was some payments made with cheques then output amount
 			if (cheques != 0)
 			{
 				printer.addTextLeft(Size.Large, 200, finalPosition, 180, "Cheques");
-				finalPosition = printer.addTextRight(Size.Large, 400, finalPosition, 200, decf2.format(cheques));
+				finalPosition = printer.addTextRight(Size.Large, 400, finalPosition, 200, formatMoney.format(cheques));
 
                 // Add small spacer
                 finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 			}
 
+            // If there was some payments made with vouchers then output amount
 			if (vouchers != 0)
 			{
 				printer.addTextLeft(Size.Large, 200, finalPosition, 180, "Vouchers");
-				finalPosition = printer.addTextRight(Size.Large, 400, finalPosition, 200, decf2.format(vouchers));
+				finalPosition = printer.addTextRight(Size.Large, 400, finalPosition, 200, formatMoney.format(vouchers));
 
                 // Add small spacer
                 finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
@@ -780,7 +818,7 @@ public class Printing
 			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 			finalPosition = printer.addTextRight(Size.Large, 400, finalPosition, 200, "========");
 			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
-			finalPosition = printer.addTextRight(Size.Large, 400, finalPosition, 200, decf2.format(cash + cheques + vouchers));
+			finalPosition = printer.addTextRight(Size.Large, 400, finalPosition, 200, formatMoney.format(cash + cheques + vouchers));
 		}
 
 		return finalPosition;
@@ -812,12 +850,8 @@ public class Printing
 		// Print the Opening Stock Section
 		finalPosition = printOpeningStock(printer, finalPosition);
 
-		CrashReporter.leaveBreadcrumb("Printing : printTripToBitmap - Printing Stock Transactions");
-
 		// Print Stock Transactions
 		finalPosition = printStockTransactions(printer, finalPosition);
-
-		CrashReporter.leaveBreadcrumb("Printing : printTripToBitmap - Printing Closing Stock");
 
 		// Print Closing Stock Section
 		finalPosition = printClosingStock(printer, finalPosition);
@@ -825,8 +859,6 @@ public class Printing
 		// Print Separator before Cash Report
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
 		finalPosition = printer.addLine(finalPosition);
-
-		CrashReporter.leaveBreadcrumb("Printing : printTripToBitmap - Printing Cash Report");
 
 		// Print the Cash Report
 		finalPosition = printCashReport(printer, finalPosition);
