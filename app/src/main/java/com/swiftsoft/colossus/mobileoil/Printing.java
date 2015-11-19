@@ -989,9 +989,6 @@ public class Printing
             finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
         }
 
-        // Print the Meter Tickets
-        finalPosition = printMeterData(printer, finalPosition, order);
-
         if (!order.HidePrices)
         {
             // Get the surcharge amount
@@ -1009,7 +1006,10 @@ public class Printing
             finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
         }
 
-		finalPosition = printer.addLine(finalPosition);
+        // Print the Meter Tickets
+        finalPosition = printMeterData(printer, finalPosition, order);
+
+        finalPosition = printer.addLine(finalPosition);
 
 		// Print the customer signature
 		if (order.CustomerSignature)
