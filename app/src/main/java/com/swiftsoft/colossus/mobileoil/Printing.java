@@ -1049,9 +1049,6 @@ public class Printing
 
         DateFormat formatDate = new SimpleDateFormat("dd-MMM-yyyy");
 
-        DecimalFormat format2dp = new DecimalFormat("#,##0.00");
-        DecimalFormat format4dp = new DecimalFormat("#,##0.0000");
-
         int finalPosition = yPosition;
 
         CrashReporter.leaveBreadcrumb("Printing: printSurchargeMessage");
@@ -1075,15 +1072,18 @@ public class Printing
             surchargeAmountVat += surchargeAmount * (line.OrderedQty > line.VatPerc2Above ? line.VatPerc2 : line.VatPerc1) / 100.0;
         }
 
+        DecimalFormat formatMoney = new DecimalFormat("#,##0.00");
+        DecimalFormat formatPpl = new DecimalFormat("#,##0.00");
+
         // Print line commencing "Deduct x ppl ..."
         StringBuilder line = new StringBuilder();
 
         line.append("Deduct ");
-        line.append(format4dp.format(surcharge));
+        line.append(formatPpl.format(surcharge));
         line.append(" ppl = £");
-        line.append(format2dp.format(totalSurchargeAmount + surchargeAmountVat));
+        line.append(formatMoney.format(totalSurchargeAmount + surchargeAmountVat));
         line.append(" (inc. £");
-        line.append(format2dp.format(surchargeAmountVat));
+        line.append(formatMoney.format(surchargeAmountVat));
         line.append(" of VAT)");
 
         // Print space before the rest of the message
@@ -1095,7 +1095,7 @@ public class Printing
         line = new StringBuilder();
 
         line.append("from £");
-        line.append(format2dp.format(order.getCreditTotal()));
+        line.append(formatMoney.format(order.getCreditTotal()));
         line.append(" if paid by ");
         line.append(formatDate.format(order.DueDate));
 
@@ -1125,11 +1125,11 @@ public class Printing
         }
 
         line.append("£");
-        line.append(format2dp.format(nettValue));
+        line.append(formatMoney.format(nettValue));
         line.append(" + VAT £");
-        line.append(format2dp.format(nettValueVat));
+        line.append(formatMoney.format(nettValueVat));
         line.append(" = £");
-        line.append(format2dp.format(nettValue + nettValueVat));
+        line.append(formatMoney.format(nettValue + nettValueVat));
 
         finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 
