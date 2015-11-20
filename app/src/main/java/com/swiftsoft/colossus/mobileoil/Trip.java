@@ -1,19 +1,5 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import java.text.DecimalFormat;
-import java.util.Date;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.swiftsoft.colossus.mobileoil.bluetooth.Bluetooth;
-import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrderLine;
-import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleStock;
-import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
-import com.swiftsoft.colossus.mobileoil.view.MyEditText;
-import com.swiftsoft.colossus.mobileoil.view.MyNumericKeypad;
-import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
@@ -28,15 +14,29 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.View.OnFocusChangeListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
+
+import com.swiftsoft.colossus.mobileoil.bluetooth.Bluetooth;
+import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrderLine;
+import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleStock;
+import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
+import com.swiftsoft.colossus.mobileoil.view.MyEditText;
+import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
+import com.swiftsoft.colossus.mobileoil.view.MyNumericKeypad;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.text.DecimalFormat;
+import java.util.Date;
 
 public class Trip extends Activity
 {
@@ -719,17 +719,18 @@ public class Trip extends Activity
 			double cashTotal = (double) Math.round((nett + vat + accBalance) * 100) / 100;
 			double paidOffice = Active.order.PrepaidAmount;
 			double payDriver = cashTotal - paidOffice;
+			double surchargeVatAmount = Active.order.getSurchargeVat();
 			
 			if (beforeDelivery)
 			{
 				payDriver = Active.order.getCodBeforeDeliveryValue();
 			}
 			
-			String message = "Pay driver " + decf2.format(payDriver);
+			String message = "Pay driver " + decf2.format(payDriver - surchargeVatAmount);
 
 			if (surcharge != 0)
 			{
-				message += " for cash discount of " + decf2.format(surcharge);
+				message += " for cash discount of " + decf2.format(surcharge + surchargeVatAmount);
 			}
 			
 			tvMessage.setText(message);

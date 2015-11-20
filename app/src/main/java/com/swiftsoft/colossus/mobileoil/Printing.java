@@ -926,7 +926,7 @@ public class Printing
 
 		// Print the Account & Invoice numbers
 		printer.addTextLeft(Size.Large, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Account no:");
-		finalPosition = printer.addTextLeft(Size.Large, RIGHT_COLUMN_X, finalPosition, RIGHT_COLUMN_WIDTH, "Invoice no:");
+		finalPosition = printer.addTextLeft(Size.Large, RIGHT_COLUMN_X, finalPosition, RIGHT_COLUMN_WIDTH, "Delivery/Invoice No:");
 
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
