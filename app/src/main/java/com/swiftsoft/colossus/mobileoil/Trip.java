@@ -734,6 +734,9 @@ public class Trip extends Activity
 			}
 			
 			tvMessage.setText(message);
+
+            tvMessage.setVisibility(Active.order.HidePrices ? View.GONE : View.VISIBLE);
+
 			tvTerms.setText("Terms: " + Active.order.getTerms());
 	
 			dialog.show();

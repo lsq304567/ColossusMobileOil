@@ -151,8 +151,16 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 			Active.order.calculateDiscount();
 			Active.order.save();
 
-			btnPayment.setEnabled(Active.order.Terms.equals("Paying by Card") ? false : true);
-			
+			if (Active.order.HidePrices)
+			{
+				btnPayment.setEnabled(false);
+			}
+			else
+			{
+				btnPayment.setEnabled(!Active.order.Terms.equals("Paying by Card"));
+			}
+
+
 			return true;
 		}
 		catch (Exception e)
