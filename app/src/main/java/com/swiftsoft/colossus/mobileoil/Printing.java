@@ -1065,11 +1065,11 @@ public class Printing
 
         for (dbTripOrderLine line : orderLines)
         {
-            double surchargeAmount = surcharge / 100.0 * line.OrderedQty;
+            double surchargeAmount = surcharge / 100.0 * line.DeliveredQty;
 
             totalSurchargeAmount += surchargeAmount;
 
-            surchargeAmountVat += surchargeAmount * (line.OrderedQty > line.VatPerc2Above ? line.VatPerc2 : line.VatPerc1) / 100.0;
+            surchargeAmountVat += surchargeAmount * (line.DeliveredQty > line.VatPerc2Above ? line.VatPerc2 : line.VatPerc1) / 100.0;
         }
 
         DecimalFormat formatMoney = new DecimalFormat("#,##0.00");
