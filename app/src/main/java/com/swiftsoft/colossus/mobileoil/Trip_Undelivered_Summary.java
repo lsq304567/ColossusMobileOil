@@ -68,7 +68,7 @@ public class Trip_Undelivered_Summary extends MyFlipperView
 			btnSkip = (Button)this.findViewById(R.id.trip_undelivered_summary_skip);
 			btnNext = (Button)this.findViewById(R.id.trip_undelivered_summary_next);
 			
-			btnSkip.setVisibility(View.INVISIBLE);
+			// btnSkip.setVisibility(View.INVISIBLE);
 			
 			btnBack.setOnClickListener(onBack);
 			btnSkip.setOnClickListener(onSkip);
@@ -123,11 +123,8 @@ public class Trip_Undelivered_Summary extends MyFlipperView
 			infoview.setDefaultTv1("Order " + Active.order.InvoiceNo);
 			
 			// Line.
-			if (lineProduct == null)
-				infoview.setDefaultTv2("Line: None");
-			else
-				infoview.setDefaultTv2("Line: " + lineProduct.Desc);
-	
+            infoview.setDefaultTv2(lineProduct == null ? "Line: None" : "Line: " + lineProduct.Desc);
+
 			String customer = Active.order.CustomerName + "\n" + Active.order.CustomerAddress;
 			String delAddress = Active.order.DeliveryName + "\n" + Active.order.DeliveryAddress;
 	
@@ -191,13 +188,26 @@ public class Trip_Undelivered_Summary extends MyFlipperView
 		}
 	};
 
+    /**
+     * Code called when the Skip button is tapped
+     */
 	OnClickListener onSkip = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
 		{
-			// Leave breadcrumb.
-			CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: onSkip");
+			try
+			{
+				// Leave breadcrumb.
+				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: onSkip");
+
+                // Switch to the Skip screen
+                trip.selectView(Trip.ViewUndeliveredSkip, +1);
+			}
+			catch (Exception e)
+			{
+				CrashReporter.logHandledException(e);
+			}
 		}
 	};
 

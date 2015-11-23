@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="#000000"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+    
+    <LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_margin="1dp"
+        android:layout_weight="1"
+		android:orientation="vertical"
+		android:background="#ffffff">
+    
+        <com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line
+            android:id="@+id/trip_undelivered_skip_infoview"
+			android:layout_width="fill_parent"
+			android:layout_height="40dp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="What is the reason for undelivery?"
+                    android:gravity="center_horizontal"
+                    android:textSize="26dp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
+
+                </TextView>
+
+                <!-- Group of radio buttons with reasons for undelivery -->
+                <RadioGroup
+                    android:id="@+id/trip_undelivered_skip_reason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp">
+
+                    <RadioButton
+                        android:id="@+id/trip_undelivered_skip_gate_locked"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Gate locked"/>
+
+                    <RadioButton
+                        android:id="@+id/trip_undelivered_skip_car_block"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Car(s) blocking entrance"/>
+
+                    <RadioButton
+                        android:id="@+id/trip_undelivered_skip_tank_locked"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tank locked"/>
+
+                    <RadioButton
+                        android:id="@+id/trip_undelivered_skip_dog_in_garden"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dog in garden"/>
+
+                    <RadioButton
+                        android:id="@+id/trip_undelivered_skip_requires_payment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Requires payment on delivery"/>
+
+                    <RadioButton
+                        android:id="@+id/trip_undelivered_skip_no_access"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="No access"/>
+
+                    <RadioButton
+                        android:id="@+id/trip_undelivered_skip_other"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Other"/>
+
+                </RadioGroup>
+
+                <EditText
+                    android:id="@+id/trip_undelivered_skip_custom_reason"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:inputType="textMultiLine"
+                    android:lines="8"
+                    android:maxLines="8"
+                    android:textSize="18sp"
+                    android:gravity="top"/>
+
+            </LinearLayout>
+        </ScrollView>
+        
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			style="@android:style/ButtonBar"
+			android:background="#343234">
+	
+			<Button
+		        android:id="@+id/trip_undelivered_skip_back"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Cancel"
+				android:textSize="18sp"
+				android:padding="20sp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Filler"
+                android:textSize="18sp"
+                android:padding="20sp"
+                android:visibility="invisible"/>
+
+            <Button
+		        android:id="@+id/trip_undelivered_skip_next"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:text="Save"
+				android:padding="20sp"
+				android:textSize="18sp" />
+	
+		</LinearLayout>
+	
+	</LinearLayout>
+	
+</LinearLayout>

@@ -31,6 +31,7 @@ import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
 import com.swiftsoft.colossus.mobileoil.view.MyEditText;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyNumericKeypad;
+import com.swiftsoft.colossus.mobileoil.view.Trip_Undelivered_Skip;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -56,6 +57,7 @@ public class Trip extends Activity
 	public static final String ViewUndeliveredTicket                   = "Trip.UndeliveredTicket";
 	public static final String ViewStockEnd                            = "Trip.StockEnd";
 	public static final String ViewTripReport                          = "Trip.Report";
+	public static final String ViewUndeliveredSkip                     = "Trip.UndeliveredSkip";
 
 	private final int ViewStockStartIdx                          = 0;
 	private final int ViewStockLoadIdx                           = 1;
@@ -73,6 +75,7 @@ public class Trip extends Activity
 	private final int ViewUndeliveredTicketIdx                   = 13;
 	private final int ViewStockEndIdx                            = 14;
 	private final int ViewTripReportIdx                          = 15;
+	private final int ViewUndeliveredSkipIdx                     = 16;
 	
 	private Trip_Stock_Start                            tripStockStart;
 	private Trip_Stock_Load                             tripStockLoad;
@@ -90,6 +93,7 @@ public class Trip extends Activity
 	private Trip_Undelivered_Ticket                     tripUndeliveredTicket;
 	private Trip_Stock_End                              tripStockEnd;
 	private Trip_Report                                 tripReport;
+	private Trip_Undelivered_Skip                       tripUndeliveredSkip;
 
 	private ViewFlipper vf;
 	private String currentViewName;
@@ -160,6 +164,7 @@ public class Trip extends Activity
 			tripUndeliveredTicket                   = new Trip_Undelivered_Ticket(this);
 			tripStockEnd                            = new Trip_Stock_End(this);
 			tripReport                              = new Trip_Report(this);
+            tripUndeliveredSkip                     = new Trip_Undelivered_Skip(this);
 			
 			vf = (ViewFlipper) findViewById(R.id.trip_flipper);
 			vf.removeAllViews();
@@ -179,6 +184,7 @@ public class Trip extends Activity
 			vf.addView(tripUndeliveredTicket);                      // Index 13
 			vf.addView(tripStockEnd);                               // Index 14
 			vf.addView(tripReport);                                 // Index 15
+            vf.addView(tripUndeliveredSkip);                        // Index 16
 			
 			// Select the initial view.
 			selectView(Trip.ViewStockStart, 0);
@@ -366,6 +372,12 @@ public class Trip extends Activity
 				newView = tripReport;
 				newIdx = ViewTripReportIdx;
 			}
+
+            if (newName.equals(ViewUndeliveredSkip))
+            {
+                newView = tripUndeliveredSkip;
+                newIdx = ViewUndeliveredSkipIdx;
+            }
 			
 			// Switch to new view.
 			if (newView != null)
@@ -969,6 +981,43 @@ public class Trip extends Activity
 			CrashReporter.logHandledException(e);
 		}
 	}
+
+    public void orderSkipped(int undeliveryReason, String customReason)
+    {
+        try
+        {
+            CrashReporter.leaveBreadcrumb("Trip: orderSkipped");
+
+            // Send message to MobileIn showing that order is undeliverable
+
+            JSONObject json = new JSONObject();
+
+            json.put("TripID", Active.trip.ColossusID);
+            json.put("OrderID", Active.order.ColossusID);
+            json.put("Reason", undeliveryReason);
+
+            if (undeliveryReason == 6)
+            {
+                json.put("CustomReason", customReason);
+            }
+
+            addIntent("Order_Undelivered", json.toString());
+
+            // Delete all order lines
+            for (dbTripOrderLine line : Active.order.GetTripOrderLines())
+            {
+                // Delete order line.
+                line.delete();
+            }
+
+            // Delete order from local db
+            Active.order.delete();
+        }
+        catch (Exception e)
+        {
+            CrashReporter.logHandledException(e);
+        }
+    }
 	
 	// User has backed out of the order.
 	public void orderStopped()
@@ -1030,34 +1079,6 @@ public class Trip extends Activity
 				
 				lines.put(jsonLine);
 			}
-
-//			JSONArray customerSig = null;
-//
-//			if (Active.order.CustomerSignature)
-//			{
-//				customerSig = new JSONArray();
-//
-//				int signatureImageLength = Active.order.CustomerSignatureImage.length;
-//
-//				for (int i = 0; i < signatureImageLength; i++)
-//				{
-//					customerSig.put(Active.order.CustomerSignatureImage[i] & 0xff);
-//				}
-//			}
-//
-//			JSONArray driverSig = null;
-//
-//			if (Active.order.DriverSignature)
-//			{
-//				driverSig = new JSONArray();
-//
-//				int signatureImageLength = Active.order.DriverSignatureImage.length;
-//
-//				for (int i = 0; i < signatureImageLength; i++)
-//				{
-//					driverSig.put(Active.order.DriverSignatureImage[i] & 0xff);
-//				}
-//			}
 
 			JSONObject json = new JSONObject();
 			json.put("TripID", Active.trip.ColossusID);
