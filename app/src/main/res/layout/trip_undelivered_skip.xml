@@ -33,7 +33,7 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="What is the reason for undelivery?"
+                    android:text="What is the reason for non-delivery?"
                     android:gravity="center_horizontal"
                     android:textSize="26dp"
                     android:paddingTop="20dp"
