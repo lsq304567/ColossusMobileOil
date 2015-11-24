@@ -18,18 +18,16 @@ import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
 public class Trip_Undelivered_Skip extends MyFlipperView
 {
 	private Trip trip;
-	private LayoutInflater inflater;
 
 	private MyInfoView1Line infoview;
 
-	private Button btnBack;
 	private Button btnNext;
 
     private RadioGroup groupReason;
 
     private EditText etCustomReason;
 
-    private int undeliveryReason = -1;
+    private int failureToDeliverReason = -1;
 
 	public Trip_Undelivered_Skip(Context context)
 	{
@@ -54,7 +52,7 @@ public class Trip_Undelivered_Skip extends MyFlipperView
 			trip = (Trip)context;
 	
 			// Inflate layout.
-			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.trip_undelivered_skip, this, true);
 
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_undelivered_skip_infoview);
@@ -69,9 +67,9 @@ public class Trip_Undelivered_Skip extends MyFlipperView
                 rb.setOnClickListener(onRadioButtonClicked);
             }
 
-            undeliveryReason = -1;
+            failureToDeliverReason = -1;
 
-			btnBack = (Button)this.findViewById(R.id.trip_undelivered_skip_back);
+			Button btnBack = (Button)this.findViewById(R.id.trip_undelivered_skip_back);
 			btnNext = (Button)this.findViewById(R.id.trip_undelivered_skip_next);
 
             btnNext.setEnabled(false);
@@ -153,7 +151,7 @@ public class Trip_Undelivered_Skip extends MyFlipperView
 		}
 	}
 
-    OnClickListener onClickListener = new OnClickListener()
+    private final OnClickListener onClickListener = new OnClickListener()
     {
         @Override
         public void onClick(View view)
@@ -178,7 +176,7 @@ public class Trip_Undelivered_Skip extends MyFlipperView
 
                     case R.id.trip_undelivered_skip_next:
 
-                        trip.orderSkipped(undeliveryReason, etCustomReason.getText().toString());
+                        trip.orderSkipped(failureToDeliverReason, etCustomReason.getText().toString());
 
                         // Return to the View
                         trip.selectView(Trip.ViewUndeliveredList, -1);
@@ -193,7 +191,7 @@ public class Trip_Undelivered_Skip extends MyFlipperView
         }
     };
 
-    OnClickListener onRadioButtonClicked = new OnClickListener()
+    private final OnClickListener onRadioButtonClicked = new OnClickListener()
     {
         @Override
         public void onClick(View view)
@@ -210,36 +208,36 @@ public class Trip_Undelivered_Skip extends MyFlipperView
                 {
                     case R.id.trip_undelivered_skip_gate_locked:
                         CrashReporter.leaveBreadcrumb("Trip_Undelivered_Skip: onRadioButtonClicked - Reason Gate Locked");
-                        undeliveryReason = 0;
+                        failureToDeliverReason = 0;
                         break;
                     case R.id.trip_undelivered_skip_car_block:
                         CrashReporter.leaveBreadcrumb("Trip_Undelivered_Skip: onRadioButtonClicked - Reason Car Blocking Entrance");
-                        undeliveryReason = 1;
+                        failureToDeliverReason = 1;
                         break;
                     case R.id.trip_undelivered_skip_tank_locked:
                         CrashReporter.leaveBreadcrumb("Trip_Undelivered_Skip: onRadioButtonClicked - Reason Tank Locked");
-                        undeliveryReason = 2;
+                        failureToDeliverReason = 2;
                         break;
                     case R.id.trip_undelivered_skip_dog_in_garden:
                         CrashReporter.leaveBreadcrumb("Trip_Undelivered_Skip: onRadioButtonClicked - Reason Dog In Garden");
-                        undeliveryReason = 3;
+                        failureToDeliverReason = 3;
                         break;
                     case R.id.trip_undelivered_skip_requires_payment:
                         CrashReporter.leaveBreadcrumb("Trip_Undelivered_Skip: onRadioButtonClicked - Reason Requires Payment");
-                        undeliveryReason = 4;
+                        failureToDeliverReason = 4;
                         break;
                     case R.id.trip_undelivered_skip_no_access:
                         CrashReporter.leaveBreadcrumb("Trip_Undelivered_Skip: onRadioButtonClicked - Reason No Access");
-                        undeliveryReason = 5;
+                        failureToDeliverReason = 5;
                         break;
                     case R.id.trip_undelivered_skip_other:
                         CrashReporter.leaveBreadcrumb("Trip_Undelivered_Skip: onRadioButtonClicked - Reason Other");
-                        undeliveryReason = 6;
+                        failureToDeliverReason = 6;
                         etCustomReason.setVisibility(View.VISIBLE);
                         break;
 
                     default:
-                        undeliveryReason = -1;
+                        failureToDeliverReason = -1;
                         break;
                 }
 
