@@ -209,24 +209,31 @@ public class Trip_Undelivered_Skip extends MyFlipperView
                 switch (button.getId())
                 {
                     case R.id.trip_undelivered_skip_gate_locked:
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Skip: onRadioButtonClicked - Reason Gate Locked");
                         undeliveryReason = 0;
                         break;
                     case R.id.trip_undelivered_skip_car_block:
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Skip: onRadioButtonClicked - Reason Car Blocking Entrance");
                         undeliveryReason = 1;
                         break;
                     case R.id.trip_undelivered_skip_tank_locked:
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Skip: onRadioButtonClicked - Reason Tank Locked");
                         undeliveryReason = 2;
                         break;
                     case R.id.trip_undelivered_skip_dog_in_garden:
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Skip: onRadioButtonClicked - Reason Dog In Garden");
                         undeliveryReason = 3;
                         break;
                     case R.id.trip_undelivered_skip_requires_payment:
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Skip: onRadioButtonClicked - Reason Requires Payment");
                         undeliveryReason = 4;
                         break;
                     case R.id.trip_undelivered_skip_no_access:
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Skip: onRadioButtonClicked - Reason No Access");
                         undeliveryReason = 5;
                         break;
                     case R.id.trip_undelivered_skip_other:
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Skip: onRadioButtonClicked - Reason Other");
                         undeliveryReason = 6;
                         etCustomReason.setVisibility(View.VISIBLE);
                         break;
