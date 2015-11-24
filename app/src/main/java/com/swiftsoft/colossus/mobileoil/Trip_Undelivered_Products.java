@@ -33,7 +33,6 @@ public class Trip_Undelivered_Products extends MyFlipperView
 	private MyInfoView1Line infoview;
 	private TableLayout tlProductsTable;
 	private TextView tvDeliveryMethod;
-	private Button btnDeliveryMethodChange;
 	private TextView tvLineProduct;
 	private Button btnLineProductChange;
 	private LinearLayout llProductsLineChange;
@@ -73,7 +72,10 @@ public class Trip_Undelivered_Products extends MyFlipperView
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_undelivered_products_infoview);
 			tlProductsTable = (TableLayout)this.findViewById(R.id.trip_undelivered_products_table);
 			tvDeliveryMethod = (TextView)this.findViewById(R.id.trip_undelivered_products_delivery_method);
-			btnDeliveryMethodChange = (Button)this.findViewById(R.id.trip_undelivered_products_delivery_method_change);
+
+            Button btnDeliveryMethodChange = (Button)this.findViewById(R.id.trip_undelivered_products_delivery_method_change);
+            btnDeliveryMethodChange.setOnClickListener(onDeliveryMethodChange);
+
 			tvLineProduct = (TextView)this.findViewById(R.id.trip_undelivered_products_line_product);
 			btnLineProductChange = (Button)this.findViewById(R.id.trip_undelivered_products_line_product_change);
 			llProductsLineChange = (LinearLayout)this.findViewById(R.id.trip_undelivered_products_line_change);
@@ -83,7 +85,6 @@ public class Trip_Undelivered_Products extends MyFlipperView
 			btnBack = (Button)this.findViewById(R.id.trip_undelivered_products_back);
 			btnNext = (Button)this.findViewById(R.id.trip_undelivered_products_next);
 			
-			btnDeliveryMethodChange.setOnClickListener(onDeliveryMethodChange);
 			btnLineProductChange.setOnClickListener(onLineProductChange);
 			btnBack.setOnClickListener(onBack);
 			btnNext.setOnClickListener(onNext);
@@ -109,12 +110,9 @@ public class Trip_Undelivered_Products extends MyFlipperView
 			tvDeliveryMethod.setText("Hose");
 			llProductsLineChange.setVisibility(View.GONE);
 			btnBack.setEnabled(true);
-			
-			if (Active.order.getUndeliveredCount() > 0)
-				btnNext.setEnabled(false);
-			else
-				btnNext.setEnabled(true);
-			
+
+            btnNext.setEnabled(Active.order.getUndeliveredCount() <= 0);
+
 			return true;
 		}
 		catch (Exception e)
@@ -147,20 +145,14 @@ public class Trip_Undelivered_Products extends MyFlipperView
 			infoview.setDefaultTv1("Product delivery");
 			
 			// Line.
-			if (lineProduct == null)
-			{
-				infoview.setDefaultTv2("Line: None");
-				tvLineProduct.setText("(none)");
-			}
-			else
-			{
-				infoview.setDefaultTv2("Line: " + lineProduct.Desc);
-				tvLineProduct.setText(lineProduct.Desc);
-			}
-	
+            infoview.setDefaultTv2(lineProduct == null ? "Line: None" : "Line: " + lineProduct.Desc);
+            tvLineProduct.setText(lineProduct == null ? "(none)" : lineProduct.Desc);
+
 			// Remove any old order lines.
 			while (tlProductsTable.getChildCount() > 1)
-				tlProductsTable.removeViewAt(1);
+            {
+                tlProductsTable.removeViewAt(1);
+            }
 			
 			if (Active.order != null)
 			{		
@@ -216,7 +208,7 @@ public class Trip_Undelivered_Products extends MyFlipperView
 		}
 	}
 
-	OnClickListener onRbClick = new OnClickListener()
+	private final OnClickListener onRbClick = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -267,7 +259,6 @@ public class Trip_Undelivered_Products extends MyFlipperView
 			return;
 		
 		// Is a line change necessary?
-		// dbProduct lineProduct = Active.vehicle.getHosereelProduct();
 		if (lineProduct != null && orderLine != null)
 		{
 			if (!lineProduct.getId().equals(orderLine.Product.getId()))
@@ -291,10 +282,10 @@ public class Trip_Undelivered_Products extends MyFlipperView
 				final TableRow tr = (TableRow) tlProductsTable.getChildAt(row);
 				
 				RadioButton rb = (RadioButton) tr.findViewById(R.id.trip_undelivered_products_row_radiobutton);
+
 				if (rb.isChecked())
 				{
-					dbTripOrderLine orderLine = (dbTripOrderLine) tr.getTag();
-					return orderLine;
+					return (dbTripOrderLine)tr.getTag();
 				}
 			}
 		}
@@ -306,21 +297,18 @@ public class Trip_Undelivered_Products extends MyFlipperView
 		return null;
 	}
 	
-	OnClickListener onDeliveryMethodChange = new OnClickListener()
+	private final OnClickListener onDeliveryMethodChange = new OnClickListener()
 	{		
 		@Override
 		public void onClick(View v)
 		{
-			if (tvDeliveryMethod.getText().equals("Bulk"))
-				tvDeliveryMethod.setText("Hose");
-			else
-				tvDeliveryMethod.setText("Bulk");
-			
+			tvDeliveryMethod.setText(tvDeliveryMethod.getText().equals("Bulk") ? "Hose" : "Bulk");
+
 			checkIfLineChangedRequired();
 		}
 	};
 	
-	OnClickListener onLineProductChange = new OnClickListener()
+	private final OnClickListener onLineProductChange = new OnClickListener()
 	{		
 		@Override
 		public void onClick(View paramView)
@@ -358,7 +346,7 @@ public class Trip_Undelivered_Products extends MyFlipperView
 		}
 	};
 
-	OnClickListener onBack = new OnClickListener()
+	private final OnClickListener onBack = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -386,7 +374,7 @@ public class Trip_Undelivered_Products extends MyFlipperView
 		}
 	};
 
-	OnClickListener onNext = new OnClickListener()
+	private final OnClickListener onNext = new OnClickListener()
 	{		
 		@Override
 		public void onClick(View paramView)
@@ -404,7 +392,7 @@ public class Trip_Undelivered_Products extends MyFlipperView
 				
 				if (Active.vehicle.getHosereelProduct() == null)
 				{
-					CrashReporter.leaveBreadcrumb("getHostreelProduct is null!!");
+					CrashReporter.leaveBreadcrumb("getHosereelProduct is null!!");
 				}
 				
 				if (!Active.vehicle.getHosereelProduct().getId().equals(lineProduct.getId()))
@@ -454,7 +442,7 @@ public class Trip_Undelivered_Products extends MyFlipperView
 		}
 	};
 
-	Trip_MeterMate_Callbacks callbacks = new Trip_MeterMate_Callbacks()
+	private final Trip_MeterMate_Callbacks callbacks = new Trip_MeterMate_Callbacks()
 	{
 		@Override
 		public int getLitres()
