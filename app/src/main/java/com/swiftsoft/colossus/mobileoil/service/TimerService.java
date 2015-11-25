@@ -1,19 +1,18 @@
 package com.swiftsoft.colossus.mobileoil.service;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-import com.swiftsoft.colossus.mobileoil.CrashReporter;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
+import com.swiftsoft.colossus.mobileoil.CrashReporter;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class TimerService extends Service
 {
-	Timer timer = null;
-	int timerInterval = 1;
-	
+	private Timer timer = null;
+
 	@Override
 	public IBinder onBind(Intent paramIntent)
 	{
@@ -29,6 +28,9 @@ public class TimerService extends Service
 		{
 			// Create timer.
 			timer = new Timer();
+
+			int timerInterval = 1;
+
 			timer.scheduleAtFixedRate(new timerTask(), 0, timerInterval * 60 * 1000);
 		}
 		catch (Exception e)
@@ -59,7 +61,7 @@ public class TimerService extends Service
 		return START_STICKY;
 	}
 	
-	class timerTask extends TimerTask
+	private class timerTask extends TimerTask
 	{
 		@Override
 		public void run()
