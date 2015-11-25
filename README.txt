@@ -1,3 +1,16 @@
+V0.99t15
+========
+
+On delivery ticket changed text from 'Invoice No:' to 'Delivery/Invoice No:'
+
+Disable Payment button if pricing is hidden
+
+Correction to use the delivered quantity to calculate the surcharge rather than use the erroneous ordered quantity
+
+Addition of Skip Delivery functionality so that driver can indicate to Colossus the reason why he as not able to deliver an order
+
+Added confirmation to Skip Order functionality
+
 V0.99t14
 ========
 
