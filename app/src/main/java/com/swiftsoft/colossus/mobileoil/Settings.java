@@ -13,8 +13,6 @@ import android.widget.Toast;
 import com.swiftsoft.colossus.mobileoil.bluetooth.Discovery;
 import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
 
-import java.util.List;
-
 public class Settings extends Activity
 {
 	private static final int REQUEST_DISCOVERY = 2001;
@@ -95,26 +93,12 @@ public class Settings extends Activity
 
             logBluetoothData = dbSetting.FindByKeyOrCreate("LogBluetoothData");
 
-            if (logBluetoothData.IntValue == 0)
-            {
-                btnLogData.setText(DATA_NOT_LOGGED);
-            }
-            else
-            {
-                btnLogData.setText(DATA_LOGGED);
-            }
-			
+            btnLogData.setText(logBluetoothData.IntValue == 0 ? DATA_NOT_LOGGED : DATA_LOGGED);
+
 			colossusURL = dbSetting.FindByKey("ColossusURL");
 			colossusURLValue = colossusURL.StringValue;
 			
-//			if (colossusURLValue.startsWith("http://192.168.") || colossusURLValue.startsWith("http://172.16.") || colossusURLValue.startsWith("http://10."))
-//			{
-				tvURL.setVisibility(View.GONE);
-//			}
-//			else
-//			{
-//				etURL.setVisibility(View.GONE);
-//			}
+			tvURL.setVisibility(View.GONE);
 		}
 		catch (Exception e)
 		{
@@ -126,7 +110,6 @@ public class Settings extends Activity
     @Override
     public void onBackPressed()
 	{
-    	return;
     }
 
     @Override
@@ -151,7 +134,7 @@ public class Settings extends Activity
     	}
     }
 
-    void updateUI()
+    private void updateUI()
     {
     	try
     	{
@@ -159,7 +142,7 @@ public class Settings extends Activity
 			tvPrinterName.setText(Utils.ToStringNoNull(printerName.StringValue, "(none)"));
 			tvPrinterAddress.setText(Utils.ToStringNoNull(printerAddress.StringValue, ""));
 
-			btnPrinterTest.setEnabled(printerName.StringValue == null ? false : true);
+			btnPrinterTest.setEnabled(printerName.StringValue != null);
 	
 			tvMeterMateName.setText(Utils.ToStringNoNull(metermateName.StringValue, "(none)"));
 			tvMeterMateAddress.setText(Utils.ToStringNoNull(metermateAddress.StringValue, ""));
@@ -175,7 +158,7 @@ public class Settings extends Activity
     	}
     }
     
-    OnClickListener onPrinterClicked = new OnClickListener()
+    private final OnClickListener onPrinterClicked = new OnClickListener()
 	{
 		@Override
 		public void onClick(View v)
@@ -205,7 +188,7 @@ public class Settings extends Activity
 				
 				// Reset other counter.
 				metermateDemoCounter = 0;
-	    	}
+			}
 	    	catch (Exception e)
 	    	{
 	    		CrashReporter.logHandledException(e);
@@ -219,6 +202,8 @@ public class Settings extends Activity
     	{
 			// Leave breadcrumb.
 			CrashReporter.leaveBreadcrumb("Settings: onPrinterChange");
+
+			CrashReporter.leaveBreadcrumb("Settings: onPrinterChange - " + ((Button)v).getText().toString());
 			
 	    	// Reset counters.
 	    	printerDemoCounter = 0;
@@ -244,8 +229,10 @@ public class Settings extends Activity
     	{
 			// Leave breadcrumb.
 			CrashReporter.leaveBreadcrumb("Settings: onPrinterTest");
-			
-	    	// Reset counters.
+
+			CrashReporter.leaveBreadcrumb("Settings: onPrinterTest - " + ((Button)v).getText().toString());
+
+			// Reset counters.
 	    	printerDemoCounter = 0;
 	    	metermateDemoCounter = 0;
 	    	
@@ -258,7 +245,7 @@ public class Settings extends Activity
     	}
     }
     
-    OnClickListener onMeterMateClicked = new OnClickListener()
+    private final OnClickListener onMeterMateClicked = new OnClickListener()
 	{
 		@Override
 		public void onClick(View v)
@@ -281,7 +268,7 @@ public class Settings extends Activity
 			   		metermateName.save();
 			   		
 			   		metermateAddress.StringValue = "00:00:00:00:00";
-			    	metermateAddress.save();
+					metermateAddress.save();
 	
 					updateUI();
 				}
@@ -300,8 +287,10 @@ public class Settings extends Activity
 	{
 		try
         {
-            // Leave Breadcrub
+            // Leave Breadcrumb
             CrashReporter.leaveBreadcrumb("Settings: onLogDataClick");
+
+            CrashReporter.leaveBreadcrumb("Settings: onLogDataClick - " + ((Button)v).getText().toString());
 
             if (btnLogData.getText() == DATA_NOT_LOGGED)
             {
@@ -331,7 +320,9 @@ public class Settings extends Activity
 			// Leave breadcrumb.
 			CrashReporter.leaveBreadcrumb("Settings: onMeterMateChange");
 			
-	    	// Reset counters.
+	    	CrashReporter.leaveBreadcrumb("Settings: onMeterMateChange - " + ((Button)v).getText().toString());
+
+            // Reset counters.
 	    	printerDemoCounter = 0;
 	    	metermateDemoCounter = 0;
 	    	
@@ -403,15 +394,15 @@ public class Settings extends Activity
 		{
 			// Leave breadcrumb.
 			CrashReporter.leaveBreadcrumb("Settings: onOKClicked");
-			
-			// If printer has changed, then all brands will need to be resent.
+
+            CrashReporter.leaveBreadcrumb("Settings: onOKClicked - " + ((Button)v).getText().toString());
+
+            // If printer has changed, then all brands will need to be resent.
 	    	if (printerAddress.StringValue != null)
 	    	{
 	    		if (!printerAddress.StringValue.equals(printerOldAddressStringValue))
 		    	{
-					List<dbSetting> settings = dbSetting.GetAllBrandLogos();
-
-					for (dbSetting setting : settings)
+					for (dbSetting setting : dbSetting.GetAllBrandLogos())
 					{
 						setting.IntValue = 0;
 						setting.save();
@@ -441,7 +432,9 @@ public class Settings extends Activity
 			// Leave breadcrumb.
 			CrashReporter.leaveBreadcrumb("Settings: onCancelClicked");
 
-			// Undo changes to printer.
+            CrashReporter.leaveBreadcrumb("Settings: onCancelClicked - " + ((Button)v).getText().toString());
+
+            // Undo changes to printer.
 	    	printerName.StringValue = printerOldNameStringValue;
 	    	printerName.save();
 	    	
