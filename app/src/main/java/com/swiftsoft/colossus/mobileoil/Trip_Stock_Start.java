@@ -1,10 +1,5 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
-import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
-import com.swiftsoft.colossus.mobileoil.view.MyStockSummary;
-import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,20 +9,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
+import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
+import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
+import com.swiftsoft.colossus.mobileoil.view.MyStockSummary;
+
 public class Trip_Stock_Start extends MyFlipperView
 {
 	private Trip trip;
-	private LayoutInflater inflater;
-	
+
 	private MyInfoView1Line infoview;
 	private MyStockSummary stockSummary;
 	private TextView tvLoadingNote1;
 	private TextView tvLoadingNote2;
-	private Button btnLoad;
-	private Button btnReturn;
-	private Button btnBack;
-	private Button btnNext;
-	
+
 	public Trip_Stock_Start(Context context)
 	{
 		super(context);
@@ -51,17 +46,18 @@ public class Trip_Stock_Start extends MyFlipperView
 			trip = (Trip)context;
 	
 			// Inflate layout.
-			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.trip_stock_start, this, true);
 			
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_stock_start_infoview);
 			stockSummary = (MyStockSummary)this.findViewById(R.id.trip_stock_start_summary);
 			tvLoadingNote1 = (TextView)this.findViewById(R.id.trip_stock_start_loading_note1);
 			tvLoadingNote2 = (TextView)this.findViewById(R.id.trip_stock_start_loading_note2);
-			btnLoad = (Button)this.findViewById(R.id.trip_stock_start_load);
-			btnReturn = (Button)this.findViewById(R.id.trip_stock_start_return);
-			btnBack = (Button)this.findViewById(R.id.trip_stock_start_back);
-			btnNext = (Button)this.findViewById(R.id.trip_stock_start_next);
+
+			Button btnLoad = (Button) this.findViewById(R.id.trip_stock_start_load);
+			Button btnReturn = (Button) this.findViewById(R.id.trip_stock_start_return);
+			Button btnBack = (Button) this.findViewById(R.id.trip_stock_start_back);
+			Button btnNext = (Button) this.findViewById(R.id.trip_stock_start_next);
 	
 			btnLoad.setOnClickListener(onLoad);
 			btnReturn.setOnClickListener(onReturn);
@@ -141,8 +137,7 @@ public class Trip_Stock_Start extends MyFlipperView
 		}
 	}
 	
-	OnClickListener onLoad = new OnClickListener()
-	{
+	private final OnClickListener onLoad = new OnClickListener() {
 		@Override
 		public void onClick(View paramView)
 		{
@@ -161,8 +156,7 @@ public class Trip_Stock_Start extends MyFlipperView
 		}
 	};
 
-	OnClickListener onReturn = new OnClickListener()
-	{
+	private final OnClickListener onReturn = new OnClickListener() {
 		@Override
 		public void onClick(View paramView)
 		{
@@ -181,8 +175,7 @@ public class Trip_Stock_Start extends MyFlipperView
 		}
 	};
 
-	OnClickListener onBack = new OnClickListener()
-	{
+	private final OnClickListener onBack = new OnClickListener() {
 		@Override
 		public void onClick(View paramView)
 		{
@@ -217,8 +210,7 @@ public class Trip_Stock_Start extends MyFlipperView
 		}
 	};
 
-	OnClickListener onNext = new OnClickListener()
-	{		
+	private final OnClickListener onNext = new OnClickListener() {
 		@Override
 		public void onClick(View paramView)
 		{
