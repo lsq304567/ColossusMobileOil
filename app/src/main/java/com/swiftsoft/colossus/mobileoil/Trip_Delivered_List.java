@@ -18,14 +18,11 @@ public class Trip_Delivered_List extends MyFlipperView
 {
 	private Trip trip;
 	private Trip_Delivered tripDelivered;
-	private LayoutInflater inflater;
-	private DeliveredAdapter adapter;
-	
+
 	private TextView tvTripNo;
 	private TextView tvCounter;
 	private ListView lvOrders;
-	private Button btnClose;
-	
+
 	public Trip_Delivered_List(Context context)
 	{
 		super(context);
@@ -58,13 +55,13 @@ public class Trip_Delivered_List extends MyFlipperView
 			trip = (Trip)context;
 	
 			// Inflate layout.
-			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.trip_delivered_list, this, true);
 			
 			tvTripNo = (TextView)this.findViewById(R.id.trip_delivered_list_trip_no);
 			tvCounter = (TextView)this.findViewById(R.id.trip_delivered_list_counter);
 			lvOrders = (ListView)this.findViewById(R.id.trip_delivered_list_orders);
-			btnClose = (Button)this.findViewById(R.id.trip_delivered_list_close);
+			Button btnClose = (Button) this.findViewById(R.id.trip_delivered_list_close);
 			
 			lvOrders.setOnItemClickListener(lvOnClick);
 			btnClose.setOnClickListener(onClose);
@@ -81,14 +78,14 @@ public class Trip_Delivered_List extends MyFlipperView
 		try
 		{
 			// Refresh data.
-			adapter = new DeliveredAdapter(trip, Active.trip.GetDelivered());
+			DeliveredAdapter adapter = new DeliveredAdapter(trip, Active.trip.GetDelivered());
 
 			// Bind to listview.
 			lvOrders.setAdapter(adapter);
 
 			// Update UI.
-			tvTripNo.setText("Trip " + Active.trip.No);
-			tvCounter.setText(adapter.getCount() + " delivered");
+			tvTripNo.setText(String.format("Trip %d", Active.trip.No));
+			tvCounter.setText(String.format("%s delivered", adapter.getCount()));
 		}
 		catch (Exception e)
 		{
@@ -96,7 +93,7 @@ public class Trip_Delivered_List extends MyFlipperView
 		}
 	}
 
-	OnItemClickListener lvOnClick = new OnItemClickListener() 
+	private final OnItemClickListener lvOnClick = new OnItemClickListener()
 	{
 		@Override
 		public void onItemClick(AdapterView<?> a, View v, int position, long id)
@@ -119,7 +116,7 @@ public class Trip_Delivered_List extends MyFlipperView
 		}
 	};
 
-	OnClickListener onClose = new OnClickListener()
+	private final OnClickListener onClose = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
