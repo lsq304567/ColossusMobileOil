@@ -3,6 +3,13 @@
     <string name="app_name">Colossus Mobile</string>
     <string name="version">v0.99t14</string>
     <string name="copyright">Copyright \u00A9 2012&#8211;2015 SWIFTsoft</string>
+
     <!-- Connect to licensing server on AZURE -->
     <string name="licensing_url">http://licensingwebapp.azurewebsites.net/api/Licenses/</string>
+
+    <!-- String for Logon Activity -->
+    <string name="logon.driver_pin_correct">Driver PIN correct</string>
+    <string name="logon.driver_pin_incorrect">Driver PIN incorrect</string>
+    <string name="logon.vehicle_number_invalid">Vehicle no is invalid</string>
+    <string name="logon.driver_number_invalid">Driver no is invalid</string>
 </resources>

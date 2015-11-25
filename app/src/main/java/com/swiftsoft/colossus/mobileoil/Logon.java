@@ -21,22 +21,22 @@ import org.json.JSONObject;
 
 public class Logon extends Activity
 {
-	MyInfoView1Line infoview;
-	EditText vehicleNo;
-	TextView vehicleDesc;
-	EditText driverNo;
-	TextView driverDesc;
-	EditText driverPIN;
-	TextView driverPINMessage;
-	Button logon;
+	private MyInfoView1Line infoview;
+	private EditText vehicleNo;
+	private TextView vehicleDesc;
+	private EditText driverNo;
+	private TextView driverDesc;
+	private EditText driverPIN;
+	private TextView driverPINMessage;
+	private Button logon;
 
-	boolean isVehicleValid;
-	boolean isDriverValid;
-	boolean isDriverPINValid;
+	private boolean isVehicleValid;
+	private boolean isDriverValid;
+	private boolean isDriverPINValid;
 
-	int orientation;
+	private int orientation;
 
-    boolean orientationChanged = false;
+    private boolean orientationChanged = false;
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState)
@@ -121,7 +121,6 @@ public class Logon extends Activity
 	@Override
 	public void onBackPressed()
 	{
-		return;
 	}
 
 	@Override
@@ -173,11 +172,11 @@ public class Logon extends Activity
 		Active.vehicle = null;
 		Active.driver = null;
 		
-		// Find vehicle registation.
+		// Find vehicle registration.
 		dbSetting registered = dbSetting.FindByKey("VehicleRegistered");
 		
 		// Initialise UI.
-		vehicleNo.setText("" + registered.IntValue);
+		vehicleNo.setText(String.format("%d", registered.IntValue));
 		vehicleNo.setEnabled(false);
 		vehicleDesc.setText("");
 
@@ -199,7 +198,7 @@ public class Logon extends Activity
 	}
 	
 	// React to changes to vehicle number.
-	TextWatcher twVehicle = new TextWatcher()
+    private final TextWatcher twVehicle = new TextWatcher()
 	{
 		@Override
 		public void afterTextChanged(Editable s)
@@ -245,7 +244,7 @@ public class Logon extends Activity
 	
 			if (vehicleNoText.length() > 0 && !isVehicleValid)
 			{
-				vehicleDesc.setText("Vehicle no is invalid");
+				vehicleDesc.setText(R.string.logon_vehicle_number_invalid);
 			}
 	
 			updateLogonState();
@@ -256,8 +255,7 @@ public class Logon extends Activity
 		}
 	}
 
-	TextWatcher twDriver = new TextWatcher()
-	{
+	private final TextWatcher twDriver = new TextWatcher() {
 		@Override
 		public void afterTextChanged(Editable s)
 		{
@@ -306,21 +304,21 @@ public class Logon extends Activity
 					if (driver.PIN == Utils.Convert2Int(driverPINText))
 					{
 						isDriverPINValid = true;
-						driverPINMessage.setText("Driver PIN correct");
+						driverPINMessage.setText(R.string.logon_driver_pin_correct);
 					}
 				}
 			}
 
 			if (driverNoText.length() > 0 && !isDriverValid)
 			{
-				driverDesc.setText("Driver no is invalid");
+				driverDesc.setText(R.string.logon_driver_number_invalid);
 			}
 
 			if (isDriverValid)
 			{
 				if (driverPINText.length() > 0 && !isDriverPINValid)
 				{
-					driverPINMessage.setText("Driver PIN incorrect");
+					driverPINMessage.setText(R.string.logon_driver_pin_incorrect);
 				}
 			}
 
@@ -342,24 +340,22 @@ public class Logon extends Activity
 	
 	private void updateLogonState()
 	{
-		logon.setEnabled(isVehicleValid && isDriverValid && isDriverPINValid ? true : false);
+		logon.setEnabled(isVehicleValid && isDriverValid && isDriverPINValid);
 	}
 
 	public void onLogonClicked(View button)
 	{
-		String vehicleNoText;
-		String driverNoText;
-		String driverPINText;
-
 		try
 		{
 			// Leave breadcrumb.
 			CrashReporter.leaveBreadcrumb("Logon: onLogonClicked");
 
+            CrashReporter.leaveBreadcrumb("Logon: onLogonClicked - " + ((Button)button).getText().toString());
+
 			// Get user input.
-			vehicleNoText = vehicleNo.getText().toString();
-			driverNoText = driverNo.getText().toString();
-			driverPINText = driverPIN.getText().toString();
+			String vehicleNoText = vehicleNo.getText().toString();
+			String driverNoText = driverNo.getText().toString();
+			String driverPINText = driverPIN.getText().toString();
 
 			// Secret code to generate demo data.
 			if (Utils.Convert2Int(driverNoText) == -159 && Utils.Convert2Int(driverPINText) == -951)
