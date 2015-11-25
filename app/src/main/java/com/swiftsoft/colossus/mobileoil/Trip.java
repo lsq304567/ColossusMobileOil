@@ -31,7 +31,6 @@ import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
 import com.swiftsoft.colossus.mobileoil.view.MyEditText;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyNumericKeypad;
-import com.swiftsoft.colossus.mobileoil.view.Trip_Undelivered_Skip;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

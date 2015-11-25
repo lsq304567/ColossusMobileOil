@@ -1,6 +1,8 @@
-package com.swiftsoft.colossus.mobileoil.view;
+package com.swiftsoft.colossus.mobileoil;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +11,9 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.swiftsoft.colossus.mobileoil.Active;
-import com.swiftsoft.colossus.mobileoil.CrashReporter;
-import com.swiftsoft.colossus.mobileoil.R;
-import com.swiftsoft.colossus.mobileoil.Trip;
 import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
+import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
+import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 
 public class Trip_Undelivered_Skip extends MyFlipperView
 {
@@ -176,10 +176,25 @@ public class Trip_Undelivered_Skip extends MyFlipperView
 
                     case R.id.trip_undelivered_skip_next:
 
-                        trip.orderSkipped(failureToDeliverReason, etCustomReason.getText().toString());
+                        // Ask driver to confirm the non-delivery of the order
+                        AlertDialog.Builder builder = new AlertDialog.Builder(trip);
+                        builder.setTitle("Confirm non-delivery");
+                        builder.setMessage("Click 'Yes' to confirm the reason why delivery\nof the order was not possible.\n\nThe order will be removed from your Trip");
 
-                        // Return to the View
-                        trip.selectView(Trip.ViewUndeliveredList, -1);
+                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                trip.orderSkipped(failureToDeliverReason, etCustomReason.getText().toString());
+
+                                // Return to the View
+                                trip.selectView(Trip.ViewUndeliveredList, -1);
+                            }
+                        });
+
+                        builder.setNegativeButton("No", null);
+                        builder.show();
 
                         break;
                 }
