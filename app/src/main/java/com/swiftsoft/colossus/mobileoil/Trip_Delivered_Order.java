@@ -1,9 +1,6 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,6 +18,10 @@ import android.widget.TextView;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrder;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrderLine;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
+
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 
 public class Trip_Delivered_Order extends MyFlipperView
 {
@@ -51,10 +52,8 @@ public class Trip_Delivered_Order extends MyFlipperView
 	private ImageView ivOrderSignatureImage;
 	private TextView tvOrderSignatureName;
 	private TextView tvOrderSignatureDateTime;
-	private Button btnBack;
-	private Button btnReprint;
-	
-	private DecimalFormat decf2;
+
+    private DecimalFormat formatMoney;
 
 	private dbTripOrder selectedOrder;
 	
@@ -116,14 +115,14 @@ public class Trip_Delivered_Order extends MyFlipperView
 			ivOrderSignatureImage = (ImageView)this.findViewById(R.id.trip_delivered_order_signature_image);
 			tvOrderSignatureName = (TextView)this.findViewById(R.id.trip_delivered_order_signature_name);
 			tvOrderSignatureDateTime = (TextView)this.findViewById(R.id.trip_delivered_order_signature_datetime);
-			btnBack = (Button)this.findViewById(R.id.trip_delivered_order_back);
-			btnReprint = (Button)this.findViewById(R.id.trip_delivered_order_reprint);
+            Button btnBack = (Button) this.findViewById(R.id.trip_delivered_order_back);
+            Button btnReprint = (Button) this.findViewById(R.id.trip_delivered_order_reprint);
 	
 			btnBack.setOnClickListener(onBack);
 			btnReprint.setOnClickListener(onReprint);
 			
 			// Setup standard decimal format.
-			decf2 = new DecimalFormat("#,##0.00");
+			formatMoney = new DecimalFormat("#,##0.00");
 		}
 		catch (Exception e)
 		{
@@ -136,7 +135,8 @@ public class Trip_Delivered_Order extends MyFlipperView
 		selectedOrder = order;
 	}
 	
-	@Override
+	@SuppressLint("SetTextI18n")
+    @Override
 	public void updateUI()
 	{
 		try
@@ -150,7 +150,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 				
 				tvOrderNo.setText(selectedOrder.InvoiceNo);
 				tvOrderCustomer.setText(customer);
-				tvOrderDelAddress.setText(delAddress + "\n" + selectedOrder.DeliveryPostcode);
+				tvOrderDelAddress.setText(String.format("%s\n%s", delAddress, selectedOrder.DeliveryPostcode));
 		
 				// If delivery address is different, show it in bold.
 				tvOrderDelAddress.setTypeface(null, customer.equals(delAddress) ? Typeface.NORMAL : Typeface.BOLD);
@@ -163,6 +163,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 				
 				for (dbTripOrderLine line : selectedOrder.GetTripOrderLines())
 				{
+					@SuppressLint("InflateParams")
 					TableRow tr = (TableRow)inflater.inflate(R.layout.trip_delivered_order_tablerow, null);
 					tr.setTag(line);
 		
@@ -170,10 +171,10 @@ public class Trip_Delivered_Order extends MyFlipperView
 					tvDesc.setText(line.Product.Desc);
 					
 					TextView tvDeliveredQty = (TextView) tr.findViewById(R.id.trip_delivered_order_tablerow_delivered);
-					tvDeliveredQty.setText(Integer.toString(line.DeliveredQty));
+					tvDeliveredQty.setText(String.format("%d", line.DeliveredQty));
 					
 					TextView tvValue = (TextView) tr.findViewById(R.id.trip_delivered_order_tablerow_value);
-					tvValue.setText("" + decf2.format(line.getDeliveredNettValue() + line.getDeliveredSurchargeValue()));
+					tvValue.setText("" + formatMoney.format(line.getDeliveredNettValue() + line.getDeliveredSurchargeValue()));
 				
 					// Add the TableRow to the TableLayout.
 					tlOrderProductTable.addView(tr);
@@ -188,7 +189,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 				double outstanding = selectedOrder.getOutstanding();
 				
 				// Update view.
-				tvOrderVat.setText(decf2.format(vat));
+				tvOrderVat.setText(formatMoney.format(vat));
 				
 				if (accBalance == 0)
 				{
@@ -197,10 +198,10 @@ public class Trip_Delivered_Order extends MyFlipperView
 				else
 				{
 					trOrderAccBalanceRow.setVisibility(View.VISIBLE);
-					tvOrderAccBalance.setText(decf2.format(accBalance));
+					tvOrderAccBalance.setText(formatMoney.format(accBalance));
 				}
 				
-				tvOrderTotal.setText(decf2.format(creditTotal));
+				tvOrderTotal.setText(formatMoney.format(creditTotal));
 				
 				if (paidOffice == 0)
 				{
@@ -209,7 +210,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 				else
 				{
 					trOrderPaidOfficeRow.setVisibility(View.VISIBLE);
-					tvOrderPaidOffice.setText(decf2.format(paidOffice));
+					tvOrderPaidOffice.setText(formatMoney.format(paidOffice));
 				}
 				
 				if (paidDriver == 0)
@@ -219,7 +220,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 				else
 				{
 					trOrderPaidDriverRow.setVisibility(View.VISIBLE);
-					tvOrderPaidDriver.setText(decf2.format(paidDriver));
+					tvOrderPaidDriver.setText(formatMoney.format(paidDriver));
 				}
 				
 				if (discount == 0)
@@ -229,7 +230,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 				else
 				{
 					trOrderDiscountRow.setVisibility(View.VISIBLE);
-					tvOrderDiscount.setText(decf2.format(discount));
+					tvOrderDiscount.setText(formatMoney.format(discount));
 				}
 				
 				if (paidOffice == 0 && paidDriver == 0 && discount == 0)
@@ -241,7 +242,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 				{
 					trOrderSubtotalRow.setVisibility(View.VISIBLE);
 					trOrderOutstandingRow.setVisibility(View.VISIBLE);
-					tvOrderOutstanding.setText(decf2.format(outstanding));
+					tvOrderOutstanding.setText(formatMoney.format(outstanding));
 				}
 				
 				tvOrderTerms.setText(selectedOrder.getTerms());
@@ -271,7 +272,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 		}
 	}
 	
-	OnClickListener onBack = new OnClickListener()
+	private final OnClickListener onBack = new OnClickListener()
 	{
 		@Override
 		public void onClick(View v)
@@ -291,7 +292,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 		}
 	};
 	
-	OnClickListener onReprint = new OnClickListener()
+	private final OnClickListener onReprint = new OnClickListener()
 	{
 		@Override
 		public void onClick(View v)
