@@ -1,10 +1,5 @@
 package com.swiftsoft.colossus.mobileoil.service;
 
-import org.json.JSONObject;
-
-import com.swiftsoft.colossus.mobileoil.Active;
-import com.swiftsoft.colossus.mobileoil.CrashReporter;
-
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -14,15 +9,20 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import com.swiftsoft.colossus.mobileoil.Active;
+import com.swiftsoft.colossus.mobileoil.CrashReporter;
+
+import org.json.JSONObject;
+
 //
 // Track the location of the device
 // and send to Colossus WebService.
 //
 public class GpsService extends Service
 {
-	long lastGPS;
-	Location lastLocation;
-	LocationManager locationManager;
+	private long lastGPS;
+	private Location lastLocation;
+	private LocationManager locationManager;
 	
 	@Override
 	public IBinder onBind(Intent intent)
@@ -134,7 +134,7 @@ public class GpsService extends Service
 		startService(i);
 	}
 
-	LocationListener locationListener = new LocationListener()
+	private final LocationListener locationListener = new LocationListener()
 	{
 		@Override
 		public void onLocationChanged(Location location)
