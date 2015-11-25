@@ -1,12 +1,5 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import org.json.JSONObject;
-
-import com.swiftsoft.colossus.mobileoil.database.adapter.TripAdapter;
-import com.swiftsoft.colossus.mobileoil.database.model.dbTrip;
-import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
-import com.swiftsoft.colossus.mobileoil.view.MyInfoView3Line;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -17,10 +10,17 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.swiftsoft.colossus.mobileoil.database.adapter.TripAdapter;
+import com.swiftsoft.colossus.mobileoil.database.model.dbTrip;
+import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
+import com.swiftsoft.colossus.mobileoil.view.MyInfoView3Line;
+
+import org.json.JSONObject;
 
 public class Trips extends Activity
 {
@@ -88,7 +88,6 @@ public class Trips extends Activity
     @Override
     public void onBackPressed() 
     {
-    	return;
     }
 
     @Override
@@ -150,7 +149,7 @@ public class Trips extends Activity
     
 	// ---------------------- List --------------------------
 	
-	OnItemClickListener lvOnClick = new OnItemClickListener() 
+	private final OnItemClickListener lvOnClick = new OnItemClickListener()
 	{
 		@Override
 		public void onItemClick(AdapterView<?> a, View v, int position, long id)
@@ -181,7 +180,7 @@ public class Trips extends Activity
 		}
 	};
 
-	void refreshData()
+	private void refreshData()
 	{
 		try
 		{
@@ -207,7 +206,7 @@ public class Trips extends Activity
 		}
 	}
 	
-	void startTrip(long id)
+	private void startTrip(long id)
 	{
 		try
 		{
@@ -249,7 +248,9 @@ public class Trips extends Activity
     	{
 			// Leave breadcrumb.
 			CrashReporter.leaveBreadcrumb("Trips: onBackClicked");
-			
+
+			CrashReporter.leaveBreadcrumb("Trips: onBackClicked - " + ((Button)v).getText().toString());
+
 			// Show message.
 			AlertDialog.Builder builder = new AlertDialog.Builder(Trips.this);
 			builder.setTitle("Trip list");
@@ -303,7 +304,9 @@ public class Trips extends Activity
     	{
 			// Leave breadcrumb.
 			CrashReporter.leaveBreadcrumb("Trips: onSettingsClicked");
-			
+
+			CrashReporter.leaveBreadcrumb("Trips: onSettingsClicked - " + ((Button)v).getText().toString());
+
 			// Show settings activity.
 			Intent i = new Intent(this, Settings.class);
 			startActivity(i);
@@ -321,7 +324,9 @@ public class Trips extends Activity
 			// Leave breadcrumb.
 			CrashReporter.leaveBreadcrumb("Trips: onNextClicked");
 
-			// Start next trip.
+            CrashReporter.leaveBreadcrumb("Trips: onNextClicked - " + ((Button)v).getText().toString());
+
+            // Start next trip.
 			startTrip(adapter.getItemId(0));
 		}
 		catch (Exception e)
