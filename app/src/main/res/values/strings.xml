@@ -12,4 +12,8 @@
     <string name="logon.driver_pin_incorrect">Driver PIN incorrect</string>
     <string name="logon.vehicle_number_invalid">Vehicle no is invalid</string>
     <string name="logon.driver_number_invalid">Driver no is invalid</string>
+
+    <!-- Strings for Signature Activity -->
+    <string name="signature.title_customer">CUSTOMER - sign to acknowledge goods received</string>
+    <string name="signature.title_driver">DRIVER - sign to acknowledge receipt of payment</string>
 </resources>

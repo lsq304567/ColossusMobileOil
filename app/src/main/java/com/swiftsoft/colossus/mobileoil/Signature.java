@@ -1,18 +1,18 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import com.swiftsoft.colossus.mobileoil.view.MySignature;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.swiftsoft.colossus.mobileoil.view.MySignature;
 
 public class Signature extends Activity
 {
 	public static final int REQUEST_SIGNATURE = 1001;
 
-	private TextView signatureTitle;
 	private MySignature signature;
 	private String signatureType;
 	private String signatureName;
@@ -32,7 +32,7 @@ public class Signature extends Activity
 			setContentView(R.layout.signature);
 			
 			// Find UI controls.
-			signatureTitle = (TextView) findViewById(R.id.signature_title);
+			TextView signatureTitle = (TextView) findViewById(R.id.signature_title);
 			signature = (MySignature) findViewById(R.id.signature);
 	
 			// Find parameters.
@@ -45,13 +45,13 @@ public class Signature extends Activity
 			{
 				CrashReporter.leaveBreadcrumb("Signature: onCreate - Customer to sign");
 
-				signatureTitle.setText("CUSTOMER - sign to acknowledge goods received");
+				signatureTitle.setText(R.string.signature_title_customer);
 			}
 			else if (signatureType.equals("Driver"))
 			{
 				CrashReporter.leaveBreadcrumb("Signature: onCreate - Driver to sign");
 
-				signatureTitle.setText("DRIVER - sign to acknowledge receipt of payment");
+				signatureTitle.setText(R.string.signature_title_driver);
 			}
 		}
 		catch (Exception e)
@@ -66,6 +66,8 @@ public class Signature extends Activity
 		{
 			// Leave breadcrumb.
 			CrashReporter.leaveBreadcrumb("Signature: onBackClicked");
+
+			CrashReporter.leaveBreadcrumb("Signature: onBackClicked - " + ((Button)button).getText().toString());
 			
 			// Close activity.
 			setResult(RESULT_CANCELED);
@@ -83,8 +85,10 @@ public class Signature extends Activity
 		{
 			// Leave breadcrumb.
 			CrashReporter.leaveBreadcrumb("Signature: onTryAgainClicked");
-			
-			// Reset the signature.
+
+            CrashReporter.leaveBreadcrumb("Signature: onTryAgainClicked - " + ((Button)button).getText().toString());
+
+            // Reset the signature.
 			signature.ResetSignature();
 		}
 		catch (Exception e)
@@ -99,8 +103,10 @@ public class Signature extends Activity
 		{
 			// Leave breadcrumb.
 			CrashReporter.leaveBreadcrumb("Signature: onFinishClicked");
-			
-			// Past data back to calling activity.
+
+            CrashReporter.leaveBreadcrumb("Signature: onFinishClicked - " + ((Button)button).getText().toString());
+
+            // Past data back to calling activity.
 			Intent data = new Intent();
 
 			data.putExtra("SignatureType", signatureType);
