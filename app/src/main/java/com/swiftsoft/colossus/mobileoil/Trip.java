@@ -58,22 +58,39 @@ public class Trip extends Activity
 	public static final String ViewTripReport                          = "Trip.Report";
 	public static final String ViewUndeliveredSkip                     = "Trip.UndeliveredSkip";
 
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ViewStockStartIdx                          = 0;
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ViewStockLoadIdx                           = 1;
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ViewStockReturnIdx                         = 2;
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ViewTransportDocIdx                        = 3;
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ViewUndeliveredListIdx                     = 4;
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ViewUndeliveredSummaryIdx                  = 5;
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ViewUndeliveredCODIdx                      = 6;
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ViewUndeliveredProductsIdx                 = 7;
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ViewUndeliveredLineChangeIdx               = 8;
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ViewUndeliveredMeterMateIdx                = 9;
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ViewUndeliveredNonMeteredIdx               = 10;
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ViewUndeliveredLineChangeDuringDeliveryIdx = 11;
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ViewUndeliveredDeliveryNoteIdx             = 12;
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ViewUndeliveredTicketIdx                   = 13;
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ViewStockEndIdx                            = 14;
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ViewTripReportIdx                          = 15;
+	@SuppressWarnings("FieldCanBeLocal")
 	private final int ViewUndeliveredSkipIdx                     = 16;
 	
 	private Trip_Stock_Start                            tripStockStart;
@@ -97,7 +114,7 @@ public class Trip extends Activity
 	private ViewFlipper vf;
 	private String currentViewName;
 	private MyFlipperView currentView;
-	private DecimalFormat decf2;
+	private DecimalFormat formatMoney;
 	private Trip_Delivered deliveredDialog;
 	private myReceiver receiver;
 	
@@ -144,7 +161,7 @@ public class Trip extends Activity
 			Bluetooth.bluetooth = BluetoothAdapter.getDefaultAdapter();
 	
 			// Setup standard decimal formats.
-			decf2 = new DecimalFormat("#,##0.00");
+			formatMoney = new DecimalFormat("#,##0.00");
 	
 			// Create views.
 			tripStockStart                          = new Trip_Stock_Start(this);
@@ -493,17 +510,17 @@ public class Trip extends Activity
 					dbTripOrderLine orderLine = Active.orderLine;
 
 					// Update UI
-					tvOrderedQty.setText(Integer.toString(orderLine.OrderedQty));
-					tvOrderedPrice.setText(decf2.format(orderLine.OrderedPrice));
-					tvOrderedSurcharge.setText(decf2.format(orderLine.Surcharge));
+					tvOrderedQty.setText(String.format("%d", orderLine.OrderedQty));
+					tvOrderedPrice.setText(formatMoney.format(orderLine.OrderedPrice));
+					tvOrderedSurcharge.setText(formatMoney.format(orderLine.Surcharge));
 					
-					tvDeliveredQty.setText(Integer.toString(orderLine.DeliveredQty));
+					tvDeliveredQty.setText(String.format("%d", orderLine.DeliveredQty));
 					
 					double newPrice = getEditTextAmount(etNewPrice);
 
-					tvDeliveredPrice.setText(newPrice == 0 ? "" : decf2.format(newPrice));
+					tvDeliveredPrice.setText(newPrice == 0 ? "" : formatMoney.format(newPrice));
 					
-					tvDeliveredSurcharge.setText(decf2.format(orderLine.Surcharge));
+					tvDeliveredSurcharge.setText(formatMoney.format(orderLine.Surcharge));
 				}
 			};
 	
@@ -520,7 +537,7 @@ public class Trip extends Activity
 						EditText et = (EditText)v;
 						double value = getEditTextAmount(et);
 
-						et.setText(value == 0 ? "" : decf2.format(value));
+						et.setText(value == 0 ? "" : formatMoney.format(value));
 					}
 				}
 			};
@@ -562,7 +579,7 @@ public class Trip extends Activity
 			}
 			else
 			{
-				etNewPrice.setText("" + Active.orderLine.DeliveredPrice);
+				etNewPrice.setText(String.format("%f", Active.orderLine.DeliveredPrice));
 				etNewPrice.setSelection(etNewPrice.getText().length(), etNewPrice.getText().length());
 			}
 			
@@ -634,7 +651,7 @@ public class Trip extends Activity
 				public void afterTextChanged(Editable paramEditable)
 				{
 					// Update total paid to driver.
-					tvPaidDriver.setText(decf2.format(getEditTextAmount(etCash) + getEditTextAmount(etCheque) + getEditTextAmount(etVoucher)));
+					tvPaidDriver.setText(formatMoney.format(getEditTextAmount(etCash) + getEditTextAmount(etCheque) + getEditTextAmount(etVoucher)));
 				}
 			};
 	
@@ -653,7 +670,7 @@ public class Trip extends Activity
 						EditText et = (EditText)v;
 						double value = getEditTextAmount(et);
 
-						et.setText(value == 0 ? "" : decf2.format(value));
+						et.setText(value == 0 ? "" : formatMoney.format(value));
 					}
 				}
 			};
@@ -700,23 +717,23 @@ public class Trip extends Activity
 			// Show current values.
 			if (Active.order.CashReceived != 0)
 			{
-				etCash.setText(decf2.format(Active.order.CashReceived));
+				etCash.setText(formatMoney.format(Active.order.CashReceived));
 			}
 			
 			if (Active.order.ChequeReceived != 0)
 			{
-				etCheque.setText(decf2.format(Active.order.ChequeReceived));
+				etCheque.setText(formatMoney.format(Active.order.ChequeReceived));
 			}
 			
 			if (Active.order.VoucherReceived != 0)
 			{
-				etVoucher.setText(decf2.format(Active.order.VoucherReceived));
+				etVoucher.setText(formatMoney.format(Active.order.VoucherReceived));
 			}
 	
 			if (Active.order.PrepaidAmount != 0)
 			{
 				trPaidOffice.setVisibility(View.VISIBLE);
-				tvPaidOffice.setText(decf2.format(Active.order.PrepaidAmount));
+				tvPaidOffice.setText(formatMoney.format(Active.order.PrepaidAmount));
 			}
 			else
 			{
@@ -737,18 +754,18 @@ public class Trip extends Activity
 				payDriver = Active.order.getCodBeforeDeliveryValue();
 			}
 			
-			String message = "Pay driver " + decf2.format(payDriver - surchargeVatAmount);
+			String message = "Pay driver " + formatMoney.format(payDriver - surchargeVatAmount);
 
 			if (surcharge != 0)
 			{
-				message += " for cash discount of " + decf2.format(surcharge + surchargeVatAmount);
+				message += " for cash discount of " + formatMoney.format(surcharge + surchargeVatAmount);
 			}
 			
 			tvMessage.setText(message);
 
             tvMessage.setVisibility(Active.order.HidePrices ? View.GONE : View.VISIBLE);
 
-			tvTerms.setText("Terms: " + Active.order.getTerms());
+			tvTerms.setText(String.format("Terms: %s", Active.order.getTerms()));
 	
 			dialog.show();
 			
@@ -981,7 +998,7 @@ public class Trip extends Activity
 		}
 	}
 
-    public void orderSkipped(int undeliveryReason, String customReason)
+    public void orderSkipped(int nonDeliveryReason, String customReason)
     {
         try
         {
@@ -993,9 +1010,9 @@ public class Trip extends Activity
 
             json.put("TripID", Active.trip.ColossusID);
             json.put("OrderID", Active.order.ColossusID);
-            json.put("Reason", undeliveryReason);
+            json.put("Reason", nonDeliveryReason);
 
-            if (undeliveryReason == 6)
+            if (nonDeliveryReason == 6)
             {
                 json.put("CustomReason", customReason);
             }
@@ -1147,7 +1164,7 @@ public class Trip extends Activity
     public void tripDelivered()
     {
 		// This needs some improving!!!
-		// Perhap the trip, order etc should now be deleted.
+		// Perhaps the trip, order etc should now be deleted.
 
     	try
     	{
