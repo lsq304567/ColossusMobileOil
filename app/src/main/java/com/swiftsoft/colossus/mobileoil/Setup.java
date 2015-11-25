@@ -115,16 +115,11 @@ import io.fabric.sdk.android.Fabric;
 
 public class Setup extends Activity
 {
-	public static final String ViewLicenseDevice   = "Setup.LicenseDevice";
+	private static final String ViewLicenseDevice   = "Setup.LicenseDevice";
 	public static final String ViewRegisterDevice  = "Setup.RegisterDevice";
 	public static final String ViewRegisterVehicle = "Setup.RegisterVehicle";
 	public static final String ViewVehicleLine     = "Setup.VehicleLine";
-	
-	private final int ViewLicenseDeviceIdx         = 0;
-	private final int ViewRegisterDeviceIdx		   = 1;
-	private final int ViewRegisterVehicleIdx       = 2;
-	private final int ViewVehicleLineIdx           = 3;
-	
+
 	private Setup_License_Device setupLicenseDevice;
     private Setup_Register_Device setupRegisterDevice;
     private Setup_Register_Vehicle setupRegisterVehicle;
@@ -215,7 +210,6 @@ public class Setup extends Activity
     @Override
     public void onBackPressed()
 	{
-    	return;
     }
     
 	@Override
@@ -305,25 +299,25 @@ public class Setup extends Activity
 			if (newName.equals(ViewLicenseDevice))
 			{
 				newView = setupLicenseDevice;
-				newIdx = ViewLicenseDeviceIdx;
+				newIdx = 0;
 			}
 			
 			if (newName.equals(ViewRegisterDevice))
 			{
 				newView = setupRegisterDevice;
-				newIdx = ViewRegisterDeviceIdx;
+				newIdx = 1;
 			}
 	
 			if (newName.equals(ViewRegisterVehicle))
 			{
 				newView = setupRegisterVehicle;
-				newIdx = ViewRegisterVehicleIdx;
+				newIdx = 2;
 			}
 			
 			if (newName.equals(ViewVehicleLine))
 			{
 				newView = setupVehicleLine;
-				newIdx = ViewVehicleLineIdx;
+				newIdx = 3;
 			}
 			
 			// Switch to new view.
@@ -394,7 +388,7 @@ public class Setup extends Activity
     }
 
     // Check if device is now registered.
-    public boolean isDeviceRegistered()
+	private boolean isDeviceRegistered()
     {
 		dbSetting setting = dbSetting.FindByKey("DeviceRegistered");
 
@@ -402,7 +396,7 @@ public class Setup extends Activity
     }
     
     // Check if vehicle is now registered.
-    public boolean isVehicleRegistered()
+	private boolean isVehicleRegistered()
     {
 		dbSetting setting = dbSetting.FindByKey("VehicleRegistered");
 
@@ -410,7 +404,7 @@ public class Setup extends Activity
     }
 
     // Check if vehicle has a line product, if applicable.
-    public boolean isVehicleLineSetup()
+	private boolean isVehicleLineSetup()
     {
 		dbSetting setting = dbSetting.FindByKey("VehicleRegistered");
 
@@ -511,7 +505,7 @@ public class Setup extends Activity
 	}
 
 	@SuppressLint("HandlerLeak")
-	Handler handler = new Handler() 
+	private final Handler handler = new Handler()
 	{    
 		@Override    
 		public void handleMessage(Message msg) 
@@ -528,7 +522,7 @@ public class Setup extends Activity
 	};
 	
 
-    // ----------------- Device registation -----------------
+    // ----------------- Device registration -----------------
 
     public void registerDevice()
     {
@@ -572,7 +566,7 @@ public class Setup extends Activity
 		}
 	}
 
-    // ----------------- Vehicle registation -----------------
+    // ----------------- Vehicle registration -----------------
 	
     public void registerVehicle(int vehicleID)
     {
