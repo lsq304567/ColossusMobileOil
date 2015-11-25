@@ -172,11 +172,11 @@ public class Printing
 		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 	}
 
-	private static int printStockOnboard(Printer printer, int yPostion)
+	private static int printStockOnboard(Printer printer, int yPosition)
 	{
         CrashReporter.leaveBreadcrumb("Printing: printStockOnboard");
 
-		int finalPosition = yPostion;
+		int finalPosition = yPosition;
 
 		// Print the 'Stock Onboard' title
 		finalPosition = printTitle(printer, finalPosition, "Stock Onboard");
@@ -290,16 +290,7 @@ public class Printing
 
 	private static String getCustomerDetails(dbTripOrder order)
 	{
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("#");
-		builder.append(order.DeliveryOrder);
-		builder.append(" - ");
-		builder.append(order.InvoiceNo);
-		builder.append("  ");
-		builder.append(order.DeliveryName);
-
-		return builder.toString();
+		return "#" + order.DeliveryOrder + " - " + order.InvoiceNo + "  " + order.DeliveryName;
 	}
 
 	private static int printAllUndeliveredOrders(Printer printer, int yPosition, List<dbTripOrder> orders)
@@ -331,7 +322,7 @@ public class Printing
             {
                 CrashReporter.leaveBreadcrumb("Printing: printAllUndeliveredOrders - Printing required by details ...");
 
-                // Add small spacer befor "Required by" line
+                // Add small spacer before "Required by" line
                 finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
                 // Now output the Required by details
@@ -356,6 +347,7 @@ public class Printing
 		return finalPosition;
 	}
 
+	@SuppressWarnings("SuspiciousNameCombination")
 	private static int printFooter(Printer printer, int yPosition)
 	{
         CrashReporter.leaveBreadcrumb("Printing: printFooter");
@@ -460,9 +452,6 @@ public class Printing
 
 		finalPosition = printer.addTextLeft(Size.Large, 550, finalPosition, 250, "On board");
 
-		// Get the product that is in the hosereel - if any
-		dbProduct lineProduct = Active.vehicle.getHosereelProduct();
-
 		List<dbVehicleStock> stockList;
 
 		if (vehicle.StockByCompartment)
@@ -518,12 +507,12 @@ public class Printing
 		{
             CrashReporter.leaveBreadcrumb("Printing: printStockTransactions - Printing " + stockTransactions.size() + " transactions ...");
 
-			DateFormat formateDate = new SimpleDateFormat("dd-MMM-yyyy");
+			DateFormat formatDate = new SimpleDateFormat("dd-MMM-yyyy");
 			DateFormat formatTime = new SimpleDateFormat("HH:mm");
 
 			long date = new Date().getTime();
 
-			String lastDate = formateDate.format(date);
+			String lastDate = formatDate.format(date);
 
 			String lastGroupBy = "";
 			String lastInvoiceNo = "";
@@ -553,9 +542,9 @@ public class Printing
 				}
 
                 // Output the date if it is different from that stored in last date
-				if (!formateDate.format(stockTransaction.Date).equals(lastDate))
+				if (!formatDate.format(stockTransaction.Date).equals(lastDate))
 				{
-					lastDate = formateDate.format(stockTransaction.Date);
+					lastDate = formatDate.format(stockTransaction.Date);
 
 					// Print date, if it has changed.
 					finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, lastDate);
@@ -672,6 +661,7 @@ public class Printing
 		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 	}
 
+	@SuppressWarnings("SuspiciousNameCombination")
 	private static int printCashReport(Printer printer, int yPosition)
 	{
         CrashReporter.leaveBreadcrumb("Printing: printCashReport");
@@ -891,7 +881,6 @@ public class Printing
 		DateFormat df1 = new SimpleDateFormat("dd-MMM-yyyy");
 
         DecimalFormat format2dp = new DecimalFormat("#,##0.00");
-        DecimalFormat format4dp = new DecimalFormat("#,##0.0000");
 
 		int finalPosition = 0;
 
@@ -1181,7 +1170,8 @@ public class Printing
         return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
     }
 
-    private static int printTerms(Printer printer, int yPosition, String terms)
+    @SuppressWarnings("UnusedReturnValue")
+	private static int printTerms(Printer printer, int yPosition, String terms)
     {
         CrashReporter.leaveBreadcrumb("Printing: printTerms");
 
@@ -1200,6 +1190,7 @@ public class Printing
 
 		int finalPosition = yPosition;
 
+		//noinspection SuspiciousNameCombination
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.XLarge);
 		finalPosition = printer.addTextCentre(Size.Normal, 0, finalPosition, 800, "Marked Gas oil and Kerosene");
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
@@ -1216,11 +1207,11 @@ public class Printing
 
 		if (amount != 0)
 		{
-			DecimalFormat decf2 = new DecimalFormat("#,##0.00");
+			DecimalFormat formatMoney = new DecimalFormat("#,##0.00");
 
 			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
 			printer.addTextRight(Size.Large, 300, finalPosition, 250, title);
-			finalPosition = printer.addTextRight(Size.Large, 590, finalPosition, 170, decf2.format(amount));
+			finalPosition = printer.addTextRight(Size.Large, 590, finalPosition, 170, formatMoney.format(amount));
 		}
 
 		return finalPosition;
@@ -1464,15 +1455,15 @@ public class Printing
 		json.put("DateTime", "/Date(" + now + ")/");
 		json.put("Image", base64Content);
 
-        if (labelType == "TransportLabel")
+        if (labelType.equals("TransportLabel"))
         {
             json.put("TripID", Active.trip.ColossusID);
         }
-        else if (labelType == "TripLabel")
+        else if (labelType.equals("TripLabel"))
         {
             json.put("TripID", Active.trip.ColossusID);
         }
-        else if (labelType == "TicketLabel")
+        else if (labelType.equals("TicketLabel"))
         {
             json.put("TripID", Active.trip.ColossusID);
             json.put("OrderID", Active.order.ColossusID);
