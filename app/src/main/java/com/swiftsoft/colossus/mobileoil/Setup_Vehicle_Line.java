@@ -1,7 +1,5 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import java.util.List;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -17,10 +15,11 @@ import com.swiftsoft.colossus.mobileoil.utilities.ControlSaver;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 
+import java.util.List;
+
 public class Setup_Vehicle_Line extends MyFlipperView
 {
 	private Setup setup;
-	private LayoutInflater inflater;
 
 	private MyInfoView1Line infoview; 
 	private TextView tvLineProduct;
@@ -70,7 +69,7 @@ public class Setup_Vehicle_Line extends MyFlipperView
 			setup = (Setup)context;
 	
 			// Inflate layout.
-			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.setup_vehicle_line, this, true);
 		
 			infoview = (MyInfoView1Line)this.findViewById(R.id.setup_vehicle_line_infoview);
@@ -132,7 +131,7 @@ public class Setup_Vehicle_Line extends MyFlipperView
 		}
 	}
 	
-	OnClickListener onChange = new OnClickListener()
+	private final OnClickListener onChange = new OnClickListener()
 	{		
 		@Override
 		public void onClick(View paramView)
@@ -181,7 +180,7 @@ public class Setup_Vehicle_Line extends MyFlipperView
 		}
 	};
 
-	OnClickListener onNext = new OnClickListener()
+	private final OnClickListener onNext = new OnClickListener()
 	{		
 		@Override
 		public void onClick(View paramView)
@@ -192,7 +191,7 @@ public class Setup_Vehicle_Line extends MyFlipperView
 				CrashReporter.leaveBreadcrumb("Setup_Vehicle_Line: onNext");
 
 				dbSetting setting = dbSetting.FindByKey("VehicleRegistered");
-		    	if (setting != null)
+				if (setting != null)
 		    	{
 		    		dbVehicle vehicle = dbVehicle.FindByNo(setting.IntValue);
 		    		if (vehicle != null)
