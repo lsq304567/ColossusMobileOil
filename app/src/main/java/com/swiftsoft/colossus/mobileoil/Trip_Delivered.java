@@ -1,20 +1,18 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrder;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 import android.widget.ViewFlipper;
 
+import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrder;
+
 public class Trip_Delivered extends Dialog
 {
-	private Trip trip;
-	private Trip_Delivered_List tripDeliveredList;
 	private Trip_Delivered_Order tripDeliveredOrder;
 	
-	private ViewFlipper vf;
+	private ViewFlipper viewFlipper;
 	
 	public Trip_Delivered(Context context)
 	{
@@ -30,20 +28,20 @@ public class Trip_Delivered extends Dialog
 			setContentView(R.layout.trip_delivered);
 			
 			// Store reference to Trip activity.
-			trip = (Trip)context;
+			Trip trip = (Trip) context;
 			
 			// Create views
-			tripDeliveredList = new Trip_Delivered_List(trip, this);
+			Trip_Delivered_List tripDeliveredList = new Trip_Delivered_List(trip, this);
 			tripDeliveredOrder = new Trip_Delivered_Order(trip, this);
 			
 			// Add views to flipper.
-			vf = (ViewFlipper)findViewById(R.id.trip_delivered_flipper);
-			vf.addView(tripDeliveredList);
-			vf.addView(tripDeliveredOrder);
+			viewFlipper = (ViewFlipper)findViewById(R.id.trip_delivered_flipper);
+			viewFlipper.addView(tripDeliveredList);
+			viewFlipper.addView(tripDeliveredOrder);
 			
 			// Select list view.
 			tripDeliveredList.updateUI();
-			vf.setDisplayedChild(0);
+			viewFlipper.setDisplayedChild(0);
 			
 			// Set dialog width & height to 'Fill parent'.
 	        getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
@@ -62,10 +60,10 @@ public class Trip_Delivered extends Dialog
 			CrashReporter.leaveBreadcrumb("Trip_Delivered: showList");
 			
 	    	// Setup animation.
-	   		vf.setInAnimation(AnimationHelper.inFromLeftAnimation());
-	   		vf.setOutAnimation(AnimationHelper.outToRightAnimation());
+	   		viewFlipper.setInAnimation(AnimationHelper.inFromLeftAnimation());
+	   		viewFlipper.setOutAnimation(AnimationHelper.outToRightAnimation());
 	   		
-			vf.setDisplayedChild(0);
+			viewFlipper.setDisplayedChild(0);
 		}
 		catch (Exception e)
 		{
@@ -81,13 +79,13 @@ public class Trip_Delivered extends Dialog
 			CrashReporter.leaveBreadcrumb("Trip_Delivered: showOrder");
 			
 	    	// Setup animation.
-			vf.setInAnimation(AnimationHelper.inFromRightAnimation());
-			vf.setOutAnimation(AnimationHelper.outToLeftAnimation());
+			viewFlipper.setInAnimation(AnimationHelper.inFromRightAnimation());
+			viewFlipper.setOutAnimation(AnimationHelper.outToLeftAnimation());
 	    	
 	    	// Change view.
 			tripDeliveredOrder.setOrder(order);
 			tripDeliveredOrder.updateUI();
-			vf.setDisplayedChild(1);
+			viewFlipper.setDisplayedChild(1);
 		}
 		catch (Exception e)
 		{
