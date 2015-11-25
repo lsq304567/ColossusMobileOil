@@ -12,12 +12,8 @@ import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 public class Trip_Report extends MyFlipperView
 {
 	private Trip trip;
-	private LayoutInflater inflater;
-	
+
 	private MyInfoView1Line infoview;
-	private Button btnPrint;
-	private Button btnChange;
-	private Button btnBack;
 	private Button btnFinish;
 	
 	public Trip_Report(Context context)
@@ -43,13 +39,13 @@ public class Trip_Report extends MyFlipperView
 			trip = (Trip)context;
 	
 			// Inflate layout.
-			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.trip_report, this, true);
 
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_report_infoview);
-			btnPrint = (Button)this.findViewById(R.id.trip_report_print);
-			btnChange = (Button)this.findViewById(R.id.trip_report_change);
-			btnBack = (Button)this.findViewById(R.id.trip_report_back);
+			Button btnPrint = (Button) this.findViewById(R.id.trip_report_print);
+			Button btnChange = (Button) this.findViewById(R.id.trip_report_change);
+			Button btnBack = (Button) this.findViewById(R.id.trip_report_back);
 			btnFinish = (Button)this.findViewById(R.id.trip_report_finish);
 			
 			btnPrint.setOnClickListener(onPrint);
@@ -112,7 +108,7 @@ public class Trip_Report extends MyFlipperView
 		}
 	}
 
-	OnClickListener onPrint = new OnClickListener()
+	private final OnClickListener onPrint = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -135,7 +131,7 @@ public class Trip_Report extends MyFlipperView
 		}
 	};
 
-	OnClickListener onChange = new OnClickListener()
+	private final OnClickListener onChange = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -155,7 +151,7 @@ public class Trip_Report extends MyFlipperView
 		}
 	};
 
-	OnClickListener onBack = new OnClickListener()
+	private final OnClickListener onBack = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -175,7 +171,7 @@ public class Trip_Report extends MyFlipperView
 		}
 	};
 
-	OnClickListener onFinish = new OnClickListener()
+	private final OnClickListener onFinish = new OnClickListener()
 	{		
 		@Override
 		public void onClick(View paramView)
