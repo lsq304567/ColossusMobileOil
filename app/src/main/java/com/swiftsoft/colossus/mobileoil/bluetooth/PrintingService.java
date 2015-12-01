@@ -21,11 +21,17 @@ public class PrintingService
 	private final Context context;
 	private final String title;
 
+	@SuppressWarnings("FieldCanBeLocal")
 	private final String msgUnavailable   = "Bluetooth is not available.";
+	@SuppressWarnings("FieldCanBeLocal")
 	private final String msgNoPrinter     = "No printer selected.\nSelect 'Change printer' first.";
+	@SuppressWarnings("FieldCanBeLocal")
 	private final String msgNotResponding = "Printer not responding.\nPlease ensure it is switched on.";
+	@SuppressWarnings("FieldCanBeLocal")
 	private final String msgCheckStatus   = "Checking printer";
+	@SuppressWarnings("FieldCanBeLocal")
 	private final String msgHealthBad     = "Printer is not ready.\nPlease check it has paper.";
+	@SuppressWarnings("FieldCanBeLocal")
 	private final String msgSendData      = "Sending data to printer";
 
 	private ProgressDialog pd;
@@ -44,7 +50,7 @@ public class PrintingService
 		internalPrint(data, 0);
 	}
 	
-	void internalPrint(String data, int brandID)
+	private void internalPrint(String data, int brandID)
 	{
 		try
 		{
@@ -193,7 +199,7 @@ public class PrintingService
 				
 				if (!printerOK)
 				{
-					// Return comms timeout error.
+					// Return communications timeout error.
 					result.message = msgNotResponding;
 					return result;
 				}
