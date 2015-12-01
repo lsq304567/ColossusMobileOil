@@ -100,19 +100,20 @@ public class Printing
 
 		int finalPosition = yPosition;
 
+        CrashReporter.leaveBreadcrumb("Printing: printDateAndTripNumber - Printing date & trip no. headers");
+
 		// Print the Date & Trip No. headers
 		printer.addTextLeft(Size.Large, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Date Printed:");
 		finalPosition = printer.addTextLeft(Size.Large, RIGHT_COLUMN_X, finalPosition, RIGHT_COLUMN_WIDTH, "Trip No:");
 
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
-        // Get the current date/time
-		long date = Utils.getCurrentTime();
-
         DateFormat formatDate = new SimpleDateFormat("dd-MMM-yyyy");
 
+        CrashReporter.leaveBreadcrumb("Printing: printDateAndTripNumber - Printing date & trip no. details");
+
         // Print the actual date & trip number values
-		printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, formatDate.format(date));
+		printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, formatDate.format(Utils.getCurrentTime()));
 		finalPosition = printer.addTextLeft(Size.Normal, RIGHT_COLUMN_X, finalPosition, RIGHT_COLUMN_WIDTH, Integer.toString(Active.trip.No));
 
 		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
@@ -124,16 +125,21 @@ public class Printing
 
 		int finalPosition = yPosition;
 
+		CrashReporter.leaveBreadcrumb("Printing: printVehicleAndDriver - Printing vehicle & driver headers");
+
 		// Print the Vehicle & Driver headers
 		printer.addTextLeft(Size.Large, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Vehicle:");
 		finalPosition = printer.addTextLeft(Size.Large, RIGHT_COLUMN_X, finalPosition, RIGHT_COLUMN_WIDTH, "Driver:");
 
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
+		CrashReporter.leaveBreadcrumb("Printing: printVehicleAndDriver - Fetching vehicle & driver details");
+
 		// Get the Vehicle & Driver details
 		dbVehicle vehicle = dbVehicle.FindByNo(Active.trip.Vehicle.No);
 		dbDriver driver = dbDriver.FindByNo(Active.trip.Driver.No);
 
+		CrashReporter.leaveBreadcrumb("Printing: printVehicleAndDriver - Printing vehicle & driver details");
 		// Print the Vehicle & Driver details
 		printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, String.format("%d - %s", vehicle.No, vehicle.Reg));
 		finalPosition = printer.addTextLeft(Size.Normal, RIGHT_COLUMN_X, finalPosition, RIGHT_COLUMN_WIDTH, String.format("%d - %s", driver.No, driver.Name));
@@ -152,13 +158,17 @@ public class Printing
 
 		int finalPosition = yPosition;
 
-		// Print the Consignor & Consignee headers
+        CrashReporter.leaveBreadcrumb("Printing: printConsignorConsignee - Printing consignor/consignee headers");
+
+        // Print the Consignor & Consignee headers
 		printer.addTextLeft(Size.Large, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Consignor:");
 		finalPosition = printer.addTextLeft(Size.Large, RIGHT_COLUMN_X, finalPosition, RIGHT_COLUMN_WIDTH, "Consignee:");
 
 		int titlePosition = finalPosition + 10;
 
-		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        CrashReporter.leaveBreadcrumb("Printing: printConsignorConsignee - Printing consignor/consignee details");
+
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 		finalPosition = printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, consignorName.StringValue);
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 		finalPosition = printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, consignorAdd1.StringValue);
@@ -181,17 +191,27 @@ public class Printing
 		// Print the 'Stock Onboard' title
 		finalPosition = printTitle(printer, finalPosition, "Stock Onboard");
 
+        CrashReporter.leaveBreadcrumb("Printing: printStockOnboard - Printing product header");
+
 		printer.addTextLeft(Size.Large, 80, finalPosition, 220, "Product");
+
+        CrashReporter.leaveBreadcrumb("Printing: printStockOnboard - Fetching vehicle details from DB");
 
 		// Get the Vehicle details
 		dbVehicle vehicle = dbVehicle.FindByNo(Active.trip.Vehicle.No);
 
 		if (vehicle.StockByCompartment)
 		{
+            CrashReporter.leaveBreadcrumb("Printing: printStockOnboard - Printing Comp. header");
+
 			printer.addTextLeft(Size.Large, 300, finalPosition, 250, "Comp.");
 		}
 
+        CrashReporter.leaveBreadcrumb("Printing: printStockOnboard - Printing On board header");
+
 		finalPosition = printer.addTextLeft(Size.Large, 550, finalPosition, 250, "On board");
+
+        CrashReporter.leaveBreadcrumb("Printing: printStockOnboard - Fetching hosereel product");
 
 		// Get the product that is in the hosereel - if any
 		dbProduct lineProduct = Active.vehicle.getHosereelProduct();
@@ -200,14 +220,20 @@ public class Printing
 
 		if (vehicle.StockByCompartment)
 		{
-			stockList = dbVehicleStock.GetStockByCompartment(vehicle);
+            CrashReporter.leaveBreadcrumb("Printing: printStockOnboard - Fetching stock by compartment");
+
+            stockList = dbVehicleStock.GetStockByCompartment(vehicle);
 		}
 		else
 		{
-			stockList = dbVehicleStock.GetStockByProduct(vehicle);
+            CrashReporter.leaveBreadcrumb("Printing: printStockOnboard - Fetching stock by product");
+
+            stockList = dbVehicleStock.GetStockByProduct(vehicle);
 
 			if (lineProduct != null)
 			{
+                CrashReporter.leaveBreadcrumb("Printing: printStockOnboard - Subtracting line stock from current stock");
+
 				// Subtract line stock.
 				for (dbVehicleStock vehicleStock : stockList)
 				{
@@ -272,10 +298,14 @@ public class Printing
 		// take appropriate action.
 		if (orders.size() == 0)
 		{
+            CrashReporter.leaveBreadcrumb("Printing: printUndeliveredOrders - There are no undelivered orders");
+
 			finalPosition = printTitle(printer, finalPosition, "No undelivered orders");
 		}
 		else
 		{
+            CrashReporter.leaveBreadcrumb("Printing: printUndeliveredOrders - Printing 'Undelivered orders' header");
+
 			// Print Undelivered Orders header
 			finalPosition = printTitle(printer, finalPosition, "Undelivered orders");
 
@@ -290,7 +320,7 @@ public class Printing
 
 	private static String getCustomerDetails(dbTripOrder order)
 	{
-		return "#" + order.DeliveryOrder + " - " + order.InvoiceNo + "  " + order.DeliveryName;
+        return String.format("#%d - %s  %s", order.DeliveryOrder, order.InvoiceNo, order.DeliveryName);
 	}
 
 	private static int printAllUndeliveredOrders(Printer printer, int yPosition, List<dbTripOrder> orders)
@@ -302,9 +332,13 @@ public class Printing
 		// Process the output of each undelivered order
 		for (dbTripOrder order : orders)
 		{
-			// Print theCustomer Details
+            CrashReporter.leaveBreadcrumb("Printing: printAllUndeliveredOrders - Printing Customer details");
+
+			// Print the Customer Details
 			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
 			finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, getCustomerDetails(order));
+
+            CrashReporter.leaveBreadcrumb("Printing: printAllUndeliveredOrders - Printing delivery address");
 
             // Print the delivery address
 			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
@@ -313,6 +347,8 @@ public class Printing
 			// Print description of each of the undelivered products
 			for (String productOrdered : order.getProductsOrdered("\n").split("\n"))
 			{
+                CrashReporter.leaveBreadcrumb("Printing: printAllUndeliveredOrders - Printing description of the undelivered products");
+
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 				finalPosition = printer.addTextLeft(Size.Normal, SINGLE_COLUMN_X, finalPosition, SINGLE_COLUMN_WIDTH, productOrdered);
 			}
