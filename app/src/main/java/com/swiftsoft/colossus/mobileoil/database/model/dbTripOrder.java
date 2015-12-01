@@ -171,9 +171,9 @@ public class dbTripOrder extends Model
 
 	public class VatRow
 	{
-		public double vatPerc;
+		public double vatPercentage;
 		public double nettValue;
-	};
+	}
 
 	// Find all order lines.
 	public List<dbTripOrderLine> GetTripOrderLines() 
@@ -186,10 +186,14 @@ public class dbTripOrder extends Model
 		String terms = this.Terms;
 		
 		if (CodPoint == 1)
+		{
 			terms += ", after delivery";
+		}
 		
 		if (CodPoint == 2)
+		{
 			terms += ", before delivery";
+		}
 		
 		return terms;
 	}
@@ -205,13 +209,19 @@ public class dbTripOrder extends Model
 		if (CodPoint == 2)
 		{
 			if (CodType == 1)
+			{
 				cod = getOrderedNettValue() + getOrderedVatValue();
+			}
 			
 			if (CodType == 2)
+			{
 				cod = getOrderedNettValue() + getOrderedVatValue() + CodAmount;
+			}
 			
 			if (CodType == 3)
+			{
 				cod = CodAmount;
+			}
 		}	
 
 		return cod;
@@ -228,13 +238,19 @@ public class dbTripOrder extends Model
 		if (CodPoint != 0)
 		{
 			if (CodType == 1)
-				cod = getDeliveredNettValue() + getDeliveredVatValue();
+            {
+                cod = getDeliveredNettValue() + getDeliveredVatValue();
+            }
 			
 			if (CodType == 2)
-				cod = getDeliveredNettValue() + getDeliveredVatValue() + CodAmount;
+            {
+                cod = getDeliveredNettValue() + getDeliveredVatValue() + CodAmount;
+            }
 			
 			if (CodType == 3)
-				cod = CodAmount;
+            {
+                cod = CodAmount;
+            }
 		}	
 
 		return cod;
@@ -248,7 +264,9 @@ public class dbTripOrder extends Model
 	public double getCodAccBalance()
 	{
 		if (CodPoint != 0 && CodType == 2)
-			return CodAmount;
+        {
+            return CodAmount;
+        }
 		
 		return 0;
 	}
@@ -259,14 +277,19 @@ public class dbTripOrder extends Model
 	public int getUndeliveredCount()
 	{
 		int counter = 0;
-		for (dbTripOrderLine line : this.GetTripOrderLines())
+
+        for (dbTripOrderLine line : this.GetTripOrderLines())
 		{
 			// Don't count non-deliverable products e.g. credit card fees.
 			if (line.Product.MobileOil == 3)
-				continue;
+            {
+                continue;
+            }
 			
 			if (line.DeliveryDate == 0)
-				counter++;
+            {
+                counter++;
+            }
 		}
 				
 		return counter;
@@ -276,11 +299,14 @@ public class dbTripOrder extends Model
 	// Ordered values.
 	//
 	
-	public double getOrderedNettValue()
+	private double getOrderedNettValue()
 	{
 		double value = 0;
-		for (dbTripOrderLine line : this.GetTripOrderLines())
-			value += line.getOrderedNettValue();
+
+        for (dbTripOrderLine line : this.GetTripOrderLines())
+        {
+            value += line.getOrderedNettValue();
+        }
 		
 		return value;
 	}
@@ -288,31 +314,37 @@ public class dbTripOrder extends Model
 	public double getOrderedSurchargeValue()
 	{
 		double value = 0;
-		for (dbTripOrderLine line : this.GetTripOrderLines())
-			value += line.getOrderedSurchargeValue();
+
+        for (dbTripOrderLine line : this.GetTripOrderLines())
+        {
+            value += line.getOrderedSurchargeValue();
+        }
 		
 		return value;
 	}
 	
-	public double getOrderedVatValue()
+	private double getOrderedVatValue()
 	{
 		List<VatRow> vatRows = new ArrayList<VatRow>();
 		
-		// Summarise all lines by VatPerc.
+		// Summarise all lines by VatPercentage.
 		for (dbTripOrderLine line : this.GetTripOrderLines())
 		{
 			AddToVatTable(vatRows, line.getOrderedVatPerc(), line.getOrderedNettValue());
 			
 			if (line.getOrderedSurchargeValue() != 0)
-				AddToVatTable(vatRows, 0, line.getOrderedSurchargeValue());
+            {
+                AddToVatTable(vatRows, 0, line.getOrderedSurchargeValue());
+            }
 		}
 
 		// Calculate VAT value.
 		double vatValue = 0;
-		for (int i = 0; i < vatRows.size(); i++)
+
+        for (int i = 0; i < vatRows.size(); i++)
 		{
 			VatRow vatRow = vatRows.get(i);
-			double vat = vatRow.nettValue * vatRow.vatPerc / 100.0;
+			double vat = vatRow.nettValue * vatRow.vatPercentage / 100.0;
 			vatValue += Utils.RoundNearest(vat, 2);
 		}		
 		
@@ -326,8 +358,12 @@ public class dbTripOrder extends Model
 	public boolean getDeliveredQtyVariesFromOrdered()
 	{
 		for (dbTripOrderLine line : this.GetTripOrderLines())
-			if (line.getDeliveredQtyVariesFromOrdered())
-				return true;
+        {
+            if (line.getDeliveredQtyVariesFromOrdered())
+            {
+                return true;
+            }
+        }
 		
 		return false;
 	}
@@ -358,13 +394,13 @@ public class dbTripOrder extends Model
 
     private static void addRow(Hashtable<Double, VatRow> table, VatRow row)
     {
-        if (!table.containsKey(row.vatPerc))
+        if (!table.containsKey(row.vatPercentage))
         {
-            table.put(row.vatPerc, row);
+            table.put(row.vatPercentage, row);
         }
         else
         {
-            VatRow foundRow = table.get(row.vatPerc);
+            VatRow foundRow = table.get(row.vatPercentage);
 
             foundRow.nettValue += row.nettValue;
         }
@@ -379,7 +415,7 @@ public class dbTripOrder extends Model
             VatRow row = new VatRow();
 
             row.nettValue = line.getDeliveredNettValue();
-            row.vatPerc = line.getDeliveredVatPerc();
+            row.vatPercentage = line.getDeliveredVatPerc();
 
             addRow(vatRows, row);
 
@@ -388,7 +424,7 @@ public class dbTripOrder extends Model
                 row = new VatRow();
 
                 row.nettValue = line.getDeliveredSurchargeValue();
-                row.vatPerc = line.getDeliveredVatPerc();
+                row.vatPercentage = line.getDeliveredVatPerc();
 
                 addRow(vatRows, row);
             }
@@ -401,7 +437,7 @@ public class dbTripOrder extends Model
 	{
 		List<VatRow> vatRows = new ArrayList<VatRow>();
 		
-		// Summarise all lines by VatPerc.
+		// Summarise all lines by VatPercentage.
 		for (dbTripOrderLine line : this.GetTripOrderLines())
 		{
 			AddToVatTable(vatRows, line.getDeliveredVatPerc(), line.getDeliveredNettValue());
@@ -418,7 +454,7 @@ public class dbTripOrder extends Model
 		for (int i = 0; i < vatRows.size(); i++)
 		{
 			VatRow vatRow = vatRows.get(i);
-			double vat = vatRow.nettValue * vatRow.vatPerc / 100.0;
+			double vat = vatRow.nettValue * vatRow.vatPercentage / 100.0;
 			vatValue += vat;
 		}		
 		
@@ -429,14 +465,14 @@ public class dbTripOrder extends Model
 	// Common
 	//
 	
-	private void AddToVatTable(List<VatRow> vatRows, double vatPerc, double nettValue)
+	private void AddToVatTable(List<VatRow> vatRows, double vatPercentage, double nettValue)
 	{
 		VatRow vatRow = null;
 		
 		// Search for existing row.
 		for (int i = 0; i < vatRows.size(); i++)
 		{
-			if (vatRows.get(i).vatPerc == vatPerc)
+			if (vatRows.get(i).vatPercentage == vatPercentage)
 			{
 				vatRow = vatRows.get(i);
 				break;
@@ -451,7 +487,7 @@ public class dbTripOrder extends Model
 		}
 		
 		// Update row values.
-		vatRow.vatPerc = vatPerc;
+		vatRow.vatPercentage = vatPercentage;
 		vatRow.nettValue += nettValue;
 	}
 	
@@ -526,7 +562,9 @@ public class dbTripOrder extends Model
 		double prepaid = PrepaidAmount;		// Really paid office i.e. cash in advance
 		
 		if (Terms.equals("Paying by Card"))
-			prepaid += getCashTotal();
+        {
+            prepaid += getCashTotal();
+        }
 		
 		return prepaid;
 	}
@@ -560,19 +598,24 @@ public class dbTripOrder extends Model
 		List<dbTripOrderLine> lines = getMany(dbTripOrderLine.class, "TripOrder");
 		
 		StringBuilder productsOrdered = new StringBuilder();
-		for (dbTripOrderLine line : lines)
+
+        for (dbTripOrderLine line : lines)
 		{
 			if (productsOrdered.length() > 0)
-				productsOrdered.append(separator);
+            {
+                productsOrdered.append(separator);
+            }
 
 			if (line.Product == null)
-				productsOrdered.append(line.OrderedQty + " of unknown product");
+            {
+                productsOrdered.append(line.OrderedQty);
+                productsOrdered.append(" of unknown product");
+            }
 			else
 			{
-				if (line.Product.MobileOil == 1)
-					productsOrdered.append(line.OrderedQty + " litres of " + line.Product.Desc);
-				else
-					productsOrdered.append(line.OrderedQty + " of " + line.Product.Desc);
+                productsOrdered.append(line.OrderedQty);
+                productsOrdered.append(line.Product.MobileOil == 1 ? " litres of " : " of ");
+                productsOrdered.append(line.Product.Desc);
 			}
 		}
 		
@@ -590,18 +633,25 @@ public class dbTripOrder extends Model
 		List<dbTripOrderLine> lines = GetTripOrderLines();
 		
 		StringBuilder productsDelivered = new StringBuilder();
-		for (dbTripOrderLine line : lines)
+
+        for (dbTripOrderLine line : lines)
 		{
 			if (line.DeliveredQty == 0)
-				continue;
+            {
+                continue;
+            }
 			
 			if (productsDelivered.length() > 0)
-				productsDelivered.append("\n");
-			
-			if (line.Product.MobileOil == 1)
-				productsDelivered.append("Delivered " + line.DeliveredQty + " litres of " + line.Product.Desc + " @ " + df.format(line.DeliveryDate));
-			else
-				productsDelivered.append("Delivered " + line.DeliveredQty + " of " + line.Product.Desc + " @ " + df.format(line.DeliveryDate));
+            {
+                productsDelivered.append("\n");
+            }
+
+            productsDelivered.append("Delivered ");
+            productsDelivered.append(line.DeliveredQty);
+            productsDelivered.append(line.Product.MobileOil == 1 ? " litres of " : " of ");
+            productsDelivered.append(line.Product.Desc);
+            productsDelivered.append(" @ ");
+            productsDelivered.append(df.format(line.DeliveryDate));
 		}
 		
 		return productsDelivered.toString();		
@@ -632,8 +682,11 @@ public class dbTripOrder extends Model
 
 		// Round off pence as discount.
 		Discount = 0;
-		if (unpaid < 1)
-			Discount = (double) Math.round((getDeliveredSurchargeValue() + Math.max(0, unpaid)) * 100) / 100;
+
+        if (unpaid < 1)
+        {
+            Discount = (double) Math.round((getDeliveredSurchargeValue() + Math.max(0, unpaid)) * 100) / 100;
+        }
 	}
 	
 	// Order delivered.
@@ -641,13 +694,16 @@ public class dbTripOrder extends Model
 	{
 		// Record delivery number - this indicates order has been delivered.
 		if (DeliveryNo == 0)
-			DeliveryNo = Trip.GetDelivered().size() + 1;
+        {
+            DeliveryNo = Trip.GetDelivered().size() + 1;
+        }
 		
 		// Record when delivery occurred. 
 		DeliveryDate = new Date().getTime();
 
 		Delivering = false;
 		Delivered = true;
+
 		save();
 	}
 }

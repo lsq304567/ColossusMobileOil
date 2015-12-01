@@ -951,8 +951,8 @@ public class Printing
 
                 dbTripOrder.VatRow row = vatValues.get(key);
 
-                String vatTitle = "VAT @ " + format2dp.format(row.vatPerc) + " %";
-                finalPosition = printTitleAndAmount(printer, finalPosition, vatTitle, row.nettValue * row.vatPerc / 100.0);
+                String vatTitle = "VAT @ " + format2dp.format(row.vatPercentage) + " %";
+                finalPosition = printTitleAndAmount(printer, finalPosition, vatTitle, row.nettValue * row.vatPercentage / 100.0);
             }
 
             // Print account balance
