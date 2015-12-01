@@ -41,6 +41,9 @@ public class dbTripStock extends Model
 	
 	@Column(name = "Notes")
 	public String Notes;
+
+	@Column(name = "CustomerName")
+	public String CustomerName;
 	
 	// Static methods
 	public static void DeleteAll()

@@ -257,12 +257,6 @@ public class dbVehicle extends Model
 		dbVehicleStock vs = dbVehicleStock.FindOrCreateByVehicleProduct(this, product);
 		vs.CurrentStock += stockAdjustment;
 		vs.save();
-		
-//		// Should that be?
-//		if (vs.CurrentStock == 0)
-//			vs.delete();
-//		else
-//			vs.save();
 	}
 	
 	private void updateLineStock(dbProduct fromProduct, dbProduct toProduct, int litres) throws Exception
@@ -409,14 +403,16 @@ public class dbVehicle extends Model
 	// If stockbycompartment is false.
 	public void recordDelivery()
 	{
+        CrashReporter.leaveBreadcrumb("dbVehicle: recordDelivery");
+
 		// Remove product from stock.
 		updateVehicleStock(Active.orderLine.Product, 0 - Active.orderLine.DeliveredQty);
 
 		// Write stock movement transactions.
-		recordDeliveryTran();
+		recordDeliveryTransaction();
 	}
 
-	private void recordDeliveryTran()
+	private void recordDeliveryTransaction()
 	{
 		long ticketNo = 0;
 
@@ -437,6 +433,7 @@ public class dbVehicle extends Model
 		lcTripStock.Date = Utils.getCurrentTime();
 		lcTripStock.InvoiceNo = Active.order.InvoiceNo;
 		lcTripStock.CustomerCode = Active.order.CustomerCode;
+		lcTripStock.CustomerName = Active.order.CustomerName;
 		lcTripStock.TicketNo = ticketNo;
 
 		lcTripStock.Description = ticketNo == 0 ? "Delivered " + Active.orderLine.DeliveredQty + " of " + Active.orderLine.Product.Desc : "Ticket #" + Active.orderLine.ticketNo + " delivered " + Active.orderLine.DeliveredQty + " of " + Active.orderLine.Product.Desc;
@@ -486,12 +483,11 @@ public class dbVehicle extends Model
 	
 	public void recordPayments()
 	{
-		String desc = "";
 		String notes = "";
 		int noOfPaymentMethods = 0;
 		DecimalFormat decf2 = new DecimalFormat("#,##0.00");
 
-		desc = "Payment total: " + decf2.format(Active.order.getPaidDriver());
+		String desc = "Payment total: " + decf2.format(Active.order.getPaidDriver());
 
 		if (Active.order.CashReceived != 0)
 		{
@@ -526,6 +522,7 @@ public class dbVehicle extends Model
 			lcTripStock.Date = Utils.getCurrentTime();
 			lcTripStock.InvoiceNo = Active.order.InvoiceNo;
 			lcTripStock.CustomerCode = Active.order.CustomerCode;
+            lcTripStock.CustomerName = Active.order.CustomerName;
 			lcTripStock.TicketNo = 0;
 			lcTripStock.Description = desc;
 			lcTripStock.Notes = notes;

@@ -604,11 +604,19 @@ public class Printing
                         builder.append("Invoice ");
                         builder.append(stockTransaction.InvoiceNo);
 
+                        // If there is a Customer Name add it
+                        if (stockTransaction.CustomerName != null && stockTransaction.CustomerName.length() > 0)
+                        {
+                            builder.append(" ");
+                            builder.append(stockTransaction.CustomerName);
+                        }
+
                         // If there is a customer code add it
                         if (stockTransaction.CustomerCode != null && stockTransaction.CustomerCode.length() > 0)
                         {
-                            builder.append("  Customer code ");
+                            builder.append(" (");
                             builder.append(stockTransaction.CustomerCode);
+                            builder.append(")");
                         }
 
 						// Print the invoice and customer details
@@ -739,8 +747,8 @@ public class Printing
 		else
 		{
 			// Print titles.
-			printer.addTextLeft(Size.Normal, 50, finalPosition, 200, "Invoice no");
-			printer.addTextLeft(Size.Normal, 250, finalPosition, 200, "Customer");
+			printer.addTextLeft(Size.Normal, 50, finalPosition, 150, "Invoice no");
+			printer.addTextLeft(Size.Normal, 150, finalPosition, 300, "Customer");
 			printer.addTextLeft(Size.Normal, 450, finalPosition, 100, "Type");
 			finalPosition = printer.addTextRight(Size.Normal, 550, finalPosition, 150, "Amount");
 
@@ -801,10 +809,18 @@ public class Printing
 							// Add small spacer to give some space between lines
 							finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
-							printer.addTextLeft(Size.Normal, 50, finalPosition, 200, stockTransaction.InvoiceNo);
-							printer.addTextLeft(Size.Normal, 250, finalPosition, 200, stockTransaction.CustomerCode);
+                            // Print the invoice number of the payment
+							printer.addTextLeft(Size.Normal, 50, finalPosition, 150, stockTransaction.InvoiceNo);
+
+                            // Print the customer makeing the payment
+                            String customerDetail = String.format("%s (%s)", stockTransaction.CustomerName, stockTransaction.CustomerCode);
+							printer.addTextLeft(Size.Normal, 150, finalPosition, 300, customerDetail);
+
+                            // Prin the type of the payment (cash/cheque/voucher)
 							printer.addTextLeft(Size.Normal, 450, finalPosition, 100, type);
-							finalPosition = printer.addTextRight(Size.Normal, 550, finalPosition, 150, formatMoney.format(amount));
+
+                            // Print the amount of the payment
+                            finalPosition = printer.addTextRight(Size.Normal, 550, finalPosition, 150, formatMoney.format(amount));
 						}
 					}
 				}
