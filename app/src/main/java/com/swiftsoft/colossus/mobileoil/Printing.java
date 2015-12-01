@@ -986,6 +986,11 @@ public class Printing
 		// Print the customer order number
 		finalPosition = printOrderNumber(printer, finalPosition, order.OrderNumber);
 
+        // Print the Vehicle & Driver
+        finalPosition = printVehicleAndDriver(printer, finalPosition);
+
+        // Print the Vehicle Registration
+
         // Print the Order Lines
 		finalPosition = printOrderLines(printer, finalPosition, order);
 
