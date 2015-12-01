@@ -188,6 +188,9 @@ public class Trip_Undelivered_Skip extends MyFlipperView
                             {
                                 trip.orderSkipped(failureToDeliverReason, etCustomReason.getText().toString());
 
+                                // Record the non-delivery transaction
+                                Active.vehicle.recordNonDeliveryTransaction(failureToDeliverReason, etCustomReason.getText().toString());
+
                                 // Return to the View
                                 trip.selectView(Trip.ViewUndeliveredList, -1);
                             }

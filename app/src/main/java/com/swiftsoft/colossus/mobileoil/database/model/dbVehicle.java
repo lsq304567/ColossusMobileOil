@@ -441,6 +441,57 @@ public class dbVehicle extends Model
 		lcTripStock.Notes = "";
 		lcTripStock.save();
 	}
+
+    //
+    // ----- NonDelivery -----
+    //
+
+    public void recordNonDeliveryTransaction(int reasonCode, String customReason)
+    {
+        // Write Stock Transaction
+        dbTripStock tripStock = new dbTripStock();
+
+        tripStock.Trip = Active.trip;
+        tripStock.Type = "NonDelivery";
+        tripStock.Date = Utils.getCurrentTime();
+        tripStock.InvoiceNo = Active.order.InvoiceNo;
+        tripStock.CustomerCode = Active.order.CustomerCode;
+        tripStock.CustomerName = Active.order.CustomerName;
+        tripStock.Description = "Non-delivery of order";
+
+        tripStock.Notes = String.format("%d - %s", reasonCode, getReasonCodeDescription(reasonCode));
+
+        // If it is a custom reason code add the custom reason
+        if (reasonCode == 6)
+        {
+            tripStock.Notes += "\n" + customReason;
+        }
+
+        tripStock.save();
+    }
+
+    private String getReasonCodeDescription(int reasonCode)
+    {
+        switch (reasonCode)
+        {
+            case 0:
+                return "Gate locked";
+            case 1:
+                return "Car(s) blocking entrance";
+            case 2:
+                return "Tank locked";
+            case 3:
+                return "Dog in garden";
+            case 4:
+                return "Requires payment on delivery";
+            case 5:
+                return "No access";
+            case 6:
+                return "Other";
+            default:
+                return "Unknown";
+        }
+    }
 	
 	//
 	// ----- Stock -----
