@@ -148,6 +148,9 @@ public class dbTripOrder extends Model
 	@Column(name = "DriverSignatureDateTime")
 	public long DriverSignatureDateTime;
 
+	@Column(name = "UnattendedSignature")
+	public boolean UnattendedSignature;
+
 	// Static methods.
 	
 	public static void DeleteAll()

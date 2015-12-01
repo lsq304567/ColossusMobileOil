@@ -129,7 +129,7 @@ public class BitmapPrinter extends Printer
         final int widthRightColumn = 220;
 
         final int xLeftColumn = 30;
-        final int widthLeftColumn = 400;
+        final int widthLeftColumn = 450;
 
         int finalPosition  = yPosition;
 

@@ -19,6 +19,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -804,6 +805,8 @@ public class Trip extends Activity
 		final Button ok_button;
 		final Button cancel_button;
 
+		final CheckBox unattendedDelivery;
+
 		try
 		{
 			// Leave breadcrumb.
@@ -817,6 +820,7 @@ public class Trip extends Activity
 			name = (EditText)dialog.findViewById(R.id.signature_name_name);
 			ok_button = (Button)dialog.findViewById(R.id.signature_name_ok);
 			cancel_button = (Button)dialog.findViewById(R.id.signature_name_cancel);
+            unattendedDelivery = (CheckBox)dialog.findViewById(R.id.signature_name_unattended);
 	
 			// Set dialog width & height to 'Fill parent'.
 	        dialog.getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT); 
@@ -863,9 +867,9 @@ public class Trip extends Activity
 			{
 				@Override
 				public void onClick(View paramView)
-				{
+                {
 					// Capture customer signature.
-					captureSignature("Customer", name.getText().toString());
+					captureSignature("Customer", name.getText().toString(), unattendedDelivery.isChecked());
 					
 					dialog.dismiss();
 				}
@@ -894,8 +898,13 @@ public class Trip extends Activity
 			CrashReporter.logHandledException(e);
 		}
 	}
+
+    public void captureSignature(String type, String name)
+    {
+        captureSignature(type, name, false);
+    }
 	
-	public void captureSignature(String type, String name)
+	public void captureSignature(String type, String name, boolean isChecked)
 	{
 		try
 		{
@@ -907,6 +916,7 @@ public class Trip extends Activity
 
 			intent.putExtra("SignatureType", type);
 			intent.putExtra("SignatureName", name);
+            intent.putExtra("SignatureUnattended", isChecked);
 
 	    	startActivityForResult(intent, Signature.REQUEST_SIGNATURE);
 		}
@@ -933,6 +943,7 @@ public class Trip extends Activity
 					String signatureType = data.getExtras().getString("SignatureType");
 					String signatureName = data.getExtras().getString("SignatureName");
 					byte[] signatureImage = data.getExtras().getByteArray("SignatureImage");
+                    boolean unattendedDelivery = data.getExtras().getBoolean("SignatureUnattended");
 	
 					// Store customer signature.
 					if (signatureType.equals("Customer"))
@@ -943,6 +954,7 @@ public class Trip extends Activity
 						Active.order.CustomerSignatureName = signatureName;
 						Active.order.CustomerSignatureImage = signatureImage;
 						Active.order.CustomerSignatureDateTime = Utils.getCurrentTime();
+                        Active.order.UnattendedSignature = unattendedDelivery;
 						Active.order.save();
 						
 						// Update UI with signature.
@@ -958,6 +970,7 @@ public class Trip extends Activity
 						Active.order.DriverSignatureName = signatureName;
 						Active.order.DriverSignatureImage = signatureImage;
 						Active.order.DriverSignatureDateTime = Utils.getCurrentTime();
+                        Active.order.UnattendedSignature = unattendedDelivery;
 						Active.order.save();
 						
 						// Try finishing the order again.

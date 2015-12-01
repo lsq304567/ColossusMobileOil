@@ -16,6 +16,7 @@ public class Signature extends Activity
 	private MySignature signature;
 	private String signatureType;
 	private String signatureName;
+	private boolean unattendedDelivery;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -40,12 +41,20 @@ public class Signature extends Activity
 
 			signatureType = intent.getExtras().getString("SignatureType");
 			signatureName = intent.getExtras().getString("SignatureName");
+			unattendedDelivery = intent.getExtras().getBoolean("SignatureUnattended");
 			
 			if (signatureType.equals("Customer"))
 			{
 				CrashReporter.leaveBreadcrumb("Signature: onCreate - Customer to sign");
 
-				signatureTitle.setText(R.string.signature_title_customer);
+                if (unattendedDelivery)
+                {
+                    signatureTitle.setText(R.string.signature_title_unattended_delivery);
+                }
+                else
+                {
+                    signatureTitle.setText(R.string.signature_title_customer);
+                }
 			}
 			else if (signatureType.equals("Driver"))
 			{
@@ -112,6 +121,7 @@ public class Signature extends Activity
 			data.putExtra("SignatureType", signatureType);
 			data.putExtra("SignatureName", signatureName);
 			data.putExtra("SignatureImage", signature.toByteArray());
+            data.putExtra("SignatureUnattended", unattendedDelivery);
 
 			setResult(RESULT_OK, data);
 

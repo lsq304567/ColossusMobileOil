@@ -15,5 +15,6 @@
 
     <!-- Strings for Signature Activity -->
     <string name="signature.title_customer">CUSTOMER - sign to acknowledge goods received</string>
+    <string name="signature.title_unattended_delivery">DRIVER - sign for unattended delivery</string>
     <string name="signature.title_driver">DRIVER - sign to acknowledge receipt of payment</string>
 </resources>

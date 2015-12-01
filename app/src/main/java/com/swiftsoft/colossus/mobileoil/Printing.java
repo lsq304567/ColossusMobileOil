@@ -812,7 +812,7 @@ public class Printing
                             // Print the invoice number of the payment
 							printer.addTextLeft(Size.Normal, 50, finalPosition, 150, stockTransaction.InvoiceNo);
 
-                            // Print the customer makeing the payment
+                            // Print the customer making the payment
                             String customerDetail = String.format("%s (%s)", stockTransaction.CustomerName, stockTransaction.CustomerCode);
 							printer.addTextLeft(Size.Normal, 150, finalPosition, 300, customerDetail);
 
@@ -1060,8 +1060,16 @@ public class Printing
 		// Print the customer signature
 		if (order.CustomerSignature)
 		{
-			// Add the signature
-			finalPosition = printer.addSignature("Customer signature", order.CustomerSignatureName, finalPosition, order.CustomerSignatureImage, order.CustomerSignatureDateTime);
+            if (order.UnattendedSignature)
+            {
+                // Add the signature
+                finalPosition = printer.addSignature("Unattended delivery signature", order.CustomerSignatureName, finalPosition, order.CustomerSignatureImage, order.CustomerSignatureDateTime);
+            }
+            else
+            {
+                // Add the signature
+                finalPosition = printer.addSignature("Customer signature", order.CustomerSignatureName, finalPosition, order.CustomerSignatureImage, order.CustomerSignatureDateTime);
+            }
 		}
 
 		// Print the driver signature
