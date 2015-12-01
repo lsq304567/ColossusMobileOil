@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.activeandroid.ActiveAndroid;
 import com.swiftsoft.colossus.mobileoil.Active;
 import com.swiftsoft.colossus.mobileoil.CrashReporter;
+import com.swiftsoft.colossus.mobileoil.Utils;
 import com.swiftsoft.colossus.mobileoil.database.model.dbDriver;
 import com.swiftsoft.colossus.mobileoil.database.model.dbMessageIn;
 import com.swiftsoft.colossus.mobileoil.database.model.dbMessageOut;
@@ -26,7 +27,6 @@ import com.swiftsoft.colossus.mobileoil.rest.RestClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -114,7 +114,7 @@ public class ColossusIntentService extends IntentService
 				dbMessageOut messageOut = new dbMessageOut();
 
 				messageOut.DeviceNo = DeviceNo;
-				messageOut.DateTime = new Date().getTime();
+				messageOut.DateTime = Utils.getCurrentTime();
 				messageOut.Type = Type;
 				messageOut.Content = Content;
 				messageOut.Guid = UUID.randomUUID().toString();

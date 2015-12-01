@@ -1,12 +1,5 @@
 package com.swiftsoft.colossus.mobileoil.database.model;
 
-import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.graphics.Color;
 
 import com.activeandroid.Model;
@@ -16,7 +9,14 @@ import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.swiftsoft.colossus.mobileoil.Active;
 import com.swiftsoft.colossus.mobileoil.CrashReporter;
+import com.swiftsoft.colossus.mobileoil.Utils;
 import com.swiftsoft.colossus.mobileoil.bluetooth.MeterMate;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.text.DecimalFormat;
+import java.util.List;
 
 @Table(name = "Vehicle")
 public class dbVehicle extends Model
@@ -313,100 +313,14 @@ public class dbVehicle extends Model
 		dbTripStock lcTripStock = new dbTripStock();
 		lcTripStock.Trip = Active.trip;
 		lcTripStock.Type = "Load";
-		lcTripStock.Date = new Date().getTime();
+		lcTripStock.Date = Utils.getCurrentTime();
 		lcTripStock.InvoiceNo = "";
 		lcTripStock.CustomerCode = "";
 		lcTripStock.TicketNo = 0;	// Unmetered by truck.
 		lcTripStock.Description = "Loaded " + litres + " of " + product.Desc;
 		lcTripStock.Notes = "";
 		lcTripStock.save();
-
-//		// Write stock compartment transaction.
-//		dbTripStockComp lcTripStockComp1 = new dbTripStockComp();
-//		lcTripStockComp1.TripStock = lcTripStock;
-//		lcTripStockComp1.Compartment = 0;
-//		lcTripStockComp1.Product = product;
-//		lcTripStockComp1.Qty = litres;
-//		lcTripStockComp1.save();
 	}
-
-//	// If stockbycompartment is true.
-//	public void recordLoad(int compartmentIdx, dbProduct product, int litres)
-//	{
-//		int compartment = getCompartmentNo(compartmentIdx); 
-//		
-//		// Add product to compartment.
-//		updateCompartmentOnboard(compartmentIdx, litres);
-//		updateCompartmentProduct(compartmentIdx, product);
-//		validateCompartment(compartmentIdx);
-//		
-//		// Write stock transaction.
-//		dbTripStock lcTripStock = new dbTripStock();
-//		lcTripStock.Trip = Active.trip;
-//		lcTripStock.Type = "Load";
-//		lcTripStock.Date = new Date().getTime();
-//		lcTripStock.InvoiceNo = "";
-//		lcTripStock.TicketNo = 0;	// Unmetered by truck.
-//		lcTripStock.Description = "Loaded " + litres + " of " + product.Desc + " into #" + compartment;
-//		lcTripStock.Notes = "";
-//		lcTripStock.save();
-//
-//		// Write stock compartment transaction.
-//		dbTripStockComp lcTripStockComp1 = new dbTripStockComp();
-//		lcTripStockComp1.TripStock = lcTripStock;
-//		lcTripStockComp1.Compartment = compartment;
-//		lcTripStockComp1.Product = product;
-//		lcTripStockComp1.Qty = litres;
-//		lcTripStockComp1.save();
-//	}
-
-//	// If stockbycompartment is true.
-//	public void recordMove(int sourceCompIdx, int returnCompIdx, int litres, long ticketNo)
-//	{
-//		dbProduct lineProduct = getHosereelProduct();
-//		dbProduct sourceProduct = getCompartmentProduct(sourceCompIdx);
-//		dbProduct returnProduct = getCompartmentProduct(returnCompIdx);
-//		int sourceComp = getCompartmentNo(sourceCompIdx); 
-//		int returnComp = getCompartmentNo(returnCompIdx); 
-//
-//		// First remove product from source compartment.
-//		updateCompartmentOnboard(sourceCompIdx, 0 - litres);
-//		validateCompartment(sourceCompIdx);
-//
-//		// Second add product to return compartment.
-//		if (getCompartmentOnboard(returnCompIdx) == 0)
-//			updateCompartmentProduct(returnCompIdx, lineProduct);
-//		
-//		updateCompartmentOnboard(returnCompIdx, litres);
-//		validateCompartment(returnCompIdx);
-//
-//		// Write stock transaction.
-//		dbTripStock lcTripStock = new dbTripStock();
-//		lcTripStock.Trip = Active.trip;
-//		lcTripStock.Type = "Move";
-//		lcTripStock.Date = new Date().getTime();
-//		lcTripStock.InvoiceNo = "";
-//		lcTripStock.TicketNo = ticketNo;
-//		lcTripStock.Description = "Moved " + litres + " of " + sourceProduct.Desc + " from #" + sourceComp + " to #" + returnComp;
-//		lcTripStock.Notes = "";
-//		lcTripStock.save();
-//
-//		// Write stock compartment transaction.
-//		dbTripStockComp lcTripStockComp1 = new dbTripStockComp();
-//		lcTripStockComp1.TripStock = lcTripStock;
-//		lcTripStockComp1.Compartment = sourceComp;
-//		lcTripStockComp1.Product = sourceProduct;
-//		lcTripStockComp1.Qty = (0 - litres);
-//		lcTripStockComp1.save();
-//		
-//		// Write stock compartment transaction.
-//		dbTripStockComp lcTripStockComp2 = new dbTripStockComp();
-//		lcTripStockComp2.TripStock = lcTripStock;
-//		lcTripStockComp2.Compartment = returnComp;
-//		lcTripStockComp2.Product = returnProduct;
-//		lcTripStockComp2.Qty = litres;
-//		lcTripStockComp2.save();
-//	}
 
 	// If stockbycompartment is false.
 	public void recordReturn(dbProduct product, int litres, boolean viaMeterMate)
@@ -425,7 +339,7 @@ public class dbVehicle extends Model
 		dbTripStock lcTripStock = new dbTripStock();
 		lcTripStock.Trip = Active.trip;
 		lcTripStock.Type = "Return";
-		lcTripStock.Date = new Date().getTime();
+		lcTripStock.Date = Utils.getCurrentTime();
 		lcTripStock.InvoiceNo = "";
 		lcTripStock.CustomerCode = "";
 		lcTripStock.TicketNo = ticketNo;
@@ -460,7 +374,7 @@ public class dbVehicle extends Model
 		dbTripStock lcTripStock = new dbTripStock();
 		lcTripStock.Trip = Active.trip;
 		lcTripStock.Type = "Line change";
-		lcTripStock.Date = new Date().getTime();
+		lcTripStock.Date = Utils.getCurrentTime();
 		lcTripStock.InvoiceNo = Active.order.InvoiceNo;
 		lcTripStock.CustomerCode = "";
 
@@ -520,7 +434,7 @@ public class dbVehicle extends Model
 		dbTripStock lcTripStock = new dbTripStock();
 		lcTripStock.Trip = Active.trip;
 		lcTripStock.Type = "Delivery";
-		lcTripStock.Date = new Date().getTime();
+		lcTripStock.Date = Utils.getCurrentTime();
 		lcTripStock.InvoiceNo = Active.order.InvoiceNo;
 		lcTripStock.CustomerCode = Active.order.CustomerCode;
 		lcTripStock.TicketNo = ticketNo;
@@ -609,7 +523,7 @@ public class dbVehicle extends Model
 			dbTripStock lcTripStock = new dbTripStock();
 			lcTripStock.Trip = Active.trip;
 			lcTripStock.Type = "Payment";
-			lcTripStock.Date = new Date().getTime();
+			lcTripStock.Date = Utils.getCurrentTime();
 			lcTripStock.InvoiceNo = Active.order.InvoiceNo;
 			lcTripStock.CustomerCode = Active.order.CustomerCode;
 			lcTripStock.TicketNo = 0;

@@ -36,7 +36,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.util.Date;
 
 public class Trip extends Activity
 {
@@ -943,7 +942,7 @@ public class Trip extends Activity
 						Active.order.CustomerSignature = true;
 						Active.order.CustomerSignatureName = signatureName;
 						Active.order.CustomerSignatureImage = signatureImage;
-						Active.order.CustomerSignatureDateTime = new Date().getTime();
+						Active.order.CustomerSignatureDateTime = Utils.getCurrentTime();
 						Active.order.save();
 						
 						// Update UI with signature.
@@ -958,7 +957,7 @@ public class Trip extends Activity
 						Active.order.DriverSignature = true;
 						Active.order.DriverSignatureName = signatureName;
 						Active.order.DriverSignatureImage = signatureImage;
-						Active.order.DriverSignatureDateTime = new Date().getTime();
+						Active.order.DriverSignatureDateTime = Utils.getCurrentTime();
 						Active.order.save();
 						
 						// Try finishing the order again.

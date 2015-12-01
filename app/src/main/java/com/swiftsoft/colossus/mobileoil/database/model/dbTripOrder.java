@@ -10,7 +10,6 @@ import com.swiftsoft.colossus.mobileoil.Utils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -699,7 +698,7 @@ public class dbTripOrder extends Model
         }
 		
 		// Record when delivery occurred. 
-		DeliveryDate = new Date().getTime();
+		DeliveryDate = Utils.getCurrentTime();
 
 		Delivering = false;
 		Delivered = true;

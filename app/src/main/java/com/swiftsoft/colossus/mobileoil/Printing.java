@@ -107,7 +107,7 @@ public class Printing
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
         // Get the current date/time
-		long date = new Date().getTime();
+		long date = Utils.getCurrentTime();
 
         DateFormat formatDate = new SimpleDateFormat("dd-MMM-yyyy");
 
@@ -510,7 +510,7 @@ public class Printing
 			DateFormat formatDate = new SimpleDateFormat("dd-MMM-yyyy");
 			DateFormat formatTime = new SimpleDateFormat("HH:mm");
 
-			long date = new Date().getTime();
+			long date = Utils.getCurrentTime();
 
 			String lastDate = formatDate.format(date);
 
@@ -1450,7 +1450,7 @@ public class Printing
 
 		JSONObject json = new JSONObject();
 
-		long now = new Date().getTime();
+		long now = Utils.getCurrentTime();
 
 		json.put("DateTime", "/Date(" + now + ")/");
 		json.put("Image", base64Content);

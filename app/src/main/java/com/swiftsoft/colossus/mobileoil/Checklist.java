@@ -1,16 +1,5 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import java.util.Date;
-
-import org.json.JSONObject;
-
-import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleChecklist;
-import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleChecklistSection;
-import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleChecklistSectionItem;
-import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
-import com.swiftsoft.colossus.mobileoil.utilities.ControlSaver;
-import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
-
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.DialogInterface;
@@ -26,6 +15,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleChecklist;
+import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleChecklistSection;
+import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleChecklistSectionItem;
+import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
+import com.swiftsoft.colossus.mobileoil.utilities.ControlSaver;
+import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
+
+import org.json.JSONObject;
 
 public class Checklist extends PreferenceActivity
 {
@@ -236,7 +234,7 @@ public class Checklist extends PreferenceActivity
 			CrashReporter.leaveBreadcrumb("Checklist: onButton1Clicked");
 
 			// Get current DateTime.
-			long now = new Date().getTime();
+			long now = Utils.getCurrentTime();
 			
 			if (message.getText().equals(msgChecklistCompleted))
 			{

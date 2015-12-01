@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import java.util.Date;
+
 public class Utils {
 
 	// Convert a string to an integer, without throw an exception.
@@ -94,4 +96,13 @@ public class Utils {
     	
 		return serialNo;
     }
+
+    /**
+     * Get the currnt time in milliseconds as a long
+     * @return The time in millseconds
+     */
+	public static long getCurrentTime()
+	{
+		return new Date().getTime();
+	}
 }

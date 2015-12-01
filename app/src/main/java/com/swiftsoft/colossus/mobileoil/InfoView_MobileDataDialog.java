@@ -1,17 +1,5 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import com.swiftsoft.colossus.mobileoil.database.adapter.DebugMessageAdapter;
-import com.swiftsoft.colossus.mobileoil.database.adapter.MessageOutAdapter;
-import com.swiftsoft.colossus.mobileoil.database.model.dbMessageOut;
-import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
-import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -28,6 +16,17 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.swiftsoft.colossus.mobileoil.database.adapter.DebugMessageAdapter;
+import com.swiftsoft.colossus.mobileoil.database.adapter.MessageOutAdapter;
+import com.swiftsoft.colossus.mobileoil.database.model.dbMessageOut;
+import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
+import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InfoView_MobileDataDialog extends Dialog
 {
@@ -187,7 +186,7 @@ public class InfoView_MobileDataDialog extends Dialog
 					{
 						DateFormat df = new SimpleDateFormat("HH:mm:ss");
 						String msg = b.getString("Message");
-						debugMessages.add(0, df.format(new Date().getTime()) + " " + msg);
+						debugMessages.add(0, df.format(Utils.getCurrentTime()) + " " + msg);
 					}
 					
 					// Update the UI.

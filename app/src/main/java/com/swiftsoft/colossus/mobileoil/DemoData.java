@@ -1,8 +1,5 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import com.swiftsoft.colossus.mobileoil.database.model.dbDriver;
 import com.swiftsoft.colossus.mobileoil.database.model.dbMessageIn;
 import com.swiftsoft.colossus.mobileoil.database.model.dbMessageOut;
@@ -18,6 +15,9 @@ import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleChecklist;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleChecklistSection;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleChecklistSectionItem;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleStock;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class DemoData
 {
@@ -194,7 +194,7 @@ public class DemoData
 		trip.Delivered = false;
 		trip.ColossusID = 1;
 		trip.No = 701;
-		trip.Date = new Date().getTime();
+		trip.Date = Utils.getCurrentTime();
 		trip.Vehicle = vehicle;
 		trip.Driver = driver;
 		trip.LoadingNotes = "BP Ref 87220";
@@ -219,7 +219,7 @@ public class DemoData
 		tripOrder1.PhoneNos = "028 66388833\n07595392491";
 		tripOrder1.RequiredBy = "11am";
 		tripOrder1.Terms = "Paying by COD";
-		tripOrder1.DueDate = new Date().getTime();
+		tripOrder1.DueDate = Utils.getCurrentTime();
 		tripOrder1.Notes = "";
 		tripOrder1.PrepaidAmount = 0;
 		tripOrder1.CodPoint = 1;
@@ -306,7 +306,7 @@ public class DemoData
 		tripOrder3.PhoneNos = "028 6633 4455";
 		tripOrder3.RequiredBy = "Today";
 		tripOrder3.Terms = "Paying by Card";
-		tripOrder3.DueDate = new Date().getTime();
+		tripOrder3.DueDate = Utils.getCurrentTime();
 		tripOrder3.Notes = "";
 		tripOrder3.PrepaidAmount = 0;
 		tripOrder3.CodPoint = 0;

@@ -1,7 +1,5 @@
 package com.swiftsoft.colossus.mobileoil.database.model;
 
-import java.util.Date;
-
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -187,7 +185,7 @@ public class dbTripOrderLine extends Model
 	public void delivered(int qty)
 	{
 		// Record when delivery occurred 
-		DeliveryDate = new Date().getTime();
+		DeliveryDate = Utils.getCurrentTime();
 
 		// and quantity delivered.
 		DeliveredQty = qty;
