@@ -19,9 +19,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Hashtable;
 
-/**
- * Created by Alan on 09/06/2015.
- */
 public class BitmapPrinter extends Printer
 {
     private final int HEIGHT_INCREMENT = 400;
@@ -41,14 +38,14 @@ public class BitmapPrinter extends Printer
     // The size of the small font
     private static final int FONT_SIZE_SMALL = 14;
 
-    Bitmap bitmap = null;
+    private Bitmap bitmap = null;
 
-    Context context;
+    private final Context context;
 
-    int maximumY = 0;
+    private int maximumY = 0;
 
     // Create Hashtable<> to store Typeface objects
-    private Hashtable<String, Typeface> typeFaces = new Hashtable<String, Typeface>();
+    private final Hashtable<String, Typeface> typeFaces = new Hashtable<String, Typeface>();
 
     private Typeface getTypeFace(String typeName)
     {
@@ -78,7 +75,7 @@ public class BitmapPrinter extends Printer
         bitmap = createWhiteBitmap(PRINTER_WIDTH, HEIGHT_INCREMENT);
     }
 
-    public int getMaximumY()
+    private int getMaximumY()
     {
         return maximumY;
     }
@@ -96,7 +93,7 @@ public class BitmapPrinter extends Printer
     /**
      * Extend the bitmap by 800 pixels or height
      * whichever is the greater.
-     * @param height
+     * @param height Amount by which to extend the bitmap
      */
     private void extendBitmap(int height)
     {
@@ -149,7 +146,7 @@ public class BitmapPrinter extends Printer
         // Print the Name header
         finalPosition = addTextLeft(Size.Large, xRightColumn, finalPosition, widthRightColumn, "Name");
 
-        // Store the position so that we know where to pring the
+        // Store the position so that we know where to print the
         // graphic signature
         int signaturePosition = addSpacer(finalPosition, SpacerHeight.Small);
 
@@ -242,6 +239,7 @@ public class BitmapPrinter extends Printer
         return paint;
     }
 
+    @SuppressWarnings("SameParameterValue")
     private Paint createTextPaint(Size textSize, String font, Alignment alignment)
     {
         Paint paint = createBlackPaint();
@@ -338,6 +336,7 @@ public class BitmapPrinter extends Printer
         return maximumHeight;
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     @Override
     public int addTextLeft(Size size, int xPosition, int yPosition, int width, String text)
     {
@@ -372,6 +371,7 @@ public class BitmapPrinter extends Printer
             maximumY = maximumHeight;
         }
 
+        //noinspection SuspiciousNameCombination
         return maximumHeight;
     }
 
@@ -409,6 +409,7 @@ public class BitmapPrinter extends Printer
             maximumY = maximumHeight;
         }
 
+        //noinspection SuspiciousNameCombination
         return maximumHeight;
     }
 
@@ -416,7 +417,7 @@ public class BitmapPrinter extends Printer
      * Adds a horizontal line to the bitmap
      * @param yPosition The distance from the top of the bitmap where
      *                  the horizontal line is to be drawn.
-     * @return
+     * @return The height of the printed item
      */
     @Override
     public int addLine(int yPosition)
@@ -458,6 +459,7 @@ public class BitmapPrinter extends Printer
         return yEnd;
     }
 
+    @SuppressWarnings("UnnecessaryLocalVariable")
     public int addLogo(int brandId, int yPosition) throws Exception
     {
         int finalPosition = yPosition;
@@ -543,6 +545,7 @@ public class BitmapPrinter extends Printer
     @Override
     public String getPrinterData() throws Exception
     {
+        @SuppressWarnings("StringBufferReplaceableByString")
         StringBuilder builder = new StringBuilder();
 
         builder.append("! DF RUN.BAT\r\n");
