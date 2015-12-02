@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:text="What is the reason for non-delivery?"
                     android:gravity="center_horizontal"
-                    android:textSize="26dp"
+                    android:textSize="26sp"
                     android:paddingTop="20dp"
                     android:paddingBottom="20dp">
 

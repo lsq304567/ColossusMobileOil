@@ -9,7 +9,7 @@
   android:background="@drawable/buttonbar_gradient"
   android:stretchColumns="*">
     
-    <TableRow android:padding="5dp">
+    <TableRow android:padding="2dp">
     
 	    <Button
 	    	android:id="@+id/keypad_one"
@@ -17,7 +17,7 @@
 	    	android:layout_height="fill_parent"
 	    	android:layout_weight="1"
 	    	android:text="1"
-	    	android:textSize="30sp"	/>
+	    	android:textSize="25sp"	/>
 	    
 	    <Button
 	    	android:id="@+id/keypad_two"
@@ -25,7 +25,7 @@
 	    	android:layout_height="fill_parent"
 	    	android:layout_weight="1"
 	    	android:text="2"
-	    	android:textSize="30sp" />
+	    	android:textSize="25sp" />
 	
 	    <Button
 	    	android:id="@+id/keypad_three"
@@ -33,7 +33,7 @@
 	    	android:layout_height="fill_parent"
 	    	android:layout_weight="1"
 	    	android:text="3"
-	    	android:textSize="30sp" />
+	    	android:textSize="25sp" />
 	    
 	    <ImageButton
 	    	android:id="@+id/keypad_del"
@@ -44,7 +44,7 @@
 	    
     </TableRow>
     
-    <TableRow android:padding="5dp">
+    <TableRow android:padding="2dp">
     
 	    <Button
 	    	android:id="@+id/keypad_four"
@@ -52,7 +52,7 @@
 	    	android:layout_height="fill_parent"
 	    	android:layout_weight="1"
 	    	android:text="4"
-	    	android:textSize="30sp"
+	    	android:textSize="25sp"
 	    	/>
 	    
 	    <Button
@@ -61,7 +61,7 @@
 	    	android:layout_height="fill_parent"
 	    	android:layout_weight="1"
 	    	android:text="5"
-	    	android:textSize="30sp"
+	    	android:textSize="25sp"
 	    	/>
 	
 	    <Button
@@ -70,7 +70,7 @@
 	    	android:layout_height="fill_parent"
 	    	android:layout_weight="1"
 	    	android:text="6"
-	    	android:textSize="30sp"
+	    	android:textSize="25sp"
 	    	/>
 	    
 	    <Button
@@ -80,12 +80,12 @@
 	    	android:layout_weight="1"
 	    	android:text="Next"
 	    	android:textColor="#ffffff"
-	    	android:textSize="24sp"
+	    	android:textSize="25sp"
 	    	/>
 	    
     </TableRow>
     
-    <TableRow android:padding="5dp">
+    <TableRow android:padding="2dp">
     
 	    <Button
 	    	android:id="@+id/keypad_seven"
@@ -93,7 +93,7 @@
 	    	android:layout_height="fill_parent"
 	    	android:layout_weight="1"
 	    	android:text="7"
-	    	android:textSize="30sp"
+	    	android:textSize="25sp"
 	    	/>
 	    
 	    <Button
@@ -102,7 +102,7 @@
 	    	android:layout_height="fill_parent"
 	    	android:layout_weight="1"
 	    	android:text="8"
-	    	android:textSize="30sp"
+	    	android:textSize="25sp"
 	    	/>
 	
 	    <Button
@@ -111,7 +111,7 @@
 	    	android:layout_height="fill_parent"
 	    	android:layout_weight="1"
 	    	android:text="9"
-	    	android:textSize="30sp"
+	    	android:textSize="25sp"
 	    	/>
 	    
 	    <Button
@@ -121,12 +121,12 @@
 	    	android:layout_weight="1"
 	    	android:text=""
 	    	android:textColor="#ffffff"
-	    	android:textSize="30sp"
+	    	android:textSize="25sp"
 	    	/>
 	    
     </TableRow>
     
-    <TableRow android:padding="5dp">
+    <TableRow android:padding="2dp">
     
 	    <Button
 	    	android:id="@+id/keypad_minus"
@@ -134,7 +134,7 @@
 	    	android:layout_height="fill_parent"
 	    	android:layout_weight="1"
 	    	android:text="-"
-	    	android:textSize="30sp"
+	    	android:textSize="25sp"
 	    	/>
 	    
 	    <Button
@@ -143,7 +143,7 @@
 	    	android:layout_height="fill_parent"
 	    	android:layout_weight="1"
 	    	android:text="0"
-	    	android:textSize="30sp"
+	    	android:textSize="25sp"
 	    	/>
 	
 	    <Button
@@ -152,7 +152,7 @@
 	    	android:layout_height="fill_parent"
 	    	android:layout_weight="1"
 	    	android:text="."
-	    	android:textSize="30sp"
+	    	android:textSize="25sp"
 	    	/>
 	    
 	    <Button
@@ -162,7 +162,7 @@
 	    	android:layout_weight="1"
 	    	android:text=""
 	    	android:textColor="#ffffff"
-	    	android:textSize="30sp"
+	    	android:textSize="25sp"
 	    	/>
 	    
     </TableRow>

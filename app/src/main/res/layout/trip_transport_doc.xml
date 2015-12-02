@@ -28,7 +28,7 @@
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 				android:layout_gravity="center_horizontal"
-				android:layout_marginTop="20dp"
+				android:layout_marginTop="10dp"
 			    android:text="Transport Document"
 			    android:textSize="20sp" 
 			    android:textStyle="bold"
@@ -42,24 +42,33 @@
 			    android:src="@drawable/transport_document"
 			    android:contentDescription="Print icon" />
 
-			<Button
-		        android:id="@+id/trip_transport_doc_print"
+			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_margin="7dp"
-				android:text="Print transport document"
-				android:textSize="16sp"
-				android:padding="20sp" />
-			
-			<Button
-		        android:id="@+id/trip_transport_doc_change"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_margin="7dp"
-				android:text="Change printer"
-				android:textSize="16sp"
-				android:padding="20sp" />
-		    
+				android:orientation="horizontal">
+
+				<Button
+					android:id="@+id/trip_transport_doc_print"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_margin="7dp"
+					android:text="Print transport document"
+					android:textSize="16sp"
+					android:padding="20sp"
+                    android:layout_weight="1"/>
+
+				<Button
+					android:id="@+id/trip_transport_doc_change"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_margin="7dp"
+					android:text="Change printer"
+					android:textSize="16sp"
+					android:padding="20sp"
+                    android:layout_weight="1"/>
+
+			</LinearLayout>
+
 		</LinearLayout>
 	
 		<LinearLayout

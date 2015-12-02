@@ -202,28 +202,28 @@ public class Discovery extends Activity
 					return result;
 				}
 				
-				//
-				// Step 2: Disable Bluetooth is already enabled, to improve reliability.
-				//
-				if (bluetooth.isEnabled())
-				{
-					// Update progress.
-					this.publishProgress(msgTurningOff);
-
-					// Disable Bluetooth.
-					bluetooth.disable();
-
-					// Wait for up to 5 seconds for Bluetooth to disable.
-					for (int i=0; i < 10; i++)
-					{
-						Thread.sleep(500);
-
-						if (bluetooth.getState() == BluetoothAdapter.STATE_OFF)
-							break;
-					}
-
-					Thread.sleep(1000);
-				}
+//				//
+//				// Step 2: Disable Bluetooth is already enabled, to improve reliability.
+//				//
+//				if (bluetooth.isEnabled())
+//				{
+//					// Update progress.
+//					this.publishProgress(msgTurningOff);
+//
+//					// Disable Bluetooth.
+//					bluetooth.disable();
+//
+//					// Wait for up to 5 seconds for Bluetooth to disable.
+//					for (int i=0; i < 10; i++)
+//					{
+//						Thread.sleep(500);
+//
+//						if (bluetooth.getState() == BluetoothAdapter.STATE_OFF)
+//							break;
+//					}
+//
+//					Thread.sleep(1000);
+//				}
 
 				//
 				// Step 3: Check Bluetooth is enabled.
@@ -265,6 +265,8 @@ public class Discovery extends Activity
 					this.publishProgress(msgDiscovery);
 					
 					bluetooth.startDiscovery();
+
+					Thread.sleep(1000);
 					
 					// Wait until complete.
 					while (bluetooth.isDiscovering())
@@ -298,22 +300,22 @@ public class Discovery extends Activity
 					{
 						if (bluetooth.isEnabled())
 						{
-							// Update progress.
-							this.publishProgress(msgTurningOff);
-
-							// Disable Bluetooth.
-							bluetooth.disable();
-
-							// Wait for up to 5 seconds for Bluetooth to disable.
-							for (int i = 0; i < 10; i++)
-							{
-								Thread.sleep(500);
-
-								if (bluetooth.getState() == BluetoothAdapter.STATE_OFF)
-								{
-									break;
-								}
-							}
+//							// Update progress.
+//							this.publishProgress(msgTurningOff);
+//
+//							// Disable Bluetooth.
+//							bluetooth.disable();
+//
+//							// Wait for up to 5 seconds for Bluetooth to disable.
+//							for (int i = 0; i < 10; i++)
+//							{
+//								Thread.sleep(500);
+//
+//								if (bluetooth.getState() == BluetoothAdapter.STATE_OFF)
+//								{
+//									break;
+//								}
+//							}
 						}
 					}
 				}

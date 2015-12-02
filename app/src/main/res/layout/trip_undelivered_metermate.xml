@@ -30,7 +30,7 @@
 			<TextView
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginTop="25dp"
+				android:layout_marginTop="10dp"
 				android:text="MeterMate status:"
 				android:textSize="24sp"
 				android:textStyle="bold"
@@ -40,7 +40,7 @@
 				android:id="@+id/trip_undelivered_metermate_comms_status"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginBottom="15dp"
+				android:layout_marginBottom="10dp"
 				android:text="Disconnected"
 				android:textSize="24sp"
 				android:textStyle="bold"
@@ -91,7 +91,7 @@
 		
 				</TableRow>
 	
-				<TableRow android:layout_marginTop="20dp">
+				<TableRow android:layout_marginTop="10dp">
 				    
 	   				<TextView
 						android:layout_width="0px"
@@ -152,7 +152,7 @@
 		
 				</TableRow>
 					
-				<TableRow android:layout_marginTop="20dp">
+				<TableRow android:layout_marginTop="10dp">
 						
 					<TextView
 						android:layout_width="0px"
@@ -178,7 +178,7 @@
 				android:id="@+id/trip_undelivered_metermate_reading_ticket"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginTop="25dp"
+				android:layout_marginTop="10dp"
 				android:text="Reading Ticket"
 				android:textSize="18sp"
 				android:textStyle="bold"
@@ -188,7 +188,7 @@
 			    android:id="@+id/trip_undelivered_metermate_demo_mode"
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content"
-			    android:layout_marginTop="20dp"
+			    android:layout_marginTop="10dp"
 			    android:orientation="horizontal">
 			
 				<Button
