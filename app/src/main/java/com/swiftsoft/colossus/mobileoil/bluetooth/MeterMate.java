@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.swiftsoft.colossus.mobileoil.CrashReporter;
-import com.swiftsoft.colossus.mobileoil.Utils;
 import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
 
 import org.json.JSONObject;
@@ -15,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 //import com.swiftsoft.colossus.mobileoil.R;
 
 public class MeterMate
@@ -429,7 +429,9 @@ public class MeterMate
 							Bluetooth.disable();
 							
 							// Ensure Bluetooth is enabled.
-							Bluetooth.enable();
+                            Bluetooth.enable();
+
+							Log.d(TAG, String.format("BT Address : %s", deviceAddress));
 
 							// Try to connect to MeterMate.
 							socket = Bluetooth.connect(deviceAddress);
@@ -607,7 +609,7 @@ public class MeterMate
 
                 if (getLogBluetoothData())
                 {
-                    BluetoothMessage btMessage = new BluetoothMessage(BluetoothMessage.Direction.Outgoing, message, Utils.getCurrentTime());
+                    BluetoothMessage btMessage = new BluetoothMessage(BluetoothMessage.Direction.Outgoing, message, new Date().getTime());
 
                     btMessages.add(btMessage);
                 }
@@ -642,7 +644,7 @@ public class MeterMate
 		{
             if (getLogBluetoothData())
             {
-                BluetoothMessage btMessage = new BluetoothMessage(BluetoothMessage.Direction.Incoming, message, Utils.getCurrentTime());
+                BluetoothMessage btMessage = new BluetoothMessage(BluetoothMessage.Direction.Incoming, message, new Date().getTime());
 
                 btMessages.add(btMessage);
             }

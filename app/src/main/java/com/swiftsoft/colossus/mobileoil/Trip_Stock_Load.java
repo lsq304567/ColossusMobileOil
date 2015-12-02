@@ -140,27 +140,37 @@ public class Trip_Stock_Load extends MyFlipperView
         // Create the Hashtable if it does not already exist
 		if (stockLevels == null)
 		{
+			CrashReporter.leaveBreadcrumb("Trip_Stock_Load: getStockLevels - Creating stock levels hashtable ...");
+
 			stockLevels = new Hashtable<String, Integer>();
 		}
+
+        CrashReporter.leaveBreadcrumb("Trip_Stock_Load: getStockLevels - Clearing stock levels hashtable ...");
 
         // Empty it
 		stockLevels.clear();
 
-		for (dbVehicleStock vs : dbVehicleStock.FindAllNonCompartmentStock(Active.vehicle))
+		for (dbVehicleStock vehicleStock : dbVehicleStock.FindAllNonCompartmentStock(Active.vehicle))
 		{
-			String productName = vs.Product.Desc;
-			int stockLevel = vs.CurrentStock;
+			String productName = vehicleStock.Product.Desc;
+			int stockLevel = vehicleStock.CurrentStock;
 
 			if (!stockLevels.containsKey(productName))
 			{
+                CrashReporter.leaveBreadcrumb(String.format("Trip_Stock_Load: getStockLevels - Adding entry for %s to hashtable ...", productName));
+
 				stockLevels.put(productName, 0);
 			}
+
+            CrashReporter.leaveBreadcrumb("Trip_Stock_Load: getStockLevels - Updating stock level ...");
 
 			stockLevels.put(productName, stockLevels.get(productName) + stockLevel);
 		}
 
 		if (Active.vehicle.getHasHosereel())
 		{
+            CrashReporter.leaveBreadcrumb("Trip_Stock_Load: getStockLevels - Adding hosereel product to stock");
+
 			String productName = Active.vehicle.getHosereelProduct().Desc;
 			int hosereelCapacity = Active.vehicle.getHosereelCapacity();
 
