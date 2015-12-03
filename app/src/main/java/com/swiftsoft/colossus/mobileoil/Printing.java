@@ -1351,9 +1351,12 @@ public class Printing
 		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 	}
 
-    private static int printMeterData(Printer printer, int yPosition, dbTripOrder order)
+    private static int printMeterData(Printer printer, int yPosition, dbTripOrder order) throws Exception
     {
         CrashReporter.leaveBreadcrumb("Printing: printMeterData");
+
+        SimpleDateFormat formatDate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        DecimalFormat formatVolume = new DecimalFormat("#,##0");
 
         int finalPosition = yPosition;
 
@@ -1374,17 +1377,19 @@ public class Printing
 
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
+                Date startTime = formatDate.parse(line.ticketStartTime);
+
 				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Start");
-				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, line.ticketStartTime);
+				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, formatDate.format(startTime));
 
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
-				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Finish");
-				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, line.ticketFinishTime);
+                Date finishTime = formatDate.parse(line.ticketFinishTime);
+
+                printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Finish");
+				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, formatDate.format(finishTime));
 
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-
-                DecimalFormat formatVolume = new DecimalFormat("#,##0");
 
                 printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Totalizer start");
 				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, formatVolume.format(line.ticketStartTotaliser));

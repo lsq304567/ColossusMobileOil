@@ -20,9 +20,8 @@ import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 public class Trip_Undelivered_MeterMate extends MyFlipperView
 {
 	private Trip trip;
-	private LayoutInflater inflater;
-	
-	private MyInfoView1Line infoview;
+
+    private MyInfoView1Line infoview;
 	private TextView tvStatus;
 	private TextView tvReadingTicket;
 	private TextView tvDeliveryMode;
@@ -64,7 +63,7 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 			trip = (Trip)context;
 	
 			// Inflate layout.
-			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.trip_undelivered_metermate, this, true);
 			
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_undelivered_metermate_infoview);
@@ -110,6 +109,7 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 	    	{
 				// Show error.
 				AlertDialog.Builder builder = new AlertDialog.Builder(trip);
+
 				builder.setTitle("MeterMate not configured");
 				builder.setMessage("You must select your MeterMate in the Settings section before proceeding.");
 				builder.setPositiveButton("OK", null);
@@ -134,6 +134,7 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 			{
 				// Show error.
 				AlertDialog.Builder builder = new AlertDialog.Builder(trip);
+
 				builder.setTitle("MeterMate in use");
 				builder.setMessage("Please try again.");
 				builder.setPositiveButton("OK", null);
@@ -192,11 +193,8 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 			dbProduct lineProduct = Active.vehicle.getHosereelProduct();
 	
 			// Line.
-			if (lineProduct == null)
-				infoview.setDefaultTv2("Line: None");
-			else
-				infoview.setDefaultTv2("Line: " + lineProduct.Desc);
-	
+			infoview.setDefaultTv2(lineProduct == null ? "Line: None" : String.format("Line: %s", lineProduct.Desc));
+
 			// Product.
 			tvProduct.setText(callbacks.getProduct().Desc);
 			
@@ -311,16 +309,9 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 	
 			// Update UI.
 			tvPresetLitres.setText(MeterMate.getPresetLitres());
-			
-			if (btnBack.isEnabled())
-			{
-				tvDeliveredLitres.setText("");
-			}
-			else
-			{
-				tvDeliveredLitres.setText(MeterMate.getRealtimeLitres());
-			}
-			
+
+            tvDeliveredLitres.setText(btnBack.isEnabled() ? "" : MeterMate.getRealtimeLitres());
+
 			tvTemperature.setText(MeterMate.getTemperature());
 		}
 		catch (Exception e)
@@ -354,7 +345,7 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 		}
 	};
 
-	OnClickListener onStart = new OnClickListener()
+	private final OnClickListener onStart = new OnClickListener()
 	{
 		@Override
 		public void onClick(View v)
@@ -374,7 +365,7 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 		}
 	};
 
-	OnClickListener onStop = new OnClickListener()
+	private final OnClickListener onStop = new OnClickListener()
 	{
 		@Override
 		public void onClick(View v)
@@ -394,7 +385,7 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 		}
 	};
 	
-	OnClickListener onBack = new OnClickListener()
+	private final OnClickListener onBack = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -417,7 +408,7 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 		}
 	};
 
-	OnClickListener onNext = new OnClickListener()
+	private final OnClickListener onNext = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
