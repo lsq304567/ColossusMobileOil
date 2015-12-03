@@ -200,13 +200,6 @@ public class Printing
 		// Get the Vehicle details
 		dbVehicle vehicle = dbVehicle.FindByNo(Active.trip.Vehicle.No);
 
-		if (vehicle.StockByCompartment)
-		{
-            CrashReporter.leaveBreadcrumb("Printing: printStockOnboard - Printing Comp. header");
-
-			printer.addTextLeft(Size.Large, 300, finalPosition, 250, "Comp.");
-		}
-
         CrashReporter.leaveBreadcrumb("Printing: printStockOnboard - Printing On board header");
 
 		finalPosition = printer.addTextLeft(Size.Large, 550, finalPosition, 250, "On board");
@@ -216,31 +209,26 @@ public class Printing
 		// Get the product that is in the hosereel - if any
 		dbProduct lineProduct = Active.vehicle.getHosereelProduct();
 
-		List<dbVehicleStock> stockList;
+		CrashReporter.leaveBreadcrumb("Printing: printStockOnboard - Fetching stock by product");
 
-		if (vehicle.StockByCompartment)
+		List<dbVehicleStock> stockList = dbVehicleStock.GetStockByProduct(vehicle);
+
+        // If there is line stock present then subtract the hosereel
+        // capacity from the product stuck of the same type
+		if (lineProduct != null)
 		{
-            CrashReporter.leaveBreadcrumb("Printing: printStockOnboard - Fetching stock by compartment");
+			CrashReporter.leaveBreadcrumb("Printing: printStockOnboard - Subtracting line stock from current stock");
 
-            stockList = dbVehicleStock.GetStockByCompartment(vehicle);
-		}
-		else
-		{
-            CrashReporter.leaveBreadcrumb("Printing: printStockOnboard - Fetching stock by product");
-
-            stockList = dbVehicleStock.GetStockByProduct(vehicle);
-
-			if (lineProduct != null)
+			// Subtract line stock.
+			for (dbVehicleStock vehicleStock : stockList)
 			{
-                CrashReporter.leaveBreadcrumb("Printing: printStockOnboard - Subtracting line stock from current stock");
-
-				// Subtract line stock.
-				for (dbVehicleStock vehicleStock : stockList)
+				if (vehicleStock.Product.getId().equals(lineProduct.getId()))
 				{
-					if (vehicleStock.Product.getId().equals(lineProduct.getId()))
-					{
-						vehicleStock.CurrentStock -= Active.vehicle.getHosereelCapacity();
-					}
+					vehicleStock.CurrentStock -= Active.vehicle.getHosereelCapacity();
+
+                    // There can only be one possible line stock, so once found
+                    // we can break
+					break;
 				}
 			}
 		}
@@ -268,19 +256,17 @@ public class Printing
 			}
 		}
 
-		if (!vehicle.StockByCompartment)
-		{
-			if (lineProduct != null)
-			{
-				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+        // Now finally print the lines stock - type & volume
+        if (lineProduct != null)
+        {
+            finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 
-				finalPosition = printTitle(printer, finalPosition, "Line stock");
+            finalPosition = printTitle(printer, finalPosition, "Line stock");
 
-				printer.addTextLeft(Size.Large, 80, finalPosition, 470, lineProduct.Desc);
+            printer.addTextLeft(Size.Large, 80, finalPosition, 470, lineProduct.Desc);
 
-				finalPosition = printer.addTextLeft(Size.Large, 550, finalPosition, 250, Integer.toString(Active.vehicle.getHosereelCapacity()));
-			}
-		}
+            finalPosition = printer.addTextLeft(Size.Large, 550, finalPosition, 250, Integer.toString(Active.vehicle.getHosereelCapacity()));
+        }
 
 		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 	}
@@ -481,25 +467,11 @@ public class Printing
 
 		dbVehicle vehicle = dbVehicle.FindByNo(Active.trip.Vehicle.No);
 
-		if (vehicle.StockByCompartment)
-		{
-			printer.addTextLeft(Size.Large, 300, finalPosition, 250, "Comp.");
-		}
-
 		finalPosition = printer.addTextLeft(Size.Large, 550, finalPosition, 250, "On board");
 
-		List<dbVehicleStock> stockList;
+        List<dbVehicleStock> stockList = dbVehicleStock.GetStockByProduct(vehicle);
 
-		if (vehicle.StockByCompartment)
-		{
-			stockList = dbVehicleStock.GetStockByCompartment(vehicle);
-		}
-		else
-		{
-			stockList = dbVehicleStock.GetStockByProduct(vehicle);
-		}
-
-		for (dbVehicleStock vehicleStock : stockList)
+        for (dbVehicleStock vehicleStock : stockList)
 		{
 			if (vehicleStock !=  null)
 			{
@@ -662,23 +634,9 @@ public class Printing
 
 		dbVehicle vehicle = dbVehicle.FindByNo(Active.trip.Vehicle.No);
 
-		if (vehicle.StockByCompartment)
-		{
-			printer.addTextLeft(Size.Large, 300, titlePosition, 250, "Comp.");
-		}
-
 		finalPosition = printer.addTextLeft(Size.Large, 550, titlePosition, 250, "On board");
 
-		List<dbVehicleStock> stockList;
-
-		if (vehicle.StockByCompartment)
-		{
-			stockList = dbVehicleStock.GetStockByCompartment(vehicle);
-		}
-		else
-		{
-			stockList = dbVehicleStock.GetStockByProduct(vehicle);
-		}
+		List<dbVehicleStock> stockList = dbVehicleStock.GetStockByProduct(vehicle);
 
 		for (dbVehicleStock vehicleStock : stockList)
 		{
