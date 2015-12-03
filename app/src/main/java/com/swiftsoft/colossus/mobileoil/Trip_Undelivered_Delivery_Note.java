@@ -250,7 +250,8 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 				double cashTotal = Active.order.getCashTotal();
 				double paidOffice = Active.order.getPrepaidAmount();
 				double paidDriver = Active.order.getPaidDriver();
-				double discount = Active.order.Discount;
+                Active.order.calculateDiscount();
+                double discount = Active.order.Discount;
 				double outstanding = Active.order.getOutstanding();
 				double surchargeVatAmount = Active.order.getSurchargeVat();
 
