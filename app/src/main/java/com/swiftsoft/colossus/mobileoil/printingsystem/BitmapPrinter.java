@@ -198,23 +198,23 @@ public class BitmapPrinter extends Printer
         switch (spacerHeight)
         {
             case Small:
-                height = 10;
+                height = 8;
                 break;
 
             case Normal:
-                height = 20;
+                height = 16;
                 break;
 
             case Large:
-                height = 30;
+                height = 24;
                 break;
 
             case XLarge:
-                height = 40;
+                height = 32;
                 break;
 
             default:
-                height = 20;
+                height = 16;
                 break;
         }
 
