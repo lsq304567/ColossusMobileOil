@@ -1,3 +1,22 @@
+V0.99t16
+========
+
+Various corrections made to codebase after running LINT
+
+Refactored retrieval of current time to a utility method
+
+Printing of both Customer name & code on Trip Report and Cash Report
+
+Addition of orders that could not be delivered to the transactions report.
+
+Printing of vehicle and driver details at top of delivery docket
+
+Implemented changes for unattended delivery - screens - delivery docket
+
+Initial changes to permit viewing of phone device
+
+Corrected formatting of date/time strings coming from MeterMate and printed on delivery docket
+
 V0.99t15
 ========
 
