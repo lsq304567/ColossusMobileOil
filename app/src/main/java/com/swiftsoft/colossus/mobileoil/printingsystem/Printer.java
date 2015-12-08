@@ -46,6 +46,11 @@ public class Printer
 		throw new RuntimeException("addSpacer not implemented in Printer class");
 	}
 
+	public int addSpacer(int yPosition, int height)
+	{
+		throw new RuntimeException("addSpacer not implemented in Printer class");
+	}
+
 	public int addSignature(String title, String name, int yPosition, byte[] signatureArray, long driverSignatureDateTime)
 	{
 		throw new RuntimeException("addSignature not implemented in Printer class");

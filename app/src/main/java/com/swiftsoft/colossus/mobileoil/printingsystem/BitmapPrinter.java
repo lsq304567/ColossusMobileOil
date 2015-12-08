@@ -132,16 +132,20 @@ public class BitmapPrinter extends Printer
         DateFormat formatTime = new SimpleDateFormat("@ HH:mm");
 
         // Decode the signature to a Bitmap
+        CrashReporter.leaveBreadcrumb("BitmapPrinter: addSignature - Decoding signature to Bitmap ...");
         Bitmap signature = BitmapFactory.decodeByteArray(signatureArray, 0, signatureArray.length);
 
         // Resize bitmap.
+        CrashReporter.leaveBreadcrumb("BitmapPrinter: addSignature - Resizing Bitmap ...");
         signature = getResizedBitmap(signature, 480, 171);
 
         // Print title of the signature
+        CrashReporter.leaveBreadcrumb("BitmapPrinter: addSignature - Printing title of the signature ...");
         finalPosition = addSpacer(finalPosition, SpacerHeight.Normal);
         addTextLeft(Size.Large, xLeftColumn, finalPosition, widthLeftColumn, title);
 
         // Print the Name header
+        CrashReporter.leaveBreadcrumb("BitmapPrinter: addSignature - Printing the 'Name' header ...");
         finalPosition = addTextLeft(Size.Large, xRightColumn, finalPosition, widthRightColumn, "Name");
 
         // Store the position so that we know where to print the
@@ -149,28 +153,40 @@ public class BitmapPrinter extends Printer
         int signaturePosition = addSpacer(finalPosition, SpacerHeight.Small);
 
         // Print the actual name
+        CrashReporter.leaveBreadcrumb("BitmapPrinter: addSignature - Printing the actual name ...");
         finalPosition = addSpacer(finalPosition, SpacerHeight.Small);
         finalPosition = addTextLeft(Size.Normal, xRightColumn, finalPosition, widthRightColumn, name);
 
         // Print the Date header
+        CrashReporter.leaveBreadcrumb("BitmapPrinter: addSignature - Printing the 'Date' header ...");
         finalPosition = addSpacer(finalPosition, SpacerHeight.Large);
         finalPosition = addTextLeft(Size.Large, xRightColumn, finalPosition, widthRightColumn, "Date of Supply");
 
         // Print the date
+        CrashReporter.leaveBreadcrumb("BitmapPrinter: addSignature - Printing the actual date ...");
         finalPosition = addSpacer(finalPosition, SpacerHeight.Small);
         finalPosition = addTextLeft(Size.Normal, xRightColumn, finalPosition, widthRightColumn, formatDate.format(datetime));
 
         // Print the time
+        CrashReporter.leaveBreadcrumb("BitmapPrinter: addSignature - Printing the actual time ...");
         finalPosition = addSpacer(finalPosition, SpacerHeight.Small);
         finalPosition = addTextLeft(Size.Normal, xRightColumn, finalPosition, widthRightColumn, formatTime.format(datetime));
 
+        // Add extra space if necessary to make sure signature does not overlap line at bottom
+        if (finalPosition < signaturePosition + 171)
+        {
+            finalPosition = addSpacer(finalPosition, signaturePosition + 171 - finalPosition);
+        }
+
         // Print line at bottom of signature
+        CrashReporter.leaveBreadcrumb("BitmapPrinter: addSignature - Printing line at bottom of signature ...");
         finalPosition = addSpacer(finalPosition, SpacerHeight.Normal);
         finalPosition = addLine(finalPosition);
 
         Canvas c = new Canvas(bitmap);
 
         // Draw the signature image at the previously stored position
+        CrashReporter.leaveBreadcrumb("BitmapPrinter: addSignature - Printing the bitmap of the signature ...");
         c.drawBitmap(signature, 20, signaturePosition, null);
 
         return finalPosition;
@@ -208,6 +224,22 @@ public class BitmapPrinter extends Printer
                 break;
         }
 
+        return addSpacer(yPosition, height);
+
+//        // Test if this will exceed the bounds of the current bitmap
+//        if (getMaximumY() + height > bitmap.getHeight())
+//        {
+//            extendBitmap(height);
+//        }
+//
+//        // Update the current maximum height
+//        maximumY += height;
+//
+//        return yPosition + height;
+    }
+
+    public int addSpacer(int yPosition, int height)
+    {
         // Test if this will exceed the bounds of the current bitmap
         if (getMaximumY() + height > bitmap.getHeight())
         {
