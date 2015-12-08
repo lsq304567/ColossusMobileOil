@@ -387,17 +387,23 @@ public class Trip_Undelivered_Products extends MyFlipperView
 				// Record line change
 				if (lineProduct == null)
 				{
-					CrashReporter.leaveBreadcrumb("lineProduct is null!!");
+					CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onNext - LineProduct is null!!");
 				}
+
+                dbProduct hosereelProduct = Active.vehicle.getHosereelProduct();
 				
-				if (Active.vehicle.getHosereelProduct() == null)
+				if (hosereelProduct == null)
 				{
-					CrashReporter.leaveBreadcrumb("getHosereelProduct is null!!");
+					CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onNext - Hosereel Product is null!!");
 				}
-				
-				if (!Active.vehicle.getHosereelProduct().getId().equals(lineProduct.getId()))
+
+				if (lineProduct != null && hosereelProduct != null)
 				{
-					Active.vehicle.recordLineChange(lineProduct, Active.vehicle.C0_Capacity, "C");
+					if (!hosereelProduct.getId().equals(lineProduct.getId()))
+					{
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onNext - Recording Line Change ...");
+						Active.vehicle.recordLineChange(lineProduct, Active.vehicle.C0_Capacity, "C");
+					}
 				}
 
 				// Check if all products are now delivered.

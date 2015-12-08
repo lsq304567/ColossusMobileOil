@@ -1,13 +1,14 @@
 package com.swiftsoft.colossus.mobileoil.database.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.swiftsoft.colossus.mobileoil.CrashReporter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "VehicleStock")
 public class dbVehicleStock extends Model
@@ -53,15 +54,25 @@ public class dbVehicleStock extends Model
 	// Returns a list of VehicleStock rows, per product.
 	public static List<dbVehicleStock> GetStockByProduct(dbVehicle vehicle)
 	{
+		CrashReporter.leaveBreadcrumb("dbVehicleStock: GetStockByProduct");
+
 		List<dbVehicleStock> stockList = new ArrayList<dbVehicleStock>();
 		
 		// Add non-compartment stock.
 		for (dbVehicleStock vs : FindAllNonCompartmentStock(vehicle))
-			AddStockByProduct(stockList, vs);		
+		{
+			AddStockByProduct(stockList, vs);
+		}
+
+        CrashReporter.leaveBreadcrumb("dbVehicleStock: GetStockByProduct - Finding hosereel stock ...");
 		
 		// Add any hosereel stock.
 		dbVehicleStock lineVS = FindByVehicleCompartment(vehicle, 0);
-		AddStockByProduct(stockList, lineVS);
+
+        if (lineVS != null)
+        {
+            AddStockByProduct(stockList, lineVS);
+        }
 				
 		return stockList;
 	}
@@ -81,20 +92,27 @@ public class dbVehicleStock extends Model
 		return stockList;
 	}
 	
-	private static void AddStockByProduct(List<dbVehicleStock> stockList, dbVehicleStock newVS)
+	private static void AddStockByProduct(List<dbVehicleStock> stockList, dbVehicleStock stockItem)
 	{
-		for (dbVehicleStock vs : stockList)
+        CrashReporter.leaveBreadcrumb("dbVehicleStock: AddStockByProduct");
+
+		for (dbVehicleStock vehicleStock : stockList)
 		{
-			if (vs.Product.getId() == newVS.Product.getId())
+			if (vehicleStock.Product.getId() == stockItem.Product.getId())
 			{
-				vs.OpeningStock += newVS.OpeningStock;
-				vs.CurrentStock += newVS.CurrentStock;
+                CrashReporter.leaveBreadcrumb("dbVehicleStock: AddStockByProduct - Updating the opening stock ...");
+				vehicleStock.OpeningStock += stockItem.OpeningStock;
+
+                CrashReporter.leaveBreadcrumb("dbVehicleStock: AddStockByProduct - Updating the current stock ...");
+				vehicleStock.CurrentStock += stockItem.CurrentStock;
+
 				return;
 			}
 		}
 		
-		// Add newVS to stockList.
-		stockList.add(newVS);
+		// Add stockItem to stockList.
+        CrashReporter.leaveBreadcrumb("dbVehicleStock: AddStockByProduct - Addint to stock list ...");
+		stockList.add(stockItem);
 	}
 	
 	public static dbVehicleStock FindOrCreateByVehicleCompartment(dbVehicle vehicle, int compartment)

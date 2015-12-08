@@ -243,6 +243,11 @@ public class Setup extends Activity
             // Register BroadcastReceiver.
             registerReceiver(registerDeviceReceiver, registerDeviceFilter);
             registerReceiver(registerVehicleReceiver, registerVehicleFilter);
+
+            if (!isSetupComplete())
+            {
+                selectInitView();
+            }
 		}
 		catch (Exception e)
 		{
@@ -406,21 +411,31 @@ public class Setup extends Activity
     // Check if vehicle has a line product, if applicable.
 	private boolean isVehicleLineSetup()
     {
+		CrashReporter.leaveBreadcrumb("Setup: isVehicleLineSetup");
+
 		dbSetting setting = dbSetting.FindByKey("VehicleRegistered");
 
     	if (setting != null)
     	{
+            CrashReporter.leaveBreadcrumb("Setup: isVehicleLineSetup - Vehicle is registered");
+
     		dbVehicle vehicle = dbVehicle.FindByNo(setting.IntValue);
 
     		if (vehicle != null)
     		{
+                CrashReporter.leaveBreadcrumb("Setup: isVehicleLineSetup - Vehicle found");
+
     			if (!vehicle.getHasHosereel())
 				{
+                    CrashReporter.leaveBreadcrumb("Setup: isVehicleLineSetup - Vehicle does not have hosereel");
+
 					return true;
 				}
     			
     			if (vehicle.getHosereelProduct() != null)
 				{
+                    CrashReporter.leaveBreadcrumb("Setup: isVehicleLineSetup - No hosereel product");
+
 					return true;
 				}
     		}
@@ -434,6 +449,8 @@ public class Setup extends Activity
     {
     	try
     	{
+            CrashReporter.leaveBreadcrumb("Setup: selectInitView");
+
             if (!isDeviceLicensed())
             {
                 selectView(Setup.ViewLicenseDevice, 0);

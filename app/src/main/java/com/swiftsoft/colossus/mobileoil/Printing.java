@@ -24,6 +24,7 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
@@ -1377,17 +1378,33 @@ public class Printing
 
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
-                Date startTime = formatDate.parse(line.ticketStartTime);
+				try
+				{
+					Date startTime = formatDate.parse(line.ticketStartTime);
 
-				printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Start");
-				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, formatDate.format(startTime));
+					printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Start");
+					finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, formatDate.format(startTime));
+				}
+				catch (ParseException e)
+				{
+					printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Start");
+					finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, line.ticketStartTime);
+				}
 
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
-                Date finishTime = formatDate.parse(line.ticketFinishTime);
+                try
+                {
+                    Date finishTime = formatDate.parse(line.ticketFinishTime);
 
-                printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Finish");
-				finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, formatDate.format(finishTime));
+                    printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Finish");
+                    finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, formatDate.format(finishTime));
+                }
+                catch (ParseException e)
+                {
+                    printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Finish");
+                    finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, line.ticketFinishTime);
+                }
 
 				finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
 
