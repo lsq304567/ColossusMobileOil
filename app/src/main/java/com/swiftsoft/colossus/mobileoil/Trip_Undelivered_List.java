@@ -131,6 +131,8 @@ public class Trip_Undelivered_List extends MyFlipperView
 				// Leave breadcrumb.
 				CrashReporter.leaveBreadcrumb("Trip_Undelivered_List: lvOnClick");
 
+				trip.OrderId = id;
+
 				startOrder(id);
 			}
 			catch (Exception e)
@@ -193,6 +195,7 @@ public class Trip_Undelivered_List extends MyFlipperView
 				// Check if all delivered.
 				if (Active.trip.GetUndelivered().size() > 0)
 				{
+					trip.OrderId = adapter.getItemId(0);
 					startOrder(adapter.getItemId(0));
 				}
 				else

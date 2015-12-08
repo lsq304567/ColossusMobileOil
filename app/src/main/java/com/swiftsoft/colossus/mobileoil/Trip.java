@@ -117,6 +117,8 @@ public class Trip extends Activity
 	private DecimalFormat formatMoney;
 	private Trip_Delivered deliveredDialog;
 	private myReceiver receiver;
+
+	public long OrderId;
 	
 	class myReceiver extends BroadcastReceiver
 	{

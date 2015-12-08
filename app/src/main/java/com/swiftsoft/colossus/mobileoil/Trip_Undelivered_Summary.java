@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
+import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrder;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 
@@ -70,9 +71,9 @@ public class Trip_Undelivered_Summary extends MyFlipperView
 			
 			// btnSkip.setVisibility(View.INVISIBLE);
 			
-			btnBack.setOnClickListener(onBack);
-			btnSkip.setOnClickListener(onSkip);
-			btnNext.setOnClickListener(onNext);
+			btnBack.setOnClickListener(buttonClick);
+			btnSkip.setOnClickListener(buttonClick);
+			btnNext.setOnClickListener(buttonClick);
 		}
 		catch (Exception e)
 		{
@@ -165,72 +166,60 @@ public class Trip_Undelivered_Summary extends MyFlipperView
 		}
 	}
 
-	OnClickListener onBack = new OnClickListener()
+	OnClickListener buttonClick = new OnClickListener()
 	{
 		@Override
-		public void onClick(View paramView)
+		public void onClick(View view)
 		{
 			try
 			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: onBack");
+				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: buttonClick");
 
-				// Mark the Active.order as OnMobile again.
-				trip.orderStopped();
-	
-				// Switch to order list view.
-				trip.selectView(Trip.ViewUndeliveredList, -1);			
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
-
-    /**
-     * Code called when the Skip button is tapped
-     */
-	OnClickListener onSkip = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: onSkip");
-
-                // Switch to the Skip screen
-                trip.selectView(Trip.ViewUndeliveredSkip, +1);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
-
-	OnClickListener onNext = new OnClickListener()
-	{		
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: onNext");
-
-				// Check if COD 'Before Delivery' on this order.
-				if (Active.order.CodPoint == 2 && Active.order.getCodBeforeDeliveryValue() > 0)
+				switch (view.getId())
 				{
-					// Switch to COD view.
-					trip.selectView(Trip.ViewUndeliveredCOD, +1);
-				}
-				else
-				{
-					// Switch to Products view.
-					trip.selectView(Trip.ViewUndeliveredProducts, +1);
+					case R.id.trip_undelivered_summary_back:
+
+						CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: buttonClick - Back button clicked");
+
+						// Mark the Active.order as OnMobile again.
+						trip.orderStopped();
+
+						// Switch to order list view.
+						trip.selectView(Trip.ViewUndeliveredList, -1);
+
+						break;
+
+					case R.id.trip_undelivered_summary_skip:
+
+						CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: onSkip");
+
+						// Switch to the Skip screen
+						trip.selectView(Trip.ViewUndeliveredSkip, +1);
+
+						break;
+
+					case R.id.trip_undelivered_summary_next:
+
+						CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: onNext");
+
+                        if (Active.order == null)
+                        {
+                            Active.order = dbTripOrder.load(dbTripOrder.class, trip.OrderId);
+                        }
+
+						// Check if COD 'Before Delivery' on this order.
+						if (Active.order.CodPoint == 2 && Active.order.getCodBeforeDeliveryValue() > 0)
+						{
+							// Switch to COD view.
+							trip.selectView(Trip.ViewUndeliveredCOD, +1);
+						}
+						else
+						{
+							// Switch to Products view.
+							trip.selectView(Trip.ViewUndeliveredProducts, +1);
+						}
+
+						break;
 				}
 			}
 			catch (Exception e)
