@@ -117,24 +117,19 @@ public class dbTripOrderLine extends Model
 	
 	public double getOrderedNettValue()
 	{
-		double nettValue = (this.OrderedQty * (this.OrderedPrice / this.Ratio));
+		double nettValue = (OrderedQty * (OrderedPrice / Ratio));
+
 		return Utils.RoundNearest(nettValue, 2);
 	}
 	
 	public double getOrderedSurchargeValue()
 	{
-		if (this.SurchargePerUOM)
-			return (this.OrderedQty * (this.Surcharge / this.Ratio));
-		else
-			return this.Surcharge;
+		return SurchargePerUOM ? OrderedQty * (Surcharge / Ratio) : Surcharge;
 	}
 
 	public double getOrderedVatPerc()
 	{
-		if (this.OrderedQty <= this.VatPerc2Above)
-			return this.VatPerc1;
-		else
-			return this.VatPerc2;
+		return OrderedQty <= VatPerc2Above ? VatPerc1 : VatPerc2;
 	}
 	
 	// Delivered.
@@ -142,8 +137,10 @@ public class dbTripOrderLine extends Model
 	public boolean getDeliveredQtyVariesFromOrdered()
 	{
 		if (DeliveredQty == 0)
-			return false;
-		
+        {
+            return false;
+        }
+
 		return (Math.abs(OrderedQty - DeliveredQty) > 50);
 	}
 	
@@ -151,30 +148,26 @@ public class dbTripOrderLine extends Model
 	// (Used by the ticket print out)
 	public double getDeliveredPrice()		
 	{
-		double value = this.getDeliveredNettValue() + this.getDeliveredSurchargeValue();
-		return Utils.RoundNearest(value / this.DeliveredQty, 4);
+		double value = getDeliveredNettValue() + getDeliveredSurchargeValue();
+
+		return Utils.RoundNearest(value / DeliveredQty, 4);
 	}
 	
 	public double getDeliveredNettValue()
 	{
-		double value = (this.DeliveredQty * (this.DeliveredPrice / this.Ratio));
+		double value = (DeliveredQty * (DeliveredPrice / Ratio));
+
 		return Utils.RoundNearest(value, 2);
 	}
 
 	public double getDeliveredSurchargeValue()
 	{
-		if (this.SurchargePerUOM)
-			return Utils.RoundNearest(this.DeliveredQty * (this.Surcharge / this.Ratio), 2);
-		else
-			return Utils.RoundNearest(this.Surcharge, 2);
+        return Utils.RoundNearest(SurchargePerUOM ? DeliveredQty * (Surcharge / Ratio) : Surcharge, 2);
 	}
 	
 	public double getDeliveredVatPerc()
 	{
-		if (this.DeliveredQty <= this.VatPerc2Above)
-			return this.VatPerc1;
-		else
-			return this.VatPerc2;
+        return DeliveredQty <= VatPerc2Above ? VatPerc1 : VatPerc2;
 	}
 
 	//
@@ -192,13 +185,11 @@ public class dbTripOrderLine extends Model
 		
 		// if delivered qty is +/- 50 from ordered qty, 
 		// then ask driver for a new price.
-		if (getDeliveredQtyVariesFromOrdered())
-			DeliveredPrice = 0;
-		else
-			DeliveredPrice = OrderedPrice;
-		
+        DeliveredPrice = getDeliveredQtyVariesFromOrdered() ? 0 : OrderedPrice;
+
 		// Mark line as delivered.
 		Delivered = true;
+
 		save();
 	}
 	
@@ -206,7 +197,7 @@ public class dbTripOrderLine extends Model
 	public void setDeliveredPricePrice(double newPrice)
 	{
 		DeliveredPrice = newPrice;
+
 		save();
 	}
-
 }
