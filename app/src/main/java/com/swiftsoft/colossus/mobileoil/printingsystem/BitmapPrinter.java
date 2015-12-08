@@ -9,10 +9,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 
-import com.swiftsoft.colossus.mobileoil.Active;
 import com.swiftsoft.colossus.mobileoil.CrashReporter;
 import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
-import com.swiftsoft.colossus.mobileoil.database.model.dbVehicle;
 
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
@@ -153,14 +151,6 @@ public class BitmapPrinter extends Printer
         // Print the actual name
         finalPosition = addSpacer(finalPosition, SpacerHeight.Small);
         finalPosition = addTextLeft(Size.Normal, xRightColumn, finalPosition, widthRightColumn, name);
-
-        // Print the vehicle registration if this was the Driver signature
-        if (title.startsWith("Driver"))
-        {
-            dbVehicle vehicle = dbVehicle.FindByNo(Active.trip.Vehicle.No);
-            finalPosition = addSpacer(finalPosition, SpacerHeight.Small);
-            finalPosition = addTextLeft(Size.Normal, xRightColumn, finalPosition, widthRightColumn, vehicle.Reg);
-        }
 
         // Print the Date header
         finalPosition = addSpacer(finalPosition, SpacerHeight.Large);
