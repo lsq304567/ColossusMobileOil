@@ -1,3 +1,12 @@
+V0.99t17
+========
+
+Fixed issure when parsing dates and using demo MeterMate
+
+Remove Vehicle Reg. from Driver signature panel, as now displayed in top section of Delivery Docket
+
+Monetary values calculated using BigDecimal rather than double - solves several inaccuracies that were noted
+
 V0.99t16
 ========
 
