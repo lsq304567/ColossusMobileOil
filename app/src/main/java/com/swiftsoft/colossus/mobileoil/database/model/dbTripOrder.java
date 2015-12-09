@@ -769,20 +769,22 @@ public class dbTripOrder extends Model
         BigDecimal prepaidAmount = getPrepaidAmount();
         BigDecimal paidDriver = getPaidDriver();
 
-		BigDecimal unpaid = getCashTotal().subtract(getPrepaidAmount()).subtract(getPaidDriver());
+		BigDecimal unpaid = cashTotal.subtract(prepaidAmount).subtract(paidDriver);
 
 		// Round off pence as discount.
 		setDiscount(BigDecimal.ZERO);
 
-        if (unpaid.compareTo(BigDecimal.ONE) == -1)
+        if (unpaid.compareTo(BigDecimal.ONE) < 0)
         {
-            if (unpaid.compareTo(BigDecimal.ZERO) == 1)
+            BigDecimal deliveredSurchargeValue = getDeliveredSurchargeValue();
+
+            if (unpaid.compareTo(BigDecimal.ZERO) > 0)
             {
-                setDiscount(getDeliveredSurchargeValue());
+                setDiscount(deliveredSurchargeValue.add(unpaid));
             }
             else
             {
-                setDiscount((getDeliveredSurchargeValue().add(unpaid)));
+                setDiscount(deliveredSurchargeValue);
             }
         }
 	}
