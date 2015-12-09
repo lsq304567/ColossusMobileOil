@@ -429,7 +429,7 @@ public class dbTripOrder extends Model
 		{
 			VatRow vatRow = vatRows.get(i);
 
-			BigDecimal vat = vatRow.nettValue.multiply(vatRow.vatPercentage).divide(new BigDecimal(100));
+			BigDecimal vat = vatRow.nettValue.multiply(vatRow.vatPercentage).divide(new BigDecimal(100), 10, BigDecimal.ROUND_HALF_UP);
 
 			vatValue = vatValue.add(Utils.RoundNearest(vat, 2));
 		}
@@ -549,7 +549,7 @@ public class dbTripOrder extends Model
 		{
 			VatRow vatRow = vatRows.get(i);
 
-			BigDecimal vat = vatRow.nettValue.multiply(vatRow.vatPercentage).divide(new BigDecimal(100));
+			BigDecimal vat = vatRow.nettValue.multiply(vatRow.vatPercentage).divide(new BigDecimal(100), 10, BigDecimal.ROUND_HALF_UP);
 
             vatValue = vatValue.add(vat);
 		}
@@ -625,7 +625,7 @@ public class dbTripOrder extends Model
 
             BigDecimal vatPercentage = getVatPercentage(orderLine);
 
-            surchargeVat = surcharge.multiply(vatPercentage).divide(new BigDecimal(100));
+            surchargeVat = surcharge.multiply(vatPercentage).divide(new BigDecimal(100), 10, BigDecimal.ROUND_HALF_UP);
         }
 
         return surchargeVat;
@@ -682,7 +682,7 @@ public class dbTripOrder extends Model
         CrashReporter.leaveBreadcrumb("dbTripOrder: getOutstanding");
 
         BigDecimal creditTotal = getCreditTotal();
-        BigDecimal prepaidAmount = getPrepaidAmount();
+        BigDecimal prepaidAmount = getAmountPrepaid();
         BigDecimal paidDriver = getPaidDriver();
 
 		return Utils.RoundNearest(creditTotal.subtract(prepaidAmount).subtract(paidDriver).subtract(getDiscount()), 2);
@@ -780,7 +780,7 @@ public class dbTripOrder extends Model
         CrashReporter.leaveBreadcrumb("dbTripOrder: calculateDiscount");
 
         BigDecimal cashTotal = getCashTotal();
-        BigDecimal prepaidAmount = getPrepaidAmount();
+        BigDecimal prepaidAmount = getAmountPrepaid();
         BigDecimal paidDriver = getPaidDriver();
 
 		BigDecimal unpaid = cashTotal.subtract(prepaidAmount).subtract(paidDriver);

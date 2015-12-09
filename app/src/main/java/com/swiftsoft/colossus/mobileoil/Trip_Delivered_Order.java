@@ -184,7 +184,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 				BigDecimal vat = selectedOrder.getDeliveredVatValue();
 				BigDecimal accBalance = selectedOrder.getCodAccBalance();
 				BigDecimal creditTotal = selectedOrder.getCreditTotal();
-				BigDecimal paidOffice = selectedOrder.getPrepaidAmount();
+				BigDecimal paidOffice = selectedOrder.getAmountPrepaid();
 				BigDecimal paidDriver = selectedOrder.getPaidDriver();
 				BigDecimal discount = selectedOrder.getDiscount();
 				BigDecimal outstanding = selectedOrder.getOutstanding();

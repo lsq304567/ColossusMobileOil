@@ -981,7 +981,7 @@ public class Printing
             finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 
             // Print amount paid at office
-            finalPosition = printTitleAndAmount(printer, finalPosition, "Paid office", order.getPrepaidAmount());
+            finalPosition = printTitleAndAmount(printer, finalPosition, "Paid office", order.getAmountPrepaid());
 
             // Print the discount
             finalPosition = printTitleAndAmount(printer, finalPosition, "Discount", order.getDiscount());

@@ -249,7 +249,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 				BigDecimal accBalance = Active.order.getCodAccBalance();
 				BigDecimal creditTotal = Active.order.getCreditTotal();
 				BigDecimal cashTotal = Active.order.getCashTotal();
-				BigDecimal paidOffice = Active.order.getPrepaidAmount();
+				BigDecimal paidOffice = Active.order.getAmountPrepaid();
 				BigDecimal paidDriver = Active.order.getPaidDriver();
                 Active.order.calculateDiscount();
                 BigDecimal discount = Active.order.getDiscount();
