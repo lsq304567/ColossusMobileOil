@@ -1,12 +1,13 @@
 package com.swiftsoft.colossus.mobileoil.database.model;
 
-import java.util.List;
-
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.swiftsoft.colossus.mobileoil.CrashReporter;
+
+import java.util.List;
 
 @Table(name = "Trip")
 public class dbTrip extends Model
@@ -38,6 +39,9 @@ public class dbTrip extends Model
 	
 	@Column(name = "Delivered")
 	public boolean Delivered;
+
+    @Column(name = "OriginalHosereelProduct")
+    public dbProduct OriginalHosereelProduct;
 
 	//
 	// Static methods.
@@ -92,24 +96,40 @@ public class dbTrip extends Model
 	// Start delivering.
 	public void start()
 	{
+		CrashReporter.leaveBreadcrumb("dbTrip: start");
+
 		// Check if any orders already delivered on this trip.
 		if (GetDelivered().size() > 0)
+		{
+			CrashReporter.leaveBreadcrumb("dbTrip: start - Some orders have been delivered");
+
 			return;
+		}
 		
 		// Check if any stock transactions for this trip.
 		if (GetStockTrans().size() > 0)
+		{
+			CrashReporter.leaveBreadcrumb("dbTrip: start - There are existing Stock Transaction for this Trip");
+
 			return;
+		}
 		
 		// Copy CurrentStock to OpeningStock at the start of this trip.
-		for (dbVehicleStock vs : dbVehicleStock.GetAll(Vehicle))
+        CrashReporter.leaveBreadcrumb("dbTrip: start - Saving Opening Stock values ...");
+		for (dbVehicleStock vehicleStock : dbVehicleStock.GetAll(Vehicle))
 		{
-			vs.OpeningStock = vs.CurrentStock;
-			vs.save();
+			vehicleStock.OpeningStock = vehicleStock.CurrentStock;
+			vehicleStock.save();
 		}
+
+        // Save the original hosereel product
+        OriginalHosereelProduct = Vehicle.getHosereelProduct();
 		
 		// Mark trip as Delivering.
 		Delivering = true;
-		save();
+
+        CrashReporter.leaveBreadcrumb("dbTrip: start - Saving Trip ...");
+        save();
 	}
 	
 	// Stop delivering.

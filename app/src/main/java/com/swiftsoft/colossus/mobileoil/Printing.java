@@ -471,8 +471,30 @@ public class Printing
 
 		finalPosition = printer.addTextLeft(Size.Large, 550, finalPosition, 250, "On board");
 
+        // Get the original product in the hosereel (if any)
+        dbProduct originalHosereelProduct = Active.trip.OriginalHosereelProduct;
+
+        // Get the product stock
         List<dbVehicleStock> stockList = dbVehicleStock.GetStockByProduct(vehicle);
 
+        // If there was any original hosereel product subtract from
+        // the OpeningStock value
+        if (originalHosereelProduct != null)
+        {
+            for (dbVehicleStock vehicleStock : stockList)
+            {
+                if (vehicleStock.Product.getId().equals(originalHosereelProduct.getId()))
+                {
+                    CrashReporter.leaveBreadcrumb("Printing: printOpeningStock - Subtracting original hosereel capacity from Opening Stock");
+
+                    vehicleStock.OpeningStock -= Active.vehicle.getHosereelCapacity();
+
+                    break;
+                }
+            }
+        }
+
+        // Now print out the opening stock values for each product
         for (dbVehicleStock vehicleStock : stockList)
 		{
 			if (vehicleStock !=  null)
@@ -494,6 +516,18 @@ public class Printing
 				finalPosition = printer.addTextLeft(Size.Large, 550, finalPosition, 250, Integer.toString(vehicleStock.OpeningStock));
 			}
 		}
+
+        // If there was original line stock print this now
+        if (originalHosereelProduct != null)
+        {
+            finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+
+            finalPosition = printTitle(printer, finalPosition, "Line Stock");
+
+            printer.addTextLeft(Size.Large, 80, finalPosition, 470, originalHosereelProduct.Desc);
+
+            finalPosition = printer.addTextLeft(Size.Large, 550, finalPosition, 250, Integer.toString(Active.vehicle.getHosereelCapacity()));
+        }
 
 		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 	}
@@ -638,9 +672,30 @@ public class Printing
 
 		finalPosition = printer.addTextLeft(Size.Large, 550, titlePosition, 250, "On board");
 
-		List<dbVehicleStock> stockList = dbVehicleStock.GetStockByProduct(vehicle);
+        // Get the original product in the hosereel (if any)
+        dbProduct hosereelProduct = Active.vehicle.getHosereelProduct();
 
-		for (dbVehicleStock vehicleStock : stockList)
+        List<dbVehicleStock> stockList = dbVehicleStock.GetStockByProduct(vehicle);
+
+        // If there was any original hosereel product subtract from
+        // the OpeningStock value
+        if (hosereelProduct != null)
+        {
+            for (dbVehicleStock vehicleStock : stockList)
+            {
+                if (vehicleStock.Product.getId().equals(hosereelProduct.getId()))
+                {
+                    CrashReporter.leaveBreadcrumb("Printing: printOpeningStock - Subtracting hosereel capacity from Current Stock");
+
+                    vehicleStock.CurrentStock -= Active.vehicle.getHosereelCapacity();
+
+                    break;
+                }
+            }
+        }
+
+        // Now print out the current stock values for each product
+        for (dbVehicleStock vehicleStock : stockList)
 		{
 			if (vehicleStock != null)
 			{
@@ -662,7 +717,19 @@ public class Printing
 			}
 		}
 
-		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+        // If there is current line stock print this now
+        if (hosereelProduct != null)
+        {
+            finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+
+            finalPosition = printTitle(printer, finalPosition, "Line Stock");
+
+            printer.addTextLeft(Size.Large, 80, finalPosition, 470, hosereelProduct.Desc);
+
+            finalPosition = printer.addTextLeft(Size.Large, 550, finalPosition, 250, Integer.toString(Active.vehicle.getHosereelCapacity()));
+        }
+
+        return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 	}
 
 	@SuppressWarnings("SuspiciousNameCombination")
