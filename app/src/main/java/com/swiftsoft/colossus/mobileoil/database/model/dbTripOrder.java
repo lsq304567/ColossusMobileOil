@@ -5,6 +5,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.swiftsoft.colossus.mobileoil.CrashReporter;
 import com.swiftsoft.colossus.mobileoil.Utils;
 
 import java.math.BigDecimal;
@@ -455,26 +456,34 @@ public class dbTripOrder extends Model
 	
 	public BigDecimal getDeliveredNettValue()
 	{
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getDeliveredNettValue");
+
 		BigDecimal value = BigDecimal.ZERO;
 
 		for (dbTripOrderLine line : this.GetTripOrderLines())
         {
             value = value.add(line.getDeliveredNettValue());
         }
+
+        CrashReporter.leaveBreadcrumb(String.format("dbTripOrder: getDeliveredNettValue - %f", value));
 		
 		return value;
 	}
 	
 	public BigDecimal getDeliveredSurchargeValue()
 	{
-		BigDecimal value = BigDecimal.ZERO;
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getDeliveredSurchargeValue");
+
+        BigDecimal value = BigDecimal.ZERO;
 
 		for (dbTripOrderLine line : this.GetTripOrderLines())
         {
             value = value.add(line.getDeliveredSurchargeValue());
         }
-		
-		return value;
+
+        CrashReporter.leaveBreadcrumb(String.format("dbTripOrder: getDeliveredSurchargeValue - %f", value));
+
+        return value;
 	}
 
     private static void addRow(Hashtable<BigDecimal, VatRow> table, VatRow row)
@@ -596,6 +605,8 @@ public class dbTripOrder extends Model
 	//
 	public BigDecimal getCashTotal()
 	{
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getCashTotal");
+
         BigDecimal deliveredNettValue = getDeliveredNettValue();
         BigDecimal deliveredVatValue = getDeliveredVatValue();
         BigDecimal codAccBalance = getCodAccBalance();
@@ -619,7 +630,6 @@ public class dbTripOrder extends Model
 
         return surchargeVat;
     }
-
 
     private static BigDecimal getVatPercentage(dbTripOrderLine line)
     {
@@ -669,6 +679,8 @@ public class dbTripOrder extends Model
 	//
 	public BigDecimal getOutstanding()
 	{
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getOutstanding");
+
         BigDecimal creditTotal = getCreditTotal();
         BigDecimal prepaidAmount = getPrepaidAmount();
         BigDecimal paidDriver = getPaidDriver();
@@ -765,11 +777,15 @@ public class dbTripOrder extends Model
 	// Update Discount.
 	public void calculateDiscount()
 	{
+        CrashReporter.leaveBreadcrumb("dbTripOrder: calculateDiscount");
+
         BigDecimal cashTotal = getCashTotal();
         BigDecimal prepaidAmount = getPrepaidAmount();
         BigDecimal paidDriver = getPaidDriver();
 
 		BigDecimal unpaid = cashTotal.subtract(prepaidAmount).subtract(paidDriver);
+
+        CrashReporter.leaveBreadcrumb(String.format("dbTripOrder: calculateDiscount - Unpaid amount : %f", unpaid));
 
 		// Round off pence as discount.
 		setDiscount(BigDecimal.ZERO);

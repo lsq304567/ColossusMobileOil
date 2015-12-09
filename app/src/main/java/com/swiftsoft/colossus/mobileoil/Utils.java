@@ -38,6 +38,10 @@ public class Utils {
 
 	public static BigDecimal RoundNearest(BigDecimal value, int n)
 	{
+        CrashReporter.leaveBreadcrumb("Utils: RoundNearest");
+
+        CrashReporter.leaveBreadcrumb(String.format("Utils: Roundnearest - Rounding %f to %d decimal places", value, n));
+
 		return value.setScale(n, BigDecimal.ROUND_HALF_UP);
 	}
 	

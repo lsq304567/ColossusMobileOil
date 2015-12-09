@@ -57,7 +57,7 @@ public class Trip_Delivered_Order extends MyFlipperView
     private DecimalFormat formatMoney;
 
 	private dbTripOrder selectedOrder;
-	
+
 	public Trip_Delivered_Order(Context context)
 	{
 		super(context);
@@ -69,12 +69,12 @@ public class Trip_Delivered_Order extends MyFlipperView
 		super(context, attrs);
 		init(context);
 	}
-	
+
 	public Trip_Delivered_Order(Context context, Trip_Delivered tripDelivered)
 	{
 		super(context);
 		init(context);
-		
+
 		// Store reference to Trip_Delivered dialog.
 		this.tripDelivered = tripDelivered;
 	}
@@ -88,11 +88,11 @@ public class Trip_Delivered_Order extends MyFlipperView
 
 			// Store reference to Trip activity.
 			trip = (Trip)context;
-	
+
 			// Inflate layout.
 			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.trip_delivered_order, this, true);
-	
+
 			tvOrderNo = (TextView)this.findViewById(R.id.trip_delivered_order_no);
 			tvOrderCustomer = (TextView)this.findViewById(R.id.trip_delivered_order_customer);
 			tvOrderDelAddress = (TextView)this.findViewById(R.id.trip_delivered_order_delAddress);
@@ -118,10 +118,10 @@ public class Trip_Delivered_Order extends MyFlipperView
 			tvOrderSignatureDateTime = (TextView)this.findViewById(R.id.trip_delivered_order_signature_datetime);
             Button btnBack = (Button) this.findViewById(R.id.trip_delivered_order_back);
             Button btnReprint = (Button) this.findViewById(R.id.trip_delivered_order_reprint);
-	
+
 			btnBack.setOnClickListener(onBack);
 			btnReprint.setOnClickListener(onReprint);
-			
+
 			// Setup standard decimal format.
 			formatMoney = new DecimalFormat("#,##0.00");
 		}
@@ -135,7 +135,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 	{
 		selectedOrder = order;
 	}
-	
+
 	@SuppressLint("SetTextI18n")
     @Override
 	public void updateUI()
@@ -145,42 +145,42 @@ public class Trip_Delivered_Order extends MyFlipperView
 			if (selectedOrder != null)
 			{
 				DateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm");
-	
+
 				String customer = selectedOrder.CustomerName + "\n" + selectedOrder.CustomerAddress;
 				String delAddress = selectedOrder.DeliveryName + "\n" + selectedOrder.DeliveryAddress;
-				
+
 				tvOrderNo.setText(selectedOrder.InvoiceNo);
 				tvOrderCustomer.setText(customer);
 				tvOrderDelAddress.setText(String.format("%s\n%s", delAddress, selectedOrder.DeliveryPostcode));
-		
+
 				// If delivery address is different, show it in bold.
 				tvOrderDelAddress.setTypeface(null, customer.equals(delAddress) ? Typeface.NORMAL : Typeface.BOLD);
-	
+
 				// Remove any old order lines.
 				while (tlOrderProductTable.getChildCount() > 1)
 				{
 					tlOrderProductTable.removeViewAt(1);
 				}
-				
+
 				for (dbTripOrderLine line : selectedOrder.GetTripOrderLines())
 				{
 					@SuppressLint("InflateParams")
 					TableRow tr = (TableRow)inflater.inflate(R.layout.trip_delivered_order_tablerow, null);
 					tr.setTag(line);
-		
+
 					TextView tvDesc = (TextView) tr.findViewById(R.id.trip_delivered_order_tablerow_desc);
 					tvDesc.setText(line.Product.Desc);
-					
+
 					TextView tvDeliveredQty = (TextView) tr.findViewById(R.id.trip_delivered_order_tablerow_delivered);
 					tvDeliveredQty.setText(String.format("%d", line.DeliveredQty));
-					
+
 					TextView tvValue = (TextView) tr.findViewById(R.id.trip_delivered_order_tablerow_value);
 					tvValue.setText("" + formatMoney.format(line.getDeliveredNettValue().add(line.getDeliveredSurchargeValue())));
-				
+
 					// Add the TableRow to the TableLayout.
 					tlOrderProductTable.addView(tr);
 				}
-		
+
 				BigDecimal vat = selectedOrder.getDeliveredVatValue();
 				BigDecimal accBalance = selectedOrder.getCodAccBalance();
 				BigDecimal creditTotal = selectedOrder.getCreditTotal();
@@ -188,10 +188,10 @@ public class Trip_Delivered_Order extends MyFlipperView
 				BigDecimal paidDriver = selectedOrder.getPaidDriver();
 				BigDecimal discount = selectedOrder.getDiscount();
 				BigDecimal outstanding = selectedOrder.getOutstanding();
-				
+
 				// Update view.
 				tvOrderVat.setText(formatMoney.format(vat));
-				
+
 				if (accBalance.compareTo(BigDecimal.ZERO) == 0)
 				{
 					trOrderAccBalanceRow.setVisibility(View.GONE);
@@ -201,9 +201,9 @@ public class Trip_Delivered_Order extends MyFlipperView
 					trOrderAccBalanceRow.setVisibility(View.VISIBLE);
 					tvOrderAccBalance.setText(formatMoney.format(accBalance));
 				}
-				
+
 				tvOrderTotal.setText(formatMoney.format(creditTotal));
-				
+
 				if (paidOffice.compareTo(BigDecimal.ZERO) == 0)
 				{
 					trOrderPaidOfficeRow.setVisibility(View.GONE);
@@ -213,7 +213,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 					trOrderPaidOfficeRow.setVisibility(View.VISIBLE);
 					tvOrderPaidOffice.setText(formatMoney.format(paidOffice));
 				}
-				
+
 				if (paidDriver.compareTo(BigDecimal.ZERO) == 0)
 				{
 					trOrderPaidDriverRow.setVisibility(View.GONE);
@@ -223,7 +223,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 					trOrderPaidDriverRow.setVisibility(View.VISIBLE);
 					tvOrderPaidDriver.setText(formatMoney.format(paidDriver));
 				}
-				
+
 				if (discount.compareTo(BigDecimal.ZERO) == 0)
 				{
 					trOrderDiscountRow.setVisibility(View.GONE);
@@ -233,7 +233,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 					trOrderDiscountRow.setVisibility(View.VISIBLE);
 					tvOrderDiscount.setText(formatMoney.format(discount));
 				}
-				
+
 				if (paidOffice.compareTo(BigDecimal.ZERO) == 0 && paidDriver.compareTo(BigDecimal.ZERO) == 0 && discount.compareTo(BigDecimal.ZERO) == 0)
 				{
 					trOrderSubtotalRow.setVisibility(View.GONE);
