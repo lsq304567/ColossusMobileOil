@@ -7,6 +7,7 @@ import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.swiftsoft.colossus.mobileoil.Utils;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -72,18 +73,38 @@ public class dbTripOrder extends Model
 	public long DueDate;
 	
 	@Column(name = "PrepaidAmount")
-	public double PrepaidAmount;
-	
-	@Column(name = "CodPoint")
+	public String PrepaidAmount;
+
+    public BigDecimal getPrepaidAmount()
+    {
+        return new BigDecimal(PrepaidAmount);
+    }
+
+    public void setPrepaidAmount(BigDecimal value)
+    {
+        PrepaidAmount = value.toString();
+    }
+
+    @Column(name = "CodPoint")
 	public int CodPoint;
 	
 	@Column(name = "CodType")
 	public int CodType;
 	
 	@Column(name = "CodAmount")
-	public double CodAmount;
+	public String CodAmount;
 
-	@Column(name = "Notes")
+    public BigDecimal getCodAmount()
+    {
+        return new BigDecimal(CodAmount);
+    }
+
+    public void setCodAmount(BigDecimal value)
+    {
+        CodAmount = value.toString();
+    }
+
+    @Column(name = "Notes")
 	public String Notes;
 	
 	//
@@ -125,18 +146,78 @@ public class dbTripOrder extends Model
     public boolean HidePrices;
 	
 	@Column(name = "CashReceived")
-	public double CashReceived;
+	public String CashReceived;
+
+    public BigDecimal getCashReceived()
+    {
+        if (CashReceived == null)
+        {
+            setCashReceived(BigDecimal.ZERO);
+        }
+
+        return new BigDecimal(CashReceived);
+    }
+
+    public void setCashReceived(BigDecimal value)
+    {
+        CashReceived = value.toString();
+    }
 	
 	@Column(name = "ChequeReceived")
-	public double ChequeReceived;
-	
-	@Column(name = "VoucherReceived")
-	public double VoucherReceived;
-	
-	@Column(name = "Discount")
-	public double Discount;
+	public String ChequeReceived;
 
-	@Column(name = "DriverSignature")
+    public BigDecimal getChequeReceived()
+    {
+        if (ChequeReceived == null)
+        {
+            setChequeReceived(BigDecimal.ZERO);
+        }
+
+        return new BigDecimal(ChequeReceived);
+    }
+
+    public void setChequeReceived(BigDecimal value)
+    {
+        ChequeReceived = value.toString();
+    }
+
+    @Column(name = "VoucherReceived")
+	public String VoucherReceived;
+
+    public BigDecimal getVoucherReceived()
+    {
+        if (VoucherReceived == null)
+        {
+            setVoucherReceived(BigDecimal.ZERO);
+        }
+
+        return new BigDecimal(VoucherReceived);
+    }
+
+    public void setVoucherReceived(BigDecimal value)
+    {
+        VoucherReceived = value.toString();
+    }
+
+    @Column(name = "Discount")
+	public String Discount;
+
+    public BigDecimal getDiscount()
+    {
+        if (Discount == null)
+        {
+            setDiscount(BigDecimal.ZERO);
+        }
+
+        return new BigDecimal(Discount);
+    }
+
+    public void setDiscount(BigDecimal value)
+    {
+        Discount = value.toString();
+    }
+
+    @Column(name = "DriverSignature")
 	public boolean DriverSignature;
 
 	@Column(name = "DriverSignatureName")
@@ -173,8 +254,8 @@ public class dbTripOrder extends Model
 
 	public class VatRow
 	{
-		public double vatPercentage;
-		public double nettValue;
+		public BigDecimal vatPercentage = BigDecimal.ZERO;
+		public BigDecimal nettValue = BigDecimal.ZERO;
 	}
 
 	// Find all order lines.
@@ -203,26 +284,26 @@ public class dbTripOrder extends Model
 	// 
 	// Return COD 'before delivery' value 
 	//
-	public double getCodBeforeDeliveryValue()
+	public BigDecimal getCodBeforeDeliveryValue()
 	{
-		double cod = 0;
+		BigDecimal cod = BigDecimal.ZERO;
 
 		// Before delivery.
 		if (CodPoint == 2)
 		{
 			if (CodType == 1)
 			{
-				cod = getOrderedNettValue() + getOrderedVatValue();
+				cod = getOrderedNettValue().add(getOrderedVatValue());
 			}
 			
 			if (CodType == 2)
 			{
-				cod = getOrderedNettValue() + getOrderedVatValue() + CodAmount;
+				cod = getOrderedNettValue().add(getOrderedVatValue()).add(getCodAmount());
 			}
 			
 			if (CodType == 3)
 			{
-				cod = CodAmount;
+				cod = getCodAmount();
 			}
 		}	
 
@@ -232,26 +313,26 @@ public class dbTripOrder extends Model
 	// 
 	// Return COD 'after delivery' value. 
 	//
-	public double getCodAfterDeliveryValue()
+	public BigDecimal getCodAfterDeliveryValue()
 	{
-		double cod = 0;
+		BigDecimal cod = BigDecimal.ZERO;
 
 		// Before/After delivery.
 		if (CodPoint != 0)
 		{
 			if (CodType == 1)
             {
-                cod = getDeliveredNettValue() + getDeliveredVatValue();
+                cod = getDeliveredNettValue().add(getDeliveredVatValue());
             }
 			
 			if (CodType == 2)
             {
-                cod = getDeliveredNettValue() + getDeliveredVatValue() + CodAmount;
+                cod = getDeliveredNettValue().add(getDeliveredVatValue()).add(getCodAmount());
             }
 			
 			if (CodType == 3)
             {
-                cod = CodAmount;
+                cod = getCodAmount();
             }
 		}	
 
@@ -263,14 +344,14 @@ public class dbTripOrder extends Model
 	//
 	// Return COD 'Acc balance' value, which is held in CodAmount if CodType is 2.
 	//
-	public double getCodAccBalance()
+	public BigDecimal getCodAccBalance()
 	{
 		if (CodPoint != 0 && CodType == 2)
         {
-            return CodAmount;
+            return getCodAmount();
         }
 		
-		return 0;
+		return BigDecimal.ZERO;
 	}
 
 	//
@@ -301,31 +382,31 @@ public class dbTripOrder extends Model
 	// Ordered values.
 	//
 	
-	private double getOrderedNettValue()
+	private BigDecimal getOrderedNettValue()
 	{
-		double value = 0;
+		BigDecimal value = BigDecimal.ZERO;
 
         for (dbTripOrderLine line : this.GetTripOrderLines())
         {
-            value += line.getOrderedNettValue();
+			value = value.add(line.getOrderedNettValue());
         }
 		
 		return value;
 	}
 	
-	public double getOrderedSurchargeValue()
+	public BigDecimal getOrderedSurchargeValue()
 	{
-		double value = 0;
+		BigDecimal value = BigDecimal.ZERO;
 
         for (dbTripOrderLine line : this.GetTripOrderLines())
         {
-            value += line.getOrderedSurchargeValue();
+			value = value.add(line.getOrderedSurchargeValue());
         }
 		
 		return value;
 	}
 	
-	private double getOrderedVatValue()
+	private BigDecimal getOrderedVatValue()
 	{
 		List<VatRow> vatRows = new ArrayList<VatRow>();
 		
@@ -334,22 +415,24 @@ public class dbTripOrder extends Model
 		{
 			AddToVatTable(vatRows, line.getOrderedVatPerc(), line.getOrderedNettValue());
 			
-			if (line.getOrderedSurchargeValue() != 0)
+			if (line.getOrderedSurchargeValue().compareTo(BigDecimal.ZERO) != 0)
             {
-                AddToVatTable(vatRows, 0, line.getOrderedSurchargeValue());
+                AddToVatTable(vatRows, BigDecimal.ZERO, line.getOrderedSurchargeValue());
             }
 		}
 
 		// Calculate VAT value.
-		double vatValue = 0;
+		BigDecimal vatValue = BigDecimal.ZERO;
 
         for (int i = 0; i < vatRows.size(); i++)
 		{
 			VatRow vatRow = vatRows.get(i);
-			double vat = vatRow.nettValue * vatRow.vatPercentage / 100.0;
-			vatValue += Utils.RoundNearest(vat, 2);
-		}		
-		
+
+			BigDecimal vat = vatRow.nettValue.multiply(vatRow.vatPercentage).divide(new BigDecimal(100));
+
+			vatValue = vatValue.add(Utils.RoundNearest(vat, 2));
+		}
+
 		return vatValue;
 	}
 
@@ -370,31 +453,31 @@ public class dbTripOrder extends Model
 		return false;
 	}
 	
-	public double getDeliveredNettValue()
+	public BigDecimal getDeliveredNettValue()
 	{
-		double value = 0;
+		BigDecimal value = BigDecimal.ZERO;
 
 		for (dbTripOrderLine line : this.GetTripOrderLines())
         {
-            value += line.getDeliveredNettValue();
+            value = value.add(line.getDeliveredNettValue());
         }
 		
 		return value;
 	}
 	
-	public double getDeliveredSurchargeValue()
+	public BigDecimal getDeliveredSurchargeValue()
 	{
-		double value = 0;
+		BigDecimal value = BigDecimal.ZERO;
 
 		for (dbTripOrderLine line : this.GetTripOrderLines())
         {
-            value += line.getDeliveredSurchargeValue();
+            value = value.add(line.getDeliveredSurchargeValue());
         }
 		
 		return value;
 	}
 
-    private static void addRow(Hashtable<Double, VatRow> table, VatRow row)
+    private static void addRow(Hashtable<BigDecimal, VatRow> table, VatRow row)
     {
         if (!table.containsKey(row.vatPercentage))
         {
@@ -404,13 +487,13 @@ public class dbTripOrder extends Model
         {
             VatRow foundRow = table.get(row.vatPercentage);
 
-            foundRow.nettValue += row.nettValue;
+            foundRow.nettValue = foundRow.nettValue.add(row.nettValue);
         }
     }
 
-	public Hashtable<Double, VatRow> getDeliveredVatValues()
+	public Hashtable<BigDecimal, VatRow> getDeliveredVatValues()
 	{
-		Hashtable<Double, VatRow> vatRows = new Hashtable<Double, VatRow>();
+		Hashtable<BigDecimal, VatRow> vatRows = new Hashtable<BigDecimal, VatRow>();
 
         for (dbTripOrderLine line : GetTripOrderLines())
         {
@@ -421,7 +504,7 @@ public class dbTripOrder extends Model
 
             addRow(vatRows, row);
 
-            if (line.getDeliveredSurchargeValue() != 0)
+            if (line.getDeliveredSurchargeValue().compareTo(BigDecimal.ZERO) != 0)
             {
                 row = new VatRow();
 
@@ -435,7 +518,7 @@ public class dbTripOrder extends Model
 		return vatRows;
 	}
 	
-	public double getDeliveredVatValue()
+	public BigDecimal getDeliveredVatValue()
 	{
 		List<VatRow> vatRows = new ArrayList<VatRow>();
 		
@@ -444,21 +527,23 @@ public class dbTripOrder extends Model
 		{
 			AddToVatTable(vatRows, line.getDeliveredVatPerc(), line.getDeliveredNettValue());
 			
-			if (line.getDeliveredSurchargeValue() != 0)
+			if (line.getDeliveredSurchargeValue().compareTo(BigDecimal.ZERO) != 0)
 			{
 				AddToVatTable(vatRows, line.getDeliveredVatPerc(), line.getDeliveredSurchargeValue());
 			}
 		}
 
 		// Calculate VAT value.
-		double vatValue = 0;
+		BigDecimal vatValue = BigDecimal.ZERO;
 
 		for (int i = 0; i < vatRows.size(); i++)
 		{
 			VatRow vatRow = vatRows.get(i);
-			double vat = vatRow.nettValue * vatRow.vatPercentage / 100.0;
-			vatValue += vat;
-		}		
+
+			BigDecimal vat = vatRow.nettValue.multiply(vatRow.vatPercentage).divide(new BigDecimal(100));
+
+            vatValue = vatValue.add(vat);
+		}
 		
 		return Utils.RoundNearest(vatValue, 2);
 	}
@@ -467,14 +552,14 @@ public class dbTripOrder extends Model
 	// Common
 	//
 	
-	private void AddToVatTable(List<VatRow> vatRows, double vatPercentage, double nettValue)
+	private void AddToVatTable(List<VatRow> vatRows, BigDecimal vatPercentage, BigDecimal nettValue)
 	{
 		VatRow vatRow = null;
 		
 		// Search for existing row.
 		for (int i = 0; i < vatRows.size(); i++)
 		{
-			if (vatRows.get(i).vatPercentage == vatPercentage)
+			if (vatRows.get(i).vatPercentage.compareTo(vatPercentage) == 0)
 			{
 				vatRow = vatRows.get(i);
 				break;
@@ -490,68 +575,68 @@ public class dbTripOrder extends Model
 		
 		// Update row values.
 		vatRow.vatPercentage = vatPercentage;
-		vatRow.nettValue += nettValue;
+        vatRow.nettValue = vatRow.nettValue.add(nettValue);
 	}
 	
 	//
 	// Return total if charging to account.
 	//
-	public double getCreditTotal()
+	public BigDecimal getCreditTotal()
 	{
-        double deliveredNettValue = getDeliveredNettValue();
-        double deliveredVatValue = getDeliveredVatValue();
-        double deliveredSurchargeValue = getDeliveredSurchargeValue();
-        double codAccBalance = getCodAccBalance();
+        BigDecimal deliveredNettValue = getDeliveredNettValue();
+        BigDecimal deliveredVatValue = getDeliveredVatValue();
+        BigDecimal deliveredSurchargeValue = getDeliveredSurchargeValue();
+        BigDecimal codAccBalance = getCodAccBalance();
 
-        return Utils.RoundNearest(deliveredNettValue + deliveredVatValue + deliveredSurchargeValue + codAccBalance, 2);
+        return Utils.RoundNearest(deliveredNettValue.add(deliveredVatValue).add(deliveredSurchargeValue).add(codAccBalance), 2);
 	}
 
 	//
 	// Return total if paying cash to driver.
 	//
-	public double getCashTotal()
+	public BigDecimal getCashTotal()
 	{
-        double deliveredNettValue = getDeliveredNettValue();
-        double deliveredVatValue = getDeliveredVatValue();
-        double codAccBalance = getCodAccBalance();
+        BigDecimal deliveredNettValue = getDeliveredNettValue();
+        BigDecimal deliveredVatValue = getDeliveredVatValue();
+        BigDecimal codAccBalance = getCodAccBalance();
 
-		return Utils.RoundNearest(deliveredNettValue + deliveredVatValue + codAccBalance, 2);
+		return Utils.RoundNearest(deliveredNettValue.add(deliveredVatValue).add(codAccBalance), 2);
 	}
 
-    public double getSurchargeVat()
+    public BigDecimal getSurchargeVat()
     {
-        double surcharge = getDeliveredSurchargeValue();
-        double surchargeVat = 0.0;
+        BigDecimal surcharge = getDeliveredSurchargeValue();
+        BigDecimal surchargeVat = BigDecimal.ZERO;
 
-        if (surcharge > 0)
+        if (surcharge.compareTo(BigDecimal.ZERO) == 1)
         {
             dbTripOrderLine orderLine = GetTripOrderLines().get(0);
 
-            double vatPercentage = getVatPercentage(orderLine);
+            BigDecimal vatPercentage = getVatPercentage(orderLine);
 
-            surchargeVat = surcharge * vatPercentage / 100.0;
+            surchargeVat = surcharge.multiply(vatPercentage).divide(new BigDecimal(100));
         }
 
         return surchargeVat;
     }
 
 
-    private static double getVatPercentage(dbTripOrderLine line)
+    private static BigDecimal getVatPercentage(dbTripOrderLine line)
     {
-        if (line.VatPerc2Above < 1.0e6)
+        if (line.VatPerc2Above < 1000000)
         {
             if (line.DeliveredQty < line.VatPerc2Above)
             {
-                return line.VatPerc1;
+                return line.getVatPerc1();
             }
             else
             {
-                return line.VatPerc2;
+                return line.getVatPerc2();
             }
         }
         else
         {
-            return line.VatPerc1;
+            return line.getVatPerc1();
         }
     }
 
@@ -559,13 +644,13 @@ public class dbTripOrder extends Model
     //
 	// Return total paid to office.
 	//
-	public double getPrepaidAmount()
+	public BigDecimal getAmountPrepaid()
 	{
-		double prepaid = PrepaidAmount;		// Really paid office i.e. cash in advance
+		BigDecimal prepaid = getPrepaidAmount();		// Really paid office i.e. cash in advance
 		
 		if (Terms.equals("Paying by Card"))
         {
-            prepaid += getCashTotal();
+            prepaid = prepaid.add(getCashTotal());
         }
 		
 		return prepaid;
@@ -574,21 +659,21 @@ public class dbTripOrder extends Model
 	//
 	// Return total paid to driver.
 	//
-	public double getPaidDriver()
+	public BigDecimal getPaidDriver()
 	{
-		return CashReceived + ChequeReceived + VoucherReceived;
+		return getCashReceived().add(getChequeReceived()).add(getVoucherReceived());
 	}
 
 	//
 	// Return outstanding amount.
 	//
-	public double getOutstanding()
+	public BigDecimal getOutstanding()
 	{
-        double creditTotal = getCreditTotal();
-        double prepaidAmount = getPrepaidAmount();
-        double paidDriver = getPaidDriver();
+        BigDecimal creditTotal = getCreditTotal();
+        BigDecimal prepaidAmount = getPrepaidAmount();
+        BigDecimal paidDriver = getPaidDriver();
 
-		return Utils.RoundNearest(creditTotal - prepaidAmount - paidDriver - Discount, 2);
+		return Utils.RoundNearest(creditTotal.subtract(prepaidAmount).subtract(paidDriver).subtract(getDiscount()), 2);
 	}
 	
 	//
@@ -680,14 +765,25 @@ public class dbTripOrder extends Model
 	// Update Discount.
 	public void calculateDiscount()
 	{
-		double unpaid = getCashTotal() - getPrepaidAmount() - getPaidDriver();
+        BigDecimal cashTotal = getCashTotal();
+        BigDecimal prepaidAmount = getPrepaidAmount();
+        BigDecimal paidDriver = getPaidDriver();
+
+		BigDecimal unpaid = getCashTotal().subtract(getPrepaidAmount()).subtract(getPaidDriver());
 
 		// Round off pence as discount.
-		Discount = 0;
+		setDiscount(BigDecimal.ZERO);
 
-        if (unpaid < 1)
+        if (unpaid.compareTo(BigDecimal.ONE) == -1)
         {
-            Discount = (double) Math.round((getDeliveredSurchargeValue() + Math.max(0, unpaid)) * 100) / 100;
+            if (unpaid.compareTo(BigDecimal.ZERO) == 1)
+            {
+                setDiscount(getDeliveredSurchargeValue());
+            }
+            else
+            {
+                setDiscount((getDeliveredSurchargeValue().add(unpaid)));
+            }
         }
 	}
 	

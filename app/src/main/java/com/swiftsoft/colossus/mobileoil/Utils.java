@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 public class Utils {
@@ -33,6 +35,11 @@ public class Utils {
 		double roundedValue = Math.round(value * power);
 		return roundedValue / power;
 	}
+
+	public static BigDecimal RoundNearest(BigDecimal value, int n)
+	{
+		return value.setScale(n, BigDecimal.ROUND_HALF_UP);
+	}
 	
 	// Truncate value to n decimal places.
 	// 1.234 = 1.23, if n=2
@@ -42,6 +49,11 @@ public class Utils {
 		double power = Math.pow(10, n);
 		double truncatedValue = Math.floor(value * power);
 		return truncatedValue / power;
+	}
+
+	public static BigDecimal Truncate(BigDecimal value, int n)
+	{
+		return value.setScale(n, RoundingMode.DOWN);
 	}
 
 	// If value is null returns nullValue string, otherwise returns value.

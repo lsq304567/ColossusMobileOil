@@ -19,6 +19,7 @@ import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrder;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrderLine;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -174,24 +175,24 @@ public class Trip_Delivered_Order extends MyFlipperView
 					tvDeliveredQty.setText(String.format("%d", line.DeliveredQty));
 					
 					TextView tvValue = (TextView) tr.findViewById(R.id.trip_delivered_order_tablerow_value);
-					tvValue.setText("" + formatMoney.format(line.getDeliveredNettValue() + line.getDeliveredSurchargeValue()));
+					tvValue.setText("" + formatMoney.format(line.getDeliveredNettValue().add(line.getDeliveredSurchargeValue())));
 				
 					// Add the TableRow to the TableLayout.
 					tlOrderProductTable.addView(tr);
 				}
 		
-				double vat = selectedOrder.getDeliveredVatValue();
-				double accBalance = selectedOrder.getCodAccBalance();
-				double creditTotal = selectedOrder.getCreditTotal();
-				double paidOffice = selectedOrder.getPrepaidAmount();
-				double paidDriver = selectedOrder.getPaidDriver();
-				double discount = selectedOrder.Discount;
-				double outstanding = selectedOrder.getOutstanding();
+				BigDecimal vat = selectedOrder.getDeliveredVatValue();
+				BigDecimal accBalance = selectedOrder.getCodAccBalance();
+				BigDecimal creditTotal = selectedOrder.getCreditTotal();
+				BigDecimal paidOffice = selectedOrder.getPrepaidAmount();
+				BigDecimal paidDriver = selectedOrder.getPaidDriver();
+				BigDecimal discount = selectedOrder.getDiscount();
+				BigDecimal outstanding = selectedOrder.getOutstanding();
 				
 				// Update view.
 				tvOrderVat.setText(formatMoney.format(vat));
 				
-				if (accBalance == 0)
+				if (accBalance.compareTo(BigDecimal.ZERO) == 0)
 				{
 					trOrderAccBalanceRow.setVisibility(View.GONE);
 				}
@@ -203,7 +204,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 				
 				tvOrderTotal.setText(formatMoney.format(creditTotal));
 				
-				if (paidOffice == 0)
+				if (paidOffice.compareTo(BigDecimal.ZERO) == 0)
 				{
 					trOrderPaidOfficeRow.setVisibility(View.GONE);
 				}
@@ -213,7 +214,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 					tvOrderPaidOffice.setText(formatMoney.format(paidOffice));
 				}
 				
-				if (paidDriver == 0)
+				if (paidDriver.compareTo(BigDecimal.ZERO) == 0)
 				{
 					trOrderPaidDriverRow.setVisibility(View.GONE);
 				}
@@ -223,7 +224,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 					tvOrderPaidDriver.setText(formatMoney.format(paidDriver));
 				}
 				
-				if (discount == 0)
+				if (discount.compareTo(BigDecimal.ZERO) == 0)
 				{
 					trOrderDiscountRow.setVisibility(View.GONE);
 				}
@@ -233,7 +234,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 					tvOrderDiscount.setText(formatMoney.format(discount));
 				}
 				
-				if (paidOffice == 0 && paidDriver == 0 && discount == 0)
+				if (paidOffice.compareTo(BigDecimal.ZERO) == 0 && paidDriver.compareTo(BigDecimal.ZERO) == 0 && discount.compareTo(BigDecimal.ZERO) == 0)
 				{
 					trOrderSubtotalRow.setVisibility(View.GONE);
 					trOrderOutstandingRow.setVisibility(View.GONE);

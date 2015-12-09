@@ -1,7 +1,5 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import java.text.DecimalFormat;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,6 +12,9 @@ import android.widget.TextView;
 
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
+
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 public class Trip_Undelivered_COD extends MyFlipperView
 {
@@ -127,13 +128,13 @@ public class Trip_Undelivered_COD extends MyFlipperView
 			infoview.setDefaultTv2("");
 			
 			tvAmountAgreed.setText(decf2.format(Active.order.getCodBeforeDeliveryValue()));
-			trCashRow.setVisibility(Active.order.CashReceived == 0 ? View.GONE : View.VISIBLE);
-			tvCashAmount.setText(decf2.format(Active.order.CashReceived));
-			trChequeRow.setVisibility(Active.order.ChequeReceived == 0 ? View.GONE : View.VISIBLE);
-			tvChequeAmount.setText(decf2.format(Active.order.ChequeReceived));
-			trVoucherRow.setVisibility(Active.order.VoucherReceived == 0 ? View.GONE : View.VISIBLE);		
-			tvVoucherAmount.setText(decf2.format(Active.order.VoucherReceived));
-			tvAmountOutstanding.setText(decf2.format(Active.order.getCodBeforeDeliveryValue() - Active.order.getPaidDriver()));
+			trCashRow.setVisibility(Active.order.getCashReceived().compareTo(BigDecimal.ZERO) == 0 ? View.GONE : View.VISIBLE);
+			tvCashAmount.setText(decf2.format(Active.order.getCashReceived()));
+			trChequeRow.setVisibility(Active.order.getChequeReceived().compareTo(BigDecimal.ZERO) == 0 ? View.GONE : View.VISIBLE);
+			tvChequeAmount.setText(decf2.format(Active.order.getChequeReceived()));
+			trVoucherRow.setVisibility(Active.order.getVoucherReceived().compareTo(BigDecimal.ZERO) == 0 ? View.GONE : View.VISIBLE);
+			tvVoucherAmount.setText(decf2.format(Active.order.getVoucherReceived()));
+			tvAmountOutstanding.setText(decf2.format(Active.order.getCodBeforeDeliveryValue().subtract(Active.order.getPaidDriver())));
 		}
 		catch (Exception e)
 		{
@@ -192,9 +193,9 @@ public class Trip_Undelivered_COD extends MyFlipperView
 				CrashReporter.leaveBreadcrumb("Trip_Undelivered_COD: onNext");
 
 				// Calculate unpaid COD.
-				double unpaidCod = Active.order.getCodBeforeDeliveryValue() - Active.order.getPaidDriver();
+				BigDecimal unpaidCod = Active.order.getCodBeforeDeliveryValue().subtract(Active.order.getPaidDriver());
 				
-				if (unpaidCod > 0)
+				if (unpaidCod.compareTo(BigDecimal.ZERO) > 0)
 				{
 					// Warn driver COD is not fully paid.
 					AlertDialog.Builder builder = new AlertDialog.Builder(trip);

@@ -25,6 +25,8 @@ import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+
 public class Trip_Undelivered_Products extends MyFlipperView
 {
 	private Trip trip;
@@ -356,7 +358,7 @@ public class Trip_Undelivered_Products extends MyFlipperView
 				// Leave breadcrumb.
 				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onBack");
 
-				if (Active.order.CodPoint == 2 && Active.order.getCodBeforeDeliveryValue() > 0)
+				if (Active.order.CodPoint == 2 && Active.order.getCodBeforeDeliveryValue().compareTo(BigDecimal.ZERO) > 0)
 				{
 					// Switch views.
 					trip.selectView(Trip.ViewUndeliveredCOD, -1);

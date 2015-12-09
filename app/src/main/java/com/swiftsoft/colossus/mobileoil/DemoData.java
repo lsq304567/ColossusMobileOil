@@ -16,6 +16,7 @@ import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleChecklistSection
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleChecklistSectionItem;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleStock;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -221,10 +222,10 @@ public class DemoData
 		tripOrder1.Terms = "Paying by COD";
 		tripOrder1.DueDate = Utils.getCurrentTime();
 		tripOrder1.Notes = "";
-		tripOrder1.PrepaidAmount = 0;
+		tripOrder1.setPrepaidAmount(BigDecimal.ZERO);
 		tripOrder1.CodPoint = 1;
 		tripOrder1.CodType = 1;
-		tripOrder1.CodAmount = 315;
+		tripOrder1.setCodAmount(new BigDecimal(315));
 		tripOrder1.save();
 			
 		dbTripOrderLine tripOrder1Line1 = new dbTripOrderLine();
@@ -233,12 +234,12 @@ public class DemoData
 		tripOrder1Line1.ColossusID = 1;
 		tripOrder1Line1.Product = kero;
 		tripOrder1Line1.OrderedQty = 500;
-		tripOrder1Line1.OrderedPrice = 60;
-		tripOrder1Line1.Surcharge = 5;
+		tripOrder1Line1.setOrderedPrice(new BigDecimal(60));
+		tripOrder1Line1.setSurcharge(new BigDecimal(5));
 		tripOrder1Line1.SurchargePerUOM = true;
-		tripOrder1Line1.Ratio = 100;
-		tripOrder1Line1.VatPerc1 = 5;
-		tripOrder1Line1.VatPerc2 = 20;
+		tripOrder1Line1.setRatio(new BigDecimal(100));
+		tripOrder1Line1.setVatPerc1(new BigDecimal(5));
+		tripOrder1Line1.setVatPerc2(new BigDecimal(20));
 		tripOrder1Line1.VatPerc2Above = 99999999;
 		tripOrder1Line1.save();
 
@@ -266,10 +267,10 @@ public class DemoData
 		tripOrder2.Terms = "7 days";
 		tripOrder2.DueDate = c.getTime().getTime();
 		tripOrder2.Notes = "Call mobile no to unlock tank";
-		tripOrder2.PrepaidAmount = 0;
+		tripOrder2.setPrepaidAmount(BigDecimal.ZERO);
 		tripOrder2.CodPoint = 0;
 		tripOrder2.CodType = 0;
-		tripOrder2.CodAmount = 0;
+		tripOrder2.setCodAmount(BigDecimal.ZERO);
 		tripOrder2.save();
 			
 		dbTripOrderLine tripOrder2Line1 = new dbTripOrderLine();
@@ -278,12 +279,12 @@ public class DemoData
 		tripOrder2Line1.ColossusID = 1;
 		tripOrder2Line1.Product = kero;
 		tripOrder2Line1.OrderedQty = 400;
-		tripOrder2Line1.OrderedPrice = 61;
-		tripOrder2Line1.Surcharge = 5;
+		tripOrder2Line1.setOrderedPrice(new BigDecimal(61));
+		tripOrder2Line1.setSurcharge(new BigDecimal(5));
 		tripOrder2Line1.SurchargePerUOM = true;
-		tripOrder2Line1.Ratio = 100;
-		tripOrder2Line1.VatPerc1 = 5;
-		tripOrder2Line1.VatPerc2 = 20;
+		tripOrder2Line1.setRatio(new BigDecimal(100));
+		tripOrder2Line1.setVatPerc1(new BigDecimal(5));
+		tripOrder2Line1.setVatPerc2(new BigDecimal(20));
 		tripOrder2Line1.VatPerc2Above = 99999999;
 		tripOrder2Line1.save();
 
@@ -308,10 +309,10 @@ public class DemoData
 		tripOrder3.Terms = "Paying by Card";
 		tripOrder3.DueDate = Utils.getCurrentTime();
 		tripOrder3.Notes = "";
-		tripOrder3.PrepaidAmount = 0;
+		tripOrder3.setPrepaidAmount(BigDecimal.ZERO);
 		tripOrder3.CodPoint = 0;
 		tripOrder3.CodType = 0;
-		tripOrder3.CodAmount = 0;
+		tripOrder3.setCodAmount(BigDecimal.ZERO);
 		tripOrder3.save();
 			
 		dbTripOrderLine tripOrder3Line1 = new dbTripOrderLine();
@@ -320,12 +321,12 @@ public class DemoData
 		tripOrder3Line1.ColossusID = 1;
 		tripOrder3Line1.Product = kero;
 		tripOrder3Line1.OrderedQty = 300;
-		tripOrder3Line1.OrderedPrice = 63.4;
-		tripOrder3Line1.Surcharge = 0;
+		tripOrder3Line1.setOrderedPrice(new BigDecimal("63.4"));
+		tripOrder3Line1.setSurcharge(BigDecimal.ZERO);
 		tripOrder3Line1.SurchargePerUOM = false;
-		tripOrder3Line1.Ratio = 100;
-		tripOrder3Line1.VatPerc1 = 5;
-		tripOrder3Line1.VatPerc2 = 20;
+		tripOrder3Line1.setRatio(new BigDecimal(100));
+		tripOrder3Line1.setVatPerc1(new BigDecimal(5));
+		tripOrder3Line1.setVatPerc2(new BigDecimal(20));
 		tripOrder3Line1.VatPerc2Above = 99999999;
 		tripOrder3Line1.save();
 

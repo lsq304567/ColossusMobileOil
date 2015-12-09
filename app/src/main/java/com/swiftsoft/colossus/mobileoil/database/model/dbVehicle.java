@@ -15,6 +15,7 @@ import com.swiftsoft.colossus.mobileoil.bluetooth.MeterMate;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -540,22 +541,22 @@ public class dbVehicle extends Model
 
 		String desc = "Payment total: " + decf2.format(Active.order.getPaidDriver());
 
-		if (Active.order.CashReceived != 0)
+		if (Active.order.getCashReceived().compareTo(BigDecimal.ZERO) != 0)
 		{
 			noOfPaymentMethods++;
-			notes += "Cash payment: " + decf2.format(Active.order.CashReceived) + "\n";
+			notes += "Cash payment: " + decf2.format(Active.order.getCashReceived()) + "\n";
 		}
 		
-		if (Active.order.ChequeReceived != 0)
+		if (Active.order.getChequeReceived().compareTo(BigDecimal.ZERO) != 0)
 		{
 			noOfPaymentMethods++;
-			notes += "Cheque payment: " + decf2.format(Active.order.ChequeReceived) + "\n";
+			notes += "Cheque payment: " + decf2.format(Active.order.getChequeReceived()) + "\n";
 		}
 
-		if (Active.order.VoucherReceived != 0)
+		if (Active.order.getVoucherReceived().compareTo(BigDecimal.ZERO) != 0)
 		{
 			noOfPaymentMethods++;
-			notes += "Voucher payment: " + decf2.format(Active.order.VoucherReceived) + "\n";
+			notes += "Voucher payment: " + decf2.format(Active.order.getVoucherReceived()) + "\n";
 		}
 		
 		if (noOfPaymentMethods > 0)

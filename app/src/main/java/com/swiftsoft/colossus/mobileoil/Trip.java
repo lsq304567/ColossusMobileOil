@@ -36,6 +36,7 @@ import com.swiftsoft.colossus.mobileoil.view.MyNumericKeypad;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 public class Trip extends Activity
@@ -513,16 +514,16 @@ public class Trip extends Activity
 
 					// Update UI
 					tvOrderedQty.setText(String.format("%d", orderLine.OrderedQty));
-					tvOrderedPrice.setText(formatMoney.format(orderLine.OrderedPrice));
-					tvOrderedSurcharge.setText(formatMoney.format(orderLine.Surcharge));
+					tvOrderedPrice.setText(formatMoney.format(orderLine.getOrderedPrice()));
+					tvOrderedSurcharge.setText(formatMoney.format(orderLine.getSurcharge()));
 					
 					tvDeliveredQty.setText(String.format("%d", orderLine.DeliveredQty));
 					
-					double newPrice = getEditTextAmount(etNewPrice);
+					BigDecimal newPrice = getEditTextAmount(etNewPrice);
 
-					tvDeliveredPrice.setText(newPrice == 0 ? "" : formatMoney.format(newPrice));
+					tvDeliveredPrice.setText(newPrice.compareTo(BigDecimal.ZERO) == 0 ? "" : formatMoney.format(newPrice));
 					
-					tvDeliveredSurcharge.setText(formatMoney.format(orderLine.Surcharge));
+					tvDeliveredSurcharge.setText(formatMoney.format(orderLine.getSurcharge()));
 				}
 			};
 	
@@ -537,9 +538,10 @@ public class Trip extends Activity
 					if (!hasFocus)
 					{
 						EditText et = (EditText)v;
-						double value = getEditTextAmount(et);
 
-						et.setText(value == 0 ? "" : formatMoney.format(value));
+						BigDecimal value = getEditTextAmount(et);
+
+						et.setText(value.compareTo(BigDecimal.ZERO) == 0 ? "" : formatMoney.format(value));
 					}
 				}
 			};
@@ -553,7 +555,7 @@ public class Trip extends Activity
 				public void onClick(View paramView)
 				{
 					// Update price.
-					double newPrice = getEditTextAmount(etNewPrice);
+					BigDecimal newPrice = getEditTextAmount(etNewPrice);
 					
 					Active.orderLine.setDeliveredPricePrice(newPrice);
 					
@@ -575,13 +577,13 @@ public class Trip extends Activity
 			});
 	
 			// Initialise dialog - triggers onTextChanged.
-			if (Active.orderLine.DeliveredPrice == 0)
+			if (Active.orderLine.getDeliveredPrice().compareTo(BigDecimal.ZERO) == 0)
 			{
 				etNewPrice.setText("");
 			}
 			else
 			{
-				etNewPrice.setText(String.format("%f", Active.orderLine.DeliveredPrice));
+				etNewPrice.setText(String.format("%f", Active.orderLine.getDeliveredPrice()));
 				etNewPrice.setSelection(etNewPrice.getText().length(), etNewPrice.getText().length());
 			}
 			
@@ -653,7 +655,7 @@ public class Trip extends Activity
 				public void afterTextChanged(Editable paramEditable)
 				{
 					// Update total paid to driver.
-					tvPaidDriver.setText(formatMoney.format(getEditTextAmount(etCash) + getEditTextAmount(etCheque) + getEditTextAmount(etVoucher)));
+					tvPaidDriver.setText(formatMoney.format(getEditTextAmount(etCash).add(getEditTextAmount(etCheque)).add(getEditTextAmount(etVoucher))));
 				}
 			};
 	
@@ -670,9 +672,10 @@ public class Trip extends Activity
 					if (!hasFocus)
 					{
 						EditText et = (EditText)v;
-						double value = getEditTextAmount(et);
 
-						et.setText(value == 0 ? "" : formatMoney.format(value));
+						BigDecimal value = getEditTextAmount(et);
+
+						et.setText(value.compareTo(BigDecimal.ZERO) == 0 ? "" : formatMoney.format(value));
 					}
 				}
 			};
@@ -688,9 +691,9 @@ public class Trip extends Activity
 				public void onClick(View paramView)
 				{
 					// Add payment to order.
-					Active.order.CashReceived = getEditTextAmount(etCash); 
-					Active.order.ChequeReceived = getEditTextAmount(etCheque);
-					Active.order.VoucherReceived = getEditTextAmount(etVoucher);
+					Active.order.setCashReceived(getEditTextAmount(etCash));
+					Active.order.setChequeReceived(getEditTextAmount(etCheque));
+					Active.order.setVoucherReceived(getEditTextAmount(etVoucher));
 					Active.order.calculateDiscount();
 					Active.order.save();
 					
@@ -717,50 +720,52 @@ public class Trip extends Activity
 			etVoucher.setText("");
 			
 			// Show current values.
-			if (Active.order.CashReceived != 0)
+			if (Active.order.getCashReceived().compareTo(BigDecimal.ZERO) != 0)
 			{
-				etCash.setText(formatMoney.format(Active.order.CashReceived));
+				etCash.setText(formatMoney.format(Active.order.getCashReceived()));
 			}
 			
-			if (Active.order.ChequeReceived != 0)
+			if (Active.order.getChequeReceived().compareTo(BigDecimal.ZERO) != 0)
 			{
-				etCheque.setText(formatMoney.format(Active.order.ChequeReceived));
+				etCheque.setText(formatMoney.format(Active.order.getChequeReceived()));
 			}
 			
-			if (Active.order.VoucherReceived != 0)
+			if (Active.order.getVoucherReceived().compareTo(BigDecimal.ZERO) != 0)
 			{
-				etVoucher.setText(formatMoney.format(Active.order.VoucherReceived));
+				etVoucher.setText(formatMoney.format(Active.order.getVoucherReceived()));
 			}
 	
-			if (Active.order.PrepaidAmount != 0)
+			if (Active.order.getPrepaidAmount().compareTo(BigDecimal.ZERO) != 0)
 			{
 				trPaidOffice.setVisibility(View.VISIBLE);
-				tvPaidOffice.setText(formatMoney.format(Active.order.PrepaidAmount));
+				tvPaidOffice.setText(formatMoney.format(Active.order.getPrepaidAmount()));
 			}
 			else
 			{
 				trPaidOffice.setVisibility(View.GONE);
 			}
 			
-			double nett = Active.order.getDeliveredNettValue();
-			double vat = Active.order.getDeliveredVatValue();
-			double surcharge = Active.order.getDeliveredSurchargeValue();
-			double accBalance = Active.order.getCodAccBalance();
-			double cashTotal = (double) Math.round((nett + vat + accBalance) * 100) / 100;
-			double paidOffice = Active.order.PrepaidAmount;
-			double payDriver = cashTotal - paidOffice;
-			double surchargeVatAmount = Active.order.getSurchargeVat();
+			BigDecimal nett = Active.order.getDeliveredNettValue();
+			BigDecimal vat = Active.order.getDeliveredVatValue();
+			BigDecimal surcharge = Active.order.getDeliveredSurchargeValue();
+			BigDecimal accBalance = Active.order.getCodAccBalance();
+
+			BigDecimal cashTotal = nett.add(vat).add(accBalance);
+
+			BigDecimal paidOffice = Active.order.getPrepaidAmount();
+			BigDecimal payDriver = cashTotal.subtract(paidOffice);
+			BigDecimal surchargeVatAmount = Active.order.getSurchargeVat();
 			
 			if (beforeDelivery)
 			{
 				payDriver = Active.order.getCodBeforeDeliveryValue();
 			}
 			
-			String message = "Pay driver " + formatMoney.format(payDriver - surchargeVatAmount);
+			String message = "Pay driver " + formatMoney.format(payDriver.subtract(surchargeVatAmount));
 
-			if (surcharge != 0)
+			if (surcharge.compareTo(BigDecimal.ZERO) != 0)
 			{
-				message += " for cash discount of " + formatMoney.format(surcharge + surchargeVatAmount);
+				message += " for cash discount of " + formatMoney.format(surcharge.add(surchargeVatAmount));
 			}
 			
 			tvMessage.setText(message);
@@ -780,14 +785,15 @@ public class Trip extends Activity
 		}
 	}
 	
-	private double getEditTextAmount(EditText amount)
+	private BigDecimal getEditTextAmount(EditText amount)
 	{
-		double value = 0;
+		BigDecimal value = BigDecimal.ZERO;
 		
 		// Convert text to value.
 		try
 		{
-			value = Double.parseDouble(amount.getText().toString());
+			value = new BigDecimal(amount.getText().toString());
+
 			value = Utils.Truncate(value, 2);
 		}
 		catch (Exception e)
@@ -1118,10 +1124,10 @@ public class Trip extends Activity
 			json.put("CustomerSignatureName", Active.order.CustomerSignatureName);
 			json.put("CustomerSignatureImage", encodeSignature(Active.order.CustomerSignature, Active.order.CustomerSignatureImage)); // customerSig);
 			json.put("CustomerSignatureDateTime", "/Date(" + Active.order.CustomerSignatureDateTime + ")/");
-			json.put("CashReceived", Active.order.CashReceived);
-			json.put("ChequeReceived", Active.order.ChequeReceived);
-			json.put("VoucherReceived", Active.order.VoucherReceived);
-			json.put("Discount", Active.order.Discount);
+			json.put("CashReceived", Active.order.getCashReceived());
+			json.put("ChequeReceived", Active.order.getChequeReceived());
+			json.put("VoucherReceived", Active.order.getVoucherReceived());
+			json.put("Discount", Active.order.getDiscount());
 			json.put("DriverSignature", Active.order.DriverSignature);
 			json.put("DriverSignatureName", Active.order.DriverSignatureName);
 			json.put("DriverSignatureImage", encodeSignature(Active.order.DriverSignature, Active.order.DriverSignatureImage)); // driverSig);

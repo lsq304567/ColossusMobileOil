@@ -111,6 +111,8 @@ import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+
 import io.fabric.sdk.android.Fabric;
 
 public class Setup extends Activity
@@ -163,6 +165,10 @@ public class Setup extends Activity
 
 		try
 		{
+            BigDecimal bd = new BigDecimal(3.141592653);
+
+            String s = Utils.RoundNearest(bd, 2).toString();
+
 			// NOTE: This is the starting point of the App.
 
 			// Start CrashReporter.

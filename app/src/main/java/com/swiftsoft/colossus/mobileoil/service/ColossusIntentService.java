@@ -27,6 +27,7 @@ import com.swiftsoft.colossus.mobileoil.rest.RestClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -746,13 +747,14 @@ public class ColossusIntentService extends IntentService
 				tripOrder.Terms = order.getString("Terms");
 				tripOrder.DueDate = getTime(order.getString("DueDate"));
 				tripOrder.Notes = order.getString("Notes");
-				tripOrder.PrepaidAmount = order.getDouble("PrepaidAmount");
+				tripOrder.setPrepaidAmount(new BigDecimal(order.getDouble("PrepaidAmount")));
 				tripOrder.CodPoint = order.getInt("CodPoint");
 				tripOrder.CodType = order.getInt("CodType");
-				tripOrder.CodAmount = order.getDouble("CodAmount");
+				tripOrder.setCodAmount(new BigDecimal(order.getDouble("CodAmount")));
 				tripOrder.save();
 				
 				JSONArray lines = new JSONArray(order.getString("Lines"));
+
 				for (int j = 0; j < lines.length(); j++)
 				{
 					JSONObject line = lines.getJSONObject(j);
@@ -785,14 +787,14 @@ public class ColossusIntentService extends IntentService
 					tripOrderLine.ColossusID = orderLineID;
 					tripOrderLine.Product = product;
 					tripOrderLine.OrderedQty = line.getInt("OrderedQuantity");
-					tripOrderLine.OrderedPrice = line.getDouble("Price");
-					tripOrderLine.DeliveredPrice = 0;
-					tripOrderLine.Surcharge = line.getDouble("Surcharge");
+					tripOrderLine.setOrderedPrice(new BigDecimal(line.getDouble("Price")));
+					tripOrderLine.setDeliveredPrice(BigDecimal.ZERO);
+					tripOrderLine.setSurcharge(new BigDecimal(line.getDouble("Surcharge")));
 					tripOrderLine.SurchargePerUOM = line.getBoolean("SurchargePerUOM");
-					tripOrderLine.Ratio = line.getDouble("Ratio");
-					tripOrderLine.VatPerc1 = line.getDouble("VatPerc1");
-					tripOrderLine.VatPerc2 = line.getDouble("VatPerc2");
-					tripOrderLine.VatPerc2Above = line.getDouble("VatPerc2Above");
+					tripOrderLine.setRatio(new BigDecimal(line.getDouble("Ratio")));
+					tripOrderLine.setVatPerc1(new BigDecimal(line.getDouble("VatPerc1")));
+					tripOrderLine.setVatPerc2(new BigDecimal(line.getDouble("VatPerc2")));
+					tripOrderLine.VatPerc2Above = line.getInt("VatPerc2Above");
 					tripOrderLine.save();
 				}
 				
@@ -1118,10 +1120,10 @@ public class ColossusIntentService extends IntentService
 				tripOrder.Terms = order.getString("Terms");
 				tripOrder.DueDate = getTime(order.getString("DueDate"));
 				tripOrder.Notes = order.getString("Notes");
-				tripOrder.PrepaidAmount = order.getDouble("PrepaidAmount");
+				tripOrder.setPrepaidAmount(new BigDecimal(order.getDouble("PrepaidAmount")));
 				tripOrder.CodPoint = order.getInt("CodPoint");
 				tripOrder.CodType = order.getInt("CodType");
-				tripOrder.CodAmount = order.getDouble("CodAmount");
+				tripOrder.setCodAmount(new BigDecimal(order.getDouble("CodAmount")));
 				tripOrder.save();
 				
 				JSONArray lines = new JSONArray(order.getString("Lines"));
@@ -1156,14 +1158,14 @@ public class ColossusIntentService extends IntentService
 					tripOrderLine.ColossusID = orderLineID;
 					tripOrderLine.Product = product;
 					tripOrderLine.OrderedQty = line.getInt("OrderedQuantity");
-					tripOrderLine.OrderedPrice = line.getDouble("Price");
-					tripOrderLine.DeliveredPrice = 0;
-					tripOrderLine.Surcharge = line.getDouble("Surcharge");
+					tripOrderLine.setOrderedPrice(new BigDecimal(line.getDouble("Price")));
+					tripOrderLine.setDeliveredPrice(BigDecimal.ZERO);
+					tripOrderLine.setSurcharge(new BigDecimal(line.getDouble("Surcharge")));
 					tripOrderLine.SurchargePerUOM = line.getBoolean("SurchargePerUOM");
-					tripOrderLine.Ratio = line.getDouble("Ratio");
-					tripOrderLine.VatPerc1 = line.getDouble("VatPerc1");
-					tripOrderLine.VatPerc2 = line.getDouble("VatPerc2");
-					tripOrderLine.VatPerc2Above = line.getDouble("VatPerc2Above");
+					tripOrderLine.setRatio(new BigDecimal(line.getDouble("Ratio")));
+					tripOrderLine.setVatPerc1(new BigDecimal(line.getDouble("VatPerc1")));
+					tripOrderLine.setVatPerc2(new BigDecimal(line.getDouble("VatPerc2")));
+					tripOrderLine.VatPerc2Above = line.getInt("VatPerc2Above");
 					tripOrderLine.save();
 				}
 				

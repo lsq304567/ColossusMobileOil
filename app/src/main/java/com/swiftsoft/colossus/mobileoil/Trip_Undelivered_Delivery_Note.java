@@ -18,6 +18,7 @@ import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrderLine;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -221,7 +222,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 
 					TextView tvValue = (TextView) tr.findViewById(R.id.trip_undelivered_delivery_note_tablerow_value);
 
-					tvValue.setText(line.getDeliveredQtyVariesFromOrdered() && line.DeliveredPrice == 0 ? "" : "" + decf2.format(line.getDeliveredNettValue() + line.getDeliveredSurchargeValue()));
+					tvValue.setText(line.getDeliveredQtyVariesFromOrdered() && line.getDeliveredPrice().compareTo(BigDecimal.ZERO) == 0 ? "" : "" + decf2.format(line.getDeliveredNettValue().add(line.getDeliveredSurchargeValue())));
 
                     tvValue.setVisibility(Active.order.HidePrices ? View.GONE : View.VISIBLE);
 
@@ -237,30 +238,30 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 						btnNewPrice.setOnClickListener(onNewPrice);
 						btnNewPrice.setTag(line);
 
-						btnNewPrice.setText(line.DeliveredPrice == 0 ? "Ordered " + line.OrderedQty + " - tap to price" : "Ordered " + line.OrderedQty);
+						btnNewPrice.setText(line.getDeliveredPrice().compareTo(BigDecimal.ZERO) == 0 ? "Ordered " + line.OrderedQty + " - tap to price" : "Ordered " + line.OrderedQty);
 	
 						tlTable.addView(tr2);
 					}
 				}
 		
-				double vat = Active.order.getDeliveredVatValue();
-				double surcharge = Active.order.getDeliveredSurchargeValue();
-				double accBalance = Active.order.getCodAccBalance();
-				double creditTotal = Active.order.getCreditTotal();
-				double cashTotal = Active.order.getCashTotal();
-				double paidOffice = Active.order.getPrepaidAmount();
-				double paidDriver = Active.order.getPaidDriver();
+				BigDecimal vat = Active.order.getDeliveredVatValue();
+				BigDecimal surcharge = Active.order.getDeliveredSurchargeValue();
+				BigDecimal accBalance = Active.order.getCodAccBalance();
+				BigDecimal creditTotal = Active.order.getCreditTotal();
+				BigDecimal cashTotal = Active.order.getCashTotal();
+				BigDecimal paidOffice = Active.order.getPrepaidAmount();
+				BigDecimal paidDriver = Active.order.getPaidDriver();
                 Active.order.calculateDiscount();
-                double discount = Active.order.Discount;
-				double outstanding = Active.order.getOutstanding();
-				double surchargeVatAmount = Active.order.getSurchargeVat();
+                BigDecimal discount = Active.order.getDiscount();
+				BigDecimal outstanding = Active.order.getOutstanding();
+				BigDecimal surchargeVatAmount = Active.order.getSurchargeVat();
 
                 llPaymentMessages.setVisibility(Active.order.HidePrices ? View.GONE : View.VISIBLE);
 				
 				// Update view.
 				tvVat.setText(decf2.format(vat));
 				
-				if (accBalance == 0)
+				if (accBalance.compareTo(BigDecimal.ZERO) == 0)
 				{
 					trAccBalanceRow.setVisibility(View.GONE);
 				}
@@ -272,7 +273,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 				
 				tvTotal.setText(decf2.format(creditTotal));
 				
-				if (paidOffice == 0)
+				if (paidOffice.compareTo(BigDecimal.ZERO) == 0)
 				{
 					trPaidOfficeRow.setVisibility(View.GONE);
 				}
@@ -282,7 +283,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 					tvPaidOffice.setText(decf2.format(paidOffice));
 				}
 				
-				if (paidDriver == 0)
+				if (paidDriver.compareTo(BigDecimal.ZERO) == 0)
 				{
 					trPaidDriverRow.setVisibility(View.GONE);
 				}
@@ -292,7 +293,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 					tvPaidDriver.setText(decf2.format(paidDriver));
 				}
 				
-				if (discount == 0)
+				if (discount.compareTo(BigDecimal.ZERO) == 0)
 				{
 					trDiscountRow.setVisibility(View.GONE);
 				}
@@ -302,7 +303,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 					tvDiscount.setText(decf2.format(discount));
 				}
 
-				if (paidOffice == 0 && paidDriver == 0 && discount == 0)
+				if (paidOffice.compareTo(BigDecimal.ZERO) == 0 && paidDriver.compareTo(BigDecimal.ZERO) == 0 && discount.compareTo(BigDecimal.ZERO) == 0)
 				{
 					trSubtotalRow.setVisibility(View.GONE);
 					trOutstandingRow.setVisibility(View.GONE);
@@ -314,12 +315,12 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 					tvOutstanding.setText(decf2.format(outstanding));
 				}
 
-				if (surcharge != 0 && outstanding > 0)
+				if (surcharge.compareTo(BigDecimal.ZERO) != 0 && outstanding.compareTo(BigDecimal.ZERO) > 0)
 				{
                     llCashDiscountMsg.setVisibility(Active.order.HidePrices ? View.GONE : View.VISIBLE);
 
-                    tvCashDiscountMsg1.setText("Please pay driver " + decf2.format(cashTotal - paidOffice - surchargeVatAmount));
-					tvCashDiscountMsg2.setText("to receive a cash discount of " + decf2.format(surcharge + surchargeVatAmount));
+                    tvCashDiscountMsg1.setText("Please pay driver " + decf2.format(cashTotal.subtract(paidOffice).subtract(surchargeVatAmount)));
+					tvCashDiscountMsg2.setText("to receive a cash discount of " + decf2.format(surcharge.add(surchargeVatAmount)));
 				}
 				else
 				{
@@ -438,7 +439,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 		try
 		{
 			// If customer has not paid all, and has not signed, ask for their signature now.
-			if (Active.order.getOutstanding() > 0 && !Active.order.CustomerSignature)
+			if (Active.order.getOutstanding().compareTo(BigDecimal.ZERO) > 0 && !Active.order.CustomerSignature)
 			{
 				trip.captureCustomersName();
 
@@ -446,7 +447,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 			}			
 			
 			// If driver has taken a payment, ensure he signs for it.
-			if (Active.order.getPaidDriver() != 0 && !Active.order.DriverSignature)
+			if (Active.order.getPaidDriver().compareTo(BigDecimal.ZERO) != 0 && !Active.order.DriverSignature)
 			{
 				// Ask driver to sign for payment received.
 				trip.captureSignature("Driver", Active.driver.Name);

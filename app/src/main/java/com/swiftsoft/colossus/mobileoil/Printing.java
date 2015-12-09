@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -958,17 +959,17 @@ public class Printing
             CrashReporter.leaveBreadcrumb("Printing - printBitmapTicket - Printing Ticket Amounts");
 
             // Print VAT
-            Hashtable<Double, dbTripOrder.VatRow> vatValues = order.getDeliveredVatValues();
+            Hashtable<BigDecimal, dbTripOrder.VatRow> vatValues = order.getDeliveredVatValues();
             Enumeration e = vatValues.keys();
 
             while (e.hasMoreElements())
             {
-                double key = (Double) e.nextElement();
+                BigDecimal key = (BigDecimal) e.nextElement();
 
                 dbTripOrder.VatRow row = vatValues.get(key);
 
                 String vatTitle = "VAT @ " + format2dp.format(row.vatPercentage) + " %";
-                finalPosition = printTitleAndAmount(printer, finalPosition, vatTitle, row.nettValue * row.vatPercentage / 100.0);
+                finalPosition = printTitleAndAmount(printer, finalPosition, vatTitle, row.nettValue.multiply(row.vatPercentage).divide(new BigDecimal(100)));
             }
 
             // Print account balance
@@ -983,7 +984,7 @@ public class Printing
             finalPosition = printTitleAndAmount(printer, finalPosition, "Paid office", order.getPrepaidAmount());
 
             // Print the discount
-            finalPosition = printTitleAndAmount(printer, finalPosition, "Discount", order.Discount);
+            finalPosition = printTitleAndAmount(printer, finalPosition, "Discount", order.getDiscount());
 
             // Print amount paid to driver
             finalPosition = printTitleAndAmount(printer, finalPosition, "Payment Received", order.getPaidDriver());
@@ -997,13 +998,13 @@ public class Printing
         if (!order.HidePrices)
         {
             // Get the surcharge amount
-            double surcharge = order.getDeliveredSurchargeValue();
+            BigDecimal surcharge = order.getDeliveredSurchargeValue();
 
             // Get the amount still to pay
-            double outstanding = order.getOutstanding();
+            BigDecimal outstanding = order.getOutstanding();
 
             // Print the surcharge/discount message if necessary
-            if (surcharge != 0 && outstanding > 0)
+            if (surcharge.compareTo(BigDecimal.ZERO) != 0 && outstanding.compareTo(BigDecimal.ZERO) > 0)
             {
                 finalPosition = printSurchargeMessage(printer, finalPosition, order);
             }
@@ -1070,19 +1071,26 @@ public class Printing
         List<dbTripOrderLine> orderLines = order.GetTripOrderLines();
 
         // Get the surcharge amount (in Pence per Litre)
-        double surcharge = orderLines.get(0).Surcharge;
+        BigDecimal surcharge = orderLines.get(0).getSurcharge();
 
-        double totalSurchargeAmount = 0.0;
+        BigDecimal totalSurchargeAmount = BigDecimal.ZERO;
 
-        double surchargeAmountVat = 0.0;
+        BigDecimal surchargeAmountVat = BigDecimal.ZERO;
 
         for (dbTripOrderLine line : orderLines)
         {
-            double surchargeAmount = surcharge / 100.0 * line.DeliveredQty;
+            BigDecimal surchargeAmount = surcharge.divide(new BigDecimal(100)).multiply(new BigDecimal(line.DeliveredQty));
 
-            totalSurchargeAmount += surchargeAmount;
+            totalSurchargeAmount = totalSurchargeAmount.add(surchargeAmount);
 
-            surchargeAmountVat += surchargeAmount * (line.DeliveredQty > line.VatPerc2Above ? line.VatPerc2 : line.VatPerc1) / 100.0;
+            if (line.DeliveredQty > line.VatPerc2Above)
+            {
+                surchargeAmountVat = surchargeAmountVat.add(line.getVatPerc2().divide(new BigDecimal(100)));
+            }
+            else
+            {
+                surchargeAmountVat = surchargeAmountVat.add(line.getVatPerc1().divide(new BigDecimal(100)));
+            }
         }
 
         DecimalFormat formatMoney = new DecimalFormat("#,##0.00");
@@ -1094,7 +1102,7 @@ public class Printing
         line.append("Deduct ");
         line.append(formatPpl.format(surcharge));
         line.append(" ppl = £");
-        line.append(formatMoney.format(totalSurchargeAmount + surchargeAmountVat));
+        line.append(formatMoney.format(totalSurchargeAmount.add(surchargeAmountVat)));
         line.append(" (inc. £");
         line.append(formatMoney.format(surchargeAmountVat));
         line.append(" of VAT)");
@@ -1128,13 +1136,21 @@ public class Printing
 
         line = new StringBuilder();
 
-        double nettValue = 0.0;
-        double nettValueVat = 0.0;
+        BigDecimal nettValue = BigDecimal.ZERO;
+        BigDecimal nettValueVat = BigDecimal.ZERO;
 
         for (dbTripOrderLine orderLine : orderLines)
         {
-            nettValue += orderLine.getDeliveredNettValue();
-            nettValueVat += order.getDeliveredNettValue() * (orderLine.OrderedQty > orderLine.VatPerc2Above ? orderLine.VatPerc2 : orderLine.VatPerc1) / 100.0;
+            nettValue =  nettValue.add(orderLine.getDeliveredNettValue());
+
+            if (orderLine.OrderedQty > orderLine.VatPerc2Above)
+            {
+                nettValueVat = nettValueVat.add(order.getDeliveredNettValue().multiply(orderLine.getVatPerc2()).divide(new BigDecimal(100)));
+            }
+            else
+            {
+                nettValueVat = nettValueVat.add(order.getDeliveredNettValue().multiply(orderLine.getVatPerc1()).divide(new BigDecimal(100)));
+            }
         }
 
         line.append("£");
@@ -1142,7 +1158,7 @@ public class Printing
         line.append(" + VAT £");
         line.append(formatMoney.format(nettValueVat));
         line.append(" = £");
-        line.append(formatMoney.format(nettValue + nettValueVat));
+        line.append(formatMoney.format(nettValue.add(nettValueVat)));
 
         finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 
@@ -1223,13 +1239,13 @@ public class Printing
 		return finalPosition;
 	}
 
-	private static int printTitleAndAmount(Printer printer, int yPosition, String title, double amount)
+	private static int printTitleAndAmount(Printer printer, int yPosition, String title, BigDecimal amount)
 	{
         CrashReporter.leaveBreadcrumb("Printing: printTitleAndAmount");
 
 		int finalPosition = yPosition;
 
-		if (amount != 0)
+		if (amount.compareTo(BigDecimal.ZERO) != 0)
 		{
 			DecimalFormat formatMoney = new DecimalFormat("#,##0.00");
 
@@ -1330,18 +1346,18 @@ public class Printing
             if (!order.HidePrices)
             {
                 // Get the Delivered price include surcharge (in PPL).
-                double deliveredPrice = line.getDeliveredPrice();
+                BigDecimal deliveredPrice = line.getPriceDelivered();
 
-                if (deliveredPrice != 0)
+                if (deliveredPrice.compareTo(BigDecimal.ZERO) != 0)
                 {
                     // Output the price in ppl to 3 decimal places
-                    printer.addTextRight(Size.Large, 500, finalPosition, 110, format3dp.format(deliveredPrice * line.Ratio));
+                    printer.addTextRight(Size.Large, 500, finalPosition, 110, format3dp.format(deliveredPrice.multiply(line.getRatio())));
                 }
 
                 // Get the value of the delivered product (in pounds)
-                double deliveredValue = line.getDeliveredNettValue() + line.getDeliveredSurchargeValue();
+                BigDecimal deliveredValue = line.getDeliveredNettValue().add(line.getDeliveredSurchargeValue());
 
-                if (deliveredValue != 0)
+                if (deliveredValue.compareTo(BigDecimal.ZERO) != 0)
                 {
                     // Output the value in pounds to 2 dp
                     printer.addTextRight(Size.Large, 630, finalPosition, 130, format2dp.format(deliveredValue));

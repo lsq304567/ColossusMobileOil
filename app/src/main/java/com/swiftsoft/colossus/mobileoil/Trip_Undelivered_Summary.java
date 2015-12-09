@@ -12,6 +12,8 @@ import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrder;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 
+import java.math.BigDecimal;
+
 public class Trip_Undelivered_Summary extends MyFlipperView
 {
 	private Trip trip;
@@ -208,7 +210,7 @@ public class Trip_Undelivered_Summary extends MyFlipperView
                         }
 
 						// Check if COD 'Before Delivery' on this order.
-						if (Active.order.CodPoint == 2 && Active.order.getCodBeforeDeliveryValue() > 0)
+						if (Active.order.CodPoint == 2 && Active.order.getCodBeforeDeliveryValue().compareTo(BigDecimal.ZERO) > 0)
 						{
 							// Switch to COD view.
 							trip.selectView(Trip.ViewUndeliveredCOD, +1);

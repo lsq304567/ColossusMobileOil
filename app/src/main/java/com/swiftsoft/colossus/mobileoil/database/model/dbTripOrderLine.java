@@ -7,6 +7,8 @@ import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.swiftsoft.colossus.mobileoil.Utils;
 
+import java.math.BigDecimal;
+
 @Table(name = "TripOrderLine")
 public class dbTripOrderLine extends Model
 {
@@ -23,27 +25,102 @@ public class dbTripOrderLine extends Model
 	public int OrderedQty;
 	
 	@Column(name = "Price")
-	public double OrderedPrice;
+	public String OrderedPrice;
+
+    public BigDecimal getOrderedPrice()
+    {
+        if (OrderedPrice == null)
+        {
+            setOrderedPrice(BigDecimal.ZERO);
+        }
+
+        return new BigDecimal(OrderedPrice);
+    }
+
+    public void setOrderedPrice(BigDecimal value)
+    {
+        OrderedPrice = value.toString();
+    }
 
 	@Column(name = "Surcharge")
-	public double Surcharge;
-	
-	// If true multiply Qty by Surcharge and divide by Ratio,
+	public String Surcharge;
+
+    public BigDecimal getSurcharge()
+    {
+        if (Surcharge == null)
+        {
+            setSurcharge(BigDecimal.ZERO);
+        }
+
+        return new BigDecimal(Surcharge);
+    }
+
+    public void setSurcharge(BigDecimal value)
+    {
+        Surcharge = value.toString();
+    }
+
+    // If true multiply Qty by Surcharge and divide by Ratio,
 	// otherwise just add Surcharge to NettValue.
 	@Column(name = "SurchargePerUOM")
 	public boolean SurchargePerUOM;
 	
 	@Column(name = "Ratio")
-	public double Ratio;
-	
-	@Column(name = "VatPerc1")
-	public double VatPerc1;
-	
-	@Column(name = "VatPerc2")
-	public double VatPerc2;
-	
-	@Column(name = "VatPerc2Above")
-	public double VatPerc2Above;
+	public String Ratio;
+
+    public BigDecimal getRatio()
+    {
+        if (Ratio == null)
+        {
+            setRatio(BigDecimal.ZERO);
+        }
+
+        return new BigDecimal(Ratio);
+    }
+
+    public void setRatio(BigDecimal value)
+    {
+        Ratio = value.toString();
+    }
+
+    @Column(name = "VatPerc1")
+	public String VatPerc1;
+
+    public BigDecimal getVatPerc1()
+    {
+        if (VatPerc1 == null)
+        {
+            setVatPerc1(BigDecimal.ZERO);
+        }
+
+        return new BigDecimal(VatPerc1);
+    }
+
+    public void setVatPerc1(BigDecimal value)
+    {
+        VatPerc1 = value.toString();
+    }
+
+    @Column(name = "VatPerc2")
+	public String VatPerc2;
+
+    public BigDecimal getVatPerc2()
+    {
+        if (VatPerc2 == null)
+        {
+            setVatPerc2(BigDecimal.ZERO);
+        }
+
+        return new BigDecimal(VatPerc2);
+    }
+
+    public void setVatPerc2(BigDecimal value)
+    {
+        VatPerc2 = value.toString();
+    }
+
+    @Column(name = "VatPerc2Above")
+	public int VatPerc2Above;
 	
 	//
 	// Modified by app.
@@ -53,9 +130,24 @@ public class dbTripOrderLine extends Model
 	public boolean Delivered;
 
 	@Column(name = "DeliveredPrice")
-	public double DeliveredPrice;
-	
-	//@Column(name = "TotalPrice")
+	public String DeliveredPrice;
+
+    public BigDecimal getDeliveredPrice()
+    {
+        if (DeliveredPrice == null)
+        {
+            setDeliveredPrice(BigDecimal.ZERO);
+        }
+
+        return new BigDecimal(DeliveredPrice);
+    }
+
+    public void setDeliveredPrice(BigDecimal value)
+    {
+        DeliveredPrice = value.toString();
+    }
+
+//@Column(name = "TotalPrice")
 	//public double TotalPrice;
 	
 	@Column(name = "DeliveredQty")
@@ -115,21 +207,28 @@ public class dbTripOrderLine extends Model
 
 	// Ordered.
 	
-	public double getOrderedNettValue()
+	public BigDecimal getOrderedNettValue()
 	{
-		double nettValue = (OrderedQty * (OrderedPrice / Ratio));
+		BigDecimal nettValue = new BigDecimal(OrderedQty).multiply(getOrderedPrice().divide(getRatio()));
 
 		return Utils.RoundNearest(nettValue, 2);
 	}
 	
-	public double getOrderedSurchargeValue()
+	public BigDecimal getOrderedSurchargeValue()
 	{
-		return SurchargePerUOM ? OrderedQty * (Surcharge / Ratio) : Surcharge;
+        if (SurchargePerUOM)
+        {
+            return new BigDecimal(OrderedQty).multiply(getSurcharge().divide(getRatio()));
+        }
+        else
+        {
+            return getSurcharge();
+        }
 	}
 
-	public double getOrderedVatPerc()
+	public BigDecimal getOrderedVatPerc()
 	{
-		return OrderedQty <= VatPerc2Above ? VatPerc1 : VatPerc2;
+		return OrderedQty <= VatPerc2Above ? getVatPerc1() : getVatPerc2();
 	}
 	
 	// Delivered.
@@ -146,28 +245,39 @@ public class dbTripOrderLine extends Model
 	
 	// The delivered price includes any surcharge.
 	// (Used by the ticket print out)
-	public double getDeliveredPrice()		
+	public BigDecimal getPriceDelivered()
 	{
-		double value = getDeliveredNettValue() + getDeliveredSurchargeValue();
+		BigDecimal value = getDeliveredNettValue().add(getDeliveredSurchargeValue());
 
-		return Utils.RoundNearest(value / DeliveredQty, 4);
+		return Utils.RoundNearest(value.divide(new BigDecimal(DeliveredQty)), 4);
 	}
 	
-	public double getDeliveredNettValue()
+	public BigDecimal getDeliveredNettValue()
 	{
-		double value = (DeliveredQty * (DeliveredPrice / Ratio));
+		BigDecimal value = new BigDecimal(DeliveredQty).multiply(getDeliveredPrice().divide(getRatio()));
 
 		return Utils.RoundNearest(value, 2);
 	}
 
-	public double getDeliveredSurchargeValue()
+	public BigDecimal getDeliveredSurchargeValue()
 	{
-        return Utils.RoundNearest(SurchargePerUOM ? DeliveredQty * (Surcharge / Ratio) : Surcharge, 2);
+        BigDecimal value;
+
+        if (SurchargePerUOM)
+        {
+            value = new BigDecimal(DeliveredQty).multiply(getSurcharge().divide(getRatio()));
+        }
+        else
+        {
+            value = getSurcharge();
+        }
+
+        return Utils.RoundNearest(value, 2);
 	}
 	
-	public double getDeliveredVatPerc()
+	public BigDecimal getDeliveredVatPerc()
 	{
-        return DeliveredQty <= VatPerc2Above ? VatPerc1 : VatPerc2;
+        return DeliveredQty <= VatPerc2Above ? getVatPerc1() : getVatPerc2();
 	}
 
 	//
@@ -185,7 +295,7 @@ public class dbTripOrderLine extends Model
 		
 		// if delivered qty is +/- 50 from ordered qty, 
 		// then ask driver for a new price.
-        DeliveredPrice = getDeliveredQtyVariesFromOrdered() ? 0 : OrderedPrice;
+        setDeliveredPrice(getDeliveredQtyVariesFromOrdered() ? BigDecimal.ZERO : getOrderedPrice());
 
 		// Mark line as delivered.
 		Delivered = true;
@@ -194,9 +304,9 @@ public class dbTripOrderLine extends Model
 	}
 	
 	// Used by driver when delivered qty is +/- 50 from ordered qty.
-	public void setDeliveredPricePrice(double newPrice)
+	public void setDeliveredPricePrice(BigDecimal newPrice)
 	{
-		DeliveredPrice = newPrice;
+		setDeliveredPrice(newPrice);
 
 		save();
 	}
