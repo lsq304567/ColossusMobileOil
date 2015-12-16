@@ -1401,11 +1401,11 @@ public class Printing
 
             if (line.DeliveredQty > line.VatPerc2Above)
             {
-                surchargeAmountVat = surchargeAmountVat.add(line.getVatPerc2().divide(new BigDecimal(100)));
+                surchargeAmountVat = surchargeAmountVat.add(surchargeAmount.multiply(line.getVatPerc2().divide(new BigDecimal(100))));
             }
             else
             {
-                surchargeAmountVat = surchargeAmountVat.add(line.getVatPerc1().divide(new BigDecimal(100)));
+                surchargeAmountVat = surchargeAmountVat.add(surchargeAmount.multiply(line.getVatPerc1().divide(new BigDecimal(100))));
             }
         }
 
