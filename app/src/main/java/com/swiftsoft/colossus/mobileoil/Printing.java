@@ -27,6 +27,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -36,7 +37,7 @@ import java.util.zip.GZIPOutputStream;
 public class Printing
 {
 	private static final int SINGLE_COLUMN_X = 40;
-	private static final int SINGLE_COLUMN_WIDTH = 760;
+	private static final int SINGLE_COLUMN_WIDTH = 740;
 
 	private static final int LEFT_COLUMN_X = 40;
 	private static final int RIGHT_COLUMN_X = 440;
@@ -297,8 +298,6 @@ public class Printing
 			// Print Undelivered Orders header
 			finalPosition = printTitle(printer, finalPosition, "Undelivered orders");
 
-			finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-
 			// Process all the Undelivered Orders
 			finalPosition = printAllUndeliveredOrders(printer, finalPosition, orders);
 		}
@@ -532,7 +531,254 @@ public class Printing
 		return printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 	}
 
-	private static int printStockTransactions(Printer printer, int yPosition)
+    private static int printStockMatrix(Printer printer, int yPosition)
+    {
+        CrashReporter.leaveBreadcrumb("Printing: printStockByProduct");
+
+        int finalPosition = yPosition;
+        int xOffset = 200;
+
+        // Get the list of vehicle stocks
+        List<dbVehicleStock> vehicleStocks = dbVehicleStock.GetStockByProduct(dbVehicle.FindByNo(Active.trip.Vehicle.No));
+
+        // Get the list of stock transactions
+        List<dbTripStock> transactions = Active.trip.GetStockTrans();
+
+        // Get the list of products that are on lorry
+        List<dbProduct> products = getUniqueProducts(transactions, vehicleStocks);
+
+        int headerHeight = 0;
+
+        // Print the product headers
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+
+        for (dbProduct product : products)
+        {
+            headerHeight = printer.addTextRight(Size.Normal, xOffset, finalPosition, 130, product.Desc);
+
+            xOffset += 150;
+        }
+
+        xOffset = 200;
+        finalPosition = headerHeight;
+
+        // Print the original stock value for each product
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        printer.addTextLeft(Size.Normal, 20, finalPosition, 160, "Starting");
+
+        for (dbProduct product : products)
+        {
+            headerHeight = printer.addTextRight(Size.Normal, xOffset, finalPosition, 130, String.format("%d", getStartingVolume(vehicleStocks, product)));
+
+            xOffset += 150;
+        }
+
+        xOffset = 200;
+        finalPosition = headerHeight;
+
+        // Print the Loaded quantities
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        printer.addTextLeft(Size.Normal, 20, finalPosition, 160, "Loaded");
+
+        for (dbProduct product : products)
+        {
+            headerHeight = printer.addTextRight(Size.Normal, xOffset, finalPosition, 130, String.format("%d", getLoadedVolume(transactions, product)));
+
+            xOffset += 150;
+        }
+
+        xOffset = 200;
+        finalPosition = headerHeight;
+
+        // Print the delivered quantities
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        printer.addTextLeft(Size.Normal, 20, finalPosition, 150, "Delivery");
+
+        for (dbProduct product : products)
+        {
+            headerHeight = printer.addTextRight(Size.Normal, xOffset, finalPosition, 130, String.format("%d", getDeliveredVolume(transactions, product)));
+
+            xOffset += 150;
+        }
+
+        xOffset = 200;
+        finalPosition = headerHeight;
+
+        // Print the returned quantities
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        printer.addTextLeft(Size.Normal, 20, finalPosition, 150, "Return");
+
+        for (dbProduct product : products)
+        {
+            headerHeight = printer.addTextRight(Size.Normal, xOffset, finalPosition, 130, String.format("%d", getReturnedVolume(transactions, product)));
+
+            xOffset += 150;
+        }
+
+        xOffset = 200;
+        finalPosition = headerHeight;
+
+        // Print the closing stock value for each product
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        printer.addTextLeft(Size.Normal, 20, finalPosition, 160, "Finishing");
+
+        for (dbProduct product : products)
+        {
+            headerHeight = printer.addTextRight(Size.Normal, xOffset, finalPosition, 130, String.format("%d", getFinishingVolume(vehicleStocks, product)));
+
+            xOffset += 150;
+        }
+
+        xOffset = 200;
+        finalPosition = headerHeight;
+
+        return finalPosition;
+    }
+
+    private static int getStartingVolume(List<dbVehicleStock> stockList, dbProduct product)
+    {
+        CrashReporter.leaveBreadcrumb("Printing: getStartingVolume");
+
+        int quantity = 0;
+
+        // Go through all stock until we find a matching product
+        // and return the quantity
+        for (dbVehicleStock stock : stockList)
+        {
+            if (stock != null && stock.Product.ColossusID == product.ColossusID)
+            {
+                quantity = stock.OpeningStock;
+
+                CrashReporter.leaveBreadcrumb(String.format("Printing: getStartingVolume - Product [%s] : %d litres", product.Desc, quantity));
+
+                break;
+            }
+        }
+
+        return quantity;
+    }
+
+    private static int getFinishingVolume(List<dbVehicleStock> stockList, dbProduct product)
+    {
+        CrashReporter.leaveBreadcrumb("Printing: getStartingVolume");
+
+        int quantity = 0;
+
+        // Go through all stock until we find a matching product
+        // and return the quantity
+        for (dbVehicleStock stock : stockList)
+        {
+            if (stock != null && stock.Product.ColossusID == product.ColossusID)
+            {
+                quantity = stock.CurrentStock;
+
+                CrashReporter.leaveBreadcrumb(String.format("Printing: getFinishingVolume - Product [%s] : %d litres", product.Desc, quantity));
+
+                break;
+            }
+        }
+
+        return quantity;
+    }
+
+    private static int getLoadedVolume(List<dbTripStock> stockTransactions, dbProduct product)
+    {
+        CrashReporter.leaveBreadcrumb("Printing: getLoadedVolume");
+
+        int quantity = 0;
+
+        // Loop through all 'Load' transactions calculating the total for the product
+        for (dbTripStock stockTransaction : stockTransactions)
+        {
+            if (stockTransaction.Type.equals("Load"))
+            {
+                if (stockTransaction.Product.ColossusID == product.ColossusID)
+                {
+                    quantity += stockTransaction.Quantity;
+                }
+            }
+        }
+
+        return quantity;
+    }
+
+    private static int getDeliveredVolume(List<dbTripStock> stockTransactions, dbProduct product)
+    {
+        CrashReporter.leaveBreadcrumb("Printing: getDelivereVolume");
+
+        int quantity = 0;
+
+        // Loop through all 'Delivery' transactions calculating the total for the product
+        for (dbTripStock stockTransaction : stockTransactions)
+        {
+            if (stockTransaction.Type.equals("Delivery"))
+            {
+                if (stockTransaction.Product.ColossusID == product.ColossusID)
+                {
+                    quantity += stockTransaction.Quantity;
+                }
+            }
+        }
+
+        return quantity;
+    }
+
+    private static int getReturnedVolume(List<dbTripStock> stockTransactions, dbProduct product)
+    {
+        CrashReporter.leaveBreadcrumb("Printing: getReturnedVolume");
+
+        int quantity = 0;
+
+        // Loop through all 'Return' transactions calculating the total for the product
+        for (dbTripStock stockTransaction : stockTransactions)
+        {
+            if (stockTransaction.Type.equals("Return"))
+            {
+                if (stockTransaction.Product.ColossusID == product.ColossusID)
+                {
+                    quantity += stockTransaction.Quantity;
+                }
+            }
+        }
+
+        return quantity;
+    }
+
+    private static List<dbProduct> getUniqueProducts(List<dbTripStock> transactions, List<dbVehicleStock> stocks)
+    {
+        CrashReporter.leaveBreadcrumb("Printing: getUniqueProducts");
+
+        // Create object to hold list of unique product in stock & transactions
+        // to be returned
+        List<dbProduct> products =  new ArrayList<dbProduct>();
+
+        for (dbTripStock transaction : transactions)
+        {
+            if (transaction.Type.equals("Load") || transaction.Type.equals("Return") || transaction.Type.equals("Delivery"))
+            {
+                if (!products.contains(transaction.Product))
+                {
+                    CrashReporter.leaveBreadcrumb(String.format("Printing: getUniqueProducts - Adding Product %s", transaction.Product.Desc));
+
+                    products.add(transaction.Product);
+                }
+            }
+        }
+
+        for (dbVehicleStock stock : stocks)
+        {
+            if (!products.contains(stock.Product))
+            {
+                CrashReporter.leaveBreadcrumb(String.format("Printing: getUniqueProducts - Adding Product %s", stock.Product.Desc));
+
+                products.add(stock.Product);
+            }
+        }
+
+        return products;
+    }
+
+    private static int printStockTransactions(Printer printer, int yPosition)
 	{
         CrashReporter.leaveBreadcrumb("Printing: printStockTransactions");
 
@@ -921,6 +1167,9 @@ public class Printing
 
 		// Print Closing Stock Section
 		finalPosition = printClosingStock(printer, finalPosition);
+
+        // Print the matrix of product loaded/Returned/Delivered
+        finalPosition = printStockMatrix(printer, finalPosition);
 
 		// Print Separator before Cash Report
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);

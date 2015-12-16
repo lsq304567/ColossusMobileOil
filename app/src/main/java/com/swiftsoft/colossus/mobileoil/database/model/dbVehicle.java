@@ -314,6 +314,8 @@ public class dbVehicle extends Model
 		lcTripStock.TicketNo = 0;	// Unmetered by truck.
 		lcTripStock.Description = "Loaded " + litres + " of " + product.Desc;
 		lcTripStock.Notes = "";
+        lcTripStock.Product = product;
+        lcTripStock.Quantity = litres;
 		lcTripStock.save();
 	}
 
@@ -332,12 +334,15 @@ public class dbVehicle extends Model
 		
 		// Write stock transaction.
 		dbTripStock lcTripStock = new dbTripStock();
+
 		lcTripStock.Trip = Active.trip;
 		lcTripStock.Type = "Return";
 		lcTripStock.Date = Utils.getCurrentTime();
 		lcTripStock.InvoiceNo = "";
 		lcTripStock.CustomerCode = "";
 		lcTripStock.TicketNo = ticketNo;
+        lcTripStock.Product = product;
+        lcTripStock.Quantity = litres;
 
 		lcTripStock.Description = ticketNo == 0 ? "Returned " + litres + " of " + product.Desc : "Ticket #" + ticketNo + " returned " + litres + " of " + product.Desc;
 		
@@ -429,6 +434,7 @@ public class dbVehicle extends Model
 		
 		// Write stock transaction.
 		dbTripStock lcTripStock = new dbTripStock();
+
 		lcTripStock.Trip = Active.trip;
 		lcTripStock.Type = "Delivery";
 		lcTripStock.Date = Utils.getCurrentTime();
@@ -436,10 +442,13 @@ public class dbVehicle extends Model
 		lcTripStock.CustomerCode = Active.order.CustomerCode;
 		lcTripStock.CustomerName = Active.order.CustomerName;
 		lcTripStock.TicketNo = ticketNo;
+        lcTripStock.Product = Active.orderLine.Product;
+        lcTripStock.Quantity = Active.orderLine.DeliveredQty;
 
 		lcTripStock.Description = ticketNo == 0 ? "Delivered " + Active.orderLine.DeliveredQty + " of " + Active.orderLine.Product.Desc : "Ticket #" + Active.orderLine.ticketNo + " delivered " + Active.orderLine.DeliveredQty + " of " + Active.orderLine.Product.Desc;
 		
 		lcTripStock.Notes = "";
+
 		lcTripStock.save();
 	}
 
