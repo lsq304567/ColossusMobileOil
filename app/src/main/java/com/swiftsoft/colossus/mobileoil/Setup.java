@@ -101,6 +101,8 @@ import android.os.Messenger;
 import android.widget.ViewFlipper;
 
 import com.crashlytics.android.Crashlytics;
+import com.swiftsoft.colossus.mobileoil.database.model.dbEndOfDay;
+import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
 import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicle;
 import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
@@ -110,6 +112,8 @@ import com.swiftsoft.colossus.mobileoil.service.TimerService;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 
 import org.json.JSONObject;
+
+import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -163,6 +167,41 @@ public class Setup extends Activity
 
 		try
 		{
+            for (int i = 0; i < 10; i++)
+            {
+                dbEndOfDay eod = new dbEndOfDay();
+
+                eod.TripId = 1234567890;
+                eod.Type = "Deliver";
+                eod.Quantity = 1000;
+                eod.Product = dbProduct.FindByCode("0002");
+
+                eod.save();
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                dbEndOfDay eod = new dbEndOfDay();
+
+                eod.TripId = 1234567890;
+                eod.Type = "Deliver";
+                eod.Quantity = 500;
+                eod.Product = dbProduct.FindByCode("0001");
+
+                eod.save();
+            }
+
+            List<dbProduct> products = dbEndOfDay.getUniqueProducts();
+
+            for (dbProduct p : products)
+            {
+                int quantity = dbEndOfDay.getQuantity("Return", p);
+
+                String s = String.format("%d", quantity);
+            }
+
+			dbEndOfDay.deleteAll();
+
 			// NOTE: This is the starting point of the App.
 
 			// Start CrashReporter.
