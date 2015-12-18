@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:background="#000000"
+android:orientation="vertical"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+
+<LinearLayout
+    android:id="@+id/eod_report_root_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_margin="1dp"
+    android:orientation="vertical"
+    android:background="#ffffff">
+
+    <com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line
+        android:id="@+id/eod_report_infoview"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:text="End of day report"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:src="@drawable/transport_document"
+            android:contentDescription="Print icon" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/eod_report_print"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="7dp"
+                android:layout_weight="1"
+                android:text="Print EOD report"
+                android:textSize="16sp"
+                android:paddingTop="20sp"
+                android:paddingBottom="20sp"/>
+
+            <Button
+                android:id="@+id/eod_report_change"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="7dp"
+                android:layout_weight="1"
+                android:text="Change printer"
+                android:textSize="16sp"
+                android:paddingTop="20sp"
+                android:paddingBottom="20sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        style="@android:style/ButtonBar"
+        android:background="#343234">
+
+        <Button
+            android:id="@+id/eod_report_back"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Back"
+            android:textSize="18sp"
+            android:padding="20sp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Spare"
+            android:textSize="18sp"
+            android:padding="20sp"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/eod_report_finish"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Finish"
+            android:padding="20sp"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
+
+</LinearLayout>

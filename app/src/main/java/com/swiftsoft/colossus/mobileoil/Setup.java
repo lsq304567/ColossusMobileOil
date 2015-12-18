@@ -163,7 +163,94 @@ public class Setup extends Activity
 
 		try
 		{
-			// NOTE: This is the starting point of the App.
+//            // Starting
+//			dbEndOfDay eod = new dbEndOfDay();
+//
+//			eod.Quantity = 5000;
+//			eod.Type = "Starting";
+//			eod.TripId = 1234;
+//			eod.Product = dbProduct.FindByCode("0001");
+//
+//			eod.save();
+//
+//            eod = new dbEndOfDay();
+//
+//            eod.Quantity = 5000;
+//            eod.Type = "Starting";
+//            eod.TripId = 1234;
+//            eod.Product = dbProduct.FindByCode("0002");
+//
+//            eod.save();
+//
+//            eod = new dbEndOfDay();
+//
+//            eod.Quantity = 0;
+//            eod.Type = "Starting";
+//            eod.TripId = 1234;
+//            eod.Product = dbProduct.FindByCode("0003");
+//
+//            eod.save();
+//
+//            // Loaded
+//            eod = new dbEndOfDay();
+//
+//            eod.Quantity = 1000;
+//            eod.Type = "Loaded";
+//            eod.TripId = 1234;
+//            eod.Product = dbProduct.FindByCode("0001");
+//
+//            eod.save();
+//
+//            eod = new dbEndOfDay();
+//
+//            eod.Quantity = 1000;
+//            eod.Type = "Loaded";
+//            eod.TripId = 1237;
+//            eod.Product = dbProduct.FindByCode("0003");
+//
+//            eod.save();
+//
+//            // Delivery
+//            eod = new dbEndOfDay();
+//
+//            eod.Quantity = 1200;
+//            eod.Type = "Return";
+//            eod.TripId = 1234;
+//            eod.Product = dbProduct.FindByCode("0001");
+//
+//            eod.save();
+//
+//            eod = new dbEndOfDay();
+//
+//            eod.Quantity = 0;
+//            eod.Type = "Return";
+//            eod.TripId = 1234;
+//            eod.Product = dbProduct.FindByCode("0002");
+//
+//            eod.save();
+//
+//            eod = new dbEndOfDay();
+//
+//            eod.Quantity = 400;
+//            eod.Type = "Return";
+//            eod.TripId = 1237;
+//            eod.Product = dbProduct.FindByCode("0003");
+//
+//            eod.save();
+//
+//            // Returns
+//            eod = new dbEndOfDay();
+//
+//            eod.Quantity = 1900;
+//            eod.Type = "Return";
+//            eod.TripId = 1234;
+//            eod.Product = dbProduct.FindByCode("0003");
+//
+//            eod.save();
+
+
+
+            // NOTE: This is the starting point of the App.
 
 			// Start CrashReporter.
 			CrashReporter.onStart(getApplicationContext());

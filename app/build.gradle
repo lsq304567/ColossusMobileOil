@@ -32,7 +32,7 @@ android {
         }
     }
 
-    lintOptions{
+    lintOptions {
         abortOnError false
     }
 }

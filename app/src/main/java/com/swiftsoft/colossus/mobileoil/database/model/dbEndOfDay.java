@@ -38,6 +38,11 @@ public class dbEndOfDay extends Model
         return new Select().from(dbEndOfDay.class).orderBy("TripId").execute();
     }
 
+    public static int getCount()
+    {
+        return getAll().size();
+    }
+
     public static List<Integer> getTripIds()
     {
         // Create List to contain the returned trip ids.
@@ -50,6 +55,25 @@ public class dbEndOfDay extends Model
                 uniqueTripIds.add(item.TripId);
             }
         }
+
+        return uniqueTripIds;
+    }
+
+    public static List<Integer> getUniqueTripIds()
+    {
+        List<Integer> uniqueTripIds = new ArrayList<Integer>();
+
+        List<dbEndOfDay> items = getAll();
+
+        for (dbEndOfDay item : items)
+        {
+            if (!uniqueTripIds.contains(item.TripId))
+            {
+                uniqueTripIds.add(item.TripId);
+            }
+        }
+
+        Collections.sort(uniqueTripIds);
 
         return uniqueTripIds;
     }
@@ -98,7 +122,70 @@ public class dbEndOfDay extends Model
         return list;
     }
 
-    public static int getQuantity(String type, dbProduct product)
+    public static int getStartingQuantity(dbProduct product)
+    {
+        int quantity = 0;
+
+        List<Integer> tripIds = getUniqueTripIds();
+
+        int firstId = tripIds.get(0);
+
+        for (dbEndOfDay item : getAll())
+        {
+            if (item.TripId == firstId)
+            {
+                if (product.equals(item.Product) && item.Type.equals("Starting"))
+                {
+                    quantity = item.Quantity;
+
+                    break;
+                }
+            }
+        }
+
+        return quantity;
+    }
+
+    public static int getFinishingQuantity(dbProduct product)
+    {
+        int quantity = 0;
+
+        List<Integer> tripIds = getUniqueTripIds();
+
+        int firstId = tripIds.get(tripIds.size() - 1);
+
+        for (dbEndOfDay item : getAll())
+        {
+            if (item.TripId == firstId)
+            {
+                if (product.equals(item.Product) && item.Type.equals("Finishing"))
+                {
+                    quantity = item.Quantity;
+
+                    break;
+                }
+            }
+        }
+
+        return quantity;
+    }
+
+    public static int getLoadedQuantity(dbProduct product)
+    {
+        return getQuantity("Loaded", product);
+    }
+
+    public static int getDeliveredQuantity(dbProduct product)
+    {
+        return getQuantity("Delivery", product);
+    }
+
+    public static int getReturnedQuantity(dbProduct product)
+    {
+        return getQuantity("Return", product);
+    }
+
+    private static int getQuantity(String type, dbProduct product)
     {
         int quantity = 0;
 

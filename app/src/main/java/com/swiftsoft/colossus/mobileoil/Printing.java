@@ -6,6 +6,7 @@ import android.util.Base64;
 
 import com.swiftsoft.colossus.mobileoil.bluetooth.PrintingService;
 import com.swiftsoft.colossus.mobileoil.database.model.dbDriver;
+import com.swiftsoft.colossus.mobileoil.database.model.dbEndOfDay;
 import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
 import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrder;
@@ -442,6 +443,143 @@ public class Printing
 		service.print(printer.getPrinterData());
 	}
 
+	public static void endOfDayReport(Context context)
+	{
+		try
+		{
+			// Print EOD report to PCX
+            printEndOfDayReport(context);
+        }
+		catch (Exception e)
+		{
+			CrashReporter.logHandledException(e);
+		}
+	}
+
+    private static void printEndOfDayReport(Context context) throws Exception
+    {
+        int finalPosition = 0;
+
+        Printer printer = new BitmapPrinter(context);
+
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+
+        finalPosition = printTitle(printer, finalPosition, "End Of Day Report");
+
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+
+        finalPosition = printer.addTextLeft(Size.Medium, 40, finalPosition, 200, "Trip IDs");
+
+        for (int id : dbEndOfDay.getUniqueTripIds())
+        {
+            finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+            finalPosition = printer.addTextLeft(Size.Normal, 40, finalPosition, 200, String.format("%d", id));
+        }
+
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
+
+        /* */
+
+        int xOffset = 200;
+
+        // Get the list of products that are on lorry
+        List<dbProduct> products = dbEndOfDay.getUniqueProducts();
+
+        int headerHeight = 0;
+
+        for (dbProduct product : products)
+        {
+            headerHeight = printer.addTextRight(Size.Normal, xOffset, finalPosition, 130, product.Desc);
+
+            xOffset += 150;
+        }
+
+        xOffset = 200;
+        finalPosition = headerHeight;
+
+        // Print the original stock value for each product
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        printer.addTextLeft(Size.Normal, 20, finalPosition, 160, "Starting");
+
+        for (dbProduct product : products)
+        {
+            headerHeight = printer.addTextRight(Size.Normal, xOffset, finalPosition, 130, String.format("%d", dbEndOfDay.getStartingQuantity(product)));
+
+            xOffset += 150;
+        }
+
+        xOffset = 200;
+        finalPosition = headerHeight;
+
+        // Print the Loaded quantities
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        printer.addTextLeft(Size.Normal, 20, finalPosition, 160, "Loaded");
+
+        for (dbProduct product : products)
+        {
+            headerHeight = printer.addTextRight(Size.Normal, xOffset, finalPosition, 130, String.format("%d", dbEndOfDay.getLoadedQuantity(product)));
+
+            xOffset += 150;
+        }
+
+        xOffset = 200;
+        finalPosition = headerHeight;
+
+        // Print the delivered quantities
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        printer.addTextLeft(Size.Normal, 20, finalPosition, 150, "Delivery");
+
+        for (dbProduct product : products)
+        {
+            headerHeight = printer.addTextRight(Size.Normal, xOffset, finalPosition, 130, String.format("%d", dbEndOfDay.getDeliveredQuantity(product)));
+
+            xOffset += 150;
+        }
+
+        xOffset = 200;
+        finalPosition = headerHeight;
+
+        // Print the returned quantities
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        printer.addTextLeft(Size.Normal, 20, finalPosition, 150, "Return");
+
+        for (dbProduct product : products)
+        {
+            headerHeight = printer.addTextRight(Size.Normal, xOffset, finalPosition, 130, String.format("%d", dbEndOfDay.getReturnedQuantity(product)));
+
+            xOffset += 150;
+        }
+
+        xOffset = 200;
+        finalPosition = headerHeight;
+
+        // Print the closing stock value for each product
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        printer.addTextLeft(Size.Normal, 20, finalPosition, 160, "Finishing");
+
+        for (dbProduct product : products)
+        {
+            headerHeight = printer.addTextRight(Size.Normal, xOffset, finalPosition, 130, String.format("%d", dbEndOfDay.getFinishingQuantity(product)));
+
+            xOffset += 150;
+        }
+
+        xOffset = 200;
+        finalPosition = headerHeight;
+
+        /* */
+
+        printFooter(printer, finalPosition);
+
+        byte[] ticketImage = printer.addBitmap();
+
+        // Send to printer.
+        sendToPrinter(context, printer);
+
+        // Save the Transport Image
+        saveLabelImage(context, "EndOfDayLabel", ticketImage);
+    }
+
 	public static void tripReport(Context context)
 	{
 		try
@@ -533,7 +671,7 @@ public class Printing
 
     private static int printStockMatrix(Printer printer, int yPosition)
     {
-        CrashReporter.leaveBreadcrumb("Printing: printStockByProduct");
+        CrashReporter.leaveBreadcrumb("Printing: printStockMatrix");
 
         int finalPosition = yPosition;
         int xOffset = 200;

@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.swiftsoft.colossus.mobileoil.database.adapter.TripAdapter;
+import com.swiftsoft.colossus.mobileoil.database.model.dbEndOfDay;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTrip;
 import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView3Line;
@@ -190,8 +191,16 @@ public class Trips extends Activity
 			// Bind to listview.
 			lvTrips.setAdapter(adapter);
 			
-			// Show/Hide next button.
-			btnNext.setVisibility(adapter.getCount() > 0 ? View.VISIBLE : View.INVISIBLE);
+			// Show the next button if there are trips in the list
+
+            if (adapter.getCount() > 0 || dbEndOfDay.getCount() > 0 )
+            {
+                btnNext.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                btnNext.setVisibility(View.INVISIBLE);
+            }
 		}
 		catch (Exception e)
 		{
@@ -317,10 +326,24 @@ public class Trips extends Activity
 			// Leave breadcrumb.
 			CrashReporter.leaveBreadcrumb("Trips: onNextClicked");
 
-            CrashReporter.leaveBreadcrumb("Trips: onNextClicked - " + ((Button)v).getText().toString());
+            CrashReporter.leaveBreadcrumb("Trips: onNextClicked - " + ((Button) v).getText().toString());
 
-            // Start next trip.
-			startTrip(adapter.getItemId(0));
+            // If there are trips waiting to be processed start the
+            // topmost one
+            //
+            // Otherwise go to screen to commence End of Day processing
+            if (adapter.getCount() > 0)
+            {
+                // Start the topmost trip in the list.
+                startTrip(adapter.getItemId(0));
+            }
+            else
+            {
+                // Display screen to print End of Day report
+                // Start the trip activity.
+                Intent intent = new Intent(this, EndOfDayReport.class);
+                startActivity(intent);
+            }
 		}
 		catch (Exception e)
 		{

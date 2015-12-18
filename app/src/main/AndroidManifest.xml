@@ -18,7 +18,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -91,6 +90,10 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar" />
         <activity
+            android:name=".EndOfDayReport"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar" />
+        <activity
             android:name=".Settings"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
@@ -103,7 +106,6 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="72d9964ce12de8b5b36b159294d7a9cee3ef8d35" />
-
     </application>
 
 </manifest>
