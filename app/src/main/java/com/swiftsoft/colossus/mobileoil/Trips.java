@@ -191,14 +191,7 @@ public class Trips extends Activity
 			lvTrips.setAdapter(adapter);
 			
 			// Show/Hide next button.
-			if (adapter.getCount() == 0)
-			{
-				btnNext.setVisibility(View.INVISIBLE);
-			}
-			else
-			{
-				btnNext.setVisibility(View.VISIBLE);
-			}
+			btnNext.setVisibility(adapter.getCount() > 0 ? View.VISIBLE : View.INVISIBLE);
 		}
 		catch (Exception e)
 		{
