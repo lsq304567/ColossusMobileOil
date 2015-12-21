@@ -6,6 +6,7 @@ import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +26,24 @@ public class dbEndOfDay extends Model
     @Column(name = "Quantity")
     public int Quantity;
 
+    @Column(name = "Value")
+    public String Value;
+
+    public BigDecimal getValue()
+    {
+        if (Value == null)
+        {
+            setValue(BigDecimal.ZERO);
+        }
+
+        return new BigDecimal(Value);
+    }
+
+    public void setValue(BigDecimal value)
+    {
+        Value = value.toString();
+    }
+
     /**
      * Delete all of the rows in the EndOfDay table.
      */
@@ -41,6 +60,66 @@ public class dbEndOfDay extends Model
     public static int getCount()
     {
         return getAll().size();
+    }
+
+    public static int getNumberOfPayments()
+    {
+        int numberOfPayments = 0;
+
+        for (dbEndOfDay item : getAll())
+        {
+            if (item.Type.startsWith("Payment_"))
+            {
+                numberOfPayments++;
+            }
+        }
+
+        return numberOfPayments;
+    }
+
+    public static BigDecimal getCashPayments()
+    {
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (dbEndOfDay item : getAll())
+        {
+            if (item.Type.equals("Payment_Cash"))
+            {
+                total = total.add(item.getValue());
+            }
+        }
+
+        return total;
+    }
+
+    public static BigDecimal getChequePayments()
+    {
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (dbEndOfDay item : getAll())
+        {
+            if (item.Type.equals("Payment_Cheque"))
+            {
+                total = total.add(item.getValue());
+            }
+        }
+
+        return total;
+    }
+
+    public static BigDecimal getVoucherPayments()
+    {
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (dbEndOfDay item : getAll())
+        {
+            if (item.Type.equals("Payment_Voucher"))
+            {
+                total = total.add(item.getValue());
+            }
+        }
+
+        return total;
     }
 
     public static List<Integer> getTripIds()
@@ -89,7 +168,7 @@ public class dbEndOfDay extends Model
         // list if it is not already present.
         for (dbEndOfDay item : items)
         {
-            if (!uniqueProducts.contains(item.Product))
+            if (item.Product != null && !uniqueProducts.contains(item.Product))
             {
                 uniqueProducts.add(item.Product);
             }
@@ -113,7 +192,7 @@ public class dbEndOfDay extends Model
 
         for (dbEndOfDay item : find(tripId))
         {
-            if (item.Product.ColossusID == product.ColossusID)
+            if (item.Product != null && item.Product.ColossusID == product.ColossusID)
             {
                 list.add(item);
             }
@@ -134,7 +213,7 @@ public class dbEndOfDay extends Model
         {
             if (item.TripId == firstId)
             {
-                if (product.equals(item.Product) && item.Type.equals("Start"))
+                if (item.Product != null && product.equals(item.Product) && item.Type.equals("Start"))
                 {
                     quantity = item.Quantity;
 
@@ -158,7 +237,7 @@ public class dbEndOfDay extends Model
         {
             if (item.TripId == firstId)
             {
-                if (product.equals(item.Product) && item.Type.equals("Finish"))
+                if (item.Product != null && product.equals(item.Product) && item.Type.equals("Finish"))
                 {
                     quantity = item.Quantity;
 
@@ -191,7 +270,7 @@ public class dbEndOfDay extends Model
 
         for (dbEndOfDay item : getAll())
         {
-            if (product.equals(item.Product) && type.equals(item.Type))
+            if (item.Product != null && product.equals(item.Product) && type.equals(item.Type))
             {
                 quantity += item.Quantity;
             }

@@ -1253,7 +1253,45 @@ public class Trip extends Activity
             eod.save();
         }
 
-        // TODO Now we need to save payment detials for the trip ...
+        // Now we need to save payment details for the trip ...
+		for (dbTripStock transaction : transactions)
+		{
+			if (transaction.Type.equals("Payment"))
+            {
+                String paymentLine = transaction.Description;
+
+                int idx = paymentLine.indexOf(":") + 1;
+
+                if (paymentLine.startsWith("Cash payment:") || paymentLine.startsWith("Cheque payment:") || paymentLine.startsWith("Voucher payment:"))
+                {
+                    // Remove all commas from the value field so that parsing does not fail
+                    String strValue = paymentLine.substring(idx).replace(",", "").trim();
+
+                    dbEndOfDay eod = new dbEndOfDay();
+
+                    if (paymentLine.startsWith("Cash payment:"))
+                    {
+                        eod.Type = "Payment_Cash";
+                    }
+                    else if (paymentLine.startsWith("Cheque payment:"))
+                    {
+                        eod.Type = "Payment_Cheque";
+                    }
+                    else if (paymentLine.startsWith("Voucher payment:"))
+                    {
+                        eod.Type = "Payment_Voucher";
+                    }
+
+                    eod.TripId = Active.trip.ColossusID;
+                    eod.Product = null;
+                    BigDecimal amount = new BigDecimal(strValue);
+                    eod.setValue(amount);
+                    eod.Quantity = 0;
+
+                    eod.save();
+                }
+            }
+		}
     }
 
     private static int getDeliveredVolume(List<dbTripStock> stockTransactions, dbProduct product)

@@ -567,7 +567,65 @@ public class Printing
         xOffset = 200;
         finalPosition = headerHeight;
 
-        /* */
+        // Print the payments @ the bottom of the report
+		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.XLarge);
+
+        if (dbEndOfDay.getNumberOfPayments() == 0)
+        {
+            finalPosition = printTitle(printer, finalPosition, "No Payments Made");
+        }
+        else
+        {
+            finalPosition = printTitle(printer, finalPosition, "Payments");
+
+            DecimalFormat formatMoney = new DecimalFormat("#,##0.00");
+
+            // Get the sum of the cash payments
+            BigDecimal cashPayments = dbEndOfDay.getCashPayments();
+
+            // Get the sum of the cheque payments
+            BigDecimal chequePayments = dbEndOfDay.getChequePayments();
+
+            // Get the sum of the voucher payments
+            BigDecimal voucherPayments = dbEndOfDay.getVoucherPayments();
+
+            if (cashPayments.compareTo(BigDecimal.ZERO) > 0)
+            {
+                finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
+
+                printer.addTextLeft(Size.Medium, 200, finalPosition, 200, "Cash");
+
+                finalPosition = printer.addTextRight(Size.Medium, 400, finalPosition, 200, formatMoney.format(cashPayments));
+            }
+
+            if (chequePayments.compareTo(BigDecimal.ZERO) > 0)
+            {
+                finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
+
+                printer.addTextLeft(Size.Medium, 200, finalPosition, 200, "Cheque");
+
+                finalPosition = printer.addTextRight(Size.Medium, 400, finalPosition, 200, formatMoney.format(chequePayments));
+            }
+
+            if (voucherPayments.compareTo(BigDecimal.ZERO) > 0)
+            {
+                finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
+
+                printer.addTextLeft(Size.Medium, 200, finalPosition, 200, "Voucher");
+
+                finalPosition = printer.addTextRight(Size.Medium, 400, finalPosition, 200, formatMoney.format(voucherPayments));
+            }
+
+            finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
+
+            finalPosition = printer.addLine(400, finalPosition, 600, finalPosition);
+
+            finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
+
+            BigDecimal total = cashPayments.add(chequePayments).add(voucherPayments);
+
+            finalPosition = printer.addTextRight(Size.Medium, 400, finalPosition, 200, formatMoney.format(total));
+        }
 
         printFooter(printer, finalPosition);
 
