@@ -134,7 +134,7 @@ public class dbEndOfDay extends Model
         {
             if (item.TripId == firstId)
             {
-                if (product.equals(item.Product) && item.Type.equals("Starting"))
+                if (product.equals(item.Product) && item.Type.equals("Start"))
                 {
                     quantity = item.Quantity;
 
@@ -158,7 +158,7 @@ public class dbEndOfDay extends Model
         {
             if (item.TripId == firstId)
             {
-                if (product.equals(item.Product) && item.Type.equals("Finishing"))
+                if (product.equals(item.Product) && item.Type.equals("Finish"))
                 {
                     quantity = item.Quantity;
 
@@ -172,12 +172,12 @@ public class dbEndOfDay extends Model
 
     public static int getLoadedQuantity(dbProduct product)
     {
-        return getQuantity("Loaded", product);
+        return getQuantity("Load", product);
     }
 
     public static int getDeliveredQuantity(dbProduct product)
     {
-        return getQuantity("Delivery", product);
+        return getQuantity("Deliver", product);
     }
 
     public static int getReturnedQuantity(dbProduct product)

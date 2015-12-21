@@ -26,7 +26,11 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.swiftsoft.colossus.mobileoil.bluetooth.Bluetooth;
+import com.swiftsoft.colossus.mobileoil.database.model.dbEndOfDay;
+import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrderLine;
+import com.swiftsoft.colossus.mobileoil.database.model.dbTripStock;
+import com.swiftsoft.colossus.mobileoil.database.model.dbVehicle;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleStock;
 import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
 import com.swiftsoft.colossus.mobileoil.view.MyEditText;
@@ -38,6 +42,8 @@ import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Trip extends Activity
 {
@@ -1180,6 +1186,220 @@ public class Trip extends Activity
 		}
     }
 
+	private void tripComplete()
+	{
+        CrashReporter.leaveBreadcrumb("Trip: tripComplete");
+
+        // Get the list of vehicle stocks
+        List<dbVehicleStock> vehicleStocks = dbVehicleStock.GetStockByProduct(dbVehicle.FindByNo(Active.trip.Vehicle.No));
+
+        // Get the list of stock transactions
+        List<dbTripStock> transactions = Active.trip.GetStockTrans();
+
+        // Get the list of products that are on lorry
+        List<dbProduct> products = getUniqueProducts(transactions, vehicleStocks);
+
+        // Store the start, load, deliver, return & finish quantities
+        for (dbProduct product : products)
+        {
+            // Starting quantities
+            dbEndOfDay eod = new dbEndOfDay();
+
+            eod.Type = "Start";
+            eod.TripId = Active.trip.ColossusID;
+            eod.Product = product;
+            eod.Quantity = getStartingVolume(vehicleStocks, product);
+
+            eod.save();
+
+            // Loaded quantities
+            eod = new dbEndOfDay();
+
+            eod.Type = "Load";
+            eod.TripId = Active.trip.ColossusID;
+            eod.Product = product;
+            eod.Quantity = getLoadedVolume(transactions, product);
+
+            eod.save();
+
+            // Delivered quantities
+            eod = new dbEndOfDay();
+
+            eod.Type = "Deliver";
+            eod.TripId = Active.trip.ColossusID;
+            eod.Product = product;
+            eod.Quantity = getDeliveredVolume(transactions, product);
+
+            eod.save();
+
+            // Returned quantities
+            eod = new dbEndOfDay();
+
+            eod.Type = "Return";
+            eod.TripId = Active.trip.ColossusID;
+            eod.Product = product;
+            eod.Quantity = getReturnedVolume(transactions, product);
+
+            eod.save();
+
+            // Finishing quantities
+            eod = new dbEndOfDay();
+
+            eod.Type = "Finish";
+            eod.TripId = Active.trip.ColossusID;
+            eod.Product = product;
+            eod.Quantity = getFinishingVolume(vehicleStocks, product);
+
+            eod.save();
+        }
+
+        // TODO Now we need to save payment detials for the trip ...
+    }
+
+    private static int getDeliveredVolume(List<dbTripStock> stockTransactions, dbProduct product)
+    {
+        CrashReporter.leaveBreadcrumb("Trip: getDelivereVolume");
+
+        int quantity = 0;
+
+        // Loop through all 'Delivery' transactions calculating the total for the product
+        for (dbTripStock stockTransaction : stockTransactions)
+        {
+            if (stockTransaction.Type.equals("Delivery"))
+            {
+                if (stockTransaction.Product.ColossusID == product.ColossusID)
+                {
+                    quantity += stockTransaction.Quantity;
+                }
+            }
+        }
+
+        return quantity;
+    }
+
+    private static int getReturnedVolume(List<dbTripStock> stockTransactions, dbProduct product)
+    {
+        CrashReporter.leaveBreadcrumb("Trip: getReturnedVolume");
+
+        int quantity = 0;
+
+        // Loop through all 'Return' transactions calculating the total for the product
+        for (dbTripStock stockTransaction : stockTransactions)
+        {
+            if (stockTransaction.Type.equals("Return"))
+            {
+                if (stockTransaction.Product.ColossusID == product.ColossusID)
+                {
+                    quantity += stockTransaction.Quantity;
+                }
+            }
+        }
+
+        return quantity;
+    }
+
+    private static int getLoadedVolume(List<dbTripStock> stockTransactions, dbProduct product)
+    {
+        CrashReporter.leaveBreadcrumb("Trip: getLoadedVolume");
+
+        int quantity = 0;
+
+        // Loop through all 'Load' transactions calculating the total for the product
+        for (dbTripStock stockTransaction : stockTransactions)
+        {
+            if (stockTransaction.Type.equals("Load"))
+            {
+                if (stockTransaction.Product.ColossusID == product.ColossusID)
+                {
+                    quantity += stockTransaction.Quantity;
+                }
+            }
+        }
+
+        return quantity;
+    }
+
+    private static int getFinishingVolume(List<dbVehicleStock> stockList, dbProduct product)
+    {
+        CrashReporter.leaveBreadcrumb("Trip: getStartingVolume");
+
+        int quantity = 0;
+
+        // Go through all stock until we find a matching product
+        // and return the quantity
+        for (dbVehicleStock stock : stockList)
+        {
+            if (stock != null && stock.Product.ColossusID == product.ColossusID)
+            {
+                quantity = stock.CurrentStock;
+
+                CrashReporter.leaveBreadcrumb(String.format("Printing: getFinishingVolume - Product [%s] : %d litres", product.Desc, quantity));
+
+                break;
+            }
+        }
+
+        return quantity;
+    }
+
+    private static int getStartingVolume(List<dbVehicleStock> stockList, dbProduct product)
+    {
+        CrashReporter.leaveBreadcrumb("Trip: getStartingVolume");
+
+        int quantity = 0;
+
+        // Go through all stock until we find a matching product
+        // and return the quantity
+        for (dbVehicleStock stock : stockList)
+        {
+            if (stock != null && stock.Product.ColossusID == product.ColossusID)
+            {
+                quantity = stock.OpeningStock;
+
+                CrashReporter.leaveBreadcrumb(String.format("Printing: getStartingVolume - Product [%s] : %d litres", product.Desc, quantity));
+
+                break;
+            }
+        }
+
+        return quantity;
+    }
+
+    private static List<dbProduct> getUniqueProducts(List<dbTripStock> transactions, List<dbVehicleStock> stocks)
+    {
+        CrashReporter.leaveBreadcrumb("Trip: getUniqueProducts");
+
+        // Create object to hold list of unique product in stock & transactions
+        // to be returned
+        List<dbProduct> products =  new ArrayList<dbProduct>();
+
+        for (dbTripStock transaction : transactions)
+        {
+            if (transaction.Type.equals("Load") || transaction.Type.equals("Return") || transaction.Type.equals("Delivery"))
+            {
+                if (!products.contains(transaction.Product))
+                {
+                    CrashReporter.leaveBreadcrumb(String.format("Printing: getUniqueProducts - Adding Product %s", transaction.Product.Desc));
+
+                    products.add(transaction.Product);
+                }
+            }
+        }
+
+        for (dbVehicleStock stock : stocks)
+        {
+            if (!products.contains(stock.Product))
+            {
+                CrashReporter.leaveBreadcrumb(String.format("Printing: getUniqueProducts - Adding Product %s", stock.Product.Desc));
+
+                products.add(stock.Product);
+            }
+        }
+
+        return products;
+    }
+
+
     // User has finished the trip.
     public void tripDelivered()
     {
@@ -1191,7 +1411,10 @@ public class Trip extends Activity
 			// Leave breadcrumb.
 			CrashReporter.leaveBreadcrumb("Trip: tripDelivered");
 
-    		// Create content.
+            // Store details of the trip in dbEndOfDay
+            tripComplete();
+
+            // Create content.
 			JSONObject json = new JSONObject();
 			json.put("TripID", Active.trip.ColossusID);
 	

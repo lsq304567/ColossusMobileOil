@@ -773,30 +773,30 @@ public class Printing
         return finalPosition;
     }
 
-    private static int getStartingVolume(List<dbVehicleStock> stockList, dbProduct product)
-    {
-        CrashReporter.leaveBreadcrumb("Printing: getStartingVolume");
+	private static int getStartingVolume(List<dbVehicleStock> stockList, dbProduct product)
+	{
+		CrashReporter.leaveBreadcrumb("Printing: getStartingVolume");
 
-        int quantity = 0;
+		int quantity = 0;
 
-        // Go through all stock until we find a matching product
-        // and return the quantity
-        for (dbVehicleStock stock : stockList)
-        {
-            if (stock != null && stock.Product.ColossusID == product.ColossusID)
-            {
-                quantity = stock.OpeningStock;
+		// Go through all stock until we find a matching product
+		// and return the quantity
+		for (dbVehicleStock stock : stockList)
+		{
+			if (stock != null && stock.Product.ColossusID == product.ColossusID)
+			{
+				quantity = stock.OpeningStock;
 
-                CrashReporter.leaveBreadcrumb(String.format("Printing: getStartingVolume - Product [%s] : %d litres", product.Desc, quantity));
+				CrashReporter.leaveBreadcrumb(String.format("Printing: getStartingVolume - Product [%s] : %d litres", product.Desc, quantity));
 
-                break;
-            }
-        }
+				break;
+			}
+		}
 
-        return quantity;
-    }
+		return quantity;
+	}
 
-    private static int getFinishingVolume(List<dbVehicleStock> stockList, dbProduct product)
+	private static int getFinishingVolume(List<dbVehicleStock> stockList, dbProduct product)
     {
         CrashReporter.leaveBreadcrumb("Printing: getStartingVolume");
 
