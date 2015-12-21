@@ -1258,7 +1258,7 @@ public class Trip extends Activity
 
     private static int getDeliveredVolume(List<dbTripStock> stockTransactions, dbProduct product)
     {
-        CrashReporter.leaveBreadcrumb("Trip: getDelivereVolume");
+        CrashReporter.leaveBreadcrumb("Trip: getDeliveredVolume");
 
         int quantity = 0;
 
@@ -1321,7 +1321,7 @@ public class Trip extends Activity
 
     private static int getFinishingVolume(List<dbVehicleStock> stockList, dbProduct product)
     {
-        CrashReporter.leaveBreadcrumb("Trip: getStartingVolume");
+        CrashReporter.leaveBreadcrumb("Trip: getFinishingVolume");
 
         int quantity = 0;
 

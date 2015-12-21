@@ -139,11 +139,8 @@ public class EndOfDayReport extends Activity
                     // Delete all End of Day records from database
                     dbEndOfDay.deleteAll();
 
-                    int count = dbEndOfDay.getCount();
-
-                    // Start the trips activity.
-                    Intent intentFinish = new Intent(getApplicationContext(), Trips.class);
-                    startActivity(intentFinish);
+                    // Go back to the Trips activity.
+                    finish();
 
                     break;
                 
