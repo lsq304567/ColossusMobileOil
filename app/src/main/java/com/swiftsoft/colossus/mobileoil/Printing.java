@@ -140,8 +140,8 @@ public class Printing
 		CrashReporter.leaveBreadcrumb("Printing: printVehicleAndDriver - Fetching vehicle & driver details");
 
 		// Get the Vehicle & Driver details
-		dbVehicle vehicle = dbVehicle.FindByNo(Active.trip.Vehicle.No);
-		dbDriver driver = dbDriver.FindByNo(Active.trip.Driver.No);
+		dbVehicle vehicle = dbVehicle.FindByNo(Active.vehicle.No);
+		dbDriver driver = dbDriver.FindByNo(Active.driver.No);
 
 		CrashReporter.leaveBreadcrumb("Printing: printVehicleAndDriver - Printing vehicle & driver details");
 		// Print the Vehicle & Driver details
@@ -466,17 +466,30 @@ public class Printing
 
         finalPosition = printTitle(printer, finalPosition, "End Of Day Report");
 
-        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+		// Vehicle & Driver.
+		finalPosition = printVehicleAndDriver(printer, finalPosition);
 
-        finalPosition = printer.addTextLeft(Size.Medium, 40, finalPosition, 200, "Trip IDs");
+		int savedPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
+
+		// Print the date & time
+        finalPosition = printer.addTextLeft(Size.Large, LEFT_COLUMN_X, savedPosition, LEFT_COLUMN_WIDTH, "Date Printed:");
+
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+
+        DateFormat formatDate = new SimpleDateFormat("dd-MMM-yyyy");
+
+        // Print the actual date value
+        printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, formatDate.format(Utils.getCurrentTime()));
+
+        finalPosition = printer.addTextLeft(Size.Medium, RIGHT_COLUMN_X, savedPosition, RIGHT_COLUMN_WIDTH, "Trip IDs:");
 
         for (int id : dbEndOfDay.getUniqueTripIds())
         {
             finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-            finalPosition = printer.addTextLeft(Size.Normal, 40, finalPosition, 200, String.format("%d", id));
+            finalPosition = printer.addTextLeft(Size.Normal, RIGHT_COLUMN_X, finalPosition, RIGHT_COLUMN_WIDTH, String.format("%d", id));
         }
 
-        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Normal);
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
 
         /* */
 
