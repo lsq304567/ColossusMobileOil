@@ -19,31 +19,6 @@ public class EndOfDayReport extends Activity
     private Button btnPrint;
     private Button btnChangePrinter;
 
-//    @Override
-//    protected View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-//    {
-//        View rootView = inflater.inflate(R.layout.end_of_day_report, container, false);
-//
-//        // Find the infoview line
-//        infoView = (MyInfoView1Line)findViewById(R.id.eod_report_infoview);
-//
-//        // Find the navigation buttons at the botto of the screen
-//        btnBack = (Button)findViewById(R.id.eod_report_back);
-//        btnFinish = (Button)findViewById(R.id.eod_report_finish);
-//
-//        // Find the print & change printer buttons
-//        btnPrint = (Button)findViewById(R.id.eod_report_print);
-//        btnChangePrinter = (Button)findViewById(R.id.eod_report_change);
-//
-//        // Setup handlers for the buttons
-//        btnBack.setOnClickListener(buttonClick);
-//        btnChangePrinter.setOnClickListener(buttonClick);
-//        btnPrint.setOnClickListener(buttonClick);
-//        btnFinish.setOnClickListener(buttonClick);
-//
-//        return rootView;
-//    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
