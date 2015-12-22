@@ -64,29 +64,18 @@ public class dbEndOfDay extends Model
 
     public static int getNumberOfPayments()
     {
-        int numberOfPayments = 0;
-
-        for (dbEndOfDay item : getAll())
-        {
-            if (item.Type.startsWith("Payment_"))
-            {
-                numberOfPayments++;
-            }
-        }
-
-        return numberOfPayments;
+        return new Select().from(dbEndOfDay.class).where("Type like ?", "Payment_%").execute().size();
     }
 
     public static BigDecimal getCashPayments()
     {
         BigDecimal total = BigDecimal.ZERO;
 
-        for (dbEndOfDay item : getAll())
+        List<dbEndOfDay> cashPayments = new Select().from(dbEndOfDay.class).where("Type like ?", "Payment_Cash").execute();
+
+        for (dbEndOfDay item : cashPayments)
         {
-            if (item.Type.equals("Payment_Cash"))
-            {
-                total = total.add(item.getValue());
-            }
+            total = total.add(item.getValue());
         }
 
         return total;
@@ -96,12 +85,11 @@ public class dbEndOfDay extends Model
     {
         BigDecimal total = BigDecimal.ZERO;
 
-        for (dbEndOfDay item : getAll())
+        List<dbEndOfDay> chequePayments = new Select().from(dbEndOfDay.class).where("Type like ?", "Payment_Cheque").execute();
+
+        for (dbEndOfDay item : chequePayments)
         {
-            if (item.Type.equals("Payment_Cheque"))
-            {
-                total = total.add(item.getValue());
-            }
+            total = total.add(item.getValue());
         }
 
         return total;
@@ -111,12 +99,11 @@ public class dbEndOfDay extends Model
     {
         BigDecimal total = BigDecimal.ZERO;
 
-        for (dbEndOfDay item : getAll())
+        List<dbEndOfDay> voucherPayments = new Select().from(dbEndOfDay.class).where("Type like ?", "Payment_Voucher").execute();
+
+        for (dbEndOfDay item : voucherPayments)
         {
-            if (item.Type.equals("Payment_Voucher"))
-            {
-                total = total.add(item.getValue());
-            }
+            total = total.add(item.getValue());
         }
 
         return total;
@@ -142,9 +129,7 @@ public class dbEndOfDay extends Model
     {
         List<Integer> uniqueTripIds = new ArrayList<Integer>();
 
-        List<dbEndOfDay> items = getAll();
-
-        for (dbEndOfDay item : items)
+        for (dbEndOfDay item : getAll())
         {
             if (!uniqueTripIds.contains(item.TripId))
             {
@@ -162,16 +147,14 @@ public class dbEndOfDay extends Model
         // Create List to contain the unique products in the table
         List<dbProduct> uniqueProducts = new ArrayList<dbProduct>();
 
-        List<dbEndOfDay> items = getAll();
+        // Get a list of all the items where the product is not null
+        List<dbEndOfDay> items = new Select().from(dbEndOfDay.class).where("Product is not null").execute();
 
         // Loop over all the items adding to output
         // list if it is not already present.
         for (dbEndOfDay item : items)
         {
-            if (item.Product != null && !uniqueProducts.contains(item.Product))
-            {
-                uniqueProducts.add(item.Product);
-            }
+            uniqueProducts.add(item.Product);
         }
 
         // Sort the product in alphabetic order by description.
@@ -203,50 +186,34 @@ public class dbEndOfDay extends Model
 
     public static int getStartingQuantity(dbProduct product)
     {
-        int quantity = 0;
+        int firstId = getUniqueTripIds().get(0);
 
-        List<Integer> tripIds = getUniqueTripIds();
-
-        int firstId = tripIds.get(0);
-
-        for (dbEndOfDay item : getAll())
+        for (dbEndOfDay item : find(firstId))
         {
-            if (item.TripId == firstId)
+            if (item.Product != null && product.equals(item.Product) && item.Type.equals("Start"))
             {
-                if (item.Product != null && product.equals(item.Product) && item.Type.equals("Start"))
-                {
-                    quantity = item.Quantity;
-
-                    break;
-                }
+                return item.Quantity;
             }
         }
 
-        return quantity;
+        return 0;
     }
 
     public static int getFinishingQuantity(dbProduct product)
     {
-        int quantity = 0;
-
         List<Integer> tripIds = getUniqueTripIds();
 
         int firstId = tripIds.get(tripIds.size() - 1);
 
-        for (dbEndOfDay item : getAll())
+        for (dbEndOfDay item : find(firstId))
         {
-            if (item.TripId == firstId)
+            if (item.Product != null && product.equals(item.Product) && item.Type.equals("Finish"))
             {
-                if (item.Product != null && product.equals(item.Product) && item.Type.equals("Finish"))
-                {
-                    quantity = item.Quantity;
-
-                    break;
-                }
+                return item.Quantity;
             }
         }
 
-        return quantity;
+        return 0;
     }
 
     public static int getLoadedQuantity(dbProduct product)
@@ -268,9 +235,11 @@ public class dbEndOfDay extends Model
     {
         int quantity = 0;
 
-        for (dbEndOfDay item : getAll())
+        List<dbEndOfDay> items = new Select().from(dbEndOfDay.class).where("Product is not null and Type=?", type).execute();
+
+        for (dbEndOfDay item : items)
         {
-            if (item.Product != null && product.equals(item.Product) && type.equals(item.Type))
+            if (product.equals(item.Product))
             {
                 quantity += item.Quantity;
             }
