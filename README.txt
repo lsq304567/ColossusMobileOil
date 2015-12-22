@@ -1,3 +1,10 @@
+V0.99t18
+========
+
+Addition of Stock Matrix at bottom of Trip Report
+
+Addition of screens and printing for End of Day Report
+
 V0.99t17
 ========
 
