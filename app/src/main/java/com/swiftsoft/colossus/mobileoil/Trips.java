@@ -193,10 +193,16 @@ public class Trips extends Activity
 			
 			// Show the next button if there are trips in the list
 
-            if (adapter.getCount() > 0 || dbEndOfDay.getCount() > 0 )
+            if (adapter.getCount() > 0)
             {
+                btnNext.setText("Next");
                 btnNext.setVisibility(View.VISIBLE);
             }
+			else if (dbEndOfDay.getCount() > 0)
+			{
+				btnNext.setText("EOD");
+				btnNext.setVisibility(View.VISIBLE);
+			}
             else
             {
                 btnNext.setVisibility(View.INVISIBLE);
