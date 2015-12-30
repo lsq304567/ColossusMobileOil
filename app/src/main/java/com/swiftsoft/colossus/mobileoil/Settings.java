@@ -139,13 +139,13 @@ public class Settings extends Activity
     	try
     	{
 			// Update UI.
-			tvPrinterName.setText(Utils.ToStringNoNull(printerName.StringValue, "(none)"));
-			tvPrinterAddress.setText(Utils.ToStringNoNull(printerAddress.StringValue, ""));
+			tvPrinterName.setText(Utils.toStringNoNull(printerName.StringValue, "(none)"));
+			tvPrinterAddress.setText(Utils.toStringNoNull(printerAddress.StringValue, ""));
 
 			btnPrinterTest.setEnabled(printerName.StringValue != null);
 	
-			tvMeterMateName.setText(Utils.ToStringNoNull(metermateName.StringValue, "(none)"));
-			tvMeterMateAddress.setText(Utils.ToStringNoNull(metermateAddress.StringValue, ""));
+			tvMeterMateName.setText(Utils.toStringNoNull(metermateName.StringValue, "(none)"));
+			tvMeterMateAddress.setText(Utils.toStringNoNull(metermateAddress.StringValue, ""));
 			
 			tvURL.setText(colossusURLValue);
 			etURL.setText(colossusURLValue);

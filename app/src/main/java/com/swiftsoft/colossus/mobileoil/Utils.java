@@ -61,7 +61,15 @@ public class Utils {
 	}
 
 	// If value is null returns nullValue string, otherwise returns value.
-	public static String ToStringNoNull(String value, String nullValue)
+
+    /**
+     * If value is null return nullValue,
+     * otherwise return value.
+     * @param value Value to be tested.
+     * @param nullValue This is returned if value is null.
+     * @return value or nullValue
+     */
+	public static String toStringNoNull(String value, String nullValue)
 	{
 		return value == null ? nullValue : value;
 	}
