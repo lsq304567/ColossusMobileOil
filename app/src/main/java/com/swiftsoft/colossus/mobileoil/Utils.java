@@ -74,7 +74,7 @@ public class Utils {
 		return value == null ? nullValue : value;
 	}
 	
-	public static void ShowKeyboard(EditText et)
+	public static void showKeyboard(EditText et)
 	{
 		// Open soft keyboard.
 		InputMethodManager imm = (InputMethodManager) et.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);

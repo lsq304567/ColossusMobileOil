@@ -905,7 +905,7 @@ public class Trip extends Activity
 	
 			// Show soft keyboard.
 			dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-			Utils.ShowKeyboard(name);
+			Utils.showKeyboard(name);
 		}
 		catch (Exception e)
 		{
