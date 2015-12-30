@@ -66,4 +66,22 @@ public class UtilsTests
     {
         assertEquals("Expected 0 to be returned", 0, Utils.convert2Int("1.5"));
     }
+
+    @Test
+    public void tostringtonull_value_present()
+    {
+        assertEquals("Expected value", "String value", Utils.toStringNoNull("String value", "Null string"));
+    }
+
+    @Test
+    public void tostringtonull_value_empty()
+    {
+        assertEquals("Expected value", "", Utils.toStringNoNull("", "Null string"));
+    }
+
+    @Test
+    public void tostringtonull_value_null()
+    {
+        assertEquals("Expected null value", "Null string", Utils.toStringNoNull(null, "Null string"));
+    }
 }
