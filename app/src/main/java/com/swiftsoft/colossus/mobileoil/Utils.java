@@ -86,7 +86,7 @@ public class Utils {
 		}
 	}
 	
-	public static void HideKeyboard(View v)
+	public static void hideKeyboard(View v)
 	{
 		InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
