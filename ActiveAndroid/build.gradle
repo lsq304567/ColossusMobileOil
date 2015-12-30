@@ -1,2 +1,4 @@
 configurations.create("default")
 artifacts.add("default", file('ActiveAndroid.jar'))
+
+task testClasses {}
