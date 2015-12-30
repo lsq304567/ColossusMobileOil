@@ -163,7 +163,7 @@ public class Setup extends Activity
 
 		try
 		{
-            // NOTE: This is the starting point of the App.
+            // NOTE: This is the starting point of the Application
 
 			// Start CrashReporter.
 			CrashReporter.onStart(getApplicationContext());
