@@ -29,14 +29,14 @@ public class Utils {
 	// Round value to n decimal places.
 	// 1.234 = 1.23, if n=2
 	// 1.235 = 1.24, if n=2
-	public static double RoundNearest(double value, int n)
+	public static double roundNearest(double value, int n)
 	{
 		double power = Math.pow(10, n);
 		double roundedValue = Math.round(value * power);
 		return roundedValue / power;
 	}
 
-	public static BigDecimal RoundNearest(BigDecimal value, int n)
+	public static BigDecimal roundNearest(BigDecimal value, int n)
 	{
         CrashReporter.leaveBreadcrumb("Utils: RoundNearest");
 

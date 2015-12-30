@@ -211,7 +211,7 @@ public class dbTripOrderLine extends Model
 	{
 		BigDecimal nettValue = new BigDecimal(OrderedQty).multiply(getOrderedPrice().divide(getRatio()));
 
-		return Utils.RoundNearest(nettValue, 2);
+		return Utils.roundNearest(nettValue, 2);
 	}
 	
 	public BigDecimal getOrderedSurchargeValue()
@@ -249,14 +249,14 @@ public class dbTripOrderLine extends Model
 	{
 		BigDecimal value = getDeliveredNettValue().add(getDeliveredSurchargeValue());
 
-		return Utils.RoundNearest(value.divide(new BigDecimal(DeliveredQty)), 4);
+		return Utils.roundNearest(value.divide(new BigDecimal(DeliveredQty)), 4);
 	}
 	
 	public BigDecimal getDeliveredNettValue()
 	{
 		BigDecimal value = new BigDecimal(DeliveredQty).multiply(getDeliveredPrice().divide(getRatio()));
 
-		return Utils.RoundNearest(value, 2);
+		return Utils.roundNearest(value, 2);
 	}
 
 	public BigDecimal getDeliveredSurchargeValue()
@@ -272,7 +272,7 @@ public class dbTripOrderLine extends Model
             value = getSurcharge();
         }
 
-        return Utils.RoundNearest(value, 2);
+        return Utils.roundNearest(value, 2);
 	}
 	
 	public BigDecimal getDeliveredVatPerc()
