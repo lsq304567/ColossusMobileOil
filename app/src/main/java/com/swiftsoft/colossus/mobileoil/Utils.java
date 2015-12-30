@@ -14,7 +14,7 @@ import java.util.Date;
 public class Utils {
 
 	// Convert a string to an integer, without throw an exception.
-	public static int Convert2Int(String text)
+	public static int convert2Int(String text)
 	{
 		try
 		{

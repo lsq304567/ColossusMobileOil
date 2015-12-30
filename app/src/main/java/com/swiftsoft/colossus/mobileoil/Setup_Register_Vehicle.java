@@ -219,7 +219,7 @@ public class Setup_Register_Vehicle extends MyFlipperView
 			if (vehicleNoText.length() > 0)
 			{
 				// Query database.
-				vehicle = dbVehicle.FindByNo(Utils.Convert2Int(vehicleNoText));
+				vehicle = dbVehicle.FindByNo(Utils.convert2Int(vehicleNoText));
 
 				if (vehicle != null)
 				{

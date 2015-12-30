@@ -233,7 +233,7 @@ public class Logon extends Activity
 			if (vehicleNoText.length() > 0)
 			{
 				// Query database.
-				dbVehicle vehicle = dbVehicle.FindByNo(Utils.Convert2Int(vehicleNoText));
+				dbVehicle vehicle = dbVehicle.FindByNo(Utils.convert2Int(vehicleNoText));
 
 				if (vehicle != null)
 				{
@@ -293,7 +293,7 @@ public class Logon extends Activity
 			if (driverNoText.length() > 0)
 			{
 				// Query database.
-				dbDriver driver = dbDriver.FindByNo(Utils.Convert2Int(driverNoText));
+				dbDriver driver = dbDriver.FindByNo(Utils.convert2Int(driverNoText));
 
 				if (driver != null)
 				{
@@ -301,7 +301,7 @@ public class Logon extends Activity
 					driverDesc.setText(driver.Name);
 
 					// Check PIN.
-					if (driver.PIN == Utils.Convert2Int(driverPINText))
+					if (driver.PIN == Utils.convert2Int(driverPINText))
 					{
 						isDriverPINValid = true;
 						driverPINMessage.setText(R.string.logon_driver_pin_correct);
@@ -323,7 +323,7 @@ public class Logon extends Activity
 			}
 
 			// Secret code to generate demo data.
-			if (Utils.Convert2Int(driverNoText) == -159 && Utils.Convert2Int(driverPINText) == -951)
+			if (Utils.convert2Int(driverNoText) == -159 && Utils.convert2Int(driverPINText) == -951)
 			{
 				isVehicleValid = true;
 				isDriverValid = true;
@@ -358,7 +358,7 @@ public class Logon extends Activity
 			String driverPINText = driverPIN.getText().toString();
 
 			// Secret code to generate demo data.
-			if (Utils.Convert2Int(driverNoText) == -159 && Utils.Convert2Int(driverPINText) == -951)
+			if (Utils.convert2Int(driverNoText) == -159 && Utils.convert2Int(driverPINText) == -951)
 			{
 				DemoData.Create();
 				init();
@@ -366,8 +366,8 @@ public class Logon extends Activity
 			}
 
 			// Find vehicle and driver.
-			Active.vehicle = dbVehicle.FindByNo(Utils.Convert2Int(vehicleNoText));
-			Active.driver = dbDriver.FindByNo(Utils.Convert2Int(driverNoText));
+			Active.vehicle = dbVehicle.FindByNo(Utils.convert2Int(vehicleNoText));
+			Active.driver = dbDriver.FindByNo(Utils.convert2Int(driverNoText));
 	
 			// Create content.
 			JSONObject json = new JSONObject();
