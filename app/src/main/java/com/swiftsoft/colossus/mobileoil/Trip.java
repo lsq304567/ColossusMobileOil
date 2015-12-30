@@ -800,7 +800,7 @@ public class Trip extends Activity
 		{
 			value = new BigDecimal(amount.getText().toString());
 
-			value = Utils.Truncate(value, 2);
+			value = Utils.truncate(value, 2);
 		}
 		catch (Exception e)
 		{

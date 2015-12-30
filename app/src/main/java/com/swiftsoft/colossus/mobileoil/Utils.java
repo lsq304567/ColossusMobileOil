@@ -48,14 +48,14 @@ public class Utils {
 	// Truncate value to n decimal places.
 	// 1.234 = 1.23, if n=2
 	// 1.235 = 1.23, if n=2
-	public static double Truncate(double value, int n)
+	public static double truncate(double value, int n)
 	{
 		double power = Math.pow(10, n);
 		double truncatedValue = Math.floor(value * power);
 		return truncatedValue / power;
 	}
 
-	public static BigDecimal Truncate(BigDecimal value, int n)
+	public static BigDecimal truncate(BigDecimal value, int n)
 	{
 		return value.setScale(n, RoundingMode.DOWN);
 	}
