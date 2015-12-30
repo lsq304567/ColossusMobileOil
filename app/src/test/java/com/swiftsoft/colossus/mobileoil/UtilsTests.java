@@ -11,4 +11,10 @@ public class UtilsTests
     {
         assertEquals("Not zero", 0, Utils.Convert2Int("0"));
     }
+
+    @Test
+    public void convert2int_one_string()
+    {
+        assertEquals("Not one", 1, Utils.Convert2Int("1"));
+    }
 }
