@@ -2,6 +2,8 @@ package com.swiftsoft.colossus.mobileoil;
 
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import com.swiftsoft.colossus.mobileoil.utilities.SecureSettings;
 
@@ -11,6 +13,7 @@ import org.mockito.Mockito;
 import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class UtilsTests
@@ -188,5 +191,34 @@ public class UtilsTests
         when(context.getSystemService(Context.TELEPHONY_SERVICE)).thenReturn(tm);
 
         assertEquals("", "666777888999", Utils.getSerialNo(context));
+    }
+
+
+    @Test(expected = NullPointerException.class)
+    public void show_keyboard_edit_text_null()
+    {
+        // This should cause a NullPointerException to be thrown ...
+        Utils.showKeyboard(null);
+    }
+
+    @Test
+    public void show_keyboard_edit_text()
+    {
+        InputMethodManager imm = Mockito.mock(InputMethodManager.class);
+
+        // Mock Context object
+        Context context = Mockito.mock(Context.class);
+
+        when(context.getSystemService(Context.INPUT_METHOD_SERVICE)).thenReturn(imm);
+
+        // Mock EditText control
+        EditText et = Mockito.mock(EditText.class);
+
+        when(et.getContext()).thenReturn(context);
+
+        Utils.showKeyboard(et);
+
+        verify(imm).toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        verify(imm).showSoftInput(et, InputMethodManager.SHOW_IMPLICIT);
     }
 }
