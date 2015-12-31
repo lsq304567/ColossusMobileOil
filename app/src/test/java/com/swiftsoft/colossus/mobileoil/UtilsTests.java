@@ -1,10 +1,17 @@
 package com.swiftsoft.colossus.mobileoil;
 
+import android.content.Context;
+import android.telephony.TelephonyManager;
+
+import com.swiftsoft.colossus.mobileoil.utilities.SecureSettings;
+
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 public class UtilsTests
 {
@@ -105,5 +112,61 @@ public class UtilsTests
 
         assertEquals("Expected -1.23", new BigDecimal("-1.23"), Utils.roundNearest(new BigDecimal("-1.234"), 2));
         assertEquals("Expected -1.24", new BigDecimal("-1.24"), Utils.roundNearest(new BigDecimal("-1.235"), 2));
+    }
+
+    @Test
+    public void get_serial_no_context_null()
+    {
+        assertEquals("Expected empty serial number", "", Utils.getSerialNo(null));
+    }
+
+    @Test
+    public void get_serial_no_failed_to_get_telephony_manager()
+    {
+        // Mock Context
+        Context context = Mockito.mock(Context.class);
+
+        // Failed to retrieve TelephonyManager
+        when(context.getSystemService(Context.TELEPHONY_SERVICE)).thenReturn(null);
+
+        assertEquals("Expected empty serial number", "", Utils.getSerialNo(context));
+    }
+
+    @Test
+    public void get_serial_no_failed_to_get_device_id()
+    {
+        // Mock the TelephonyManager
+        TelephonyManager tm = Mockito.mock(TelephonyManager.class);
+
+        when(tm.getDeviceId()).thenReturn(null);
+
+        // Mock the Context
+        Context context = Mockito.mock(Context.class);
+
+        when(context.getSystemService(Context.TELEPHONY_SERVICE)).thenReturn(tm);
+
+        SecureSettings settings = Mockito.mock(SecureSettings.class);
+
+        when(settings.getSerialNumber(context)).thenReturn("1234567890");
+
+        Utils.SecureSettings = settings;
+
+        assertEquals("Expected something else", "1234567890", Utils.getSerialNo(context));
+    }
+
+    @Test
+    public void get_serial_no()
+    {
+        // Mock the TelephonyManager
+        TelephonyManager tm = Mockito.mock(TelephonyManager.class);
+
+        when(tm.getDeviceId()).thenReturn("666777888999");
+
+        // Mock the Context
+        Context context = Mockito.mock(Context.class);
+
+        when(context.getSystemService(Context.TELEPHONY_SERVICE)).thenReturn(tm);
+
+        assertEquals("", "666777888999", Utils.getSerialNo(context));
     }
 }

@@ -1,17 +1,20 @@
 package com.swiftsoft.colossus.mobileoil;
 
 import android.content.Context;
-import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+
+import com.swiftsoft.colossus.mobileoil.utilities.ISecureSettings;
+import com.swiftsoft.colossus.mobileoil.utilities.SecureSettings;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
 
-public class Utils {
+public class Utils
+{
+    public static ISecureSettings SecureSettings = new SecureSettings();
 
 	// Convert a string to an integer, without throw an exception.
 	public static int convert2Int(String text)
@@ -45,10 +48,16 @@ public class Utils {
 		return value.setScale(n, BigDecimal.ROUND_HALF_UP);
 	}
 	
-	// Truncate value to n decimal places.
-	// 1.234 = 1.23, if n=2
-	// 1.235 = 1.23, if n=2
-	public static double truncate(double value, int n)
+    /**
+     * Truncates double value to n decimal places
+     *
+     * 1.234 -> 1.23, if n=2
+     * 1.235 -> 1.23, if n=2
+     * @param value double to be truncated
+     * @param n number of decimals in the result
+     * @return double truncated to n decimal places.
+     */
+    public static double truncate(double value, int n)
 	{
 		double power = Math.pow(10, n);
 		double truncatedValue = Math.floor(value * power);
@@ -59,8 +68,6 @@ public class Utils {
 	{
 		return value.setScale(n, RoundingMode.DOWN);
 	}
-
-	// If value is null returns nullValue string, otherwise returns value.
 
     /**
      * If value is null return nullValue,
@@ -86,16 +93,10 @@ public class Utils {
 		}
 	}
 	
-	public static void hideKeyboard(View v)
-	{
-		InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-	}
-	
     // Returns: Serial no of device i.e. IMEI no.
     public static String getSerialNo(Context context)
     {
-    	String serialNo = "";
+    	String serialNumber = "";
 
     	try
     	{
@@ -105,12 +106,13 @@ public class Utils {
 			// Get IMEI
 			TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
-			serialNo = tm.getDeviceId();
+			serialNumber = tm.getDeviceId();
 
-			if (serialNo == null)
+            // If no serial number was retrieved then attempt
+            // to get the Android ID
+			if (serialNumber == null)
 			{
-				// Use serial number of device, which may not be unique!
-				serialNo = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+                serialNumber = SecureSettings.getSerialNumber(context);
 			}
     	}
 		catch (Exception e) 
@@ -118,7 +120,7 @@ public class Utils {
 			CrashReporter.logHandledException(e);
 		}			
     	
-		return serialNo;
+		return serialNumber;
     }
 
     /**
