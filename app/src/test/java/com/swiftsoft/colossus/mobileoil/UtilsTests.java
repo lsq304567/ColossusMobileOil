@@ -115,6 +115,26 @@ public class UtilsTests
     }
 
     @Test
+    public void truncate_double_2_decimal_places()
+    {
+        assertEquals("Expected 1.23", 1.23, Utils.truncate(1.234, 2), 0.0001);
+        assertEquals("Expected 1.23", 1.23, Utils.truncate(1.236, 2), 0.0001);
+
+        assertEquals("Expected -1.23", -1.23, Utils.truncate(-1.234, 2), 0.0001);
+        assertEquals("Expected -1.23", -1.23, Utils.truncate(-1.236, 2), 0.0001);
+    }
+
+    @Test
+    public void truncate_big_decimal_2_decimal_places()
+    {
+        assertEquals("Expected 1.23", new BigDecimal("1.23"), Utils.truncate(new BigDecimal("1.234"), 2));
+        assertEquals("Expected 1.23", new BigDecimal("1.23"), Utils.truncate(new BigDecimal("1.236"), 2));
+
+        assertEquals("Expected -1.23", new BigDecimal("-1.23"), Utils.truncate(new BigDecimal("-1.234"), 2));
+        assertEquals("Expected -1.23", new BigDecimal("-1.23"), Utils.truncate(new BigDecimal("-1.236"), 2));
+    }
+
+    @Test
     public void get_serial_no_context_null()
     {
         assertEquals("Expected empty serial number", "", Utils.getSerialNo(null));

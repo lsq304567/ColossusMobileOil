@@ -59,9 +59,17 @@ public class Utils
      */
     public static double truncate(double value, int n)
 	{
+        boolean isNegative = value < 0.0;
+
+        if (isNegative)
+        {
+            value = -value;
+        }
+
 		double power = Math.pow(10, n);
 		double truncatedValue = Math.floor(value * power);
-		return truncatedValue / power;
+
+		return isNegative ? -truncatedValue / power : truncatedValue / power;
 	}
 
 	public static BigDecimal truncate(BigDecimal value, int n)
