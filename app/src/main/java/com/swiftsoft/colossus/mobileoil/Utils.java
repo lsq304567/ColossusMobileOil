@@ -91,12 +91,17 @@ public class Utils
 	
 	public static void showKeyboard(EditText et)
 	{
+        if (et == null)
+        {
+            throw new IllegalArgumentException("Valid EditText object must be passed.");
+        }
+
 		// Open soft keyboard.
 		InputMethodManager imm = (InputMethodManager) et.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 
 		if (imm != null) 
 		{
-			imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY); 
+			imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
 			imm.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT);
 		}
 	}
