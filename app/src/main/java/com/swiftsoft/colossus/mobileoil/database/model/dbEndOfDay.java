@@ -154,7 +154,10 @@ public class dbEndOfDay extends Model
         // list if it is not already present.
         for (dbEndOfDay item : items)
         {
-            uniqueProducts.add(item.Product);
+            if (!uniqueProducts.contains(item.Product))
+            {
+                uniqueProducts.add(item.Product);
+            }
         }
 
         // Sort the product in alphabetic order by description.
