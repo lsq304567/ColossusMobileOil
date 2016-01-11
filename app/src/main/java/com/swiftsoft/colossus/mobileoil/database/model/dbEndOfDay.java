@@ -109,22 +109,6 @@ public class dbEndOfDay extends Model
         return total;
     }
 
-    public static List<Integer> getTripIds()
-    {
-        // Create List to contain the returned trip ids.
-        List<Integer> uniqueTripIds = new ArrayList<Integer>();
-
-        for (dbEndOfDay item : getAll())
-        {
-            if (!uniqueTripIds.contains(item.TripId))
-            {
-                uniqueTripIds.add(item.TripId);
-            }
-        }
-
-        return uniqueTripIds;
-    }
-
     public static List<Integer> getUniqueTripIds()
     {
         List<Integer> uniqueTripIds = new ArrayList<Integer>();
