@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Colossus Mobile</string>
-    <string name="version">v0.99t18</string>
-    <string name="copyright">Copyright \u00A9 2012&#8211;2015 SWIFTsoft</string>
+    <string name="version">v0.99t19</string>
+    <string name="copyright">Copyright \u00A9 2012&#8211;2016 SWIFTsoft</string>
 
     <!-- Connect to licensing server on AZURE -->
     <string name="licensing_url">http://licensingwebapp.azurewebsites.net/api/Licenses/</string>

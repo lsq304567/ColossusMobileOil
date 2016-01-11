@@ -1,3 +1,12 @@
+V0.99t19
+========
+
+Addition of Unit tests for Utils class
+
+Correction to make sure that List of dbProduct objects returned by dbEndOfDay.getUniqueProducts() is actually unique
+
+Add code for creation of EoD Report to be sent to Colossus
+
 V0.99t18
 ========
 
