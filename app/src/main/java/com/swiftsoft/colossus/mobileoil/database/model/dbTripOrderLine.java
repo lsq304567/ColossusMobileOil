@@ -194,13 +194,15 @@ public class dbTripOrderLine extends Model
 	public static void DeleteAll()
 	{
 		CrashReporter.leaveBreadcrumb("dbTripOrderLine: DeleteAll");
-		
+
 		new Delete().from(dbTripOrderLine.class).execute();
 	}
 
 	// Find trip by ColossusID.
 	public static dbTripOrderLine FindByColossusID(int ColossusID)
 	{
+        CrashReporter.leaveBreadcrumb("dbTripOrderLine: FindByColossusID");
+
 		return new Select().from(dbTripOrderLine.class).where("ColossusID=?", ColossusID).executeSingle();
 	}
 	
@@ -212,6 +214,8 @@ public class dbTripOrderLine extends Model
 	
 	public BigDecimal getOrderedNettValue()
 	{
+        CrashReporter.leaveBreadcrumb("dbTripOrderLine: getOrderedNettValue");
+
 		BigDecimal nettValue = new BigDecimal(OrderedQty).multiply(getOrderedPrice().divide(getRatio(), 10, BigDecimal.ROUND_HALF_UP));
 
 		return Utils.roundNearest(nettValue, 2);
@@ -219,18 +223,26 @@ public class dbTripOrderLine extends Model
 	
 	public BigDecimal getOrderedSurchargeValue()
 	{
+        CrashReporter.leaveBreadcrumb("dbTripOrderLine: getOrderedSurchargeValue");
+
         if (SurchargePerUOM)
         {
+            CrashReporter.leaveBreadcrumb("dbTripOrderLine: getOrderedSurchargeValue - SurchargePerUOM true");
+
             return new BigDecimal(OrderedQty).multiply(getSurcharge().divide(getRatio(), 10, BigDecimal.ROUND_HALF_UP));
         }
         else
         {
+            CrashReporter.leaveBreadcrumb("dbTripOrderLine: getOrderedSurchargeValue - SurchargePerUOM false");
+
             return getSurcharge();
         }
 	}
 
 	public BigDecimal getOrderedVatPerc()
 	{
+        CrashReporter.leaveBreadcrumb("dbTripOrderLine: getOrderedVatPerc");
+
 		return OrderedQty <= VatPerc2Above ? getVatPerc1() : getVatPerc2();
 	}
 	
@@ -238,8 +250,12 @@ public class dbTripOrderLine extends Model
 	
 	public boolean getDeliveredQtyVariesFromOrdered()
 	{
+        CrashReporter.leaveBreadcrumb("dbTripOrderLine: getDeliveredQtyVariesFromOrdered");
+
 		if (DeliveredQty == 0)
         {
+            CrashReporter.leaveBreadcrumb("dbTripOrderLine: getDeliveredQtyVariesFromOrdered - Delivered Quantity is zero");
+
             return false;
         }
 
@@ -250,6 +266,8 @@ public class dbTripOrderLine extends Model
 	// (Used by the ticket print out)
 	public BigDecimal getPriceDelivered()
 	{
+        CrashReporter.leaveBreadcrumb("dbTripOrderLine: getPriceDelivered");
+
 		BigDecimal value = getDeliveredNettValue().add(getDeliveredSurchargeValue());
 
 		return Utils.roundNearest(value.divide(new BigDecimal(DeliveredQty), 10, BigDecimal.ROUND_HALF_UP), 4);
@@ -257,13 +275,17 @@ public class dbTripOrderLine extends Model
 	
 	public BigDecimal getDeliveredNettValue()
 	{
-		BigDecimal value = new BigDecimal(DeliveredQty).multiply(getDeliveredPrice().divide(getRatio(), 10, BigDecimal.ROUND_HALF_UP));
+        CrashReporter.leaveBreadcrumb("dbTripOrderLine: getDeliveredNettValue");
+
+        BigDecimal value = new BigDecimal(DeliveredQty).multiply(getDeliveredPrice().divide(getRatio(), 10, BigDecimal.ROUND_HALF_UP));
 
 		return Utils.roundNearest(value, 2);
 	}
 
 	public BigDecimal getDeliveredSurchargeValue()
 	{
+        CrashReporter.leaveBreadcrumb("dbTripOrderLine: getDeliveredSurchargeValue");
+
         BigDecimal value;
 
         if (SurchargePerUOM)
@@ -280,6 +302,8 @@ public class dbTripOrderLine extends Model
 	
 	public BigDecimal getDeliveredVatPerc()
 	{
+        CrashReporter.leaveBreadcrumb("dbTripOrderLine: getDeliveredVatPerc");
+
         return DeliveredQty <= VatPerc2Above ? getVatPerc1() : getVatPerc2();
 	}
 
@@ -290,7 +314,9 @@ public class dbTripOrderLine extends Model
 	// OrderLine delivered.
 	public void delivered(int qty)
 	{
-		// Record when delivery occurred 
+        CrashReporter.leaveBreadcrumb("dbTripOrderLine: delivered");
+
+        // Record when delivery occurred
 		DeliveryDate = Utils.getCurrentTime();
 
 		// and quantity delivered.
@@ -309,7 +335,9 @@ public class dbTripOrderLine extends Model
 	// Used by driver when delivered qty is +/- 50 from ordered qty.
 	public void setDeliveredPricePrice(BigDecimal newPrice)
 	{
-		setDeliveredPrice(newPrice);
+        CrashReporter.leaveBreadcrumb("dbTripOrderLine: getDeliveredPricePrice");
+
+        setDeliveredPrice(newPrice);
 
 		save();
 	}
