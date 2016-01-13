@@ -512,7 +512,7 @@ public class Printing
 
         // Print the original stock value for each product
         finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-        printer.addTextLeft(Size.Normal, 20, finalPosition, 160, "Starting");
+        printer.addTextLeft(Size.Normal, 40, finalPosition, 160, "Starting");
 
         for (dbProduct product : products)
         {
@@ -526,7 +526,7 @@ public class Printing
 
         // Print the Loaded quantities
         finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-        printer.addTextLeft(Size.Normal, 20, finalPosition, 160, "Loaded");
+        printer.addTextLeft(Size.Normal, 40, finalPosition, 160, "Loaded");
 
         for (dbProduct product : products)
         {
@@ -540,7 +540,7 @@ public class Printing
 
         // Print the delivered quantities
         finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-        printer.addTextLeft(Size.Normal, 20, finalPosition, 150, "Delivery");
+        printer.addTextLeft(Size.Normal, 40, finalPosition, 150, "Delivery");
 
         for (dbProduct product : products)
         {
@@ -554,7 +554,7 @@ public class Printing
 
         // Print the returned quantities
         finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-        printer.addTextLeft(Size.Normal, 20, finalPosition, 150, "Return");
+        printer.addTextLeft(Size.Normal, 40, finalPosition, 150, "Return to Stock");
 
         for (dbProduct product : products)
         {
@@ -568,7 +568,7 @@ public class Printing
 
         // Print the closing stock value for each product
         finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-        printer.addTextLeft(Size.Normal, 20, finalPosition, 160, "Finishing");
+        printer.addTextLeft(Size.Normal, 40, finalPosition, 160, "Finishing");
 
         for (dbProduct product : products)
         {
@@ -773,7 +773,7 @@ public class Printing
 
         // Print the original stock value for each product
         finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-        printer.addTextLeft(Size.Normal, 20, finalPosition, 160, "Starting");
+        printer.addTextLeft(Size.Normal, 40, finalPosition, 160, "Starting");
 
         for (dbProduct product : products)
         {
@@ -787,7 +787,7 @@ public class Printing
 
         // Print the Loaded quantities
         finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-        printer.addTextLeft(Size.Normal, 20, finalPosition, 160, "Loaded");
+        printer.addTextLeft(Size.Normal, 40, finalPosition, 160, "Loaded");
 
         for (dbProduct product : products)
         {
@@ -801,7 +801,7 @@ public class Printing
 
         // Print the delivered quantities
         finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-        printer.addTextLeft(Size.Normal, 20, finalPosition, 150, "Delivery");
+        printer.addTextLeft(Size.Normal, 40, finalPosition, 150, "Delivery");
 
         for (dbProduct product : products)
         {
@@ -815,7 +815,7 @@ public class Printing
 
         // Print the returned quantities
         finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-        printer.addTextLeft(Size.Normal, 20, finalPosition, 150, "Return");
+        printer.addTextLeft(Size.Normal, 40, finalPosition, 150, "Return to Stock");
 
         for (dbProduct product : products)
         {
@@ -829,7 +829,7 @@ public class Printing
 
         // Print the closing stock value for each product
         finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
-        printer.addTextLeft(Size.Normal, 20, finalPosition, 160, "Finishing");
+        printer.addTextLeft(Size.Normal, 40, finalPosition, 160, "Finishing");
 
         for (dbProduct product : products)
         {
