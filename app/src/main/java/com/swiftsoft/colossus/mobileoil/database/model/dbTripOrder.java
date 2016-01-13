@@ -237,13 +237,17 @@ public class dbTripOrder extends Model
 	
 	public static void DeleteAll()
 	{
+		CrashReporter.leaveBreadcrumb("dbTripOrder: DeleteAll");
+
 		new Delete().from(dbTripOrder.class).execute();
 	}
 
 	// Find trip by ColossusID.
 	public static dbTripOrder FindByColossusID(int ColossusID)
 	{
-		return new Select().from(dbTripOrder.class).where("ColossusID=?", ColossusID).executeSingle();
+        CrashReporter.leaveBreadcrumb("dbTripOrder: FindByColossusID");
+
+        return new Select().from(dbTripOrder.class).where("ColossusID=?", ColossusID).executeSingle();
 	}
 	
 	public static List<dbTripOrder> GetAll()
@@ -262,21 +266,29 @@ public class dbTripOrder extends Model
 	// Find all order lines.
 	public List<dbTripOrderLine> GetTripOrderLines() 
 	{
-		return getMany(dbTripOrderLine.class, "TripOrder");
+        CrashReporter.leaveBreadcrumb("dbTripOrder: GetTripOrderLines");
+
+        return getMany(dbTripOrderLine.class, "TripOrder");
 	}
 
 	public String getTerms()
 	{
-		String terms = this.Terms;
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getTerms");
+
+        String terms = this.Terms;
 		
 		if (CodPoint == 1)
 		{
-			terms += ", after delivery";
+            CrashReporter.leaveBreadcrumb("dbTripOrder: getTerms - CodPoint = 1");
+
+            terms += ", after delivery";
 		}
 		
 		if (CodPoint == 2)
 		{
-			terms += ", before delivery";
+            CrashReporter.leaveBreadcrumb("dbTripOrder: getTerms - CodPoint = 2");
+
+            terms += ", before delivery";
 		}
 		
 		return terms;
@@ -287,59 +299,38 @@ public class dbTripOrder extends Model
 	//
 	public BigDecimal getCodBeforeDeliveryValue()
 	{
-		BigDecimal cod = BigDecimal.ZERO;
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getCodBeforeDeliveryValue");
+
+        BigDecimal cod = BigDecimal.ZERO;
 
 		// Before delivery.
 		if (CodPoint == 2)
 		{
-			if (CodType == 1)
+            CrashReporter.leaveBreadcrumb("dbTripOrder: getCodBeforeDeliveryValue - CodPoint = 2");
+
+            if (CodType == 1)
 			{
-				cod = getOrderedNettValue().add(getOrderedVatValue());
+                CrashReporter.leaveBreadcrumb("dbTripOrder: getCodBeforeDeliveryValue - CodType == 1");
+
+                cod = getOrderedNettValue().add(getOrderedVatValue());
 			}
 			
 			if (CodType == 2)
 			{
-				cod = getOrderedNettValue().add(getOrderedVatValue()).add(getCodAmount());
+                CrashReporter.leaveBreadcrumb("dbTripOrder: getCodBeforeDeliveryValue - CodType == 2");
+
+                cod = getOrderedNettValue().add(getOrderedVatValue()).add(getCodAmount());
 			}
 			
 			if (CodType == 3)
 			{
-				cod = getCodAmount();
-			}
-		}	
+                CrashReporter.leaveBreadcrumb("dbTripOrder: getCodBeforeDeliveryValue - CodType == 3");
 
-		return cod;
-	}
-	
-	// 
-	// Return COD 'after delivery' value. 
-	//
-	public BigDecimal getCodAfterDeliveryValue()
-	{
-		BigDecimal cod = BigDecimal.ZERO;
-
-		// Before/After delivery.
-		if (CodPoint != 0)
-		{
-			if (CodType == 1)
-            {
-                cod = getDeliveredNettValue().add(getDeliveredVatValue());
-            }
-			
-			if (CodType == 2)
-            {
-                cod = getDeliveredNettValue().add(getDeliveredVatValue()).add(getCodAmount());
-            }
-			
-			if (CodType == 3)
-            {
                 cod = getCodAmount();
-            }
+			}
 		}	
 
 		return cod;
-		// After delivery, all customers can pay the cash price if they like.
-		// return getDeliveredNettValue() + getDeliveredVatValue();
 	}
 	
 	//
@@ -347,7 +338,9 @@ public class dbTripOrder extends Model
 	//
 	public BigDecimal getCodAccBalance()
 	{
-		if (CodPoint != 0 && CodType == 2)
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getCodAccBalance");
+
+        if (CodPoint != 0 && CodType == 2)
         {
             return getCodAmount();
         }
@@ -360,7 +353,9 @@ public class dbTripOrder extends Model
 	//
 	public int getUndeliveredCount()
 	{
-		int counter = 0;
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getUndeliveredCount");
+
+        int counter = 0;
 
         for (dbTripOrderLine line : this.GetTripOrderLines())
 		{
@@ -375,8 +370,10 @@ public class dbTripOrder extends Model
                 counter++;
             }
 		}
-				
-		return counter;
+
+        CrashReporter.leaveBreadcrumb(String.format("dbTripOrder: getUndeliveredCount - Count = %d", counter));
+
+        return counter;
 	}
 	
 	//
@@ -385,7 +382,9 @@ public class dbTripOrder extends Model
 	
 	private BigDecimal getOrderedNettValue()
 	{
-		BigDecimal value = BigDecimal.ZERO;
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getOrderedNettValue");
+
+        BigDecimal value = BigDecimal.ZERO;
 
         for (dbTripOrderLine line : this.GetTripOrderLines())
         {
@@ -395,30 +394,20 @@ public class dbTripOrder extends Model
 		return value;
 	}
 	
-	public BigDecimal getOrderedSurchargeValue()
-	{
-		BigDecimal value = BigDecimal.ZERO;
-
-        for (dbTripOrderLine line : this.GetTripOrderLines())
-        {
-			value = value.add(line.getOrderedSurchargeValue());
-        }
-		
-		return value;
-	}
-	
 	private BigDecimal getOrderedVatValue()
 	{
-		List<VatRow> vatRows = new ArrayList<VatRow>();
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getOrderedVatValue");
+
+        List<VatRow> vatRows = new ArrayList<VatRow>();
 		
 		// Summarise all lines by VatPercentage.
 		for (dbTripOrderLine line : this.GetTripOrderLines())
 		{
-			AddToVatTable(vatRows, line.getOrderedVatPerc(), line.getOrderedNettValue());
+			addToVatTable(vatRows, line.getOrderedVatPerc(), line.getOrderedNettValue());
 			
 			if (line.getOrderedSurchargeValue().compareTo(BigDecimal.ZERO) != 0)
             {
-                AddToVatTable(vatRows, BigDecimal.ZERO, line.getOrderedSurchargeValue());
+                addToVatTable(vatRows, BigDecimal.ZERO, line.getOrderedSurchargeValue());
             }
 		}
 
@@ -441,19 +430,6 @@ public class dbTripOrder extends Model
 	// Delivered values.
 	//
 
-	public boolean getDeliveredQtyVariesFromOrdered()
-	{
-		for (dbTripOrderLine line : this.GetTripOrderLines())
-        {
-            if (line.getDeliveredQtyVariesFromOrdered())
-            {
-                return true;
-            }
-        }
-		
-		return false;
-	}
-	
 	public BigDecimal getDeliveredNettValue()
 	{
         CrashReporter.leaveBreadcrumb("dbTripOrder: getDeliveredNettValue");
@@ -488,6 +464,8 @@ public class dbTripOrder extends Model
 
     private static void addRow(Hashtable<BigDecimal, VatRow> table, VatRow row)
     {
+        CrashReporter.leaveBreadcrumb("dbTripOrder: addRow");
+
         if (!table.containsKey(row.vatPercentage))
         {
             table.put(row.vatPercentage, row);
@@ -502,7 +480,9 @@ public class dbTripOrder extends Model
 
 	public Hashtable<BigDecimal, VatRow> getDeliveredVatValues()
 	{
-		Hashtable<BigDecimal, VatRow> vatRows = new Hashtable<BigDecimal, VatRow>();
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getDeliveredVatValues");
+
+        Hashtable<BigDecimal, VatRow> vatRows = new Hashtable<BigDecimal, VatRow>();
 
         for (dbTripOrderLine line : GetTripOrderLines())
         {
@@ -529,16 +509,18 @@ public class dbTripOrder extends Model
 	
 	public BigDecimal getDeliveredVatValue()
 	{
-		List<VatRow> vatRows = new ArrayList<VatRow>();
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getDeliveredVatValue");
+
+        List<VatRow> vatRows = new ArrayList<VatRow>();
 		
 		// Summarise all lines by VatPercentage.
 		for (dbTripOrderLine line : this.GetTripOrderLines())
 		{
-			AddToVatTable(vatRows, line.getDeliveredVatPerc(), line.getDeliveredNettValue());
+			addToVatTable(vatRows, line.getDeliveredVatPerc(), line.getDeliveredNettValue());
 			
 			if (line.getDeliveredSurchargeValue().compareTo(BigDecimal.ZERO) != 0)
 			{
-				AddToVatTable(vatRows, line.getDeliveredVatPerc(), line.getDeliveredSurchargeValue());
+				addToVatTable(vatRows, line.getDeliveredVatPerc(), line.getDeliveredSurchargeValue());
 			}
 		}
 
@@ -561,9 +543,11 @@ public class dbTripOrder extends Model
 	// Common
 	//
 	
-	private void AddToVatTable(List<VatRow> vatRows, BigDecimal vatPercentage, BigDecimal nettValue)
+	private void addToVatTable(List<VatRow> vatRows, BigDecimal vatPercentage, BigDecimal nettValue)
 	{
-		VatRow vatRow = null;
+        CrashReporter.leaveBreadcrumb("dbTripOrder: addToVatTable");
+
+        VatRow vatRow = null;
 		
 		// Search for existing row.
 		for (int i = 0; i < vatRows.size(); i++)
@@ -592,6 +576,8 @@ public class dbTripOrder extends Model
 	//
 	public BigDecimal getCreditTotal()
 	{
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getCreditTotal");
+
         BigDecimal deliveredNettValue = getDeliveredNettValue();
         BigDecimal deliveredVatValue = getDeliveredVatValue();
         BigDecimal deliveredSurchargeValue = getDeliveredSurchargeValue();
@@ -616,6 +602,8 @@ public class dbTripOrder extends Model
 
     public BigDecimal getSurchargeVat()
     {
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getSurchargeVat");
+
         BigDecimal surcharge = getDeliveredSurchargeValue();
         BigDecimal surchargeVat = BigDecimal.ZERO;
 
@@ -633,6 +621,8 @@ public class dbTripOrder extends Model
 
     private static BigDecimal getVatPercentage(dbTripOrderLine line)
     {
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getVatPercentage");
+
         if (line.VatPerc2Above < 1000000)
         {
             if (line.DeliveredQty < line.VatPerc2Above)
@@ -656,7 +646,9 @@ public class dbTripOrder extends Model
 	//
 	public BigDecimal getAmountPrepaid()
 	{
-		BigDecimal prepaid = getPrepaidAmount();		// Really paid office i.e. cash in advance
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getAmountPrepaid");
+
+        BigDecimal prepaid = getPrepaidAmount();		// Really paid office i.e. cash in advance
 		
 		if (Terms.equals("Paying by Card"))
         {
@@ -671,7 +663,9 @@ public class dbTripOrder extends Model
 	//
 	public BigDecimal getPaidDriver()
 	{
-		return getCashReceived().add(getChequeReceived()).add(getVoucherReceived());
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getPaidDriver");
+
+        return getCashReceived().add(getChequeReceived()).add(getVoucherReceived());
 	}
 
 	//
@@ -693,7 +687,9 @@ public class dbTripOrder extends Model
 	//
 	public String getProductsOrdered(String separator)
 	{
-		// Find order lines.
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getProductsOrdered");
+
+        // Find order lines.
 		List<dbTripOrderLine> lines = getMany(dbTripOrderLine.class, "TripOrder");
 		
 		StringBuilder productsOrdered = new StringBuilder();
@@ -726,7 +722,9 @@ public class dbTripOrder extends Model
 	//
 	public String getProductsDelivered()
 	{
-		DateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm");
+        CrashReporter.leaveBreadcrumb("dbTripOrder: getProductsDelivered");
+
+        DateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm");
 
 		// Find order lines.
 		List<dbTripOrderLine> lines = GetTripOrderLines();
@@ -763,14 +761,18 @@ public class dbTripOrder extends Model
 	// Start delivering.
 	public void start()
 	{
-		Delivering = true;
+        CrashReporter.leaveBreadcrumb("dbTripOrder: start");
+
+        Delivering = true;
 		save();
 	}
 
 	// Stop delivering.
 	public void stop()
 	{
-		Delivering = false;
+        CrashReporter.leaveBreadcrumb("dbTripOrder: stop");
+
+        Delivering = false;
 		save();
 	}
 
@@ -808,7 +810,9 @@ public class dbTripOrder extends Model
 	// Order delivered.
 	public void delivered()
 	{
-		// Record delivery number - this indicates order has been delivered.
+        CrashReporter.leaveBreadcrumb("dbTripOrder: delivered");
+
+        // Record delivery number - this indicates order has been delivered.
 		if (DeliveryNo == 0)
         {
             DeliveryNo = Trip.GetDelivered().size() + 1;
