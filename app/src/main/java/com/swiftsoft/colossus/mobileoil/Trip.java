@@ -1206,7 +1206,7 @@ public class Trip extends Activity
             dbEndOfDay eod = new dbEndOfDay();
 
             eod.Type = "Start";
-            eod.TripId = Active.trip.ColossusID;
+            eod.TripId = Active.trip.No;
             eod.Product = product;
             eod.Quantity = getStartingVolume(vehicleStocks, product);
 
@@ -1216,7 +1216,7 @@ public class Trip extends Activity
             eod = new dbEndOfDay();
 
             eod.Type = "Load";
-            eod.TripId = Active.trip.ColossusID;
+            eod.TripId = Active.trip.No;
             eod.Product = product;
             eod.Quantity = getLoadedVolume(transactions, product);
 
@@ -1226,7 +1226,7 @@ public class Trip extends Activity
             eod = new dbEndOfDay();
 
             eod.Type = "Deliver";
-            eod.TripId = Active.trip.ColossusID;
+            eod.TripId = Active.trip.No;
             eod.Product = product;
             eod.Quantity = getDeliveredVolume(transactions, product);
 
@@ -1236,7 +1236,7 @@ public class Trip extends Activity
             eod = new dbEndOfDay();
 
             eod.Type = "Return";
-            eod.TripId = Active.trip.ColossusID;
+            eod.TripId = Active.trip.No;
             eod.Product = product;
             eod.Quantity = getReturnedVolume(transactions, product);
 
@@ -1246,7 +1246,7 @@ public class Trip extends Activity
             eod = new dbEndOfDay();
 
             eod.Type = "Finish";
-            eod.TripId = Active.trip.ColossusID;
+            eod.TripId = Active.trip.No;
             eod.Product = product;
             eod.Quantity = getFinishingVolume(vehicleStocks, product);
 
@@ -1282,7 +1282,7 @@ public class Trip extends Activity
                         eod.Type = "Payment_Voucher";
                     }
 
-                    eod.TripId = Active.trip.ColossusID;
+                    eod.TripId = Active.trip.No;
                     eod.Product = null;
                     BigDecimal amount = new BigDecimal(strValue);
                     eod.setValue(amount);
