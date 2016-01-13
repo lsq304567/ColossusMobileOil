@@ -1604,17 +1604,17 @@ public class Printing
 
         for (dbTripOrderLine line : orderLines)
         {
-            BigDecimal surchargeAmount = surcharge.divide(new BigDecimal(100)).multiply(new BigDecimal(line.DeliveredQty));
+            BigDecimal surchargeAmount = surcharge.divide(new BigDecimal(100), 10, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(line.DeliveredQty));
 
             totalSurchargeAmount = totalSurchargeAmount.add(surchargeAmount);
 
             if (line.DeliveredQty > line.VatPerc2Above)
             {
-                surchargeAmountVat = surchargeAmountVat.add(surchargeAmount.multiply(line.getVatPerc2().divide(new BigDecimal(100))));
+                surchargeAmountVat = surchargeAmountVat.add(surchargeAmount.multiply(line.getVatPerc2().divide(new BigDecimal(100), 10, BigDecimal.ROUND_HALF_UP)));
             }
             else
             {
-                surchargeAmountVat = surchargeAmountVat.add(surchargeAmount.multiply(line.getVatPerc1().divide(new BigDecimal(100))));
+                surchargeAmountVat = surchargeAmountVat.add(surchargeAmount.multiply(line.getVatPerc1().divide(new BigDecimal(100), 10, BigDecimal.ROUND_HALF_UP)));
             }
         }
 
@@ -1670,11 +1670,11 @@ public class Printing
 
             if (orderLine.OrderedQty > orderLine.VatPerc2Above)
             {
-                nettValueVat = nettValueVat.add(order.getDeliveredNettValue().multiply(orderLine.getVatPerc2()).divide(new BigDecimal(100)));
+                nettValueVat = nettValueVat.add(order.getDeliveredNettValue().multiply(orderLine.getVatPerc2()).divide(new BigDecimal(100), 10, BigDecimal.ROUND_HALF_UP));
             }
             else
             {
-                nettValueVat = nettValueVat.add(order.getDeliveredNettValue().multiply(orderLine.getVatPerc1()).divide(new BigDecimal(100)));
+                nettValueVat = nettValueVat.add(order.getDeliveredNettValue().multiply(orderLine.getVatPerc1()).divide(new BigDecimal(100), 10, BigDecimal.ROUND_HALF_UP));
             }
         }
 

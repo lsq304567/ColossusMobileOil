@@ -5,6 +5,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.swiftsoft.colossus.mobileoil.CrashReporter;
 import com.swiftsoft.colossus.mobileoil.Utils;
 
 import java.math.BigDecimal;
@@ -192,6 +193,8 @@ public class dbTripOrderLine extends Model
 	
 	public static void DeleteAll()
 	{
+		CrashReporter.leaveBreadcrumb("dbTripOrderLine: DeleteAll");
+		
 		new Delete().from(dbTripOrderLine.class).execute();
 	}
 
@@ -209,7 +212,7 @@ public class dbTripOrderLine extends Model
 	
 	public BigDecimal getOrderedNettValue()
 	{
-		BigDecimal nettValue = new BigDecimal(OrderedQty).multiply(getOrderedPrice().divide(getRatio()));
+		BigDecimal nettValue = new BigDecimal(OrderedQty).multiply(getOrderedPrice().divide(getRatio(), 10, BigDecimal.ROUND_HALF_UP));
 
 		return Utils.roundNearest(nettValue, 2);
 	}
@@ -218,7 +221,7 @@ public class dbTripOrderLine extends Model
 	{
         if (SurchargePerUOM)
         {
-            return new BigDecimal(OrderedQty).multiply(getSurcharge().divide(getRatio()));
+            return new BigDecimal(OrderedQty).multiply(getSurcharge().divide(getRatio(), 10, BigDecimal.ROUND_HALF_UP));
         }
         else
         {
@@ -249,12 +252,12 @@ public class dbTripOrderLine extends Model
 	{
 		BigDecimal value = getDeliveredNettValue().add(getDeliveredSurchargeValue());
 
-		return Utils.roundNearest(value.divide(new BigDecimal(DeliveredQty)), 4);
+		return Utils.roundNearest(value.divide(new BigDecimal(DeliveredQty), 10, BigDecimal.ROUND_HALF_UP), 4);
 	}
 	
 	public BigDecimal getDeliveredNettValue()
 	{
-		BigDecimal value = new BigDecimal(DeliveredQty).multiply(getDeliveredPrice().divide(getRatio()));
+		BigDecimal value = new BigDecimal(DeliveredQty).multiply(getDeliveredPrice().divide(getRatio(), 10, BigDecimal.ROUND_HALF_UP));
 
 		return Utils.roundNearest(value, 2);
 	}
@@ -265,7 +268,7 @@ public class dbTripOrderLine extends Model
 
         if (SurchargePerUOM)
         {
-            value = new BigDecimal(DeliveredQty).multiply(getSurcharge().divide(getRatio()));
+            value = new BigDecimal(DeliveredQty).multiply(getSurcharge().divide(getRatio(), 10, BigDecimal.ROUND_HALF_UP));
         }
         else
         {
