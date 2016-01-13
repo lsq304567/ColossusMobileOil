@@ -52,6 +52,30 @@ public class dbTrip extends Model
 		new Delete().from(dbTrip.class).execute();
 	}
 
+	public static List<dbTrip> getAll()
+	{
+		CrashReporter.leaveBreadcrumb("dbTrip: getAll");
+
+		return new Select().from(dbTrip.class).orderBy("ColossusID").execute();
+	}
+
+    public static dbTrip findByTripNumber(int tripNumber)
+    {
+        dbTrip foundTrip = null;
+
+        for (dbTrip trip: getAll())
+        {
+            if (trip.No == tripNumber)
+            {
+                foundTrip = trip;
+
+                break;
+            }
+        }
+
+        return foundTrip;
+    }
+
 	// Find trip by ColossusID.
 	public static dbTrip FindByColossusID(int ColossusID)
 	{

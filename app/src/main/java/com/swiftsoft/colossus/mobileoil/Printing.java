@@ -456,7 +456,49 @@ public class Printing
 		}
 	}
 
-    private static void printEndOfDayReport(Context context) throws Exception
+	private static double getStartTotalizer(int tripNumber)
+	{
+		double totalizer = Double.MAX_VALUE;
+
+		for (dbTripOrder tripOrder :  dbTripOrder.GetAll())
+		{
+			if (tripOrder.Trip.No == tripNumber)
+			{
+				for (dbTripOrderLine line : tripOrder.GetTripOrderLines())
+				{
+					if (line.ticketStartTotaliser < totalizer)
+					{
+						totalizer = line.ticketStartTotaliser;
+					}
+				}
+			}
+		}
+
+		return totalizer;
+	}
+
+	private static double getFinishTotalizer(int tripNumber)
+	{
+		double totalizer = 0.0;
+
+		for (dbTripOrder tripOrder :  dbTripOrder.GetAll())
+		{
+			if (tripOrder.Trip.No == tripNumber)
+			{
+				for (dbTripOrderLine line : tripOrder.GetTripOrderLines())
+				{
+					if (line.ticketEndTotaliser > totalizer)
+					{
+						totalizer = line.ticketEndTotaliser;
+					}
+				}
+			}
+		}
+
+		return totalizer;
+	}
+
+	private static void printEndOfDayReport(Context context) throws Exception
     {
         int finalPosition = 0;
 
@@ -483,7 +525,10 @@ public class Printing
 
         finalPosition = printer.addTextLeft(Size.Medium, RIGHT_COLUMN_X, savedPosition, RIGHT_COLUMN_WIDTH, "Trip IDs:");
 
-        for (int id : dbEndOfDay.getUniqueTripIds())
+		// get the unique trip ids
+		List<Integer> uniqueTripIds = dbEndOfDay.getUniqueTripIds();
+
+        for (int id : uniqueTripIds)
         {
             finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
             finalPosition = printer.addTextLeft(Size.Normal, RIGHT_COLUMN_X, finalPosition, RIGHT_COLUMN_WIDTH, String.format("%d", id));
@@ -579,6 +624,22 @@ public class Printing
 
         xOffset = 200;
         finalPosition = headerHeight;
+
+        DecimalFormat formatVolume = new DecimalFormat("#,##0");
+
+        double startTotalizer = getStartTotalizer(uniqueTripIds.get(0));
+        double endTotaliser = getFinishTotalizer(uniqueTripIds.get(uniqueTripIds.size() - 1));
+
+        // Print the totalizer values
+		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Large);
+        printer.addTextLeft(Size.Normal, 40, finalPosition, 140, "Start Totalizer");
+        finalPosition = printer.addTextRight(Size.Normal, 200, finalPosition, 200, formatVolume.format(startTotalizer));
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        printer.addTextLeft(Size.Normal, 40, finalPosition, 140, "End Totalizer");
+        finalPosition = printer.addTextRight(Size.Normal, 200, finalPosition, 200, formatVolume.format(endTotaliser));
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        printer.addTextLeft(Size.Normal, 40, finalPosition, 140, "Total Delivered");
+        finalPosition = printer.addTextRight(Size.Normal, 200, finalPosition, 200, formatVolume.format(endTotaliser - startTotalizer));
 
         // Print the payments @ the bottom of the report
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.XLarge);
