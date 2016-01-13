@@ -1,3 +1,15 @@
+V0.99t20
+========
+
+Ensure that all BigDecimal divisions are length-limited (this solves an number of Exceptions that
+were being raised
+
+Addition of futher breadcrumbing
+
+On EoD Report changed to print TripNo rather than TripID
+
+Addition of start & end totalizer and delivered amount to EoD report
+
 V0.99t19
 ========
 
