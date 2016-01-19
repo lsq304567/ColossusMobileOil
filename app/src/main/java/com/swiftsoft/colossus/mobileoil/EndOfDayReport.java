@@ -10,6 +10,8 @@ import android.widget.Button;
 import com.swiftsoft.colossus.mobileoil.database.model.dbDriver;
 import com.swiftsoft.colossus.mobileoil.database.model.dbEndOfDay;
 import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
+import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrder;
+import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrderLine;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicle;
 import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
@@ -19,6 +21,7 @@ import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.List;
 
 public class EndOfDayReport extends Activity
 {
@@ -163,6 +166,104 @@ public class EndOfDayReport extends Activity
         }
     };
 
+    private static double getStartTotalizer(int tripNumber)
+    {
+        CrashReporter.leaveBreadcrumb("EndOfDayReport: getStartTotalizer");
+
+        double totalizer = Double.MAX_VALUE;
+
+        for (dbTripOrder tripOrder :  dbTripOrder.GetAll())
+        {
+            if (tripOrder.Trip.No == tripNumber)
+            {
+                for (dbTripOrderLine line : tripOrder.GetTripOrderLines())
+                {
+                    if (line.ticketStartTotaliser < totalizer)
+                    {
+                        totalizer = line.ticketStartTotaliser;
+                    }
+                }
+            }
+        }
+
+        return totalizer;
+    }
+
+    private static double getFinishTotalizer(int tripNumber)
+    {
+        CrashReporter.leaveBreadcrumb("EndOfDayReport: getFinishTotalizer");
+
+        double totalizer = 0.0;
+
+        for (dbTripOrder tripOrder :  dbTripOrder.GetAll())
+        {
+            if (tripOrder.Trip.No == tripNumber)
+            {
+                for (dbTripOrderLine line : tripOrder.GetTripOrderLines())
+                {
+                    if (line.ticketEndTotaliser > totalizer)
+                    {
+                        totalizer = line.ticketEndTotaliser;
+                    }
+                }
+            }
+        }
+
+        return totalizer;
+    }
+
+    private static String getStartTicketNumber(int tripNumber)
+    {
+        CrashReporter.leaveBreadcrumb("EndOfDayReport: getStartTicketNumber");
+
+        String ticketNumber = null;
+
+        int id = Integer.MAX_VALUE;
+
+        for (dbTripOrder tripOrder : dbTripOrder.GetAll())
+        {
+            if (tripOrder.Trip.No == tripNumber)
+            {
+                for (dbTripOrderLine line : tripOrder.GetTripOrderLines())
+                {
+                    if (line.ColossusID < id)
+                    {
+                        id = line.ColossusID;
+                        ticketNumber = line.ticketNo;
+                    }
+                }
+            }
+        }
+
+        return ticketNumber;
+    }
+
+    private static String getFinishTicketNumber(int tripNumber)
+    {
+        CrashReporter.leaveBreadcrumb("EndOfDayReport: getFinishTicketNumber");
+
+        String ticketNumber = null;
+
+        int id = Integer.MIN_VALUE;
+
+        for (dbTripOrder tripOrder : dbTripOrder.GetAll())
+        {
+            if (tripOrder.Trip.No == tripNumber)
+            {
+                for (dbTripOrderLine line : tripOrder.GetTripOrderLines())
+                {
+                    if (line.ColossusID > id)
+                    {
+                        id = line.ColossusID;
+                        ticketNumber = line.ticketNo;
+                    }
+                }
+            }
+        }
+
+        return ticketNumber;
+    }
+
     private void sendEndOfDayReport() throws Exception
     {
         CrashReporter.leaveBreadcrumb("EndOfDayReport: sendEndOfDayReport");
@@ -177,6 +278,14 @@ public class EndOfDayReport extends Activity
         json.put("TripIDs", getTripIds());
         json.put("Products", getProducts());
         json.put("Payments", getPayments());
+
+        List<Integer> uniqueTripIds = dbEndOfDay.getUniqueTripIds();
+
+        json.put("StartTotalizer", getStartTotalizer(uniqueTripIds.get(0)));
+        json.put("FinishTotalizer", getFinishTotalizer(uniqueTripIds.get(uniqueTripIds.size() - 1)));
+
+        json.put("StartTicketNo", getStartTicketNumber(uniqueTripIds.get(0)));
+        json.put("FinishTicketNo", getFinishTicketNumber(uniqueTripIds.get(uniqueTripIds.size() - 1)));
 
         // Create Intent object to send message to Colossus
         Intent intent = new Intent(context, ColossusIntentService.class);

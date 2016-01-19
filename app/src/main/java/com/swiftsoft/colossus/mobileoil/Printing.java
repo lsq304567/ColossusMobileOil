@@ -456,8 +456,62 @@ public class Printing
 		}
 	}
 
-	private static double getStartTotalizer(int tripNumber)
+    private static String getStartTicketNumber(int tripNumber)
+    {
+        CrashReporter.leaveBreadcrumb("Printing: getStartTicketNumber");
+
+        String ticketNumber = null;
+
+        int id = Integer.MAX_VALUE;
+
+        for (dbTripOrder tripOrder : dbTripOrder.GetAll())
+        {
+            if (tripOrder.Trip.No == tripNumber)
+            {
+                for (dbTripOrderLine line : tripOrder.GetTripOrderLines())
+                {
+                    if (line.ColossusID < id)
+                    {
+                        id = line.ColossusID;
+                        ticketNumber = line.ticketNo;
+                    }
+                }
+            }
+        }
+
+        return ticketNumber;
+    }
+
+    private static String getFinishTicketNumber(int tripNumber)
+    {
+        CrashReporter.leaveBreadcrumb("Printing: getFinishTicketNumber");
+
+        String ticketNumber = null;
+
+        int id = Integer.MIN_VALUE;
+
+        for (dbTripOrder tripOrder : dbTripOrder.GetAll())
+        {
+            if (tripOrder.Trip.No == tripNumber)
+            {
+                for (dbTripOrderLine line : tripOrder.GetTripOrderLines())
+                {
+                    if (line.ColossusID > id)
+                    {
+                        id = line.ColossusID;
+                        ticketNumber = line.ticketNo;
+                    }
+                }
+            }
+        }
+
+        return ticketNumber;
+    }
+
+    private static double getStartTotalizer(int tripNumber)
 	{
+		CrashReporter.leaveBreadcrumb("Printing: getStartTotalizer");
+
 		double totalizer = Double.MAX_VALUE;
 
 		for (dbTripOrder tripOrder :  dbTripOrder.GetAll())
@@ -479,7 +533,9 @@ public class Printing
 
 	private static double getFinishTotalizer(int tripNumber)
 	{
-		double totalizer = 0.0;
+        CrashReporter.leaveBreadcrumb("Printing: getFinishTotalizer");
+
+        double totalizer = 0.0;
 
 		for (dbTripOrder tripOrder :  dbTripOrder.GetAll())
 		{
@@ -640,6 +696,12 @@ public class Printing
         finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
         printer.addTextLeft(Size.Normal, 40, finalPosition, 140, "Total Delivered");
         finalPosition = printer.addTextRight(Size.Normal, 200, finalPosition, 200, formatVolume.format(endTotaliser - startTotalizer));
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        printer.addTextLeft(Size.Normal, 40, finalPosition, 140, "Start Ticket");
+        finalPosition = printer.addTextRight(Size.Normal, 200, finalPosition, 200, getStartTicketNumber(uniqueTripIds.get(0)));
+        finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.Small);
+        printer.addTextLeft(Size.Normal, 40, finalPosition, 140, "Finish Ticket");
+        finalPosition = printer.addTextRight(Size.Normal, 200, finalPosition, 200, getFinishTicketNumber(uniqueTripIds.get(uniqueTripIds.size() - 1)));
 
         // Print the payments @ the bottom of the report
 		finalPosition = printer.addSpacer(finalPosition, Printer.SpacerHeight.XLarge);

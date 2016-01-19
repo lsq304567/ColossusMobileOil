@@ -1258,40 +1258,56 @@ public class Trip extends Activity
 		{
 			if (transaction.Type.equals("Payment"))
             {
-                String paymentLine = transaction.Description;
+				// Get all payment information in the transaction
+				String[] paymentLines = (transaction.Description + "\n" + transaction.Notes).split("\n");
 
-                int idx = paymentLine.indexOf(":") + 1;
-
-                if (paymentLine.startsWith("Cash payment:") || paymentLine.startsWith("Cheque payment:") || paymentLine.startsWith("Voucher payment:"))
-                {
-                    // Remove all commas from the value field so that parsing does not fail
-                    String strValue = paymentLine.substring(idx).replace(",", "").trim();
-
-                    dbEndOfDay eod = new dbEndOfDay();
-
-                    if (paymentLine.startsWith("Cash payment:"))
+				for (String paymentLine : paymentLines)
+				{
+                    if (isCashChequeVoucherPayment(paymentLine))
                     {
-                        eod.Type = "Payment_Cash";
-                    }
-                    else if (paymentLine.startsWith("Cheque payment:"))
-                    {
-                        eod.Type = "Payment_Cheque";
-                    }
-                    else if (paymentLine.startsWith("Voucher payment:"))
-                    {
-                        eod.Type = "Payment_Voucher";
-                    }
+                        int idx = paymentLine.indexOf(":") + 1;
 
-                    eod.TripId = Active.trip.No;
-                    eod.Product = null;
-                    BigDecimal amount = new BigDecimal(strValue);
-                    eod.setValue(amount);
-                    eod.Quantity = 0;
+                        // Remove all commas from the value field so that parsing does not fail
+                        String strValue = paymentLine.substring(idx).replace(",", "").trim();
 
-                    eod.save();
-                }
+                        dbEndOfDay eod = new dbEndOfDay();
+
+                        if (paymentLine.startsWith("Cash payment:"))
+                        {
+                            eod.Type = "Payment_Cash";
+                        }
+
+                        if (paymentLine.startsWith("Cheque payment:"))
+                        {
+                            eod.Type = "Payment_Cheque";
+                        }
+
+                        if (paymentLine.startsWith("Voucher payment:"))
+                        {
+                            eod.Type = "Payment_Voucher";
+                        }
+
+                        eod.TripId = Active.trip.No;
+                        eod.Product = null;
+                        BigDecimal amount = new BigDecimal(strValue);
+                        eod.setValue(amount);
+                        eod.Quantity = 0;
+
+                        eod.save();
+                    }
+				}
             }
 		}
+    }
+
+    private boolean isCashChequeVoucherPayment(String line)
+    {
+        if (line.startsWith("Cash payment:") || line.startsWith("Cheque payment:") || line.startsWith("Voucher payment:"))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private static int getDeliveredVolume(List<dbTripStock> stockTransactions, dbProduct product)
