@@ -1,5 +1,6 @@
 package com.swiftsoft.colossus.mobileoil.database;
 
+import com.swiftsoft.colossus.mobileoil.Active;
 import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
 
 /**
@@ -9,6 +10,6 @@ public class DbUtils
 {
     public static String getInfoviewLineProduct(dbProduct product)
     {
-        return product == null ? "Line: None" : String.format("Line: %s", product.Desc);
+        return product == null ? "Line: None" : String.format("Line: %s(%d)", product.Desc, Active.vehicle.getHosereelCapacity());
     }
 }
