@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
+import com.swiftsoft.colossus.mobileoil.database.DbUtils;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrder;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
@@ -17,9 +17,8 @@ import java.math.BigDecimal;
 public class Trip_Undelivered_Summary extends MyFlipperView
 {
 	private Trip trip;
-	private LayoutInflater inflater;
-	
-	private MyInfoView1Line infoview;
+
+    private MyInfoView1Line infoview;
 	private TextView tvCustomer;
 	private TextView tvDelAddressLabel;
 	private TextView tvDelAddress;
@@ -28,11 +27,8 @@ public class Trip_Undelivered_Summary extends MyFlipperView
 	private TextView tvProducts;
 	private TextView tvTerms;
 	private TextView tvNotes;
-	private Button btnBack;
-	private Button btnSkip;
-	private Button btnNext;
-	
-	public Trip_Undelivered_Summary(Context context)
+
+    public Trip_Undelivered_Summary(Context context)
 	{
 		super(context);
 		init(context);
@@ -55,7 +51,7 @@ public class Trip_Undelivered_Summary extends MyFlipperView
 			trip = (Trip)context;
 	
 			// Inflate layout.
-			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.trip_undelivered_summary, this, true);
 
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_undelivered_summary_infoview);
@@ -67,9 +63,9 @@ public class Trip_Undelivered_Summary extends MyFlipperView
 			tvProducts = (TextView)this.findViewById(R.id.trip_undelivered_summary_products);
 			tvTerms = (TextView)this.findViewById(R.id.trip_undelivered_summary_terms);
 			tvNotes = (TextView)this.findViewById(R.id.trip_undelivered_summary_notes);
-			btnBack = (Button)this.findViewById(R.id.trip_undelivered_summary_back);
-			btnSkip = (Button)this.findViewById(R.id.trip_undelivered_summary_skip);
-			btnNext = (Button)this.findViewById(R.id.trip_undelivered_summary_next);
+            Button btnBack = (Button) this.findViewById(R.id.trip_undelivered_summary_back);
+            Button btnSkip = (Button) this.findViewById(R.id.trip_undelivered_summary_skip);
+            Button btnNext = (Button) this.findViewById(R.id.trip_undelivered_summary_next);
 			
 			// btnSkip.setVisibility(View.INVISIBLE);
 			
@@ -88,6 +84,8 @@ public class Trip_Undelivered_Summary extends MyFlipperView
 	{
 		try
 		{
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: resumeView");
+
 			// Resume updating.
 			infoview.resume();
 			
@@ -105,6 +103,8 @@ public class Trip_Undelivered_Summary extends MyFlipperView
 	{
 		try
 		{
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: pauseView");
+
 			// Pause updating.
 			infoview.pause();
 		}
@@ -119,14 +119,13 @@ public class Trip_Undelivered_Summary extends MyFlipperView
 	{
 		try
 		{
-			// Update the UI.
-			dbProduct lineProduct = Active.vehicle.getHosereelProduct();
-			
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: updateUI");
+
 			// Order no.
 			infoview.setDefaultTv1("Order " + Active.order.InvoiceNo);
 			
 			// Line.
-            infoview.setDefaultTv2(lineProduct == null ? "Line: None" : "Line: " + lineProduct.Desc);
+            infoview.setDefaultTv2(DbUtils.getInfoviewLineProduct(Active.vehicle.getHosereelProduct()));
 
 			String customer = Active.order.CustomerName + "\n" + Active.order.CustomerAddress;
 			String delAddress = Active.order.DeliveryName + "\n" + Active.order.DeliveryAddress;
@@ -138,22 +137,20 @@ public class Trip_Undelivered_Summary extends MyFlipperView
 				tvDelAddressLabel.setVisibility(View.GONE);
 				tvDelAddress.setVisibility(View.GONE);
 				
-				// Set customer (inc. postcode).
-				tvCustomer.setText(Active.order.CustomerName + " (" + Active.order.CustomerCode + ")\n" + 
-								   Active.order.CustomerAddress + "\n" + 
-								   Active.order.CustomerPostcode);
+				// Set customer address (inc. postcode).
+                tvCustomer.setText(String.format("%s (%s)\n%s\n%s", Active.order.CustomerName, Active.order.CustomerCode, Active.order.CustomerAddress, Active.order.CustomerPostcode));
 			}
 			else
 			{
 				// Show the delivery address.
 				tvDelAddressLabel.setVisibility(View.VISIBLE);
 				tvDelAddress.setVisibility(View.VISIBLE);
-				
-				tvCustomer.setText(Active.order.CustomerName + " (" + Active.order.CustomerCode + ")\n" + 
-								   Active.order.CustomerAddress);
-				tvDelAddress.setText(Active.order.DeliveryName + "\n" + 
-								     Active.order.DeliveryAddress + "\n" + 
-								     Active.order.DeliveryPostcode);				
+
+                // Show the customer address
+                tvCustomer.setText(String.format("%s (%s)\n%s", Active.order.CustomerName, Active.order.CustomerCode, Active.order.CustomerAddress));
+
+                // Set the delivery address
+                tvDelAddress.setText(String.format("%s\n%s\n%s", Active.order.DeliveryName, Active.order.DeliveryAddress, Active.order.DeliveryPostcode));
 			}
 
 			tvPhoneNos.setText(Active.order.PhoneNos);
@@ -168,7 +165,7 @@ public class Trip_Undelivered_Summary extends MyFlipperView
 		}
 	}
 
-	OnClickListener buttonClick = new OnClickListener()
+	private final OnClickListener buttonClick = new OnClickListener()
 	{
 		@Override
 		public void onClick(View view)
@@ -193,7 +190,7 @@ public class Trip_Undelivered_Summary extends MyFlipperView
 
 					case R.id.trip_undelivered_summary_skip:
 
-						CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: onSkip");
+						CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: buttonClick - Skip button clicked");
 
 						// Switch to the Skip screen
 						trip.selectView(Trip.ViewUndeliveredSkip, +1);
@@ -202,7 +199,7 @@ public class Trip_Undelivered_Summary extends MyFlipperView
 
 					case R.id.trip_undelivered_summary_next:
 
-						CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: onNext");
+						CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: buttonClick - Next button clicked");
 
                         if (Active.order == null)
                         {

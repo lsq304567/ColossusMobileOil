@@ -1,7 +1,5 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import java.util.List;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -9,9 +7,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.swiftsoft.colossus.mobileoil.database.DbUtils;
 import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
+
+import java.util.List;
 
 public class Trip_Undelivered_Line_Change_DuringDelivery extends MyFlipperView
 {
@@ -110,17 +111,18 @@ public class Trip_Undelivered_Line_Change_DuringDelivery extends MyFlipperView
 		{
 			// Update the UI.
 			infoview.setDefaultTv1("Line changed?");
+
 			dbProduct lineProduct = Active.vehicle.getHosereelProduct();
+
+			infoview.setDefaultTv2(DbUtils.getInfoviewLineProduct(lineProduct));
 			
 			// Line.
 			if (lineProduct == null)
 			{
-				infoview.setDefaultTv2("Line: None");
 				tvLineProduct.setText("(none)");
 			}
 			else
 			{
-				infoview.setDefaultTv2("Line: " + lineProduct.Desc);
 				tvLineProduct.setText(lineProduct.Desc);
 			}	
 		}

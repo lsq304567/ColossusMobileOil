@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.swiftsoft.colossus.mobileoil.bluetooth.MeterMate;
-import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
+import com.swiftsoft.colossus.mobileoil.database.DbUtils;
 import com.swiftsoft.colossus.mobileoil.database.model.dbSetting;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
@@ -190,10 +190,9 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 		{
 			// Update the UI.
 			infoview.setDefaultTv1("MeterMate");
-			dbProduct lineProduct = Active.vehicle.getHosereelProduct();
-	
+
 			// Line.
-			infoview.setDefaultTv2(lineProduct == null ? "Line: None" : String.format("Line: %s", lineProduct.Desc));
+			infoview.setDefaultTv2(DbUtils.getInfoviewLineProduct(Active.vehicle.getHosereelProduct()));
 
 			// Product.
 			tvProduct.setText(callbacks.getProduct().Desc);

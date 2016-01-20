@@ -6,10 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
-import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
+import com.swiftsoft.colossus.mobileoil.database.DbUtils;
+import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 import com.swiftsoft.colossus.mobileoil.view.MyStockSummary;
-import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 
 public class Trip_Stock_End extends MyFlipperView
 {
@@ -100,18 +100,12 @@ public class Trip_Stock_End extends MyFlipperView
 	{
 		try
 		{
-			// Update the UI.
-			dbProduct lineProduct = Active.vehicle.getHosereelProduct();
-			
 			// Trip no.
 			infoview.setDefaultTv1("Trip " + Active.trip.No);
 			
 			// Line.
-			if (lineProduct == null)
-				infoview.setDefaultTv2("Line: None");
-			else
-				infoview.setDefaultTv2("Line: " + lineProduct.Desc);
-	
+			infoview.setDefaultTv2(DbUtils.getInfoviewLineProduct(Active.vehicle.getHosereelProduct()));
+
 			stockSummary.updateStock();
 		}
 		catch (Exception e)

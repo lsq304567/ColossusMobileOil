@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
+import com.swiftsoft.colossus.mobileoil.database.DbUtils;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 
@@ -136,14 +136,11 @@ public class Trip_Undelivered_Skip extends MyFlipperView
 		{
             CrashReporter.leaveBreadcrumb("Trip_Undelivered_Skip: updateUI");
 
-			// Update the UI.
-			dbProduct lineProduct = Active.vehicle.getHosereelProduct();
-			
 			// Order no.
 			infoview.setDefaultTv1("Order " + Active.order.InvoiceNo);
 			
 			// Line.
-            infoview.setDefaultTv2(lineProduct == null ? "Line: None" : "Line: " + lineProduct.Desc);
+            infoview.setDefaultTv2(DbUtils.getInfoviewLineProduct(Active.vehicle.getHosereelProduct()));
 		}
 		catch (Exception e)
 		{

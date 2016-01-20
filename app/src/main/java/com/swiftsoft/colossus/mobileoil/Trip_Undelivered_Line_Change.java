@@ -1,8 +1,5 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import java.text.DecimalFormat;
-import java.text.ParseException;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -14,10 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.swiftsoft.colossus.mobileoil.bluetooth.MeterMate;
+import com.swiftsoft.colossus.mobileoil.database.DbUtils;
 import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
 import com.swiftsoft.colossus.mobileoil.view.MyEditText;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
+
+import java.text.DecimalFormat;
+import java.text.ParseException;
 
 public class Trip_Undelivered_Line_Change extends MyFlipperView
 {
@@ -136,14 +137,10 @@ public class Trip_Undelivered_Line_Change extends MyFlipperView
 		{
 			// Update the UI.
 			infoview.setDefaultTv1("Line change");
-			dbProduct lineProduct = Active.vehicle.getHosereelProduct();
-			
+
 			// Line.
-			if (lineProduct == null)
-				infoview.setDefaultTv2("Line: None");
-			else
-				infoview.setDefaultTv2("Line: " + lineProduct.Desc);
-	
+			infoview.setDefaultTv2(DbUtils.getInfoviewLineProduct(Active.vehicle.getHosereelProduct()));
+
 			if (Active.vehicle.StockByCompartment)
 			{
 				// Update UI for StockByCompartment.
@@ -167,19 +164,16 @@ public class Trip_Undelivered_Line_Change extends MyFlipperView
 				
 				// To section
 				tvReturnCompartment.setText(Integer.toString(returnCompartment));
-				
-				if (returnProduct == null)
-					tvReturnUllage.setText(decf0.format(returnUllage) + " l");
-				else
-					tvReturnUllage.setText(decf0.format(returnUllage) + " l of " + returnProduct.Desc);
-				
+
+				tvReturnUllage.setText(String.format("%s 1%s", decf0.format(returnUllage), returnProduct == null ? "" : " of " + returnProduct.Desc));
+
 				tlByCompartment.setVisibility(View.VISIBLE);
 				tlNotByCompartment.setVisibility(View.GONE);
 			}
 			else
 			{
 				// Update UI for not StockByCompartment.
-				tvFromProduct.setText(lineProduct.Desc);
+				tvFromProduct.setText(Active.vehicle.getHosereelProduct().Desc);
 				tvToProduct.setText(Active.lineChangeProduct.Desc);
 	
 				tlByCompartment.setVisibility(View.GONE);

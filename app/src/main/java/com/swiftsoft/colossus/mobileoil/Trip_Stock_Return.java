@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.swiftsoft.colossus.mobileoil.bluetooth.MeterMate;
+import com.swiftsoft.colossus.mobileoil.database.DbUtils;
 import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrder;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrderLine;
@@ -289,10 +290,9 @@ public class Trip_Stock_Return extends MyFlipperView
 
 			// Update the UI.
 			infoview.setDefaultTv1("Return product");
-			dbProduct lineProduct = Active.vehicle.getHosereelProduct();
-			
+
 			// Set the line product in the title bar.
-            infoview.setDefaultTv2(lineProduct == null ? "Line: None" : "Line: " + lineProduct.Desc);
+            infoview.setDefaultTv2(DbUtils.getInfoviewLineProduct(Active.vehicle.getHosereelProduct()));
 
             // Set the Product name with maximum amount of product that can be returned
             if (product == null)

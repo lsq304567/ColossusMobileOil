@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.swiftsoft.colossus.mobileoil.bluetooth.BluetoothMessage;
 import com.swiftsoft.colossus.mobileoil.bluetooth.MeterMate;
+import com.swiftsoft.colossus.mobileoil.database.DbUtils;
 import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrderLine;
 import com.swiftsoft.colossus.mobileoil.service.ColossusIntentService;
@@ -147,7 +148,7 @@ public class Trip_Undelivered_Products extends MyFlipperView
 			infoview.setDefaultTv1("Product delivery");
 			
 			// Line.
-            infoview.setDefaultTv2(lineProduct == null ? "Line: None" : "Line: " + lineProduct.Desc);
+            infoview.setDefaultTv2(DbUtils.getInfoviewLineProduct(lineProduct));
             tvLineProduct.setText(lineProduct == null ? "(none)" : lineProduct.Desc);
 
 			// Remove any old order lines.

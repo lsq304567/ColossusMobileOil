@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.swiftsoft.colossus.mobileoil.database.DbUtils;
 import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrder;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrderLine;
@@ -256,11 +257,8 @@ public class Trip_Stock_Load extends MyFlipperView
 			// Update the UI.
 			infoview.setDefaultTv1("Load product");
 
-            // Get the product in the hosereel
-			dbProduct lineProduct = Active.vehicle.getHosereelProduct();
-			
 			// Set the Line product in the title bar
-            infoview.setDefaultTv2(lineProduct == null ? "Line: None" : "Line: " + lineProduct.Desc);
+            infoview.setDefaultTv2(DbUtils.getInfoviewLineProduct(Active.vehicle.getHosereelProduct()));
 
             if (product == null)
             {
