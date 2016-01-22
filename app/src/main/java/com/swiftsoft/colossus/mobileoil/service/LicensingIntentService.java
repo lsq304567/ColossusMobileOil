@@ -26,6 +26,8 @@ public class LicensingIntentService extends IntentService
 	@Override
 	protected void onHandleIntent(Intent intent)
 	{
+        CrashReporter.leaveBreadcrumb("LicensingIntentService: onHandleIntent");
+
 		int result = -1;
 		String error;
 		String type = null;
@@ -37,6 +39,7 @@ public class LicensingIntentService extends IntentService
 		{
 			// Get parameters.
 			Bundle bundle = intent.getExtras();
+
 			type = bundle.getString("Type");
 			serialNo = bundle.getString("SerialNo");
 			companyPIN = bundle.getInt("CompanyPIN");
@@ -44,18 +47,18 @@ public class LicensingIntentService extends IntentService
 			
 			// Create JSON input for WebService.
 			JSONObject json = new JSONObject();
+
 			json.put("SerialNo", serialNo);
 			json.put("CompanyPIN", companyPIN);
-			String body = json.toString();
-			
-			// Create RESTful client.
+
+    		// Create RESTful client.
 			IRestClient client = new RestClient(getResources().getString(R.string.licensing_url) + type);
 			
 			// JSON header.
 			client.addHeader("Content-type", "application/json");
 			
 			// JSON body.
-			client.addBody(body);
+			client.addBody(json.toString());
 			
 			try
 			{
@@ -64,12 +67,12 @@ public class LicensingIntentService extends IntentService
 			}
 			catch (Exception e1)
 			{
-			    error = e1.getMessage();
+			    e1.getMessage();
 			}
 
-			int rcode = client.getResponseCode();
+			int responseCode = client.getResponseCode();
 			
-			if (rcode == 200)
+			if (responseCode == 200)
 			{
 				// Success!
 				String response = client.getResponse();
@@ -115,7 +118,7 @@ public class LicensingIntentService extends IntentService
 			else
 			{
 				// Code 0 most likely means timed out.
-				error = rcode == 0 ? "Timed out" : "Error code " + rcode;
+				error = responseCode == 0 ? "Timed out" : String.format("Error code %d", responseCode);
 			}				
 		}
 		catch (Exception e2)
@@ -125,6 +128,7 @@ public class LicensingIntentService extends IntentService
 		
 		// Send message back to UI.
 		Bundle data = new Bundle();
+
 		data.putString("Type", type);
 		data.putString("Error", error);
 		data.putInt("Result", result);
@@ -134,7 +138,10 @@ public class LicensingIntentService extends IntentService
 		
 		try
 		{
-			messenger.send(msg);
+			if (messenger != null)
+			{
+				messenger.send(msg);
+			}
 		}
 		catch (RemoteException e3)
 		{
