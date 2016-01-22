@@ -1,7 +1,6 @@
 package com.swiftsoft.colossus.mobileoil.bluetooth;
 
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
@@ -20,8 +19,8 @@ import java.util.ArrayList;
 public class MeterMate
 {
 	// Debugging
-	static final String TAG = "MeterMate";
-	static final boolean D = true;
+	private static final String TAG = "MeterMate";
+	private static final boolean D = true;
 	
 	// Comms states.
 	public static final int COMMS_CONNECTING = 0;
@@ -33,63 +32,58 @@ public class MeterMate
 	public static final int MESSAGE_PUMPING_STATUS_CHANGED = 1;
 
 	// Flag to indicate MeterMate is in use - i.e. prevent two MeterMate UIs connecting.
-	static boolean inUse = false;
+	private static boolean inUse = false;
 	
 	// Flag to indicate MeterMate comms is running.
-	static boolean running = false;
+	private static boolean running = false;
 	
 	// UI Handler.
-	static Handler handler;
-	static Context context;
+	private static Handler handler;
 
-	// Bluetooth comms.
-	static int STX = 0x02;
-	static int ETX = 0x03;
-	static int commsStatus = COMMS_DISCONNECTED;
-	static String deviceAddress;
-	static BluetoothSocket socket;
-	static InputStream inStream;
-	static OutputStream outStream;
+    // Bluetooth comms.
+	private static final int STX = 0x02;
+	private static final int ETX = 0x03;
+	private static int commsStatus = COMMS_DISCONNECTED;
+	private static String deviceAddress;
+	private static BluetoothSocket socket;
+	private static InputStream inStream;
+	private static OutputStream outStream;
 
 	// Meter.
-	static Boolean inDeliveryMode;
-	static Boolean inPumpingMode;
-	static Integer presetLitres;
-	static Integer realtimeLitres;
-	static Double temperature;
+	private static Boolean inDeliveryMode;
+	private static Boolean inPumpingMode;
+	private static Integer presetLitres;
+	private static Integer realtimeLitres;
+	private static Double temperature;
 	
 	// Ticket data.
-	static boolean readTicket = false;
-	static Integer ticketNo;
-	static String ticketProductDesc;
-	static String ticketStartTime;
-	static String ticketFinishTime;
-	static double ticketStartTotaliser;
-	static double ticketEndTotaliser;
-	static double ticketGrossVolume;
-	static double ticketNetVolume;
-	static double ticketTemperature;
-	static boolean ticketAt15Degrees;
+	private static boolean readTicket = false;
+	private static Integer ticketNo;
+	private static String ticketProductDesc;
+	private static String ticketStartTime;
+	private static String ticketFinishTime;
+	private static double ticketStartTotalizer;
+	private static double ticketEndTotalizer;
+	private static double ticketGrossVolume;
+	private static double ticketNetVolume;
+	private static double ticketTemperature;
+	private static boolean ticketAt15Degrees;
 	
 	// Demo simulator.
-	static boolean demoMode = false;
-	static boolean demoPumping = false;
+	private static boolean demoMode = false;
+	private static boolean demoPumping = false;
 
     // Private member holding Bluetooth messages sent/received
-	static ArrayList<BluetoothMessage> btMessages;
+	private static ArrayList<BluetoothMessage> btMessages;
 
-	static boolean logBluetoothData = false;
+	@SuppressWarnings("CanBeFinal")
+    private static boolean logBluetoothData = false;
 	
 	// Public comms status
 
 	public static boolean getLogBluetoothData()
 	{
 		return logBluetoothData;
-	}
-
-	public static void setLogBluetoothData(boolean logData)
-	{
-		logBluetoothData = logData;
 	}
 
     public static ArrayList<BluetoothMessage> getMessages()
@@ -102,7 +96,7 @@ public class MeterMate
 		return commsStatus;
 	}
 	
-	static synchronized void setCommsStatus(int value)
+	private static synchronized void setCommsStatus(int value)
 	{
 		if (commsStatus != value)
 		{
@@ -123,7 +117,7 @@ public class MeterMate
 		return inDeliveryMode == null ? "" : inDeliveryMode ? "Yes" : "No";
 	}
 	
-	static synchronized void setInDeliveryMode(boolean value)
+	private static synchronized void setInDeliveryMode(boolean value)
 	{
 		if (inDeliveryMode == null || inDeliveryMode != value)
 		{
@@ -142,7 +136,7 @@ public class MeterMate
 		return inPumpingMode == null ? "" : inPumpingMode ? "Yes" : "No";
 	}
 	
-	static synchronized void setInPumpingMode(boolean value)
+	private static synchronized void setInPumpingMode(boolean value)
 	{
 		if (inPumpingMode == null || inPumpingMode != value)
 		{
@@ -161,7 +155,7 @@ public class MeterMate
 		return presetLitres == null ? "" : presetLitres.toString();
 	}
 	
-	static synchronized void setPresetLitres(int value)
+	private static synchronized void setPresetLitres(int value)
 	{
 		if (presetLitres == null || presetLitres != value)
 		{
@@ -180,7 +174,7 @@ public class MeterMate
 		return realtimeLitres == null ? "" : realtimeLitres.toString();
 	}
 	
-	static synchronized void setRealtimeLitres(int value)
+	private static synchronized void setRealtimeLitres(int value)
 	{
 		if (realtimeLitres == null || realtimeLitres != value)
 		{
@@ -199,7 +193,7 @@ public class MeterMate
 		return temperature == null ? "" : temperature.toString();
 	}
 	
-	static synchronized void setTemperature(double value)
+	private static synchronized void setTemperature(double value)
 	{
 		if (temperature == null || temperature != value)
 		{
@@ -242,14 +236,14 @@ public class MeterMate
 		return ticketNo == null ? "" : ticketFinishTime;
 	}
 	
-	public static synchronized double getTicketStartTotaliser()
+	public static synchronized double getTicketStartTotalizer()
 	{
-		return ticketNo == null ? 0 : ticketStartTotaliser;
+		return ticketNo == null ? 0 : ticketStartTotalizer;
 	}
 	
-	public static synchronized double getTicketEndTotaliser()
+	public static synchronized double getTicketEndTotalizer()
 	{
-		return ticketNo == null ? 0 : ticketEndTotaliser;
+		return ticketNo == null ? 0 : ticketEndTotalizer;
 	}
 	
 	public static synchronized double getTicketGrossVolume()
@@ -273,24 +267,24 @@ public class MeterMate
 	}
 	
 
-	static synchronized void setTicketDetails(
-			int newTicketNo,
-			String newProductDesc,
-			String newStart,
-			String newFinish,
-			double newTotaliserStart,
-			double newTotaliserEnd,
-			double newGrossVolume,
-			double newVolume,
-			double newTemperature,
-			boolean newAt15Degrees)
+	private static synchronized void setTicketDetails(
+            int newTicketNo,
+            String newProductDesc,
+            String newStart,
+            String newFinish,
+            double newTotalizerStart,
+            double newTotalizerEnd,
+            double newGrossVolume,
+            double newVolume,
+            double newTemperature,
+            boolean newAt15Degrees)
 	{
 		ticketNo = newTicketNo;
 		ticketProductDesc = newProductDesc;
 		ticketStartTime = newStart;
 		ticketFinishTime = newFinish;
-		ticketStartTotaliser = newTotaliserStart;
-		ticketEndTotaliser = newTotaliserEnd;
+		ticketStartTotalizer = newTotalizerStart;
+		ticketEndTotalizer = newTotalizerEnd;
 		ticketGrossVolume = newGrossVolume;
 		ticketNetVolume = newVolume;
 		ticketTemperature = newTemperature;
@@ -320,22 +314,22 @@ public class MeterMate
 	}
 	
 	// Public methods.
-	public static void Initialise()
+	private static void Initialise()
 	{
 		readTicket = false;
 		ticketNo = null;
 		ticketProductDesc = "";
 		ticketStartTime = "";
 		ticketFinishTime = "";
-		ticketStartTotaliser = 0;
-		ticketEndTotaliser = 0;
+		ticketStartTotalizer = 0;
+		ticketEndTotalizer = 0;
 		ticketGrossVolume = 0;
 		ticketNetVolume = 0;
 		ticketTemperature = 0;
 		ticketAt15Degrees = false;
 	}	
 	
-	public static boolean startup(Handler myHandler, Context myContext, String myDeviceAddress)
+	public static boolean startup(Handler myHandler, String myDeviceAddress)
 	{
 		if (inUse)
 		{
@@ -344,8 +338,7 @@ public class MeterMate
 
 		// Store parameters.
 		handler = myHandler;
-		context = myContext;
-		deviceAddress = myDeviceAddress;
+        deviceAddress = myDeviceAddress;
 
 		// Initialise meter variables.
 		inDeliveryMode = null;
@@ -400,7 +393,7 @@ public class MeterMate
 	}
 	
 	// Background thread.
-	static Runnable runnable = new Runnable()
+	private static final Runnable runnable = new Runnable()
 	{
 		@Override
 		public void run()
@@ -459,14 +452,24 @@ public class MeterMate
 									int litres = 0;
 									
 									// Find current litres delivered.
-									try {litres = Integer.parseInt(getRealtimeLitres());}
-									catch (Exception e) {}
+									try
+                                    {
+                                        litres = Integer.parseInt(getRealtimeLitres());
+                                    }
+									catch (Exception ignored)
+                                    {
+
+                                    }
 
 									// Check if delivery is complete.
 									if (presetLitres != null && litres >= presetLitres)
-										demoStop();
+                                    {
+                                        demoStop();
+                                    }
 									else
-										setRealtimeLitres(litres + 1);
+                                    {
+                                        setRealtimeLitres(litres + 1);
+                                    }
 								}
 
 								if (readTicket)
@@ -593,7 +596,7 @@ public class MeterMate
 	};
 
 	// Send message to MeterMate.
-	static synchronized boolean sendMessage(String message)
+	private static synchronized void sendMessage(String message)
 	{
 		try
 		{
@@ -613,9 +616,7 @@ public class MeterMate
 
                     btMessages.add(btMessage);
                 }
-
-				return true;
-			}
+            }
 		}
 		catch (IOException e)
 		{
@@ -633,12 +634,10 @@ public class MeterMate
 			inStream = null;
 			outStream = null;
 		}
-		
-		return false;
-	}
+    }
 
 	// Process message from MeterMate.
-	static void processMessage(String message)
+	private static void processMessage(String message)
 	{
 		try
 		{
@@ -704,8 +703,8 @@ public class MeterMate
 						json.getString("ProductDesc"),
 						json.getString("Start"),
 						json.getString("Finish"),
-						json.getDouble("totaliserStart"),
-						json.getDouble("totaliserEnd"),
+						json.getDouble("totalizerStart"),
+						json.getDouble("totalizerEnd"),
 						json.getDouble("grossVolume"),
 						json.getDouble("volume"),
 						json.getDouble("temperature"),
@@ -728,15 +727,8 @@ public class MeterMate
 		Thread thread = new Thread(runnable);
 		thread.start();
 
-        dbSetting dbLogBluetoothData = dbSetting.FindByKey("LogBluetoothData");
+		dbSetting dbLogBluetoothData = dbSetting.FindByKey("LogBluetoothData");
 
-        if (dbLogBluetoothData != null)
-        {
-            logBluetoothData = dbLogBluetoothData.IntValue == 0 ? false : true;
-        }
-        else
-        {
-            logBluetoothData = false;
-        }
+		logBluetoothData = dbLogBluetoothData != null && (dbLogBluetoothData.IntValue != 0);
 	}
 }

@@ -130,7 +130,7 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 			}
 	    	
 			// Enable connection to MeterMate.
-			if (!MeterMate.startup(appHandler, getContext(), metermate.StringValue))
+			if (!MeterMate.startup(appHandler, metermate.StringValue))
 			{
 				// Show error.
 				AlertDialog.Builder builder = new AlertDialog.Builder(trip);

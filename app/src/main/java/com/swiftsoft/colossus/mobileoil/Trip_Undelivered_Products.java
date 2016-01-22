@@ -483,8 +483,8 @@ public class Trip_Undelivered_Products extends MyFlipperView
 				Active.orderLine.ticketProductDesc = MeterMate.getTicketProductDesc();
 				Active.orderLine.ticketStartTime = MeterMate.getTicketStartTime();
 				Active.orderLine.ticketFinishTime = MeterMate.getTicketFinishTime();
-				Active.orderLine.ticketStartTotaliser = MeterMate.getTicketStartTotaliser();
-				Active.orderLine.ticketEndTotaliser = MeterMate.getTicketEndTotaliser();
+				Active.orderLine.ticketStartTotaliser = MeterMate.getTicketStartTotalizer();
+				Active.orderLine.ticketEndTotaliser = MeterMate.getTicketEndTotalizer();
 				Active.orderLine.ticketGrossVolume = MeterMate.getTicketGrossVolume();
 				Active.orderLine.ticketNetVolume = MeterMate.getTicketNetVolume();
 				Active.orderLine.ticketTemperature = MeterMate.getTicketTemperature();
