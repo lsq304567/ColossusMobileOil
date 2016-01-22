@@ -22,6 +22,8 @@ public class TimerService extends Service
 	@Override
 	public void onCreate()
 	{
+		CrashReporter.leaveBreadcrumb("TimerService: onCreate");
+
 		super.onCreate();
 
 		try
@@ -42,6 +44,8 @@ public class TimerService extends Service
 	@Override
 	public void onDestroy()
 	{
+        CrashReporter.leaveBreadcrumb("TimerService.onDestroy");
+
 		super.onDestroy();
 
 		try
@@ -72,8 +76,7 @@ public class TimerService extends Service
 				CrashReporter.leaveBreadcrumb("timerTask: run");
 
 				// Call ColossusIntentService.
-				Intent i = new Intent(getApplicationContext(), ColossusIntentService.class);
-				startService(i);
+				startService(new Intent(getApplicationContext(), ColossusIntentService.class));
 			}
 			catch (Exception e)
 			{
