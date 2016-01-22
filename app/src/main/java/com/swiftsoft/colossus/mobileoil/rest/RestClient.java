@@ -1,5 +1,7 @@
 package com.swiftsoft.colossus.mobileoil.rest;
 
+import com.swiftsoft.colossus.mobileoil.CrashReporter;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -23,11 +25,11 @@ import java.util.ArrayList;
 
 public class RestClient implements IRestClient
 {
-    private ArrayList <NameValuePair> params;
-    private ArrayList <NameValuePair> headers;
+    private final ArrayList <NameValuePair> params;
+    private final ArrayList <NameValuePair> headers;
     private String body;
 
-    private String url;
+    private final String url;
 
     private int responseCode;
     private String message;
@@ -78,6 +80,8 @@ public class RestClient implements IRestClient
 
     public void execute(RequestMethod method) throws Exception
     {
+        CrashReporter.leaveBreadcrumb("RestClient: execute");
+        
         switch(method)
         {
             case GET:
@@ -100,12 +104,12 @@ public class RestClient implements IRestClient
                 HttpGet request = new HttpGet(url + combinedParams);
 
                 //add headers
-                for(NameValuePair h : headers)
+                for(NameValuePair header : headers)
                 {
-                    request.addHeader(h.getName(), h.getValue());
+                    request.addHeader(header.getName(), header.getValue());
                 }
 
-                executeRequest(request, url);
+                executeRequest(request);
 
                 break;
             }
@@ -115,9 +119,9 @@ public class RestClient implements IRestClient
                 HttpPost request = new HttpPost(url);
 
                 //add headers
-                for(NameValuePair h : headers)
+                for(NameValuePair header : headers)
                 {
-                    request.addHeader(h.getName(), h.getValue());
+                    request.addHeader(header.getName(), header.getValue());
                 }
 
                 if (!params.isEmpty())
@@ -130,15 +134,17 @@ public class RestClient implements IRestClient
                     request.setEntity(new StringEntity(body, HTTP.UTF_8));
                 }
 
-                executeRequest(request, url);
+                executeRequest(request);
 
                 break;
             }
         }
     }
 
-    private void executeRequest(HttpUriRequest request, String url)
+    private void executeRequest(HttpUriRequest request)
     {
+        CrashReporter.leaveBreadcrumb("RestClient: executeRequest");
+
         HttpClient client = new DefaultHttpClient();
 
         HttpResponse httpResponse;
@@ -153,11 +159,12 @@ public class RestClient implements IRestClient
 
             if (entity != null)
             {
-                InputStream instream = entity.getContent();
-                response = convertStreamToString(instream);
+                InputStream inputStream = entity.getContent();
+
+                response = convertStreamToString(inputStream);
 
                 // Closing the input stream will trigger connection release
-                instream.close();
+                inputStream.close();
             }
 
         }
@@ -175,6 +182,8 @@ public class RestClient implements IRestClient
 
     private static String convertStreamToString(InputStream is)
     {
+        CrashReporter.leaveBreadcrumb("RestClient: convertStreamToString");
+
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
 
