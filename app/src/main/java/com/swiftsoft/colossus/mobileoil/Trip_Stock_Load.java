@@ -1,5 +1,6 @@
 package com.swiftsoft.colossus.mobileoil;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,19 +29,17 @@ import java.util.List;
 public class Trip_Stock_Load extends MyFlipperView
 {
 	private Trip trip;
-	private LayoutInflater inflater;
-	
+
 	private dbProduct product = null;
 	private MyInfoView1Line infoview;
 	private MyEditText etLoaded;
 	private TextView tvProduct;
-	private Button btnChange;	
 	private Button btnOK;
 	private Button btnCancel;
 	
 	private List<dbProduct> products;
 
-	private DecimalFormat decf;
+	private DecimalFormat decimalFormat;
 	private String previousViewName;
 
     private Hashtable<String, Integer> requiredProducts;
@@ -69,17 +68,17 @@ public class Trip_Stock_Load extends MyFlipperView
 			trip = (Trip)context;
 	
 			// Setup a standard decimal format.
-			decf = new DecimalFormat("#,##0");
+			decimalFormat = new DecimalFormat("#,##0");
 	
 			// Inflate layout.
-			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.trip_stock_load, this, true);
 			
 	    	// Find UI controls.
 	    	infoview = (MyInfoView1Line)this.findViewById(R.id.trip_stock_load_infoview);
 			etLoaded = (MyEditText)this.findViewById(R.id.trip_stock_load_litres);
 			tvProduct = (TextView)this.findViewById(R.id.trip_stock_load_product);
-			btnChange = (Button)this.findViewById(R.id.trip_stock_load_change);
+			Button btnChange = (Button) this.findViewById(R.id.trip_stock_load_change);
 			btnOK = (Button)this.findViewById(R.id.trip_stock_load_ok);
 			btnCancel = (Button)this.findViewById(R.id.trip_stock_load_cancel);
 	
@@ -184,7 +183,8 @@ public class Trip_Stock_Load extends MyFlipperView
 		}
 	}
 	
-	@Override
+	@SuppressLint("SetTextI18n")
+    @Override
 	public boolean resumeView() 
 	{
 		try
@@ -247,7 +247,8 @@ public class Trip_Stock_Load extends MyFlipperView
 		previousViewName = name;
 	}
 	
-	@Override
+	@SuppressLint("SetTextI18n")
+    @Override
 	public void updateUI() 
 	{
 		try
@@ -285,12 +286,12 @@ public class Trip_Stock_Load extends MyFlipperView
                     int toLoad = requiredAmount - stockLevel;
 
                     // Load product.
-                    tvProduct.setText(product.Desc + " " + toLoad + " litres");
+					tvProduct.setText(String.format("%s %d litres", product.Desc, toLoad));
                 }
                 else
                 {
                     // Load product.
-                    tvProduct.setText(product.Desc + " 0 litres");
+					tvProduct.setText(String.format("%s 0 litres", product.Desc));
                 }
             }
 		}
@@ -300,7 +301,7 @@ public class Trip_Stock_Load extends MyFlipperView
 		}
 	}
 
-    TextWatcher onLitresChanged = new TextWatcher()
+    private final TextWatcher onLitresChanged = new TextWatcher()
 	{
 		@Override
 		public void onTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3)
@@ -319,7 +320,7 @@ public class Trip_Stock_Load extends MyFlipperView
 		}
 	};
 	    
-    OnClickListener onChange = new OnClickListener()
+    private final OnClickListener onChange = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -368,7 +369,7 @@ public class Trip_Stock_Load extends MyFlipperView
 		}
 	};
 
-	OnClickListener onOK = new OnClickListener()
+	private final OnClickListener onOK = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -389,7 +390,7 @@ public class Trip_Stock_Load extends MyFlipperView
 				}
 			
 				// Check loaded quantity.
-				try {litres = decf.parse(etLoaded.getText().toString()).intValue();}
+				try {litres = decimalFormat.parse(etLoaded.getText().toString()).intValue();}
 				catch (ParseException e) {e.printStackTrace();}
 		
 				if (litres <= 0)
@@ -429,7 +430,7 @@ public class Trip_Stock_Load extends MyFlipperView
 		}
 	};
 	
-	OnClickListener onCancel = new OnClickListener()
+	private final OnClickListener onCancel = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -475,7 +476,7 @@ public class Trip_Stock_Load extends MyFlipperView
 
                 if (text.length() > 0)
                 {
-                    litres = decf.parse(text).intValue();
+                    litres = decimalFormat.parse(text).intValue();
                 }
             }
 	    	catch (ParseException e)
@@ -483,8 +484,8 @@ public class Trip_Stock_Load extends MyFlipperView
                 e.printStackTrace();
             }
 
-            btnOK.setEnabled(litres <= 0 ? false : true);
-            btnCancel.setText(litres <= 0 ? "Close" : "Cancel");
+            btnOK.setEnabled(litres > 0);
+            btnCancel.setText(litres > 0 ? "Cancel" : "Close");
 		}
 		catch (Exception e)
 		{
