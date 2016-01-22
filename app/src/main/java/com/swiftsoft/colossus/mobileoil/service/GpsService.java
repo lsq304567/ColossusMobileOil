@@ -82,39 +82,53 @@ public class GpsService extends Service
 	{
 		try
 		{
+            CrashReporter.leaveBreadcrumb("GpsService: updateDatabase");
+
+			// Get the latitude and longitude of the location
 			double latitude = location.getLatitude();
 			double longitude = location.getLongitude();
-			long time = location.getTime();
-			int speed = (int) (location.getSpeed() * 2.2369362920544);	// Convert to MPH.
-			float accuracy = location.getAccuracy();
 
 			// Create new location object.
 			Location newLocation = new Location("");
 			newLocation.setLatitude(latitude);
 			newLocation.setLongitude(longitude);
 
-			// Report location at least every 5 minutes, 
-			// and at most every 1 minute, if travelled more than 20 metres.
-			if ((time - lastGPS >= 300000) || (time - lastGPS >= 60000 &&  newLocation.distanceTo(lastLocation) >= 20))
+            // Get the current UTC time from the location
+            long time = location.getTime();
+
+            // Calculate the time elapsed since the last reported location
+            long timeElapsed = time - lastGPS;
+
+            // Report location at least every 5 minutes,
+			// and at most every 1 minute,
+			// if travelled more than 20 metres.
+			if ((timeElapsed >= 300000) || (timeElapsed >= 60000 && newLocation.distanceTo(lastLocation) >= 20.0f))
 			{
+                CrashReporter.leaveBreadcrumb("GpsService: updateDatabase - Reporting position");
+
 				// Store new location.
-				lastGPS = location.getTime();
+				lastGPS = time;
 				lastLocation.setLatitude(latitude);
 				lastLocation.setLongitude(longitude);
-				
+
+                // If there is an Active vehicle send the GPS message
 				if (Active.vehicle != null)
 				{
-					// Create content.
+                    // Get the speed from the location in miles-per-hour
+                    int speed = (int) (location.getSpeed() * 2.2369362920544);
+
+                    // Create content.
 					JSONObject json = new JSONObject();
+
 					json.put("VehicleID", Active.vehicle.ColossusID);
 					json.put("Latitude", latitude);
 					json.put("Longitude", longitude);
 					json.put("Speed", speed);
-					json.put("Accuracy", accuracy);
+					json.put("Accuracy", location.getAccuracy());
 					json.put("DateTime", "/Date(" + time + ")/");
 					
 					// Call ColossusIntentService.
-					addIntent("GPS", json.toString());
+					sendGpsMessage("GPS", json.toString());
 				}
 			}
 		}
@@ -124,8 +138,10 @@ public class GpsService extends Service
 		}
 	}
 
-	private void addIntent(String type, String content)
+	private void sendGpsMessage(String type, String content)
 	{
+        CrashReporter.leaveBreadcrumb("GpsService: sendGpsMessage");
+
 		Intent i = new Intent(getApplicationContext(), ColossusIntentService.class);
 
 		i.putExtra("Type", type);
@@ -139,6 +155,8 @@ public class GpsService extends Service
 		@Override
 		public void onLocationChanged(Location location)
 		{
+            CrashReporter.leaveBreadcrumb("GpsService: onLocatinChanged");
+
 			if (location != null)
 			{
 				updateDatabase(location);
@@ -150,8 +168,10 @@ public class GpsService extends Service
 		{
 			try
 			{
+                CrashReporter.leaveBreadcrumb("GpsService: onProviderDisabled");
+
 				// Call ColossusIntentService.
-				addIntent("GPS_Off", "");
+				sendGpsMessage("GPS_Off", "");
 			}
 			catch (Exception e)
 			{
@@ -164,8 +184,10 @@ public class GpsService extends Service
 		{
 			try
 			{
+                CrashReporter.leaveBreadcrumb("GpsService: onProviderEnabled");
+
 				// Call ColossusIntentService.
-				addIntent("GPS_On", "");
+				sendGpsMessage("GPS_On", "");
 			}
 			catch (Exception e)
 			{
@@ -176,7 +198,7 @@ public class GpsService extends Service
 		@Override
 		public void onStatusChanged(String provider, int status, Bundle extras)
 		{
-//			Log.w("GPS Status is now " + status);
+            CrashReporter.leaveBreadcrumb(String.format("GpsService: onStatusChanged - Status -> %d", status));
 		}
 	};
 }
