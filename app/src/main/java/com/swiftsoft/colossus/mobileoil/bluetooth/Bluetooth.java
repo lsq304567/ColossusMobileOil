@@ -10,8 +10,8 @@ import java.lang.reflect.Method;
 public class Bluetooth
 {
 	// Debugging
-	static final String TAG = "Bluetooth";
-	static final boolean D = true;
+	private static final String TAG = "Bluetooth";
+	private static final boolean D = true;
 
 	// Must be initialised from UI thread.
 	public static BluetoothAdapter bluetooth;
@@ -36,6 +36,7 @@ public class Bluetooth
 		}
 	}
 	
+	@SuppressWarnings("RedundantArrayCreation")
 	public static BluetoothSocket connect(String deviceAddress) throws Exception
 	{
 		BluetoothSocket socket = null;
@@ -51,8 +52,8 @@ public class Bluetooth
 			
 			// This method used reflection, but proves more reliable 
 			// than the createRfcommSocketToServiceRecord public API!
-			Method m = device.getClass().getMethod("createRfcommSocket", new Class[] { Integer.TYPE });         
-			socket = (BluetoothSocket) m.invoke(device, new Object[] { Integer.valueOf(1) });
+			Method m = device.getClass().getMethod("createRfcommSocket", new Class[] { Integer.TYPE });
+			socket = (BluetoothSocket) m.invoke(device, new Object[] {1});
 	
 			// Public API method.
 			//BluetoothSocket socket = device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
@@ -80,7 +81,7 @@ public class Bluetooth
 			bluetooth.disable();
 		
 			// Wait for up to 5 seconds for Bluetooth to disable.
-			for (int i=0; i < 10; i++)
+			for (int i = 0; i < 10; i++)
 			{
 				Thread.sleep(500);
 		
