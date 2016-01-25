@@ -7,9 +7,7 @@ import android.widget.EditText;
 
 import com.swiftsoft.colossus.mobileoil.utilities.SecureSettings;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
@@ -196,18 +194,18 @@ public class UtilsTests
         assertEquals("", "666777888999", Utils.getSerialNo(context));
     }
 
-    @Rule
-    public ExpectedException expectedEx = ExpectedException.none();
-
-    @Test
-    public void show_keyboard_edit_text_null()
-    {
-        expectedEx.expect(IllegalArgumentException.class);
-        expectedEx.expectMessage("Valid EditText object must be passed.");
-
-        // This should cause a NullPointerException to be thrown ...
-        Utils.showKeyboard(null);
-    }
+//    @Rule
+//    public ExpectedException expectedEx = ExpectedException.none();
+//
+//    @Test
+//    public void show_keyboard_edit_text_null()
+//    {
+//        expectedEx.expect(IllegalArgumentException.class);
+//        expectedEx.expectMessage("Valid EditText object must be passed.");
+//
+//        // This should cause a NullPointerException to be thrown ...
+//        Utils.showKeyboard(null);
+//    }
 
     @Test
     public void show_keyboard_edit_text()
