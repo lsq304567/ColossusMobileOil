@@ -3,6 +3,11 @@ package com.swiftsoft.colossus.mobileoil;
 import com.swiftsoft.colossus.mobileoil.rest.IRestClient;
 import com.swiftsoft.colossus.mobileoil.rest.RestClient;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +16,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
@@ -135,5 +142,66 @@ public class RestClientTests
         restClient.addBody("test_body");
 
         assertEquals("Unexpected body value", "test_body", restClient.getBody());
+    }
+
+    @Test
+    public void execute_get_success_null() throws Exception
+    {
+        IRestClient restClient = new RestClient("dummy_url");
+
+        HttpResponse response = PowerMockito.mock(HttpResponse.class);
+
+        StatusLine statusLine = PowerMockito.mock(StatusLine.class);
+
+        PowerMockito.when(statusLine.getStatusCode()).thenReturn(200);
+        PowerMockito.when(statusLine.getReasonPhrase()).thenReturn("");
+
+        PowerMockito.when(response.getStatusLine()).thenReturn(statusLine);
+        PowerMockito.when(response.getEntity()).thenReturn(null);
+
+        DefaultHttpClient client = PowerMockito.mock(DefaultHttpClient.class);
+
+        PowerMockito.whenNew(DefaultHttpClient.class).withNoArguments().thenReturn(client);
+
+        PowerMockito.when(client.execute(Mockito.any(HttpUriRequest.class))).thenReturn(response);
+
+        restClient.execute(IRestClient.RequestMethod.GET);
+
+        assertEquals("Unexpected response code", 200, restClient.getResponseCode());
+    }
+
+    @Test
+    public void execute_get_success() throws Exception
+    {
+        IRestClient restClient = new RestClient("dummy_url");
+
+        HttpResponse response = PowerMockito.mock(HttpResponse.class);
+
+        StatusLine statusLine = PowerMockito.mock(StatusLine.class);
+
+        PowerMockito.when(statusLine.getStatusCode()).thenReturn(200);
+        PowerMockito.when(statusLine.getReasonPhrase()).thenReturn("");
+
+        PowerMockito.when(response.getStatusLine()).thenReturn(statusLine);
+
+        HttpEntity entity = PowerMockito.mock(HttpEntity.class);
+
+        InputStream inputStream = new ByteArrayInputStream("Mary had a little lamb".getBytes());
+
+        PowerMockito.when(entity.getContent()).thenReturn(inputStream);
+
+        PowerMockito.when(response.getEntity()).thenReturn(entity);
+
+        DefaultHttpClient client = PowerMockito.mock(DefaultHttpClient.class);
+
+        PowerMockito.whenNew(DefaultHttpClient.class).withNoArguments().thenReturn(client);
+
+        PowerMockito.when(client.execute(Mockito.any(HttpUriRequest.class))).thenReturn(response);
+
+        restClient.execute(IRestClient.RequestMethod.GET);
+
+        assertEquals("Unexpected response code", 200, restClient.getResponseCode());
+        assertEquals("Unexpected error message", "", restClient.getErrorMessage());
+        assertEquals("Unexpected response", "Mary had a little lamb\n", restClient.getResponse());
     }
 }
