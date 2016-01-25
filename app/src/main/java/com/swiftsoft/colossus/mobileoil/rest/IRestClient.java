@@ -32,4 +32,6 @@ public interface IRestClient
     ArrayList<NameValuePair> getHeaders();
 
     ArrayList<NameValuePair> getParameters();
+
+    String getBody();
 }

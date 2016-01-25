@@ -119,6 +119,12 @@ public class RestClientEx implements IRestClient
         return null;
     }
 
+    @Override
+    public String getBody()
+    {
+        return this.body;
+    }
+
     private void executeGet(URL url)
     {
         try

@@ -125,4 +125,15 @@ public class RestClientTests
         assertEquals("Incorrect header name", "P2", restClient.getHeaders().get(1).getName());
         assertEquals("Incorrect header value", "V2", restClient.getHeaders().get(1).getValue());
     }
+
+    @Test
+    public void addition_of_body()
+    {
+        IRestClient restClient = new RestClient("dummy_url");
+
+        // Add body string
+        restClient.addBody("test_body");
+
+        assertEquals("Unexpected body value", "test_body", restClient.getBody());
+    }
 }

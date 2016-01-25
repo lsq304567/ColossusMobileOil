@@ -147,6 +147,12 @@ public class RestClient implements IRestClient
         return this.params;
     }
 
+    @Override
+    public String getBody()
+    {
+        return this.body;
+    }
+
     private void executeRequest(HttpUriRequest request)
     {
         CrashReporter.leaveBreadcrumb("RestClient: executeRequest");
