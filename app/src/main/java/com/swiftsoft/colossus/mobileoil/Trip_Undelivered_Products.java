@@ -103,6 +103,8 @@ public class Trip_Undelivered_Products extends MyFlipperView
 	{
 		try
 		{
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: resumeView");
+
 			// Resume updating.
 			infoview.resume();
 			
@@ -130,6 +132,8 @@ public class Trip_Undelivered_Products extends MyFlipperView
 	{
 		try
 		{
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: pauseView");
+
 			// Pause updating.
 			infoview.pause();
 		}
@@ -144,6 +148,8 @@ public class Trip_Undelivered_Products extends MyFlipperView
 	{
 		try
 		{
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: updateUI");
+
 			// Update the UI.
 			infoview.setDefaultTv1("Product delivery");
 			
@@ -164,7 +170,9 @@ public class Trip_Undelivered_Products extends MyFlipperView
 				{
 					// Skip non-deliverable products e.g. credit card fee?
 					if (line.Product.MobileOil == 3)
-						continue;
+                    {
+                        continue;
+                    }
 					
 					TableRow tr = (TableRow)inflater.inflate(R.layout.trip_undelivered_products_row, null);
 					tr.setTag(line);
@@ -174,15 +182,20 @@ public class Trip_Undelivered_Products extends MyFlipperView
 					rb.setOnClickListener(onRbClick);
 					
 					TextView tvOrderedQty = (TextView) tr.findViewById(R.id.trip_undelivered_products_row_ordered);
-					tvOrderedQty.setText(Integer.toString(line.OrderedQty));
+					tvOrderedQty.setText(String.format("%d", line.OrderedQty));
 					
 					TextView tvDeliveredQty = (TextView) tr.findViewById(R.id.trip_undelivered_products_row_delivered);
+
 					if (line.DeliveredQty != 0)
-						tvDeliveredQty.setText(Integer.toString(line.DeliveredQty));
+                    {
+                        tvDeliveredQty.setText(String.format("%d", line.DeliveredQty));
+                    }
 					
 					// Check if already delivered.
 					if (line.Delivered)
-						rb.setEnabled(false);
+                    {
+                        rb.setEnabled(false);
+                    }
 					
 					// Add the TableRow to the TableLayout
 			        tlProductsTable.addView(tr);
@@ -219,7 +232,7 @@ public class Trip_Undelivered_Products extends MyFlipperView
 			try
 			{
 				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onRbClick");
+				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onRbClick.onClick");
 
 				// Find TableRow.
 				TableRow myTr = (TableRow) paramView.getParent().getParent();
@@ -231,8 +244,9 @@ public class Trip_Undelivered_Products extends MyFlipperView
 
 					if (!tr.equals(myTr))
 					{
-						RadioButton rb = (RadioButton) tr.findViewById(R.id.trip_undelivered_products_row_radiobutton);
-						rb.setChecked(false);
+						RadioButton button = (RadioButton) tr.findViewById(R.id.trip_undelivered_products_row_radiobutton);
+
+						button.setChecked(false);
 					}
 				}
 	
@@ -250,6 +264,8 @@ public class Trip_Undelivered_Products extends MyFlipperView
 
 	private void checkIfLineChangedRequired()
 	{
+        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: checkIfLineChangeRequired");
+
 		// Check if any product is selected.
 		dbTripOrderLine orderLine = getSelectedOrderLine();
 		
@@ -259,7 +275,9 @@ public class Trip_Undelivered_Products extends MyFlipperView
 			
 		// Is bulk, then ignore line change logic.
 		if (tvDeliveryMethod.getText().equals("Bulk"))
-			return;
+        {
+            return;
+        }
 		
 		// Is a line change necessary?
 		if (lineProduct != null && orderLine != null)
@@ -280,15 +298,17 @@ public class Trip_Undelivered_Products extends MyFlipperView
 	{
 		try
 		{
-			for (int row = 1; row < tlProductsTable.getChildCount(); row++)
-			{
-				final TableRow tr = (TableRow) tlProductsTable.getChildAt(row);
-				
-				RadioButton rb = (RadioButton) tr.findViewById(R.id.trip_undelivered_products_row_radiobutton);
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: getSelectedOrderLine");
 
-				if (rb.isChecked())
+			for (int rowIndex = 1; rowIndex < tlProductsTable.getChildCount(); rowIndex++)
+			{
+				final TableRow row = (TableRow) tlProductsTable.getChildAt(rowIndex);
+				
+				RadioButton radioButton = (RadioButton) row.findViewById(R.id.trip_undelivered_products_row_radiobutton);
+
+				if (radioButton.isChecked())
 				{
-					return (dbTripOrderLine)tr.getTag();
+					return (dbTripOrderLine)row.getTag();
 				}
 			}
 		}
@@ -305,6 +325,8 @@ public class Trip_Undelivered_Products extends MyFlipperView
 		@Override
 		public void onClick(View v)
 		{
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onDeliveryMethodChange.onClick");
+
 			tvDeliveryMethod.setText(tvDeliveryMethod.getText().equals("Bulk") ? "Hose" : "Bulk");
 
 			checkIfLineChangedRequired();
@@ -319,7 +341,7 @@ public class Trip_Undelivered_Products extends MyFlipperView
 			try
 			{
 				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onChange");
+				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onLineProductChange.onClick");
 			
 				// Display msgPerformChecklist message and finish activity.
 				AlertDialog.Builder builder = new AlertDialog.Builder(trip);
@@ -357,7 +379,7 @@ public class Trip_Undelivered_Products extends MyFlipperView
 			try
 			{
 				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onBack");
+				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onBack.onClick");
 
 				if (Active.order.CodPoint == 2 && Active.order.getCodBeforeDeliveryValue().compareTo(BigDecimal.ZERO) > 0)
 				{
@@ -385,26 +407,27 @@ public class Trip_Undelivered_Products extends MyFlipperView
 			try
 			{
 				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onNext");
+				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onNext.onClick");
 
 				// Record line change
 				if (lineProduct == null)
 				{
-					CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onNext - LineProduct is null!!");
+					CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onNext.onClick - LineProduct is null!!");
 				}
 
                 dbProduct hosereelProduct = Active.vehicle.getHosereelProduct();
 				
 				if (hosereelProduct == null)
 				{
-					CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onNext - Hosereel Product is null!!");
+					CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onNext.onClick - Hosereel Product is null!!");
 				}
 
 				if (lineProduct != null && hosereelProduct != null)
 				{
 					if (!hosereelProduct.getId().equals(lineProduct.getId()))
 					{
-                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onNext - Recording Line Change ...");
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: onNext.onClick - Recording Line Change ...");
+
 						Active.vehicle.recordLineChange(lineProduct, Active.vehicle.C0_Capacity, "C");
 					}
 				}
@@ -456,13 +479,17 @@ public class Trip_Undelivered_Products extends MyFlipperView
 		@Override
 		public int getLitres()
 		{
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: callbacks.getLitres");
+
 			return Active.orderLine.OrderedQty;
 		}
 
 		@Override
 		public dbProduct getProduct()
 		{
-			return Active.orderLine.Product;
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: callbacks.getProduct");
+
+            return Active.orderLine.Product;
 		}
 
 		@Override
@@ -471,7 +498,7 @@ public class Trip_Undelivered_Products extends MyFlipperView
 			try
 			{
 				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: MeterMate onTicketComplete");
+				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: callbacks.onTicketComplete");
 
 				int litres;
 
@@ -515,6 +542,8 @@ public class Trip_Undelivered_Products extends MyFlipperView
 
         private void saveMeterMateData() throws Exception
         {
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: callbacks.saveMeterMateData");
+
             Intent i = new Intent(getContext(), ColossusIntentService.class);
 
             // Set the type of the data being stored
@@ -552,7 +581,7 @@ public class Trip_Undelivered_Products extends MyFlipperView
 			try
 			{
 				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: MeterMate onNextClicked");
+				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: callbacks.onNextClicked");
 
 				if (tvDeliveryMethod.getText().equals("Hose"))
 				{
