@@ -82,4 +82,47 @@ public class RestClientTests
         assertEquals("Incorrect parameter name", "P2", restClient.getParameters().get(1).getName());
         assertEquals("Incorrect parameter value", "V2", restClient.getParameters().get(1).getValue());
     }
+
+
+    @Test
+    public void addition_of_headers() throws Exception
+    {
+        // Create IRestClient for testing ...
+        IRestClient restClient = new RestClient("dummy_url");
+
+        // No headers expected
+        assertEquals("No headers expected", 0, restClient.getHeaders().size());
+
+        BasicNameValuePair pair;
+
+        pair = Mockito.mock(BasicNameValuePair.class);
+
+        // Add a single header
+        PowerMockito.whenNew(BasicNameValuePair.class).withArguments("P1", "V1").thenReturn(pair);
+
+        Mockito.when(pair.getName()).thenReturn("P1");
+        Mockito.when(pair.getValue()).thenReturn("V1");
+
+        restClient.addHeader("P1", "V1");
+
+        assertEquals("One header expected", 1, restClient.getHeaders().size());
+        assertEquals("Incorrect header name", "V1", restClient.getHeaders().get(0).getValue());
+        assertEquals("Incorrect header value", "P1", restClient.getHeaders().get(0).getName());
+
+        // Add another header
+        pair = Mockito.mock(BasicNameValuePair.class);
+
+        PowerMockito.whenNew(BasicNameValuePair.class).withArguments("P2", "V2").thenReturn(pair);
+
+        Mockito.when(pair.getName()).thenReturn("P2");
+        Mockito.when(pair.getValue()).thenReturn("V2");
+
+        restClient.addHeader("P2", "V2");
+
+        assertEquals("Two headers expected", 2, restClient.getHeaders().size());
+        assertEquals("Incorrect header name", "P1", restClient.getHeaders().get(0).getName());
+        assertEquals("Incorrect header value", "V1", restClient.getHeaders().get(0).getValue());
+        assertEquals("Incorrect header name", "P2", restClient.getHeaders().get(1).getName());
+        assertEquals("Incorrect header value", "V2", restClient.getHeaders().get(1).getValue());
+    }
 }
