@@ -2,6 +2,8 @@ package com.swiftsoft.colossus.mobileoil.rest;
 
 import android.content.ContentValues;
 
+import org.apache.http.NameValuePair;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,11 +12,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Map;
 
-/**
- * Created by Alan on 25/09/2015.
- */
 public class RestClientEx implements IRestClient
 {
     private String url;
@@ -105,6 +105,18 @@ public class RestClientEx implements IRestClient
                 break;
             }
         }
+    }
+
+    @Override
+    public ArrayList<NameValuePair> getHeaders()
+    {
+        return null;
+    }
+
+    @Override
+    public ArrayList<NameValuePair> getParameters()
+    {
+        return null;
     }
 
     private void executeGet(URL url)

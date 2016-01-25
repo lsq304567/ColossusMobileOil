@@ -25,8 +25,8 @@ import java.util.ArrayList;
 
 public class RestClient implements IRestClient
 {
-    private final ArrayList <NameValuePair> params;
-    private final ArrayList <NameValuePair> headers;
+    private final ArrayList<NameValuePair> params;
+    private final ArrayList<NameValuePair> headers;
     private String body;
 
     private final String url;
@@ -35,12 +35,6 @@ public class RestClient implements IRestClient
     private String message;
     private String response;
 
-//    public enum RequestMethod
-//    {
-//     GET,
-//     POST
-//    }
-    
     public String getResponse()
     {
         return response;
@@ -81,7 +75,7 @@ public class RestClient implements IRestClient
     public void execute(RequestMethod method) throws Exception
     {
         CrashReporter.leaveBreadcrumb("RestClient: execute");
-        
+
         switch(method)
         {
             case GET:
@@ -139,6 +133,18 @@ public class RestClient implements IRestClient
                 break;
             }
         }
+    }
+
+    @Override
+    public ArrayList<NameValuePair> getHeaders()
+    {
+        return this.headers;
+    }
+
+    @Override
+    public ArrayList<NameValuePair> getParameters()
+    {
+        return this.params;
     }
 
     private void executeRequest(HttpUriRequest request)
