@@ -36,7 +36,7 @@ public class Trip_Undelivered_Ticket extends MyFlipperView
 		try
 		{
 			// Leave breadcrumb.
-			CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: init");
+			CrashReporter.leaveBreadcrumb("Trip_Undelivered_Ticket: init");
 
 			// Store reference to Trip activity.
 			trip = (Trip)context;
@@ -51,10 +51,10 @@ public class Trip_Undelivered_Ticket extends MyFlipperView
 			btnBack = (Button)this.findViewById(R.id.trip_undelivered_ticket_back);
 			btnFinish = (Button)this.findViewById(R.id.trip_undelivered_ticket_finish);
 			
-			btnPrint.setOnClickListener(onPrint);
-			btnChange.setOnClickListener(onChange);
-			btnBack.setOnClickListener(onBack);
-			btnFinish.setOnClickListener(onFinish);
+			btnPrint.setOnClickListener(onClickListener);
+			btnChange.setOnClickListener(onClickListener);
+			btnBack.setOnClickListener(onClickListener);
+			btnFinish.setOnClickListener(onClickListener);
 		}
 		catch (Exception e)
 		{
@@ -67,6 +67,8 @@ public class Trip_Undelivered_Ticket extends MyFlipperView
 	{
 		try
 		{
+			CrashReporter.leaveBreadcrumb("Trip_Undelivered_Ticket: resumeView");
+
 			// Resume updating.
 			infoview.resume();
 
@@ -95,6 +97,8 @@ public class Trip_Undelivered_Ticket extends MyFlipperView
 	{
 		try
 		{
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_Ticket: pauseView");
+
 			// Pause updating.
 			infoview.pause();
 		}
@@ -109,6 +113,8 @@ public class Trip_Undelivered_Ticket extends MyFlipperView
 	{
 		try
 		{
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_ticket: updateUI");
+
 			// Set order no.
 			infoview.setDefaultTv1("Order " + order.InvoiceNo);
 			infoview.setDefaultTv2("");
@@ -119,92 +125,69 @@ public class Trip_Undelivered_Ticket extends MyFlipperView
 		}
 	}
 
-	private final OnClickListener onPrint = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: onPrint");
+    private final OnClickListener onClickListener = new OnClickListener()
+    {
+        @Override
+        public void onClick(View view)
+        {
+            try
+            {
+                switch (view.getId())
+                {
+                    case R.id.trip_undelivered_ticket_print:
 
-				// Print ticket.
-				Printing.ticket(trip, order);
-	
-				// Mark order as delivered.
-				if (Active.order != null)
-				{
-					trip.orderDelivered();
-				}
-	
-				btnBack.setEnabled(false);
-				btnFinish.setEnabled(true);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Ticket: onClick - print");
 
-	private final OnClickListener onChange = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: onChange");
+                        // Print ticket.
+                        Printing.ticket(trip, order);
 
-				// Show setting activity.
-				trip.changeSettings();
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                        // Mark order as delivered.
+                        if (Active.order != null)
+                        {
+                            trip.orderDelivered();
+                        }
 
-	private final OnClickListener onBack = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: onBack");
+                        btnBack.setEnabled(false);
+                        btnFinish.setEnabled(true);
 
-				// Switch views.
-				trip.selectView(Trip.ViewUndeliveredDeliveryNote, -1);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                        break;
 
-	private final OnClickListener onFinish = new OnClickListener()
-	{		
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Summary: onFinish");
+                    case R.id.trip_undelivered_ticket_change:
 
-				// Finally order is delivered!!
-				trip.selectView(Trip.ViewUndeliveredList, +1);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Ticket: onClick - change printer");
+
+                        // Show setting activity.
+                        trip.changeSettings();
+
+                        break;
+
+                    case R.id.trip_undelivered_ticket_back:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Ticket: onClick - back");
+
+                        // Switch views.
+                        trip.selectView(Trip.ViewUndeliveredDeliveryNote, -1);
+
+                        break;
+
+                    case R.id.trip_undelivered_ticket_finish:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Ticket: onClick - finish");
+
+                        // Finally order is delivered!!
+                        trip.selectView(Trip.ViewUndeliveredList, +1);
+
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                CrashReporter.logHandledException(e);
+            }
+        }
+    };
 }
