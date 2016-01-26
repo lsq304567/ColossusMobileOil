@@ -17,15 +17,11 @@ import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 public class Trip_Undelivered_List extends MyFlipperView
 {
 	private Trip trip;
-	private LayoutInflater inflater;
 	private UndeliveredAdapter adapter;
 	
 	private MyInfoView1Line infoview;
 	private ListView lvOrders;
-	private Button btnBack;
-	private Button btnDelivered;
-	private Button btnNext;
-	
+
 	public Trip_Undelivered_List(Context context)
 	{
 		super(context);
@@ -49,14 +45,14 @@ public class Trip_Undelivered_List extends MyFlipperView
 			trip = (Trip)context;
 	
 			// Inflate layout.
-			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.trip_undelivered_list, this, true);
 
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_undelivered_list_infoview);
 			lvOrders = (ListView)this.findViewById(R.id.trip_undelivered_list_orders);
-			btnBack = (Button)this.findViewById(R.id.trip_undelivered_list_back);
-			btnDelivered = (Button)this.findViewById(R.id.trip_undelivered_list_delivered);
-			btnNext = (Button)this.findViewById(R.id.trip_undelivered_list_next);
+			Button btnBack = (Button) this.findViewById(R.id.trip_undelivered_list_back);
+			Button btnDelivered = (Button) this.findViewById(R.id.trip_undelivered_list_delivered);
+			Button btnNext = (Button) this.findViewById(R.id.trip_undelivered_list_next);
 			
 			lvOrders.setOnItemClickListener(lvOnClick);
 			btnBack.setOnClickListener(onBack);
@@ -121,7 +117,7 @@ public class Trip_Undelivered_List extends MyFlipperView
 		}
 	}
 
-	OnItemClickListener lvOnClick = new OnItemClickListener() 
+	private final OnItemClickListener lvOnClick = new OnItemClickListener()
 	{
 		@Override
 		public void onItemClick(AdapterView<?> a, View v, int position, long id)
@@ -142,7 +138,7 @@ public class Trip_Undelivered_List extends MyFlipperView
 		}
 	};
 
-	OnClickListener onBack = new OnClickListener()
+	private final OnClickListener onBack = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -162,7 +158,7 @@ public class Trip_Undelivered_List extends MyFlipperView
 		}
 	};
 
-	OnClickListener onDelivered = new OnClickListener()
+	private final OnClickListener onDelivered = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -182,7 +178,7 @@ public class Trip_Undelivered_List extends MyFlipperView
 		}
 	};
 
-	OnClickListener onNext = new OnClickListener()
+	private final OnClickListener onNext = new OnClickListener()
 	{		
 		@Override
 		public void onClick(View paramView)
@@ -215,6 +211,7 @@ public class Trip_Undelivered_List extends MyFlipperView
 	{
 		// Start next order.
 		Active.order = dbTripOrder.load(dbTripOrder.class, id);
+		
 		if (Active.order != null)
 		{
 			// Mark the Active.order as Delivering.
