@@ -345,9 +345,9 @@ public class Trip_Undelivered_Products extends MyFlipperView
 			
 				// Display msgPerformChecklist message and finish activity.
 				AlertDialog.Builder builder = new AlertDialog.Builder(trip);
-				builder.setTitle("Line product correction");
-				builder.setMessage("This should ONLY be used if correcting an error. Do you wish to proceed?");
-				builder.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+				builder.setTitle(R.string.trip_undelivered_products_line_product_correction);
+				builder.setMessage(R.string.trip_undelivered_products_line_product_correction_query);
+				builder.setPositiveButton(R.string.trip_undelivered_products_positive_answer, new DialogInterface.OnClickListener()
 				{	
 					@Override
 					public void onClick(DialogInterface dialog, int which)
@@ -361,7 +361,7 @@ public class Trip_Undelivered_Products extends MyFlipperView
 						}
 					}
 				});
-				builder.setNegativeButton("No", null);
+				builder.setNegativeButton(R.string.trip_undelivered_products_negative_answer, null);
 				builder.show();
 			}
 			catch (Exception e)
