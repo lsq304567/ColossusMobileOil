@@ -25,4 +25,8 @@
     <string name="trip.undelivered.products.positive_answer">Yes</string>
     <string name="trip.undelivered.products.negative_answer">No</string>
 
+    <!-- Strings for Setup_License_device -->
+    <string name="setup.license.device.now.licensed">Device now licensed</string>
+    <string name="setup.license.device.now.checking.for.license">Checking for existing license</string>
+
 </resources>

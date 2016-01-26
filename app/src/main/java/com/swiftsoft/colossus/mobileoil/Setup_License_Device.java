@@ -19,7 +19,6 @@ import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 public class Setup_License_Device extends MyFlipperView
 {
 	private Setup setup;
-	private LayoutInflater inflater;
 
 	private MyInfoView1Line infoview;
 	private TextView tvMessage;
@@ -78,7 +77,7 @@ public class Setup_License_Device extends MyFlipperView
 			setup = (Setup)context;
 	
 			// Inflate layout.
-			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.setup_license_device, this, true);
 			
 			infoview = (MyInfoView1Line)this.findViewById(R.id.setup_license_device_infoview);
@@ -153,7 +152,7 @@ public class Setup_License_Device extends MyFlipperView
 		}
 	}
 
-    TextWatcher twPin = new TextWatcher()
+    private final TextWatcher twPin = new TextWatcher()
 	{
 		@Override
 		public void onTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3)
@@ -182,7 +181,7 @@ public class Setup_License_Device extends MyFlipperView
 		}
 	};
 
-	OnClickListener onRetry = new OnClickListener()
+	private final OnClickListener onRetry = new OnClickListener()
 	{		
 		@Override
 		public void onClick(View paramView)
@@ -205,7 +204,7 @@ public class Setup_License_Device extends MyFlipperView
 		}
 	};
 
-	OnClickListener onNext = new OnClickListener()
+	private final OnClickListener onNext = new OnClickListener()
 	{		
 		@Override
 		public void onClick(View paramView)
@@ -219,8 +218,7 @@ public class Setup_License_Device extends MyFlipperView
 				tvError.setVisibility(View.INVISIBLE);
 				btnNext.setEnabled(false);
 				
-				if (etPin.getVisibility() == View.VISIBLE &&
-					etPin.isEnabled())
+				if (etPin.getVisibility() == View.VISIBLE && etPin.isEnabled())
 				{
 					// Get company PIN.
 					int pin = 0;
@@ -229,7 +227,7 @@ public class Setup_License_Device extends MyFlipperView
 					{
 						pin = Integer.parseInt(etPin.getText().toString());
 					}
-					catch (Exception e)
+					catch (Exception ignored)
 					{
 					}
 	
@@ -267,7 +265,7 @@ public class Setup_License_Device extends MyFlipperView
 			if (setup.isDeviceLicensed())
 			{
 				// User may now proceed.
-				tvMessage.setText("Device now licensed");
+				tvMessage.setText(R.string.setup_license_device_now_licensed);
 				etPin.setEnabled(false);
 				btnNext.setEnabled(true);
 				return;
@@ -310,7 +308,7 @@ public class Setup_License_Device extends MyFlipperView
 			// Setup UI.
 			infoview.setDefaultTv1("App Setup");
 			infoview.setDefaultTv2("Device licensing");
-			tvMessage.setText("Checking for existing license");
+			tvMessage.setText(R.string.setup_license_device_now_checking_for_license);
 			tvPin.setVisibility(View.INVISIBLE);
 			etPin.setVisibility(View.INVISIBLE);
 			tvError.setVisibility(View.INVISIBLE);
