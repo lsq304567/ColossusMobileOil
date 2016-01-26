@@ -49,12 +49,14 @@ public class Trip_Undelivered_List extends MyFlipperView
 			inflater.inflate(R.layout.trip_undelivered_list, this, true);
 
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_undelivered_list_infoview);
-			lvOrders = (ListView)this.findViewById(R.id.trip_undelivered_list_orders);
-			Button btnBack = (Button) this.findViewById(R.id.trip_undelivered_list_back);
-			Button btnDelivered = (Button) this.findViewById(R.id.trip_undelivered_list_delivered);
-			Button btnNext = (Button) this.findViewById(R.id.trip_undelivered_list_next);
-			
+
+            lvOrders = (ListView)this.findViewById(R.id.trip_undelivered_list_orders);
+
 			lvOrders.setOnItemClickListener(lvOnClick);
+
+            Button btnBack = (Button) this.findViewById(R.id.trip_undelivered_list_back);
+            Button btnDelivered = (Button) this.findViewById(R.id.trip_undelivered_list_delivered);
+            Button btnNext = (Button) this.findViewById(R.id.trip_undelivered_list_next);
 
 			btnBack.setOnClickListener(onClickListener);
 			btnDelivered.setOnClickListener(onClickListener);
@@ -71,7 +73,9 @@ public class Trip_Undelivered_List extends MyFlipperView
 	{
 		try
 		{
-			// Resume updating.
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_List: resumeView");
+
+            // Resume updating.
 			infoview.resume();
 			
 			return true;
@@ -88,7 +92,9 @@ public class Trip_Undelivered_List extends MyFlipperView
 	{
 		try
 		{
-			// Pause updating.
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_List: pauseView");
+
+            // Pause updating.
 			infoview.pause();
 		}
 		catch (Exception e)
@@ -102,7 +108,9 @@ public class Trip_Undelivered_List extends MyFlipperView
 	{
 		try
 		{
-			// Refresh data.
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_List: updateUI");
+
+            // Refresh data.
 			adapter = new UndeliveredAdapter(trip, Active.trip.GetUndelivered());
 			
 			// Bind to listview.
@@ -197,7 +205,9 @@ public class Trip_Undelivered_List extends MyFlipperView
 
 	private void startOrder(long id)
 	{
-		// Start next order.
+        CrashReporter.leaveBreadcrumb("Trip_Undelivered_List: startOrder");
+
+        // Start next order.
 		Active.order = dbTripOrder.load(dbTripOrder.class, id);
 
 		if (Active.order != null)
