@@ -55,9 +55,10 @@ public class Trip_Undelivered_List extends MyFlipperView
 			Button btnNext = (Button) this.findViewById(R.id.trip_undelivered_list_next);
 			
 			lvOrders.setOnItemClickListener(lvOnClick);
-			btnBack.setOnClickListener(onBack);
-			btnDelivered.setOnClickListener(onDelivered);
-			btnNext.setOnClickListener(onNext);
+
+			btnBack.setOnClickListener(onClickListener);
+			btnDelivered.setOnClickListener(onClickListener);
+			btnNext.setOnClickListener(onClickListener);
 		}
 		catch (Exception e)
 		{
@@ -138,80 +139,67 @@ public class Trip_Undelivered_List extends MyFlipperView
 		}
 	};
 
-	private final OnClickListener onBack = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_List: onBack");
+    private final OnClickListener onClickListener = new OnClickListener()
+    {
+        @Override
+        public void onClick(View view)
+        {
+            try
+            {
+                switch (view.getId())
+                {
+                    case R.id.trip_undelivered_list_back:
 
-				// Switch views.
-				trip.selectView(Trip.ViewTransportDoc, -1);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_List: onClick - Back");
 
-	private final OnClickListener onDelivered = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_List: onDelivered");
+                        // Switch views.
+                        trip.selectView(Trip.ViewTransportDoc, -1);
 
-				// Show delivered dialog.
-				trip.showDelivered();
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                        break;
 
-	private final OnClickListener onNext = new OnClickListener()
-	{		
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_List: onNext");
+                    case R.id.trip_undelivered_list_delivered:
 
-				// Check if all delivered.
-				if (Active.trip.GetUndelivered().size() > 0)
-				{
-					trip.OrderId = adapter.getItemId(0);
-					startOrder(adapter.getItemId(0));
-				}
-				else
-				{
-					// All deliveries done; switch to stock at end view. 
-					trip.selectView(Trip.ViewStockEnd, +1);
-				}
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
-	
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_List: onClick - Delivered");
+
+                        // Show delivered dialog.
+                        trip.showDelivered();
+
+                        break;
+
+                    case R.id.trip_undelivered_list_next:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_List: onClick - Next");
+
+                        // Check if all delivered.
+                        if (Active.trip.GetUndelivered().size() > 0)
+                        {
+                            trip.OrderId = adapter.getItemId(0);
+                            startOrder(adapter.getItemId(0));
+                        }
+                        else
+                        {
+                            // All deliveries done; switch to stock at end view.
+                            trip.selectView(Trip.ViewStockEnd, +1);
+                        }
+
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                CrashReporter.logHandledException(e);
+            }
+        }
+    };
+
 	private void startOrder(long id)
 	{
 		// Start next order.
 		Active.order = dbTripOrder.load(dbTripOrder.class, id);
-		
+
 		if (Active.order != null)
 		{
 			// Mark the Active.order as Delivering.
