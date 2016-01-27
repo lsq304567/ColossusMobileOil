@@ -2084,14 +2084,14 @@ public class Printing
 
 				if (line.ticketAt15Degrees)
 				{
-					printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Volume delivered @ 15.0 C");
+					printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Volume delivered @ 15.0 °C");
 					finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, formatVolume.format(line.ticketNetVolume));
 				}
 				else
 				{
                     DecimalFormat formatTemperature = new DecimalFormat("#,##0.0");
 
-                    printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Volume delivered @ " + formatTemperature.format(line.ticketTemperature) + " C");
+                    printer.addTextLeft(Size.Normal, LEFT_COLUMN_X, finalPosition, LEFT_COLUMN_WIDTH, "Volume delivered @ " + formatTemperature.format(line.ticketTemperature) + " °C");
 					finalPosition = printer.addTextRight(Size.Normal, RIGHT_COLUMN_X, finalPosition, 250, formatVolume.format(line.ticketGrossVolume));
 				}
 			}
