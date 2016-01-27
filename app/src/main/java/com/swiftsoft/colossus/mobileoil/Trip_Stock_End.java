@@ -46,14 +46,14 @@ public class Trip_Stock_End extends MyFlipperView
 
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_stock_end_infoview);
 			stockSummary = (MyStockSummary)this.findViewById(R.id.trip_stock_end_summary);
-			
+
 			Button btnReturn = (Button) this.findViewById(R.id.trip_stock_end_return);
 			Button btnBack = (Button) this.findViewById(R.id.trip_stock_end_back);
 			Button btnNext = (Button) this.findViewById(R.id.trip_stock_end_next);
 	
-			btnReturn.setOnClickListener(onReturn);
-			btnBack.setOnClickListener(onBack);
-			btnNext.setOnClickListener(onNext);
+			btnReturn.setOnClickListener(onClickListener);
+			btnBack.setOnClickListener(onClickListener);
+			btnNext.setOnClickListener(onClickListener);
 		}
 		catch (Exception e)
 		{
@@ -119,64 +119,51 @@ public class Trip_Stock_End extends MyFlipperView
 			CrashReporter.logHandledException(e);
 		}
 	}
-	
-	private final OnClickListener onReturn = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Stock_End: onReturn");
-				
-				// Switch views.
-				trip.selectView(Trip.ViewStockReturn, +1);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
 
-	private final OnClickListener onBack = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Stock_End: onBack");
-				
-				// Switch views.
-				trip.selectView(Trip.ViewUndeliveredList, -1);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+    private final OnClickListener onClickListener = new OnClickListener()
+    {
+        @Override
+        public void onClick(View view)
+        {
+            try
+            {
+                switch (view.getId())
+                {
+                    case R.id.trip_stock_end_return:
 
-	private final OnClickListener onNext = new OnClickListener()
-	{		
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Stock_End: onNext");
-				
-				// Switch views.
-				trip.selectView(Trip.ViewTripReport, +1);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Stock_End: onClick - Return");
+
+                        // Switch views.
+                        trip.selectView(Trip.ViewStockReturn, +1);
+
+                        break;
+
+                    case R.id.trip_stock_end_back:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Stock_End: onClick - Back");
+
+                        // Switch views.
+                        trip.selectView(Trip.ViewUndeliveredList, -1);
+
+                        break;
+
+                    case R.id.trip_stock_end_next:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Stock_End: onClick - Next");
+
+                        // Switch views.
+                        trip.selectView(Trip.ViewTripReport, +1);
+
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                CrashReporter.logHandledException(e);
+            }
+        }
+    };
 }
