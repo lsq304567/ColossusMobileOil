@@ -46,6 +46,7 @@ public class Trip_Stock_End extends MyFlipperView
 
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_stock_end_infoview);
 			stockSummary = (MyStockSummary)this.findViewById(R.id.trip_stock_end_summary);
+			
 			Button btnReturn = (Button) this.findViewById(R.id.trip_stock_end_return);
 			Button btnBack = (Button) this.findViewById(R.id.trip_stock_end_back);
 			Button btnNext = (Button) this.findViewById(R.id.trip_stock_end_next);
@@ -65,6 +66,9 @@ public class Trip_Stock_End extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Stock_End: resumeView");
+
 			// Resume updating.
 			infoview.resume();
 			
@@ -82,6 +86,9 @@ public class Trip_Stock_End extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Stock_End: pauseView");
+
 			// Pause updating.
 			infoview.pause();
 		}
@@ -96,6 +103,9 @@ public class Trip_Stock_End extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Stock_End: updateUI");
+
 			// Trip no.
 			infoview.setDefaultTv1("Trip " + Active.trip.No);
 			
