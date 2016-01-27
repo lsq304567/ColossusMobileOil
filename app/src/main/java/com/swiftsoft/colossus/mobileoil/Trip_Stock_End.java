@@ -14,14 +14,10 @@ import com.swiftsoft.colossus.mobileoil.view.MyStockSummary;
 public class Trip_Stock_End extends MyFlipperView
 {
 	private Trip trip;
-	private LayoutInflater inflater;
-	
+
 	private MyInfoView1Line infoview;
 	private MyStockSummary stockSummary;
-	private Button btnReturn;
-	private Button btnBack;
-	private Button btnNext;
-	
+
 	public Trip_Stock_End(Context context)
 	{
 		super(context);
@@ -45,14 +41,14 @@ public class Trip_Stock_End extends MyFlipperView
 			trip = (Trip)context;
 	
 			// Inflate layout.
-			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.trip_stock_end, this, true);
 
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_stock_end_infoview);
 			stockSummary = (MyStockSummary)this.findViewById(R.id.trip_stock_end_summary);
-			btnReturn = (Button)this.findViewById(R.id.trip_stock_end_return);
-			btnBack = (Button)this.findViewById(R.id.trip_stock_end_back);
-			btnNext = (Button)this.findViewById(R.id.trip_stock_end_next);
+			Button btnReturn = (Button) this.findViewById(R.id.trip_stock_end_return);
+			Button btnBack = (Button) this.findViewById(R.id.trip_stock_end_back);
+			Button btnNext = (Button) this.findViewById(R.id.trip_stock_end_next);
 	
 			btnReturn.setOnClickListener(onReturn);
 			btnBack.setOnClickListener(onBack);
@@ -114,7 +110,7 @@ public class Trip_Stock_End extends MyFlipperView
 		}
 	}
 	
-	OnClickListener onReturn = new OnClickListener()
+	private final OnClickListener onReturn = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -134,7 +130,7 @@ public class Trip_Stock_End extends MyFlipperView
 		}
 	};
 
-	OnClickListener onBack = new OnClickListener()
+	private final OnClickListener onBack = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -154,7 +150,7 @@ public class Trip_Stock_End extends MyFlipperView
 		}
 	};
 
-	OnClickListener onNext = new OnClickListener()
+	private final OnClickListener onNext = new OnClickListener()
 	{		
 		@Override
 		public void onClick(View paramView)
