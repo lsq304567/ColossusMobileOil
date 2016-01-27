@@ -75,6 +75,9 @@ public class Trip_Stock_Start extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Stock_Start: resumeView");
+
 			// Resume updating.
 			infoview.resume();
 			
@@ -92,6 +95,9 @@ public class Trip_Stock_Start extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Stock_Start: pauseView");
+
 			// Pause updating.
 			infoview.pause();
 		}
@@ -106,6 +112,9 @@ public class Trip_Stock_Start extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Stock_Start: updateUI");
+
 			// Trip no.
 			infoview.setDefaultTv1("Trip " + Active.trip.No);
 			
