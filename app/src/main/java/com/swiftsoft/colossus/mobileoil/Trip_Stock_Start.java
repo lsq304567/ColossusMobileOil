@@ -51,6 +51,7 @@ public class Trip_Stock_Start extends MyFlipperView
 			
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_stock_start_infoview);
 			stockSummary = (MyStockSummary)this.findViewById(R.id.trip_stock_start_summary);
+
 			tvLoadingNote1 = (TextView)this.findViewById(R.id.trip_stock_start_loading_note1);
 			tvLoadingNote2 = (TextView)this.findViewById(R.id.trip_stock_start_loading_note2);
 
@@ -59,10 +60,10 @@ public class Trip_Stock_Start extends MyFlipperView
 			Button btnBack = (Button) this.findViewById(R.id.trip_stock_start_back);
 			Button btnNext = (Button) this.findViewById(R.id.trip_stock_start_next);
 	
-			btnLoad.setOnClickListener(onLoad);
-			btnReturn.setOnClickListener(onReturn);
-			btnBack.setOnClickListener(onBack);
-			btnNext.setOnClickListener(onNext);
+			btnLoad.setOnClickListener(onClickListener);
+			btnReturn.setOnClickListener(onClickListener);
+			btnBack.setOnClickListener(onClickListener);
+			btnNext.setOnClickListener(onClickListener);
 		}
 		catch (Exception e)
 		{
@@ -138,91 +139,72 @@ public class Trip_Stock_Start extends MyFlipperView
 			CrashReporter.logHandledException(e);
 		}
 	}
-	
-	private final OnClickListener onLoad = new OnClickListener() {
+
+	private final OnClickListener onClickListener = new OnClickListener()
+	{
 		@Override
-		public void onClick(View paramView)
+		public void onClick(View view)
 		{
 			try
 			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Stock_Start: onLoad");
+				switch (view.getId())
+                {
+                    case R.id.trip_stock_start_load:
 
-				// Switch views.
-				trip.selectView(Trip.ViewStockLoad, +1);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Stock_Start: onClick - Load");
 
-	private final OnClickListener onReturn = new OnClickListener() {
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Stock_Start: onReturn");
+                        // Switch views.
+                        trip.selectView(Trip.ViewStockLoad, +1);
 
-				// Switch views.
-				trip.selectView(Trip.ViewStockReturn, +1);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                        break;
 
-	private final OnClickListener onBack = new OnClickListener() {
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Stock_Start: onBack");
+                    case R.id.trip_stock_start_return:
 
-				// Check if user really wants to end the trip.
-				AlertDialog.Builder builder = new AlertDialog.Builder(trip);
-				builder.setTitle("Trip " + Active.trip.No);
-				builder.setMessage("Do you want to end this trip?");
-				
-				builder.setPositiveButton("Yes", new DialogInterface.OnClickListener()
-				{
-					@Override
-					public void onClick(DialogInterface dialog, int which)
-					{
-						trip.tripStopped();
-					}
-				});
-				
-				builder.setNegativeButton("No", null);
-				
-				AlertDialog alert = builder.create();
-				alert.show();
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Stock_Start: onClick - Return");
 
-	private final OnClickListener onNext = new OnClickListener() {
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Stock_Start: onNext");
+                        // Switch views.
+                        trip.selectView(Trip.ViewStockReturn, +1);
 
-				// Switch views.
-				trip.selectView(Trip.ViewTransportDoc, +1);
+                        break;
+
+                    case R.id.trip_stock_start_back:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Stock_Start: onClick - Back");
+
+                        // Check if user really wants to end the trip.
+                        AlertDialog.Builder builder = new AlertDialog.Builder(trip);
+                        builder.setTitle("Trip " + Active.trip.No);
+                        builder.setMessage("Do you want to end this trip?");
+
+                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                trip.tripStopped();
+                            }
+                        });
+
+                        builder.setNegativeButton("No", null);
+
+                        AlertDialog alert = builder.create();
+                        alert.show();
+
+                        break;
+
+                    case R.id.trip_stock_start_next:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Stock_Start: onClick - Next");
+
+                        // Switch views.
+                        trip.selectView(Trip.ViewTransportDoc, +1);
+
+                        break;
+                }
 			}
 			catch (Exception e)
 			{
