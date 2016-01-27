@@ -97,15 +97,15 @@ public class Trip_Stock_Return extends MyFlipperView
 			btnOK = (Button)this.findViewById(R.id.trip_stock_return_ok);
 			btnCancel = (Button)this.findViewById(R.id.trip_stock_return_cancel);
 	
-			btnChange.setOnClickListener(onChange);
+			btnChange.setOnClickListener(onClickListener);
 			rbMetered.setOnCheckedChangeListener(onRadioButtonCheckChanged);
-			rbMetered.setOnClickListener(onRadioButtonClicked);
+			rbMetered.setOnClickListener(onClickListener);
 			etPreset.addTextChangedListener(onLitresChanged);
 			rbUnmetered.setOnCheckedChangeListener(onRadioButtonCheckChanged);
-			rbUnmetered.setOnClickListener(onRadioButtonClicked);
+			rbUnmetered.setOnClickListener(onClickListener);
 			etLitres.addTextChangedListener(onLitresChanged);
-			btnOK.setOnClickListener(onOK);
-			btnCancel.setOnClickListener(onCancel);
+			btnOK.setOnClickListener(onClickListener);
+			btnCancel.setOnClickListener(onClickListener);
 		}
 		catch (Exception e)
 		{
@@ -243,6 +243,9 @@ public class Trip_Stock_Return extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Stock_Return: pauseView");
+
 			// Pause updating.
 			infoview.pause();
 		}
@@ -255,13 +258,19 @@ public class Trip_Stock_Return extends MyFlipperView
 	@Override
 	public void setPreviousView(String name) 
 	{
+		// Leave breadcrumb.
+		CrashReporter.leaveBreadcrumb("Trip_Stock_Return: setPreviousView");
+
 		// Store previous view.
 		previousViewName = name;
 	}
 
     private int getStockLevel(String productName)
     {
-        if (stockLevels.containsKey(productName))
+		// Leave breadcrumb.
+		CrashReporter.leaveBreadcrumb("Trip_Stock_Return: getStockLevel");
+
+		if (stockLevels.containsKey(productName))
         {
             return stockLevels.get(productName);
         }
@@ -271,7 +280,10 @@ public class Trip_Stock_Return extends MyFlipperView
 
     private int getRequiredAmount(String productName)
     {
-        if (requiredProducts.containsKey(productName))
+		// Leave breadcrumb.
+		CrashReporter.leaveBreadcrumb("Trip_Stock_Return: getRequiredAmount");
+
+		if (requiredProducts.containsKey(productName))
         {
             return requiredProducts.get(productName);
         }
@@ -396,34 +408,8 @@ public class Trip_Stock_Return extends MyFlipperView
     	}
     }
 
-	private final OnClickListener onRadioButtonClicked = new OnClickListener()
-	{
-		@Override
-		public void onClick(View v)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Stock_Return: onRadioButtonClicked");
-				
-				// Update other radio button.
-				if (v == rbMetered)
-                {
-                    rbUnmetered.setChecked(false);
-                }
-				else
-                {
-                    rbMetered.setChecked(false);
-                }
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
 
-   	private final OnCheckedChangeListener onRadioButtonCheckChanged = new OnCheckedChangeListener()
+	private final OnCheckedChangeListener onRadioButtonCheckChanged = new OnCheckedChangeListener()
 	{
 		@Override
 		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
@@ -432,155 +418,192 @@ public class Trip_Stock_Return extends MyFlipperView
 		}
 	};
 
-    private final TextWatcher onLitresChanged = new TextWatcher()
+	private final TextWatcher onLitresChanged = new TextWatcher()
 	{
 		@Override
 		public void onTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3)
 		{
 		}
-		
+
 		@Override
 		public void beforeTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3)
 		{
 		}
-		
+
 		@Override
 		public void afterTextChanged(Editable paramEditable)
 		{
 			validate();
 		}
 	};
-	    
-    private final OnClickListener onChange = new OnClickListener()
+
+	private final OnClickListener onClickListener = new OnClickListener()
 	{
 		@Override
-		public void onClick(View paramView)
+		public void onClick(View view)
 		{
 			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Stock_Return: onChange");
-				
-				// Check there are products.
-				if (!products.isEmpty())
-				{
-					int idx = -1;
-	
-					if (product != null)
-					{
-						// Find currently selected product.
-						for (int i = 0; i < products.size(); i++)
-						{
-							if (products.get(i).getId().equals(product.getId()))
-							{
-								idx = i;
-								break;
-							}
-						}
-					}
-	
-					// Move to next product.
-					idx++;
-					
-					// Change to next product.
-					if (idx != products.size())
-					{
-						product = products.get(idx);
-						
-						if (product.MobileOil == 1) // Metered
-						{
-							rbMetered.setChecked(true);
-							rbMetered.setEnabled(true);
-							
-							rbUnmetered.setChecked(false);
-						}
-						
-						if (product.MobileOil == 2) // Non-Metered
-						{
-							rbMetered.setChecked(false);
-							rbMetered.setEnabled(false);
-							
-							rbUnmetered.setChecked(true);
-						}
-					}
-					else
-						product = null;
-					
-					// Validate.
-					validate();
-					
-					// Reflect changes on UI.
-					updateUI();
-				}
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
+            {
+                switch (view.getId())
+                {
+                    case R.id.trip_stock_return_metered:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Stock_Return: onClick - RB Metered");
+
+                        rbUnmetered.setChecked(false);
+
+                        break;
+
+                    case R.id.trip_stock_return_unmetered:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Stock_Return: onClick - RB Unmetered");
+
+                        rbMetered.setChecked(false);
+
+                        break;
+
+                    case R.id.trip_stock_return_change:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Stock_Return: onClick - Change");
+
+                        // Check there are products.
+                        if (!products.isEmpty())
+                        {
+                            int idx = -1;
+
+                            if (product != null)
+                            {
+                                // Find currently selected product.
+                                for (int i = 0; i < products.size(); i++)
+                                {
+                                    if (products.get(i).getId().equals(product.getId()))
+                                    {
+                                        idx = i;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // Move to next product.
+                            idx++;
+
+                            // Change to next product.
+                            if (idx != products.size())
+                            {
+                                product = products.get(idx);
+
+                                if (product.MobileOil == 1) // Metered
+                                {
+                                    rbMetered.setChecked(true);
+                                    rbMetered.setEnabled(true);
+
+                                    rbUnmetered.setChecked(false);
+                                }
+
+                                if (product.MobileOil == 2) // Non-Metered
+                                {
+                                    rbMetered.setChecked(false);
+                                    rbMetered.setEnabled(false);
+
+                                    rbUnmetered.setChecked(true);
+                                }
+                            }
+                            else
+                                product = null;
+
+                            // Validate.
+                            validate();
+
+                            // Reflect changes on UI.
+                            updateUI();
+                        }
+
+                        break;
+
+                    case R.id.trip_stock_return_ok:
+
+                        String errorMessage = "";
+
+                        try
+                        {
+                            // Leave breadcrumb.
+                            CrashReporter.leaveBreadcrumb("Trip_Stock_Return: onClick - OK");
+
+                            //
+                            // Validation.
+                            //
+
+                            // Check product has been selected.
+                            if (product == null)
+                            {
+                                errorMessage = "No product selected";
+                                return;
+                            }
+
+                            if (rbMetered.isChecked())
+                            {
+                                if (litres <= 0)
+                                {
+                                    errorMessage = "Preset value is missing";
+                                    return;
+                                }
+
+                                // Switch to MeterMate view.
+                                trip.setMeterMateCallbacks(callbacks);
+                                trip.selectView(Trip.ViewUndeliveredMeterMate, +1);
+                            }
+                            else
+                            {
+                                // Complete product return.
+                                stockReturnComplete(litres, false);
+                            }
+                        }
+                        finally
+                        {
+                            // Show error message?
+                            if (errorMessage.length() > 0)
+                            {
+                                Toast t = Toast.makeText(trip, errorMessage, Toast.LENGTH_SHORT);
+                                t.setGravity(Gravity.CENTER, 0, 0);
+                                t.show();
+                            }
+                        }
+
+                        break;
+
+                    case R.id.trip_stock_return_cancel:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Stock_Return: onClick - Cancel");
+
+                        // Close or cancel?
+                        if (btnCancel.getText().equals("Close"))
+                        {
+                            // Close view.
+                            btnCancel.setEnabled(false);
+
+                            trip.selectView(previousViewName, -1);
+                        }
+                        else
+                        {
+                            // Cancel input.
+                            etPreset.setText("");
+                            etLitres.setText("");
+                        }
+
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                CrashReporter.logHandledException(e);
+            }
 		}
 	};
 
-	private final OnClickListener onOK = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			String errorMessage = "";
-			
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Stock_Return: onOK");
-
-				// Determine is metered.
-				boolean isMetered = rbMetered.isChecked();
-
-				//
-				// Validation.
-				//
-
-				// Check product has been selected.
-				if (product == null)
-				{
-					errorMessage = "No product selected";
-					return;
-				}
-				
-				if (isMetered)
-				{
-					if (litres <= 0)
-					{
-						errorMessage = "Preset value is missing";
-						return;
-					}
-
-					// Switch to MeterMate view.
-					trip.setMeterMateCallbacks(callbacks);
-					trip.selectView(Trip.ViewUndeliveredMeterMate, +1);
-				}
-				else
-				{
-					// Complete product return.
-					stockReturnComplete(litres, false);
-				}
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-			finally
-			{
-				// Show error message?
-				if (errorMessage.length() > 0)
-				{
-					Toast t = Toast.makeText(trip, errorMessage, Toast.LENGTH_SHORT);
-					t.setGravity(Gravity.CENTER, 0, 0);
-					t.show();
-				}
-			}
-		}
-	};
-	
 	private final Trip_MeterMate_Callbacks callbacks = new Trip_MeterMate_Callbacks()
 	{
 		@Override
@@ -661,36 +684,4 @@ public class Trip_Stock_Return extends MyFlipperView
 			CrashReporter.logHandledException(e);
 		}
 	}
-
-	private final OnClickListener onCancel = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Stock_Return: onCancel");
-
-				// Close or cancel?
-				if (btnCancel.getText().equals("Close"))
-				{
-					// Close view.
-					btnCancel.setEnabled(false);
-					
-					trip.selectView(previousViewName, -1);
-				}
-				else
-				{
-					// Cancel input.
-					etPreset.setText("");
-					etLitres.setText("");
-				}
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
 }
