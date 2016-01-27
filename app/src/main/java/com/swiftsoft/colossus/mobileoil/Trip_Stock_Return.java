@@ -32,14 +32,12 @@ import java.util.List;
 public class Trip_Stock_Return extends MyFlipperView
 {
 	private Trip trip;
-	private LayoutInflater inflater;
-	
+
 	private dbProduct product;
 	private int litres;
 
 	private MyInfoView1Line infoview;
 	private TextView tvProduct;
-	private Button btnChange;	
 	private RadioButton rbMetered;
 	private TextView tvPreset;
 	private MyEditText etPreset;
@@ -51,7 +49,7 @@ public class Trip_Stock_Return extends MyFlipperView
 	
 	private List<dbProduct> products;
 
-	private DecimalFormat decf;
+	private DecimalFormat decimalFormat;
 	private String previousViewName;
 
 	private Hashtable<String, Integer> requiredProducts;
@@ -80,16 +78,16 @@ public class Trip_Stock_Return extends MyFlipperView
 			trip = (Trip)context;
 	
 			// Setup a standard decimal format.
-			decf = new DecimalFormat("#,##0");
+			decimalFormat = new DecimalFormat("#,##0");
 	
 			// Inflate layout.
-			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.trip_stock_return, this, true);
 			
 	    	// Find UI controls.
 	    	infoview = (MyInfoView1Line)this.findViewById(R.id.trip_stock_return_infoview);
 			tvProduct = (TextView)this.findViewById(R.id.trip_stock_return_product);
-			btnChange = (Button)this.findViewById(R.id.trip_stock_return_change);
+			Button btnChange = (Button) this.findViewById(R.id.trip_stock_return_change);
 			rbMetered = (RadioButton)this.findViewById(R.id.trip_stock_return_metered);
 			tvPreset = (TextView)this.findViewById(R.id.trip_stock_return_preset_label);
 			etPreset = (MyEditText)this.findViewById(R.id.trip_stock_return_preset);
@@ -312,12 +310,12 @@ public class Trip_Stock_Return extends MyFlipperView
                     int toReturn = stockLevel - requiredAmount;
 
                     // Return product.
-                    tvProduct.setText(product.Desc + " " + toReturn + " litres");
+                    tvProduct.setText(String.format("%s %d litres", product.Desc, toReturn));
                 }
                 else
                 {
                     // Return product.
-                    tvProduct.setText(product.Desc + " 0 litres");
+                    tvProduct.setText(String.format("%s 0 litres", product.Desc));
                 }
             }
 		}
@@ -348,7 +346,7 @@ public class Trip_Stock_Return extends MyFlipperView
 
                     if (text.length() > 0)
                     {
-                        litres = decf.parse(text).intValue();
+                        litres = decimalFormat.parse(text).intValue();
                     }
                 }
 				catch (ParseException e)
@@ -375,7 +373,7 @@ public class Trip_Stock_Return extends MyFlipperView
 
                     if (text.length() > 0)
                     {
-                        litres = decf.parse(text).intValue();
+                        litres = decimalFormat.parse(text).intValue();
                     }
                 }
 				catch (ParseException e)
@@ -389,7 +387,7 @@ public class Trip_Stock_Return extends MyFlipperView
 				etLitres.setVisibility(View.INVISIBLE);
 			}
 
-            btnOK.setEnabled(litres <= 0 ? false : true);
+            btnOK.setEnabled(litres > 0);
             btnCancel.setText(litres <= 0 ? "Close" : "Cancel");
     	}
     	catch (Exception e)
@@ -398,7 +396,7 @@ public class Trip_Stock_Return extends MyFlipperView
     	}
     }
 
-	OnClickListener onRadioButtonClicked = new OnClickListener()
+	private final OnClickListener onRadioButtonClicked = new OnClickListener()
 	{
 		@Override
 		public void onClick(View v)
@@ -408,7 +406,7 @@ public class Trip_Stock_Return extends MyFlipperView
 				// Leave breadcrumb.
 				CrashReporter.leaveBreadcrumb("Trip_Stock_Return: onRadioButtonClicked");
 				
-				// Update other radiobutton.
+				// Update other radio button.
 				if (v == rbMetered)
                 {
                     rbUnmetered.setChecked(false);
@@ -425,7 +423,7 @@ public class Trip_Stock_Return extends MyFlipperView
 		}
 	};
 
-   	OnCheckedChangeListener onRadioButtonCheckChanged = new OnCheckedChangeListener()
+   	private final OnCheckedChangeListener onRadioButtonCheckChanged = new OnCheckedChangeListener()
 	{
 		@Override
 		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
@@ -434,7 +432,7 @@ public class Trip_Stock_Return extends MyFlipperView
 		}
 	};
 
-    TextWatcher onLitresChanged = new TextWatcher()
+    private final TextWatcher onLitresChanged = new TextWatcher()
 	{
 		@Override
 		public void onTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3)
@@ -453,7 +451,7 @@ public class Trip_Stock_Return extends MyFlipperView
 		}
 	};
 	    
-    OnClickListener onChange = new OnClickListener()
+    private final OnClickListener onChange = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -522,7 +520,7 @@ public class Trip_Stock_Return extends MyFlipperView
 		}
 	};
 
-	OnClickListener onOK = new OnClickListener()
+	private final OnClickListener onOK = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -583,7 +581,7 @@ public class Trip_Stock_Return extends MyFlipperView
 		}
 	};
 	
-	Trip_MeterMate_Callbacks callbacks = new Trip_MeterMate_Callbacks()
+	private final Trip_MeterMate_Callbacks callbacks = new Trip_MeterMate_Callbacks()
 	{
 		@Override
 		public int getLitres()
@@ -664,7 +662,7 @@ public class Trip_Stock_Return extends MyFlipperView
 		}
 	}
 
-	OnClickListener onCancel = new OnClickListener()
+	private final OnClickListener onCancel = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
