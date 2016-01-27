@@ -320,7 +320,7 @@ public class dbVehicle extends Model
 	}
 
 	// If stockbycompartment is false.
-	public void recordReturn(dbProduct product, int litres, boolean viaMeterMate)
+	public void recordReturn(dbProduct product, int litres, boolean viaMeterMate, String notes)
 	{
 		long ticketNo = 0;
 		
@@ -336,6 +336,7 @@ public class dbVehicle extends Model
 		dbTripStock lcTripStock = new dbTripStock();
 
 		lcTripStock.Trip = Active.trip;
+
 		lcTripStock.Type = "Return";
 		lcTripStock.Date = Utils.getCurrentTime();
 		lcTripStock.InvoiceNo = "";
@@ -346,7 +347,8 @@ public class dbVehicle extends Model
 
 		lcTripStock.Description = ticketNo == 0 ? "Returned " + litres + " of " + product.Desc : "Ticket #" + ticketNo + " returned " + litres + " of " + product.Desc;
 		
-		lcTripStock.Notes = "";
+		lcTripStock.Notes = notes;
+
 		lcTripStock.save();
 	}
 
@@ -578,6 +580,7 @@ public class dbVehicle extends Model
 			
 			// Write stock transaction.
 			dbTripStock lcTripStock = new dbTripStock();
+
 			lcTripStock.Trip = Active.trip;
 			lcTripStock.Type = "Payment";
 			lcTripStock.Date = Utils.getCurrentTime();
@@ -587,6 +590,7 @@ public class dbVehicle extends Model
 			lcTripStock.TicketNo = 0;
 			lcTripStock.Description = desc;
 			lcTripStock.Notes = notes;
+
 			lcTripStock.save();
 		}
 	}	

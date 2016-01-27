@@ -634,6 +634,21 @@ public class Trip_Stock_Return extends MyFlipperView
                                 if (litres <= 0)
                                 {
                                     errorMessage = "Preset value is missing";
+
+                                    return;
+                                }
+
+                                if (!rbReturnTank.isChecked() && !rbReturnVehicle.isChecked() && !rbReturnOther.isChecked())
+                                {
+                                    errorMessage = "Return destination not chosen";
+
+                                    return;
+                                }
+
+                                if (etReturnDetail.getText().length() <= 0)
+                                {
+                                    errorMessage = "No return details completed";
+
                                     return;
                                 }
 
@@ -643,6 +658,20 @@ public class Trip_Stock_Return extends MyFlipperView
                             }
                             else
                             {
+                                if (!rbReturnTank.isChecked() && !rbReturnVehicle.isChecked() && !rbReturnOther.isChecked())
+                                {
+                                    errorMessage = "Return destination not chosen";
+
+                                    return;
+                                }
+
+                                if (etReturnDetail.getText().length() <= 0)
+                                {
+                                    errorMessage = "No return details completed";
+
+                                    return;
+                                }
+
                                 // Complete product return.
                                 stockReturnComplete(litres, false);
                             }
@@ -754,9 +783,27 @@ public class Trip_Stock_Return extends MyFlipperView
 		{
 			// Leave breadcrumb.
 			CrashReporter.leaveBreadcrumb("Trip_Stock_Return: stockReturnComplete");
+
+            // Construct the note to print
+            StringBuilder builder = new StringBuilder();
+
+            if (rbReturnTank.isChecked())
+            {
+                builder.append("Returned to Tank ");
+            }
+            else if (rbReturnVehicle.isChecked())
+            {
+                builder.append("Returned to Vehicle ");
+            }
+            else if (rbReturnOther.isChecked())
+            {
+                builder.append("Returned to Other location ");
+            }
+
+            builder.append(etReturnDetail.getText().toString());
 			
 			// Update stock locally.
-			Active.vehicle.recordReturn(product, litres, viaMeterMate);
+			Active.vehicle.recordReturn(product, litres, viaMeterMate, builder.toString());
 			
 			// Update stock on server.
 			trip.sendVehicleStock();
