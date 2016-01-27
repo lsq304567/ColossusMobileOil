@@ -17,110 +17,212 @@
             android:id="@+id/trip_stock_return_infoview"
 			android:layout_width="fill_parent"
 			android:layout_height="40dp" />
-	
-	    <TableLayout
-	        android:layout_width="fill_parent"
-	        android:layout_height="0dip"
-	        android:layout_weight="1"
-	        android:layout_marginTop="5dp"
-	        android:padding="10dp">
+
+		<ScrollView
+			android:layout_width="fill_parent"
+			android:layout_height="0dip"
+			android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+				<TableLayout
+				android:layout_width="fill_parent"
+				android:layout_height="0dip"
+				android:layout_weight="1"
+				android:layout_marginTop="0dp"
+				android:padding="10dp">
+
+					<TableRow
+					android:id="@+id/trip_stock_return_product_row"
+					android:layout_marginTop="0dp"
+					android:layout_marginBottom="0dp" >
+
+						<LinearLayout
+							android:layout_width="0px"
+							android:layout_height="wrap_content"
+							android:layout_gravity="center_vertical"
+							android:layout_weight="4"
+							android:orientation="vertical">
+
+							<TextView
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="Product"
+								android:textSize="16sp" />
+
+							<TextView
+								android:id="@+id/trip_stock_return_product"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:text="None"
+								android:textSize="16sp"
+								android:textStyle="bold" />
+
+						</LinearLayout>
+
+						<Button
+							android:id="@+id/trip_stock_return_change"
+							android:layout_width="0px"
+							android:layout_height="wrap_content"
+							android:layout_gravity="top"
+							android:layout_weight="4"
+							android:text="Change"
+							android:textSize="16sp" />
+
+					</TableRow>
+
+					<TableRow>
+
+						<RadioButton
+							android:id="@+id/trip_stock_return_metered"
+							android:layout_width="0px"
+							android:layout_weight="4"
+							android:layout_height="wrap_content"
+							android:text="Metered" />
+
+						<TextView
+							android:id="@+id/trip_stock_return_preset_label"
+							android:layout_width="0px"
+							android:layout_weight="1.6"
+							android:layout_height="wrap_content"
+							android:text="Preset"
+							android:textSize="16sp" />
+
+						<EditText
+							android:id="@+id/trip_stock_return_preset"
+							android:layout_width="0px"
+							android:layout_weight="2.4"
+							android:layout_height="wrap_content"
+							android:singleLine="true"
+							android:inputType="number"/>
+
+						<!--<com.swiftsoft.colossus.mobileoil.view.MyEditText-->
+							<!--android:id="@+id/trip_stock_return_preset"-->
+							<!--android:layout_width="0px"-->
+							<!--android:layout_weight="2.4"-->
+							<!--android:layout_height="wrap_content"-->
+							<!--android:singleLine="true"-->
+                            <!--android:inputType="number"/>-->
+
+					</TableRow>
+
+					<TableRow>
+
+						<RadioButton
+							android:id="@+id/trip_stock_return_unmetered"
+							android:layout_width="0px"
+							android:layout_weight="4"
+							android:layout_height="wrap_content"
+							android:text="Unmetered" />
+
+						<TextView
+							android:id="@+id/trip_stock_return_litres_label"
+							android:layout_width="0px"
+							android:layout_weight="1.6"
+							android:layout_height="wrap_content"
+							android:text="Quantity"
+							android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/trip_stock_return_litres"
+                            android:layout_width="0px"
+                            android:layout_weight="2.4"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:inputType="number"/>
+
+                        <!--<com.swiftsoft.colossus.mobileoil.view.MyEditText-->
+							<!--android:id="@+id/trip_stock_return_litres"-->
+							<!--android:layout_width="0px"-->
+							<!--android:layout_weight="2.4"-->
+							<!--android:layout_height="wrap_content"-->
+							<!--android:singleLine="true"-->
+                            <!--android:inputType="number"/>-->
+
+					</TableRow>
+
+				</TableLayout>
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:layout_weight="1">
+
+					<TextView
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:text="Return Destination?"
+						android:gravity="center_horizontal"
+						android:textSize="20sp"
+						android:paddingTop="0dp"
+						android:paddingBottom="5dp">
+
+					</TextView>
+
+					<LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:orientation="horizontal"
+                        android:layout_weight="5">
+
+                        <!-- Group of radio buttons with reasons for undelivery -->
+                        <RadioGroup
+                            android:id="@+id/trip_stock_return_location"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:orientation="vertical"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp">
+
+                            <RadioButton
+                                android:id="@+id/trip_stock_return_location_tank"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Tank"/>
+
+                            <RadioButton
+                                android:id="@+id/trip_stock_return_location_vehicle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Vehicle"/>
+
+                            <RadioButton
+                                android:id="@+id/trip_stock_return_location_other"                       android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Other"/>
+
+                        </RadioGroup>
+
+                        <EditText
+                            android:id="@+id/trip_stock_return_location_details"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:textSize="18sp"
+                            android:gravity="center"/>
+
+					</LinearLayout>
+
+				</LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
 	    
-	        <TableRow 
-	            android:id="@+id/trip_stock_return_product_row"
-	            android:layout_marginTop="20dp"
-	            android:layout_marginBottom="20dp" >
-
-	            <LinearLayout 
-	                android:layout_width="0px"
-	                android:layout_height="wrap_content"
-	                android:layout_gravity="center_vertical"
-	                android:layout_weight="4"
-	                android:orientation="vertical">
-	            
-		            <TextView
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content"
-		                android:text="Product"
-		                android:textSize="16sp" />
-	
-		            <TextView
-		                android:id="@+id/trip_stock_return_product"
-		                android:layout_width="wrap_content"
-		                android:layout_height="wrap_content"
-		                android:text="None"
-		                android:textSize="16sp"
-		                android:textStyle="bold" />
-
-	            </LinearLayout>
-	            	            
-	            <Button
-	                android:id="@+id/trip_stock_return_change"
-	                android:layout_width="0px"
-	                android:layout_height="wrap_content"
-	                android:layout_gravity="top"
-	                android:layout_weight="4"
-	                android:text="Change"
-	                android:textSize="16sp" />
-	            
-	        </TableRow>
-	        
-	        <TableRow>
-	        	        
-		    	<RadioButton 
-				    android:id="@+id/trip_stock_return_metered" 
-			        android:layout_width="0px"
-			        android:layout_weight="4"
-			        android:layout_height="wrap_content"
-			        android:text="Metered" />
-
-				<TextView
-					android:id="@+id/trip_stock_return_preset_label"
-			        android:layout_width="0px"
-			        android:layout_weight="1.6"
-					android:layout_height="wrap_content"
-					android:text="Preset"
-					android:textSize="16sp" />
-		
-				<com.swiftsoft.colossus.mobileoil.view.MyEditText
-					android:id="@+id/trip_stock_return_preset"
-			        android:layout_width="0px"
-			        android:layout_weight="2.4"
-					android:layout_height="wrap_content"
-					android:singleLine="true" />
-		    	
-		    </TableRow>
-	    	
-	        <TableRow>
-	            
-				<RadioButton
-				    android:id="@+id/trip_stock_return_unmetered" 
-			        android:layout_width="0px"
-			        android:layout_weight="4"
-			        android:layout_height="wrap_content"
-			        android:text="Unmetered" />
-				            	  
-				<TextView
-					android:id="@+id/trip_stock_return_litres_label"
-					android:layout_width="0px"
-					android:layout_weight="1.6"
-					android:layout_height="wrap_content"
-					android:text="Quantity"
-					android:textSize="16sp" />
-		
-				<com.swiftsoft.colossus.mobileoil.view.MyEditText
-					android:id="@+id/trip_stock_return_litres"
-					android:layout_width="0px"
-					android:layout_weight="2.4"
-					android:layout_height="wrap_content"
-					android:singleLine="true" />
-				
-			</TableRow>
-			
-	    </TableLayout>
-	    
-		<com.swiftsoft.colossus.mobileoil.view.MyNumericKeypad
-			android:layout_height="wrap_content"
-			android:layout_width="fill_parent" />
+		<!--<com.swiftsoft.colossus.mobileoil.view.MyNumericKeypad-->
+            <!--android:id="@+id/trip_stock_return_numeric_keypad"-->
+			<!--android:layout_height="wrap_content"-->
+			<!--android:layout_width="fill_parent" />-->
     		
 	    <LinearLayout
 			android:layout_width="match_parent"

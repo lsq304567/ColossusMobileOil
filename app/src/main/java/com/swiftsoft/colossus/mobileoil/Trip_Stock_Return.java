@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,9 +21,9 @@ import com.swiftsoft.colossus.mobileoil.database.model.dbProduct;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrder;
 import com.swiftsoft.colossus.mobileoil.database.model.dbTripOrderLine;
 import com.swiftsoft.colossus.mobileoil.database.model.dbVehicleStock;
-import com.swiftsoft.colossus.mobileoil.view.MyEditText;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
+import com.swiftsoft.colossus.mobileoil.view.MyNumericKeypad;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -40,12 +41,20 @@ public class Trip_Stock_Return extends MyFlipperView
 	private TextView tvProduct;
 	private RadioButton rbMetered;
 	private TextView tvPreset;
-	private MyEditText etPreset;
+	private EditText etPreset;
 	private RadioButton rbUnmetered;
 	private TextView tvLitres;
-	private MyEditText etLitres;
+	private EditText etLitres;
 	private Button btnOK;
 	private Button btnCancel;
+
+	// Radio Buttons for return destination
+	private RadioButton rbReturnTank;
+	private RadioButton rbReturnVehicle;
+	private RadioButton rbReturnOther;
+
+	// Edit Text for return detail
+	private EditText etReturnDetail;
 	
 	private List<dbProduct> products;
 
@@ -54,6 +63,8 @@ public class Trip_Stock_Return extends MyFlipperView
 
 	private Hashtable<String, Integer> requiredProducts;
 	private Hashtable<String, Integer> stockLevels;
+
+    MyNumericKeypad keypad;
 
 	public Trip_Stock_Return(Context context)
 	{
@@ -90,22 +101,40 @@ public class Trip_Stock_Return extends MyFlipperView
 			Button btnChange = (Button) this.findViewById(R.id.trip_stock_return_change);
 			rbMetered = (RadioButton)this.findViewById(R.id.trip_stock_return_metered);
 			tvPreset = (TextView)this.findViewById(R.id.trip_stock_return_preset_label);
-			etPreset = (MyEditText)this.findViewById(R.id.trip_stock_return_preset);
+			etPreset = (EditText)this.findViewById(R.id.trip_stock_return_preset);
 			rbUnmetered = (RadioButton)this.findViewById(R.id.trip_stock_return_unmetered);
 			tvLitres = (TextView)this.findViewById(R.id.trip_stock_return_litres_label);
-			etLitres = (MyEditText)this.findViewById(R.id.trip_stock_return_litres);
+			etLitres = (EditText)this.findViewById(R.id.trip_stock_return_litres);
 			btnOK = (Button)this.findViewById(R.id.trip_stock_return_ok);
 			btnCancel = (Button)this.findViewById(R.id.trip_stock_return_cancel);
+
+            rbReturnTank = (RadioButton)this.findViewById(R.id.trip_stock_return_location_tank);
+            rbReturnVehicle = (RadioButton)this.findViewById(R.id.trip_stock_return_location_vehicle);
+            rbReturnOther = (RadioButton)this.findViewById(R.id.trip_stock_return_location_other);
+
+            etReturnDetail = (EditText)this.findViewById(R.id.trip_stock_return_location_details);
 	
 			btnChange.setOnClickListener(onClickListener);
 			rbMetered.setOnCheckedChangeListener(onRadioButtonCheckChanged);
 			rbMetered.setOnClickListener(onClickListener);
-			etPreset.addTextChangedListener(onLitresChanged);
+			etPreset.addTextChangedListener(onTextChanged);
 			rbUnmetered.setOnCheckedChangeListener(onRadioButtonCheckChanged);
 			rbUnmetered.setOnClickListener(onClickListener);
-			etLitres.addTextChangedListener(onLitresChanged);
+			etLitres.addTextChangedListener(onTextChanged);
 			btnOK.setOnClickListener(onClickListener);
 			btnCancel.setOnClickListener(onClickListener);
+
+            rbReturnTank.setOnCheckedChangeListener(onRadioButtonCheckChanged);
+            rbReturnVehicle.setOnCheckedChangeListener(onRadioButtonCheckChanged);
+            rbReturnOther.setOnCheckedChangeListener(onRadioButtonCheckChanged);
+
+            etReturnDetail.addTextChangedListener(onDetailsChanged);
+
+//            etReturnDetail.setOnClickListener(onClickListener);
+//            etPreset.setOnClickListener(onClickListener);
+//            etLitres.setOnClickListener(onClickListener);
+//
+//            keypad = (MyNumericKeypad)this.findViewById(R.id.trip_stock_return_numeric_keypad);
 		}
 		catch (Exception e)
 		{
@@ -343,13 +372,15 @@ public class Trip_Stock_Return extends MyFlipperView
     	{
             CrashReporter.leaveBreadcrumb("Trip_Stock_Return: validate");
 
+            boolean isValid = true;
+
 	    	litres = 0;
 	    	
 			if (rbMetered.isChecked())
 			{
 				tvPreset.setVisibility(View.VISIBLE);
 				etPreset.setVisibility(View.VISIBLE);
-				etPreset.requestFocus();
+				//etPreset.requestFocus();
 				
 				// Check if preset value is valid.
 				try
@@ -376,7 +407,7 @@ public class Trip_Stock_Return extends MyFlipperView
 			{
 				tvLitres.setVisibility(View.VISIBLE);
 				etLitres.setVisibility(View.VISIBLE);
-				etLitres.requestFocus();
+				//etLitres.requestFocus();
 				
 				// Check if unmetered value is valid.
 				try
@@ -399,8 +430,29 @@ public class Trip_Stock_Return extends MyFlipperView
 				etLitres.setVisibility(View.INVISIBLE);
 			}
 
-            btnOK.setEnabled(litres > 0);
-            btnCancel.setText(litres <= 0 ? "Close" : "Cancel");
+            // If litres is more than zero then valid
+            isValid = litres > 0;
+
+            if (isValid)
+            {
+                if (rbReturnTank.isChecked() || rbReturnVehicle.isChecked() || rbReturnOther.isChecked())
+                {
+                    if (etReturnDetail.getText().length() <= 0)
+                    {
+                        isValid = false;
+                    }
+                }
+                else
+                {
+                    isValid = false;
+                }
+            }
+
+            btnOK.setEnabled(isValid);
+            btnCancel.setText(isValid ? "Cancel" : "Close");
+
+//            btnOK.setEnabled(litres > 0);
+//            btnCancel.setText(litres <= 0 ? "Close" : "Cancel");
     	}
     	catch (Exception e)
     	{
@@ -418,7 +470,7 @@ public class Trip_Stock_Return extends MyFlipperView
 		}
 	};
 
-	private final TextWatcher onLitresChanged = new TextWatcher()
+	private final TextWatcher onTextChanged = new TextWatcher()
 	{
 		@Override
 		public void onTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3)
@@ -437,6 +489,27 @@ public class Trip_Stock_Return extends MyFlipperView
 		}
 	};
 
+	private final TextWatcher onDetailsChanged = new TextWatcher()
+	{
+		@Override
+		public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
+		{
+
+		}
+
+		@Override
+		public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
+		{
+
+		}
+
+		@Override
+		public void afterTextChanged(Editable editable)
+		{
+			validate();
+		}
+	};
+
 	private final OnClickListener onClickListener = new OnClickListener()
 	{
 		@Override
@@ -446,6 +519,19 @@ public class Trip_Stock_Return extends MyFlipperView
             {
                 switch (view.getId())
                 {
+//                    case R.id.trip_stock_return_litres:
+//                    case R.id.trip_stock_return_preset:
+//
+//                        keypad.setVisibility(VISIBLE);
+//
+//                        break;
+//
+//                    case R.id.trip_stock_return_location_details:
+//
+//                        keypad.setVisibility(INVISIBLE);
+//
+//                        break;
+//
                     case R.id.trip_stock_return_metered:
 
                         // Leave breadcrumb.
@@ -592,6 +678,11 @@ public class Trip_Stock_Return extends MyFlipperView
                             // Cancel input.
                             etPreset.setText("");
                             etLitres.setText("");
+                            etReturnDetail.setText("");
+
+                            rbReturnTank.setChecked(false);
+                            rbReturnVehicle.setChecked(false);
+                            rbReturnOther.setChecked(false);
                         }
 
                         break;

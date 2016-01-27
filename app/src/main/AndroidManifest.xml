@@ -98,6 +98,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="stateHidden" />
+
         <activity android:name="net.hockeyapp.android.UpdateActivity" />
 
         <meta-data
