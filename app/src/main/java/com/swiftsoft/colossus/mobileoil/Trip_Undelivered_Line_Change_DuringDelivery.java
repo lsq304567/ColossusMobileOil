@@ -1,5 +1,6 @@
 package com.swiftsoft.colossus.mobileoil;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -17,16 +18,13 @@ import java.util.List;
 public class Trip_Undelivered_Line_Change_DuringDelivery extends MyFlipperView
 {
 	private Trip trip;
-	private LayoutInflater inflater;
-	
+
 	private dbProduct lineProduct = null;
 	private List<dbProduct> products;
 
 	private MyInfoView1Line infoview;
 	private TextView tvLineProduct;
-	private Button btnChange;
-	private Button btnNext;
-	
+
 	public Trip_Undelivered_Line_Change_DuringDelivery(Context context)
 	{
 		super(context);
@@ -50,13 +48,13 @@ public class Trip_Undelivered_Line_Change_DuringDelivery extends MyFlipperView
 			trip = (Trip)context;
 	
 			// Inflate layout.
-			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.trip_undelivered_line_change_duringdelivery, this, true);
 			
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_undelivered_lc_duringdelivery_infoview);
 			tvLineProduct = (TextView)this.findViewById(R.id.trip_undelivered_lc_duringdelivery_line_product);
-			btnChange = (Button)this.findViewById(R.id.trip_undelivered_lc_duringdelivery_line_product_change);
-			btnNext = (Button)this.findViewById(R.id.trip_undelivered_lc_duringdelivery_next);
+			Button btnChange = (Button) this.findViewById(R.id.trip_undelivered_lc_duringdelivery_line_product_change);
+			Button btnNext = (Button) this.findViewById(R.id.trip_undelivered_lc_duringdelivery_next);
 
 			btnChange.setOnClickListener(onChange);
 			btnNext.setOnClickListener(onNext);
@@ -104,6 +102,7 @@ public class Trip_Undelivered_Line_Change_DuringDelivery extends MyFlipperView
 		}
 	}
 
+	@SuppressLint("SetTextI18n")
 	@Override
 	public void updateUI() 
 	{
@@ -132,7 +131,7 @@ public class Trip_Undelivered_Line_Change_DuringDelivery extends MyFlipperView
 		}
 	}
 
-	OnClickListener onChange = new OnClickListener()
+	private final OnClickListener onChange = new OnClickListener()
 	{		
 		@Override
 		public void onClick(View paramView)
@@ -180,7 +179,7 @@ public class Trip_Undelivered_Line_Change_DuringDelivery extends MyFlipperView
 		}
 	};
 
-	OnClickListener onNext = new OnClickListener()
+	private final OnClickListener onNext = new OnClickListener()
 	{		
 		@Override
 		public void onClick(View paramView)
