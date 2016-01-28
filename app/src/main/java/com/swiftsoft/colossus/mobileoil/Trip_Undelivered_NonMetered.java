@@ -1,8 +1,6 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import java.text.DecimalFormat;
-import java.text.ParseException;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,10 +16,12 @@ import com.swiftsoft.colossus.mobileoil.view.MyEditText;
 import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
 import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
+
 public class Trip_Undelivered_NonMetered extends MyFlipperView
 {
 	private Trip trip;
-	private LayoutInflater inflater;
 
 	private MyInfoView1Line infoview;
 	private TextView tvProduct;
@@ -30,7 +30,7 @@ public class Trip_Undelivered_NonMetered extends MyFlipperView
 	private Button btnOK;
 	private Button btnCancel;
 	
-	private DecimalFormat decf;
+	private DecimalFormat decimalFormat;
 
 	public Trip_Undelivered_NonMetered(Context context)
 	{
@@ -55,10 +55,10 @@ public class Trip_Undelivered_NonMetered extends MyFlipperView
 			trip = (Trip)context;
 	
 			// Setup a standard decimal format.
-			decf = new DecimalFormat("#,##0");
+			decimalFormat = new DecimalFormat("#,##0");
 
 			// Inflate layout.
-			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.trip_undelivered_nonmetered, this, true);
 			
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_undelivered_nonmetered_infoview);
@@ -78,6 +78,7 @@ public class Trip_Undelivered_NonMetered extends MyFlipperView
 		}
 	}
 
+	@SuppressLint("SetTextI18n")
 	@Override
 	public boolean resumeView() 
 	{
@@ -127,7 +128,7 @@ public class Trip_Undelivered_NonMetered extends MyFlipperView
 			infoview.setDefaultTv2("");
 			
 			tvProduct.setText(Active.orderLine.Product.Desc);
-			tvOrdered.setText(Active.orderLine.OrderedQty + "");
+			tvOrdered.setText(String.format("%d", Active.orderLine.OrderedQty));
 		}
 		catch (Exception e)
 		{
@@ -135,7 +136,7 @@ public class Trip_Undelivered_NonMetered extends MyFlipperView
 		}
 	}
 
-    TextWatcher onDeliveredChanged = new TextWatcher()
+    private final TextWatcher onDeliveredChanged = new TextWatcher()
 	{
 		@Override
 		public void onTextChanged(CharSequence paramCharSequence, int paramInt1, int paramInt2, int paramInt3)
@@ -154,7 +155,7 @@ public class Trip_Undelivered_NonMetered extends MyFlipperView
 		}
 	};
 	    
-	OnClickListener onOK = new OnClickListener()
+	private final OnClickListener onOK = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -177,7 +178,7 @@ public class Trip_Undelivered_NonMetered extends MyFlipperView
 				// Get quantity.
 				try
 				{
-					quantity = decf.parse(etDelivered.getText().toString()).intValue();
+					quantity = decimalFormat.parse(etDelivered.getText().toString()).intValue();
 				}
 				catch (ParseException e)
 				{
@@ -228,7 +229,7 @@ public class Trip_Undelivered_NonMetered extends MyFlipperView
 		}
 	};
 	
-	OnClickListener onCancel = new OnClickListener()
+	private final OnClickListener onCancel = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -259,6 +260,7 @@ public class Trip_Undelivered_NonMetered extends MyFlipperView
 		}
 	};
 	
+	@SuppressLint("SetTextI18n")
 	private void validate()
     {
 		try
@@ -266,7 +268,7 @@ public class Trip_Undelivered_NonMetered extends MyFlipperView
 	    	int quantity = -1;
 	    	
 	    	// Check if value is valid.
-	    	try {quantity = decf.parse(etDelivered.getText().toString()).intValue();}
+	    	try {quantity = decimalFormat.parse(etDelivered.getText().toString()).intValue();}
 	    	catch (ParseException e) {e.printStackTrace();}
 	    	   	
 	    	if (quantity < 0)
