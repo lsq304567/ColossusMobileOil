@@ -68,9 +68,10 @@ public class Trip_Undelivered_NonMetered extends MyFlipperView
 			etDelivered.addTextChangedListener(onDeliveredChanged);
 			
 			btnOK = (Button)this.findViewById(R.id.trip_undelivered_nonmetered_ok);
-			btnOK.setOnClickListener(onOK);
 			btnCancel = (Button)this.findViewById(R.id.trip_undelivered_nonmetered_cancel);
-			btnCancel.setOnClickListener(onCancel);
+
+            btnOK.setOnClickListener(onClickListener);
+			btnCancel.setOnClickListener(onClickListener);
 		}
 		catch (Exception e)
 		{
@@ -163,112 +164,118 @@ public class Trip_Undelivered_NonMetered extends MyFlipperView
 			validate();
 		}
 	};
+
+    private final OnClickListener onClickListener = new OnClickListener()
+    {
+        @Override
+        public void onClick(View view)
+        {
+            try
+            {
+                switch (view.getId())
+                {
+                    case R.id.trip_undelivered_nonmetered_ok:
+
+                        String errorMessage = "";
+                        int quantity = 0;
+
+                        try
+                        {
+                            // Leave breadcrumb.
+                            CrashReporter.leaveBreadcrumb("Trip_Undelivered_NonMetered: onClick - OK");
+
+                            // Check quantity has been entered.
+                            if (etDelivered.getText().length() == 0)
+                            {
+                                errorMessage = "Quantity missing";
+                                return;
+                            }
+
+                            // Get quantity.
+                            try
+                            {
+                                quantity = decimalFormat.parse(etDelivered.getText().toString()).intValue();
+                            }
+                            catch (ParseException e)
+                            {
+                                e.printStackTrace();
+                            }
+
+                            // Check quantity is valid.
+                            if (quantity < 0)
+                            {
+                                errorMessage = "Quantity invalid";
+
+                                return;
+                            }
+
+                            // Update orderline.
+                            Active.orderLine.delivered(quantity);
+
+                            // Update stock locally.
+                            Active.vehicle.recordDelivery();
+
+                            // Update stock on server.
+                            trip.sendVehicleStock();
+
+                            if (Active.order.getUndeliveredCount() > 0)
+                            {
+                                // Deliver next product.
+                                trip.selectView(Trip.ViewUndeliveredProducts, -1);
+                            }
+                            else
+                            {
+                                // Move to Delivery Note.
+                                trip.selectView(Trip.ViewUndeliveredDeliveryNote, +1);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            CrashReporter.logHandledException(e);
+                        }
+                        finally
+                        {
+                            // Show error message?
+                            if (errorMessage.length() > 0)
+                            {
+                                Toast t = Toast.makeText(trip, errorMessage, Toast.LENGTH_SHORT);
+
+                                t.setGravity(Gravity.CENTER, 0, 0);
+                                t.show();
+                            }
+                        }
+
+                        break;
+
+                    case R.id.trip_undelivered_nonmetered_cancel:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_NonMetered: onClick - Cancel");
+
+                        if (btnCancel.getText().equals("Close"))
+                        {
+                            // Close view.
+                            btnCancel.setEnabled(false);
+
+                            // Switch back to previous view.
+                            trip.selectView(Trip.ViewUndeliveredProducts, -1);
+                        }
+                        else
+                        {
+                            // Cancel input.
+                            etDelivered.setText("");
+                        }
+
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                CrashReporter.logHandledException(e);
+            }
+        }
+    };
 	    
-	private final OnClickListener onOK = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			String errorMessage = "";
-			int quantity = 0;
-
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_NonMetered: onOK");
-
-				// Check quantity has been entered.
-				if (etDelivered.getText().length() == 0)
-				{
-					errorMessage = "Quantity missing";
-					return;
-				}
-
-				// Get quantity.
-				try
-				{
-					quantity = decimalFormat.parse(etDelivered.getText().toString()).intValue();
-				}
-				catch (ParseException e)
-				{
-					e.printStackTrace();
-				}
-		
-				// Check quantity is valid.
-				if (quantity < 0)
-				{
-					errorMessage = "Quantity invalid";
-					return;
-				}
-				
-				// Update orderline.
-				Active.orderLine.delivered(quantity);
-				
-				// Update stock locally.
-				Active.vehicle.recordDelivery();
-				
-				// Update stock on server.
-				trip.sendVehicleStock();
-				
-				if (Active.order.getUndeliveredCount() > 0)
-				{
-					// Deliver next product.
-					trip.selectView(Trip.ViewUndeliveredProducts, -1);
-				}
-				else
-				{
-					// Move to Delivery Note. 
-					trip.selectView(Trip.ViewUndeliveredDeliveryNote, +1);
-				}
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-			finally
-			{
-				// Show error message?
-				if (errorMessage.length() > 0)
-				{
-					Toast t = Toast.makeText(trip, errorMessage, Toast.LENGTH_SHORT);
-					t.setGravity(Gravity.CENTER, 0, 0);
-					t.show();
-				}
-			}			
-		}
-	};
-	
-	private final OnClickListener onCancel = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_NonMetered: onCancel");
-				
-				if (btnCancel.getText().equals("Close"))
-				{
-					// Close view.
-					btnCancel.setEnabled(false);
-					
-					// Switch back to previous view.
-					trip.selectView(Trip.ViewUndeliveredProducts, -1);
-				}
-				else
-				{
-					// Cancel input.
-					etDelivered.setText("");
-				}
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
-	
 	@SuppressLint("SetTextI18n")
 	private void validate()
     {
