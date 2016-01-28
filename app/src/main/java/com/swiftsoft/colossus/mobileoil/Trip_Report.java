@@ -48,10 +48,10 @@ public class Trip_Report extends MyFlipperView
 			Button btnBack = (Button) this.findViewById(R.id.trip_report_back);
 			btnFinish = (Button)this.findViewById(R.id.trip_report_finish);
 			
-			btnPrint.setOnClickListener(onPrint);
-			btnChange.setOnClickListener(onChange);
-			btnBack.setOnClickListener(onBack);
-			btnFinish.setOnClickListener(onFinish);
+			btnPrint.setOnClickListener(onClickListener);
+			btnChange.setOnClickListener(onClickListener);
+			btnBack.setOnClickListener(onClickListener);
+			btnFinish.setOnClickListener(onClickListener);
 		}
 		catch (Exception e)
 		{
@@ -117,81 +117,58 @@ public class Trip_Report extends MyFlipperView
 		}
 	}
 
-	private final OnClickListener onPrint = new OnClickListener()
+	private final OnClickListener onClickListener = new OnClickListener()
 	{
 		@Override
-		public void onClick(View paramView)
+		public void onClick(View view)
 		{
 			try
 			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Report: onPrint");
-				
-				// Print trip report.
-				Printing.tripReport(trip);
-			
-				// Enable 'Finish' button.
-				btnFinish.setEnabled(true);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+				switch (view.getId())
+				{
+					case R.id.trip_report_print:
 
-	private final OnClickListener onChange = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Report: onChange");
-				
-				// Show Settings activity.
-				trip.changeSettings();
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+						// Leave breadcrumb.
+						CrashReporter.leaveBreadcrumb("Trip_Report: onClick - Print");
 
-	private final OnClickListener onBack = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Report: onBack");
-				
-				// Show Stock End view.
-				trip.selectView(Trip.ViewStockEnd, -1);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+						// Print trip report.
+						Printing.tripReport(trip);
 
-	private final OnClickListener onFinish = new OnClickListener()
-	{		
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Report: onFinish");
-				
-				// Trip now complete.
-				trip.tripDelivered();
+						// Enable 'Finish' button.
+						btnFinish.setEnabled(true);
+
+						break;
+
+                    case R.id.trip_report_change:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Report: onClick - Change");
+
+                        // Show Settings activity.
+                        trip.changeSettings();
+
+                        break;
+
+                    case R.id.trip_report_back:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Report: onClick - Back");
+
+                        // Show Stock End view.
+                        trip.selectView(Trip.ViewStockEnd, -1);
+
+                        break;
+
+                    case  R.id.trip_report_finish:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Report: onClick - Finish");
+
+                        // Trip now complete.
+                        trip.tripDelivered();
+
+                        break;
+                }
 			}
 			catch (Exception e)
 			{
