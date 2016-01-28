@@ -116,11 +116,12 @@ public class Trip_Delivered_Order extends MyFlipperView
 			ivOrderSignatureImage = (ImageView)this.findViewById(R.id.trip_delivered_order_signature_image);
 			tvOrderSignatureName = (TextView)this.findViewById(R.id.trip_delivered_order_signature_name);
 			tvOrderSignatureDateTime = (TextView)this.findViewById(R.id.trip_delivered_order_signature_datetime);
+
             Button btnBack = (Button) this.findViewById(R.id.trip_delivered_order_back);
             Button btnReprint = (Button) this.findViewById(R.id.trip_delivered_order_reprint);
 
-			btnBack.setOnClickListener(onBack);
-			btnReprint.setOnClickListener(onReprint);
+			btnBack.setOnClickListener(onClickListener);
+			btnReprint.setOnClickListener(onClickListener);
 
 			// Setup standard decimal format.
 			formatMoney = new DecimalFormat("#,##0.00");
@@ -265,7 +266,7 @@ public class Trip_Delivered_Order extends MyFlipperView
 					tvOrderSignatureName.setText(selectedOrder.CustomerSignatureName);
 					ivOrderSignatureImage.setImageBitmap(bitmap);
 					tvOrderSignatureDateTime.setText(df.format(selectedOrder.CustomerSignatureDateTime));
-                    
+
 					llOrderSignature.setVisibility(View.VISIBLE);
 				}
 	
@@ -278,44 +279,41 @@ public class Trip_Delivered_Order extends MyFlipperView
 			CrashReporter.logHandledException(e);
 		}
 	}
-	
-	private final OnClickListener onBack = new OnClickListener()
-	{
-		@Override
-		public void onClick(View v)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Delivered_Order: onBack");
-				
-				// Switch back to the delivered list.
-				tripDelivered.showList();
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
-	
-	private final OnClickListener onReprint = new OnClickListener()
-	{
-		@Override
-		public void onClick(View v)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Delivered_Order: onReprint");
-				
-				// Reprint the ticket.
-				Printing.ticket(trip, selectedOrder);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+
+    private final OnClickListener onClickListener = new OnClickListener()
+    {
+        @Override
+        public void onClick(View view)
+        {
+            try
+            {
+                switch (view.getId())
+                {
+                    case R.id.trip_delivered_order_back:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Delivered_Order: onBack");
+
+                        // Switch back to the delivered list.
+                        tripDelivered.showList();
+
+                        break;
+
+                    case R.id.trip_delivered_order_reprint:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Delivered_Order: onReprint");
+
+                        // Reprint the ticket.
+                        Printing.ticket(trip, selectedOrder);
+
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                CrashReporter.logHandledException(e);
+            }
+        }
+    };
 }
