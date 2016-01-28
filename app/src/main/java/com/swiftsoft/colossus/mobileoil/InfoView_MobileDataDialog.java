@@ -30,23 +30,20 @@ import java.util.List;
 
 public class InfoView_MobileDataDialog extends Dialog
 {
-	myReceiver receiver;
-    TelephonyManager Tel;
-    MyPhoneStateListener MyListener;
-    MessageOutAdapter adapter1;
-    DebugMessageAdapter adapter2;
-    long listCount = -1;
-    long listDateTime = -1;
-    List<String> debugMessages;
+	private myReceiver receiver;
+    private TelephonyManager Tel;
+    private MyPhoneStateListener MyListener;
+	private long listCount = -1;
+    private long listDateTime = -1;
+    private List<String> debugMessages;
     
-    Activity activity;
-	Dialog dialog;
-	TextView tvURL;
-	TextView tvPhone;
-	TextView tvData;
-	TextView tvQueue;
-	ListView lv1;
-	ListView lv2;
+    private Activity activity;
+	private Dialog dialog;
+	private TextView tvPhone;
+	private TextView tvData;
+	private TextView tvQueue;
+	private ListView lv1;
+	private ListView lv2;
 	
 	public InfoView_MobileDataDialog(Context context)
 	{
@@ -72,7 +69,7 @@ public class InfoView_MobileDataDialog extends Dialog
 	        getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 	        
 	        // Find controls.
-	        tvURL = (TextView)this.findViewById(R.id.infoview_mobiledatadialog_url);
+			TextView tvURL = (TextView) this.findViewById(R.id.infoview_mobiledatadialog_url);
 	        tvPhone = (TextView)this.findViewById(R.id.infoview_mobiledatadialog_phone);
 	        tvData = (TextView)this.findViewById(R.id.infoview_mobiledatadialog_data);
 	        tvQueue = (TextView)this.findViewById(R.id.infoview_mobiledatadialog_queue);
@@ -103,7 +100,7 @@ public class InfoView_MobileDataDialog extends Dialog
 		}
 	}
 
-	View.OnClickListener onClose = new View.OnClickListener()
+	private final View.OnClickListener onClose = new View.OnClickListener()
 	{
 		@Override
 		public void onClick(View v)
@@ -112,13 +109,13 @@ public class InfoView_MobileDataDialog extends Dialog
 			{
 				// Leave breadcrumb.
 				CrashReporter.leaveBreadcrumb("InfoView_MobileDataDialog: onClick");
-			
+
 				// Stop listening to colossus broadcasts.
 				activity.unregisterReceiver(receiver);
-				
+
 				// Stop listening to phone state events.
 				Tel.listen(MyListener, PhoneStateListener.LISTEN_NONE);
-				
+
 				// Close dialog.
 				dialog.dismiss();
 			}
@@ -128,7 +125,7 @@ public class InfoView_MobileDataDialog extends Dialog
 			}
 		}
 	};
-	
+
 	public void updateUI()
 	{
 		try
@@ -138,13 +135,16 @@ public class InfoView_MobileDataDialog extends Dialog
 
 			// Hash all DateTimes. 
 			long dateTime = 0;
+
 			for (dbMessageOut message : messages)
-				dateTime += message.DateTime;
+            {
+                dateTime += message.DateTime;
+            }
 
 			if (messages.size() != listCount || dateTime != listDateTime)
 			{
 				// Refresh data.
-				adapter1 = new MessageOutAdapter(activity, messages);
+				MessageOutAdapter adapter1 = new MessageOutAdapter(activity, messages);
 				
 				// Bind to listview.
 				lv1.setAdapter(adapter1);
@@ -155,12 +155,14 @@ public class InfoView_MobileDataDialog extends Dialog
 			}
 			
 			// Get content for list 2.
-			adapter2 = new DebugMessageAdapter(activity, debugMessages);
+			DebugMessageAdapter adapter2 = new DebugMessageAdapter(activity, debugMessages);
 			lv2.setAdapter(adapter2);
 			
 			// Update queue length.
 			if (ColossusIntentService.getQueueSize() >= 0)
-				tvQueue.setText("" + ColossusIntentService.getQueueSize());
+            {
+                tvQueue.setText(String.format("%d", ColossusIntentService.getQueueSize()));
+            }
 		}
 		catch (Exception e)
 		{
@@ -181,12 +183,13 @@ public class InfoView_MobileDataDialog extends Dialog
 				if (intent.getAction().equals(ColossusIntentService.BroadcastCommsDebug))
 				{
 					// Add new debug message.
-					Bundle b = intent.getExtras();
-					if (b != null)
+					Bundle bundle = intent.getExtras();
+
+					if (bundle != null)
 					{
 						DateFormat df = new SimpleDateFormat("HH:mm:ss");
-						String msg = b.getString("Message");
-						debugMessages.add(0, df.format(Utils.getCurrentTime()) + " " + msg);
+
+                        debugMessages.add(0, df.format(Utils.getCurrentTime()) + " " + bundle.getString("Message"));
 					}
 					
 					// Update the UI.
@@ -200,28 +203,22 @@ public class InfoView_MobileDataDialog extends Dialog
 		}
 	}
 
-	class MyPhoneStateListener extends PhoneStateListener {
+	private class MyPhoneStateListener extends PhoneStateListener {
 
 	    @Override
 	    public void onServiceStateChanged(ServiceState serviceState)
 	    {
 	    	super.onServiceStateChanged(serviceState);
-	    	
-	    	if (serviceState.getState() == ServiceState.STATE_IN_SERVICE)
-	    		tvPhone.setText("Yes");
-	    	else
-	    		tvPhone.setText("No");
+
+			tvPhone.setText(serviceState.getState() == ServiceState.STATE_IN_SERVICE ? "Yes" : "No");
 	    }
 	    
 	    @Override
 	    public void onDataConnectionStateChanged(int state, int networkType)
 	    {
 	    	super.onDataConnectionStateChanged(state, networkType);
-	    	
-	    	if (state == TelephonyManager.DATA_CONNECTED)
-	    		tvData.setText("Yes");
-	    	else
-	    		tvData.setText("No");
+
+			tvData.setText(state == TelephonyManager.DATA_CONNECTED ? "Yes" : "No");
 	    }
 	}
 
