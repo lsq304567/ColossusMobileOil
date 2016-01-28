@@ -1,23 +1,19 @@
 package com.swiftsoft.colossus.mobileoil;
 
-import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
-import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
+import com.swiftsoft.colossus.mobileoil.view.MyFlipperView;
+import com.swiftsoft.colossus.mobileoil.view.MyInfoView1Line;
+
 public class Trip_Transport_Doc extends MyFlipperView
 {
 	private Trip trip;
-	private LayoutInflater inflater;
-	
+
 	private MyInfoView1Line infoview;
-	private Button btnPrint;
-	private Button btnChange;
-	private Button btnBack;
 	private Button btnNext;
 	
 	public Trip_Transport_Doc(Context context)
@@ -43,13 +39,13 @@ public class Trip_Transport_Doc extends MyFlipperView
 			trip = (Trip)context;
 	
 			// Inflate layout.
-			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.trip_transport_doc, this, true);
 			
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_transport_doc_infoview);
-			btnPrint = (Button)this.findViewById(R.id.trip_transport_doc_print);
-			btnChange = (Button)this.findViewById(R.id.trip_transport_doc_change);
-			btnBack = (Button)this.findViewById(R.id.trip_transport_doc_back);
+			Button btnPrint = (Button) this.findViewById(R.id.trip_transport_doc_print);
+			Button btnChange = (Button) this.findViewById(R.id.trip_transport_doc_change);
+			Button btnBack = (Button) this.findViewById(R.id.trip_transport_doc_back);
 			btnNext = (Button)this.findViewById(R.id.trip_transport_doc_next);
 			
 			btnPrint.setOnClickListener(onPrint);
@@ -112,7 +108,7 @@ public class Trip_Transport_Doc extends MyFlipperView
 		}
 	}
 
-	OnClickListener onPrint = new OnClickListener()
+	private final OnClickListener onPrint = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -135,7 +131,7 @@ public class Trip_Transport_Doc extends MyFlipperView
 		}
 	};
 
-	OnClickListener onChange = new OnClickListener()
+	private final OnClickListener onChange = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -155,7 +151,7 @@ public class Trip_Transport_Doc extends MyFlipperView
 		}
 	};
 
-	OnClickListener onBack = new OnClickListener()
+	private final OnClickListener onBack = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -175,7 +171,7 @@ public class Trip_Transport_Doc extends MyFlipperView
 		}
 	};
 
-	OnClickListener onNext = new OnClickListener()
+	private final OnClickListener onNext = new OnClickListener()
 	{		
 		@Override
 		public void onClick(View paramView)
