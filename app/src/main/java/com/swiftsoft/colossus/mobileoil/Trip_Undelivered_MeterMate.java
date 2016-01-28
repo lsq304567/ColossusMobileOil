@@ -1,5 +1,6 @@
 package com.swiftsoft.colossus.mobileoil;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Handler;
@@ -99,6 +100,9 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Undelivered_MeterMate: resumeView");
+
 			// Resume updating.
 			infoview.resume();
 			
@@ -167,6 +171,9 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Undelivered_MeterMate: pauseView");
+
 			// Pause updating.
 			infoview.pause();
 		}
@@ -179,6 +186,9 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 	@Override
 	public void setPreviousView(String name) 
 	{
+		// Leave breadcrumb.
+		CrashReporter.leaveBreadcrumb("Trip_Undelivered_MeterMate: setPreviousView");
+
 		// Store previous view.
 		previousViewName = name;
 	}
@@ -188,6 +198,9 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Undelivered_MeterMate: updateUI");
+
 			// Update the UI.
 			infoview.setDefaultTv1("MeterMate");
 
@@ -207,11 +220,15 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 		}
 	}
 
+	@SuppressLint("SetTextI18n")
 	private void updateCommsStatus()
 	{
 		try
 		{
-            switch (MeterMate.getCommsStatus())
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Undelivered_MeterMate: updateCommStatus");
+
+			switch (MeterMate.getCommsStatus())
             {
                 case MeterMate.COMMS_CONNECTED:
 
@@ -259,6 +276,9 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Undelivered_MeterMate: updatePumpingStatus");
+
 			tvDeliveryMode.setText(MeterMate.getInDeliveryMode());
 			tvProductFlowing.setText(MeterMate.getInPumpingMode());
 			
@@ -326,6 +346,9 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 		{
 			try
 			{
+				// Leave breadcrumb.
+				CrashReporter.leaveBreadcrumb("Trip_Undelivered_MeterMate: handleMessage");
+
 				switch (msg.what)
 				{
 					case MeterMate.MESSAGE_COMMS_STATUS_CHANGED:
