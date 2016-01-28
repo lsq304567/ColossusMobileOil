@@ -48,10 +48,10 @@ public class Trip_Transport_Doc extends MyFlipperView
 			Button btnBack = (Button) this.findViewById(R.id.trip_transport_doc_back);
 			btnNext = (Button)this.findViewById(R.id.trip_transport_doc_next);
 			
-			btnPrint.setOnClickListener(onPrint);
-			btnChange.setOnClickListener(onChange);
-			btnBack.setOnClickListener(onBack);
-			btnNext.setOnClickListener(onNext);
+			btnPrint.setOnClickListener(onClickListener);
+			btnChange.setOnClickListener(onClickListener);
+			btnBack.setOnClickListener(onClickListener);
+			btnNext.setOnClickListener(onClickListener);
 		}
 		catch (Exception e)
 		{
@@ -117,81 +117,58 @@ public class Trip_Transport_Doc extends MyFlipperView
 		}
 	}
 
-	private final OnClickListener onPrint = new OnClickListener()
+	private final OnClickListener onClickListener = new OnClickListener()
 	{
 		@Override
-		public void onClick(View paramView)
+		public void onClick(View view)
 		{
 			try
 			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Transport_Doc: onPrint");
+				switch (view.getId())
+                {
+                    case R.id.trip_transport_doc_print:
 
-				// Print the transport document.
-				Printing.transportDocument(trip);
-				
-				// Enable 'Next' button.
-				btnNext.setEnabled(true);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Transport_Doc: onPrint");
 
-	private final OnClickListener onChange = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Transport_Doc: onChange");
+                        // Print the transport document.
+                        Printing.transportDocument(trip);
 
-				// Show Settings activity.
-				trip.changeSettings();
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                        // Enable 'Next' button.
+                        btnNext.setEnabled(true);
 
-	private final OnClickListener onBack = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Transport_Doc: onBack");
+                        break;
 
-				// Switch views.
-				trip.selectView(Trip.ViewStockStart, -1);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                    case R.id.trip_transport_doc_change:
 
-	private final OnClickListener onNext = new OnClickListener()
-	{		
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Transport_Doc: onNext");
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Transport_Doc: onChange");
 
-				// Switch views.
-				trip.selectView(Trip.ViewUndeliveredList, +1);
+                        // Show Settings activity.
+                        trip.changeSettings();
+
+                        break;
+
+                    case R.id.trip_transport_doc_back:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Transport_Doc: onBack");
+
+                        // Switch views.
+                        trip.selectView(Trip.ViewStockStart, -1);
+
+                        break;
+
+                    case R.id.trip_transport_doc_next:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Transport_Doc: onNext");
+
+                        // Switch views.
+                        trip.selectView(Trip.ViewUndeliveredList, +1);
+
+                        break;
+                }
 			}
 			catch (Exception e)
 			{
