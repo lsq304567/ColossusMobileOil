@@ -70,6 +70,9 @@ public class Trip_Undelivered_Line_Change_DuringDelivery extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Undelivered_Line_Change_DuringDelivery: resumeView");
+
 			// Resume updating.
 			infoview.resume();
 			
@@ -93,6 +96,9 @@ public class Trip_Undelivered_Line_Change_DuringDelivery extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Undelivered_Line_Change_DuringDelivery: pauseView");
+
 			// Pause updating.
 			infoview.pause();
 		}
@@ -108,6 +114,9 @@ public class Trip_Undelivered_Line_Change_DuringDelivery extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Undelivered_Line_Change_DuringDelivery: updateUI");
+
 			// Update the UI.
 			infoview.setDefaultTv1("Line changed?");
 
