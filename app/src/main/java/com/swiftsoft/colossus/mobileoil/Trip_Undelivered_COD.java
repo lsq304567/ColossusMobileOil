@@ -71,9 +71,9 @@ public class Trip_Undelivered_COD extends MyFlipperView
 			Button btnPayment = (Button) this.findViewById(R.id.trip_undelivered_cod_payment);
 			Button btnNext = (Button) this.findViewById(R.id.trip_undelivered_cod_next);
 			
-			btnBack.setOnClickListener(onBack);
-			btnPayment.setOnClickListener(onPayment);
-			btnNext.setOnClickListener(onNext);
+			btnBack.setOnClickListener(onClickListener);
+			btnPayment.setOnClickListener(onClickListener);
+			btnNext.setOnClickListener(onClickListener);
 			
 			// Setup standard decimal format.
 			decimalFormat = new DecimalFormat("#,##0.00");
@@ -147,85 +147,72 @@ public class Trip_Undelivered_COD extends MyFlipperView
 		}
 	}
 
-	private final OnClickListener onBack = new OnClickListener()
+	private final OnClickListener onClickListener = new OnClickListener()
 	{
 		@Override
-		public void onClick(View paramView)
+		public void onClick(View view)
 		{
 			try
 			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_COD: onBack");
+				switch (view.getId())
+                {
+                    case R.id.trip_undelivered_cod_back:
 
-				// Switch views.
-				trip.selectView(Trip.ViewUndeliveredSummary, -1);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_COD: onClick - Back");
 
-	private final OnClickListener onPayment = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_COD: onPayment");
+                        // Switch views.
+                        trip.selectView(Trip.ViewUndeliveredSummary, -1);
 
-				// Show payment dialog.
-				trip.acceptPayment(true);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                        break;
 
-	private final OnClickListener onNext = new OnClickListener()
-	{		
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_COD: onNext");
+                    case R.id.trip_undelivered_cod_payment:
 
-				// Calculate unpaid COD.
-				BigDecimal unpaidCod = Active.order.getCodBeforeDeliveryValue().subtract(Active.order.getPaidDriver());
-				
-				if (unpaidCod.compareTo(BigDecimal.ZERO) > 0)
-				{
-					// Warn driver COD is not fully paid.
-					AlertDialog.Builder builder = new AlertDialog.Builder(trip);
-					builder.setTitle("COD outstanding");
-					builder.setMessage(decimalFormat.format(unpaidCod) + " outstanding.\n\nAre you sure you wish to continue?");
-					
-					builder.setPositiveButton("Yes", new DialogInterface.OnClickListener()
-					{
-						@Override
-						public void onClick(DialogInterface dialog, int which)
-						{
-							// Switch views.
-							trip.selectView(Trip.ViewUndeliveredProducts, +1);
-						}
-						
-					});
-	
-					builder.setNegativeButton("No", null);					
-					builder.show();				
-				}
-				else
-				{
-					// Switch views.
-					trip.selectView(Trip.ViewUndeliveredProducts, +1);
-				}
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_COD: onClick - Payment");
+
+                        // Show payment dialog.
+                        trip.acceptPayment(true);
+
+                        break;
+
+                    case R.id.trip_undelivered_cod_next:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_COD: onClick - Next");
+
+                        // Calculate unpaid COD.
+                        BigDecimal unpaidCod = Active.order.getCodBeforeDeliveryValue().subtract(Active.order.getPaidDriver());
+
+                        if (unpaidCod.compareTo(BigDecimal.ZERO) > 0)
+                        {
+                            // Warn driver COD is not fully paid.
+                            AlertDialog.Builder builder = new AlertDialog.Builder(trip);
+                            builder.setTitle("COD outstanding");
+                            builder.setMessage(decimalFormat.format(unpaidCod) + " outstanding.\n\nAre you sure you wish to continue?");
+
+                            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which)
+                                {
+                                    // Switch views.
+                                    trip.selectView(Trip.ViewUndeliveredProducts, +1);
+                                }
+
+                            });
+
+                            builder.setNegativeButton("No", null);
+                            builder.show();
+                        }
+                        else
+                        {
+                            // Switch views.
+                            trip.selectView(Trip.ViewUndeliveredProducts, +1);
+                        }
+
+                        break;
+                }
 			}
 			catch (Exception e)
 			{
