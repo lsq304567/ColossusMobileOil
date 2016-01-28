@@ -79,15 +79,16 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 	
 	    	llDemoMode = (LinearLayout)this.findViewById(R.id.trip_undelivered_metermate_demo_mode);
 			llDemoMode.setVisibility(View.GONE);
+
 	    	btnStart = (Button)this.findViewById(R.id.trip_undelivered_metermate_start);
-	    	btnStart.setOnClickListener(onStart);
 	    	btnStop = (Button)this.findViewById(R.id.trip_undelivered_metermate_stop);
-	    	btnStop.setOnClickListener(onStop);
-	    	
 			btnBack = (Button)this.findViewById(R.id.trip_undelivered_metermate_back);
-			btnBack.setOnClickListener(onBack);
 			btnNext = (Button)this.findViewById(R.id.trip_undelivered_metermate_next);
-			btnNext.setOnClickListener(onNext);
+
+            btnStart.setOnClickListener(onClickListener);
+            btnStop.setOnClickListener(onClickListener);
+            btnBack.setOnClickListener(onClickListener);
+			btnNext.setOnClickListener(onClickListener);
 		}
 		catch (Exception e)
 		{
@@ -292,10 +293,7 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 				btnStop.setEnabled(true);
 			}
 			
-			if (MeterMate.getInDeliveryMode().equals("No") &&
-					MeterMate.getInPumpingMode().equals("No") &&
-					!btnBack.isEnabled() &&
-					!btnNext.isEnabled())
+			if (MeterMate.getInDeliveryMode().equals("No") && MeterMate.getInPumpingMode().equals("No") && !btnBack.isEnabled() && !btnNext.isEnabled())
 			{
 				// If not in delivery mode, and no product flowing, then we could be finished.
 				// If Back is disabled, then product was flowing.
@@ -367,81 +365,58 @@ public class Trip_Undelivered_MeterMate extends MyFlipperView
 		}
 	};
 
-	private final OnClickListener onStart = new OnClickListener()
+	private final OnClickListener onClickListener = new OnClickListener()
 	{
 		@Override
-		public void onClick(View v)
+		public void onClick(View view)
 		{
 			try
 			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_MeterMate: onStart");
+				switch (view.getId())
+                {
+                    case R.id.trip_undelivered_metermate_start:
 
-				// Start demo meter.
-				MeterMate.demoStart();
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_MeterMate: onClick - Start");
 
-	private final OnClickListener onStop = new OnClickListener()
-	{
-		@Override
-		public void onClick(View v)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_MeterMate: onStop");
+                        // Start demo meter.
+                        MeterMate.demoStart();
 
-				// Stop demo meter.
-				MeterMate.demoStop();
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
-	
-	private final OnClickListener onBack = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_MeterMate: onBack");
+                        break;
 
-				// Shutdown MeterMate.
-				MeterMate.shutdown();
-				
-				// Switch to previous view.
-				trip.selectView(previousViewName, -1);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                    case R.id.trip_undelivered_metermate_stop:
 
-	private final OnClickListener onNext = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_MeterMate: onNext");
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_MeterMate: onClick - Stop");
 
-				// Handle 'Next' clicked.
-				callbacks.onNextClicked();
+                        // Stop demo meter.
+                        MeterMate.demoStop();
+
+                        break;
+
+                    case R.id.trip_undelivered_metermate_back:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_MeterMate: onClick - Back");
+
+                        // Shutdown MeterMate.
+                        MeterMate.shutdown();
+
+                        // Switch to previous view.
+                        trip.selectView(previousViewName, -1);
+
+                        break;
+
+                    case R.id.trip_undelivered_metermate_next:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_MeterMate: onClick - Next");
+
+                        // Handle 'Next' clicked.
+                        callbacks.onNextClicked();
+
+                        break;
+                }
 			}
 			catch (Exception e)
 			{
