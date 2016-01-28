@@ -64,6 +64,9 @@ public class Trip_Transport_Doc extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Transport_Doc: resumeView");
+
 			// Resume updating.
 			infoview.resume();
 			
@@ -84,6 +87,9 @@ public class Trip_Transport_Doc extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Transport_Doc: pauseView");
+
 			// Pause updating.
 			infoview.pause();
 		}
@@ -98,6 +104,9 @@ public class Trip_Transport_Doc extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Transport_Doc: updateUI");
+
 			// Set trip no.
 			infoview.setDefaultTv1("Trip " + Active.trip.No);
 			infoview.setDefaultTv2("");
