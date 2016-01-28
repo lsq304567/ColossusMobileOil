@@ -53,11 +53,12 @@ public class Trip_Undelivered_Line_Change_DuringDelivery extends MyFlipperView
 			
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_undelivered_lc_duringdelivery_infoview);
 			tvLineProduct = (TextView)this.findViewById(R.id.trip_undelivered_lc_duringdelivery_line_product);
+
 			Button btnChange = (Button) this.findViewById(R.id.trip_undelivered_lc_duringdelivery_line_product_change);
 			Button btnNext = (Button) this.findViewById(R.id.trip_undelivered_lc_duringdelivery_next);
 
-			btnChange.setOnClickListener(onChange);
-			btnNext.setOnClickListener(onNext);
+			btnChange.setOnClickListener(onClickListener);
+			btnNext.setOnClickListener(onClickListener);
 		}
 		catch (Exception e)
 		{
@@ -140,80 +141,75 @@ public class Trip_Undelivered_Line_Change_DuringDelivery extends MyFlipperView
 		}
 	}
 
-	private final OnClickListener onChange = new OnClickListener()
-	{		
+	private final OnClickListener onClickListener = new OnClickListener()
+	{
 		@Override
-		public void onClick(View paramView)
+		public void onClick(View view)
 		{
 			try
 			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Setup_Vehicle_Line: onChange");
-				
-				// Check there are products.
-				if (!products.isEmpty())
-				{
-					int idx = -1;
-	
-					if (lineProduct != null)
-					{
-						// Find currently selected product.
-						for (int i = 0; i < products.size(); i++)
-						{
-							if (products.get(i).getId().equals(lineProduct.getId()))
-							{
-								idx = i;
-								break;
-							}
-						}
-					}
-	
-					// Move to next product.
-					idx++;
-					
-					// Change to next product.
-					if (idx != products.size())
-						lineProduct = products.get(idx);
-					else
-						lineProduct = products.get(0);
-					
-					// Reflect changes on UI.
-					tvLineProduct.setText(lineProduct.Desc);
-				}
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+				switch (view.getId())
+                {
+                    case R.id.trip_undelivered_lc_duringdelivery_line_product_change:
 
-	private final OnClickListener onNext = new OnClickListener()
-	{		
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Products: MeterMate onNextClicked");
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Line_Change_DuringDelivery: onClick - Change");
 
-				// Record line change
-				if (!Active.vehicle.getHosereelProduct().getId().equals(lineProduct.getId()))
-				{
-					Active.vehicle.recordLineChange(lineProduct, Active.vehicle.C0_Capacity, "0");
-				}
-			
-				if (Active.order.getUndeliveredCount() > 0)
-				{
-					// Deliver next product.
-					trip.selectView(Trip.ViewUndeliveredProducts, -1);
-				}
-				else
-				{
-					// Move to Delivery Note. 
-					trip.selectView(Trip.ViewUndeliveredDeliveryNote, +1);
-				}
+                        // Check there are products.
+                        if (!products.isEmpty())
+                        {
+                            int productIndex = -1;
+
+                            if (lineProduct != null)
+                            {
+                                // Find currently selected product.
+                                for (int i = 0; i < products.size(); i++)
+                                {
+                                    if (products.get(i).getId().equals(lineProduct.getId()))
+                                    {
+                                        productIndex = i;
+
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // Move to next product.
+                            productIndex++;
+
+                            // Change to next product.
+                            lineProduct = productIndex != products.size() ? products.get(productIndex) : products.get(0);
+
+                            // Reflect changes on UI.
+                            tvLineProduct.setText(lineProduct.Desc);
+                        }
+
+                        break;
+
+                    case R.id.trip_undelivered_lc_duringdelivery_next:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Line_Change_DuringDelivery: MeterMate onClick -Next");
+
+                        // Record line change
+                        if (!Active.vehicle.getHosereelProduct().getId().equals(lineProduct.getId()))
+                        {
+                            Active.vehicle.recordLineChange(lineProduct, Active.vehicle.C0_Capacity, "0");
+                        }
+
+                        if (Active.order.getUndeliveredCount() > 0)
+                        {
+                            // Deliver next product.
+                            trip.selectView(Trip.ViewUndeliveredProducts, -1);
+                        }
+                        else
+                        {
+                            // Move to Delivery Note.
+                            trip.selectView(Trip.ViewUndeliveredDeliveryNote, +1);
+                        }
+
+                        break;
+                }
 			}
 			catch (Exception e)
 			{
