@@ -244,7 +244,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
                         TableRow tr2 = (TableRow)inflater.inflate(R.layout.trip_undelivered_delivery_note_tablerow2, null);
 						
 						Button btnNewPrice = (Button)tr2.findViewById(R.id.trip_undelivered_delivery_note_tablerow2_button);
-                        
+
 						btnNewPrice.setOnClickListener(onClickListener);
 						btnNewPrice.setTag(line);
 

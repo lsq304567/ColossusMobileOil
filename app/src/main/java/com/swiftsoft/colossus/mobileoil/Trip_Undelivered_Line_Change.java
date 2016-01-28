@@ -23,10 +23,9 @@ import java.text.ParseException;
 public class Trip_Undelivered_Line_Change extends MyFlipperView
 {
 	private Trip trip;
-	private LayoutInflater inflater;
-	
-	private int lcSourceCompartmentIdx = 0;
-	private int lcReturnCompartmentIdx = 0;
+
+    private final int lcSourceCompartmentIdx = 0;
+	private final int lcReturnCompartmentIdx = 0;
 
 	private MyInfoView1Line infoview;
 	private TableLayout tlByCompartment;
@@ -38,10 +37,8 @@ public class Trip_Undelivered_Line_Change extends MyFlipperView
 	private TextView tvFromProduct;
 	private TextView tvToProduct;
 	private MyEditText etPreset;
-	private Button btnBack;
-	private Button btnNext;
-	
-	private DecimalFormat decf0;
+
+    private DecimalFormat decimalFormat;
 	private int litres;
 
 	public Trip_Undelivered_Line_Change(Context context)
@@ -67,7 +64,7 @@ public class Trip_Undelivered_Line_Change extends MyFlipperView
 			trip = (Trip)context;
 	
 			// Inflate layout.
-			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.trip_undelivered_line_change, this, true);
 			
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_undelivered_lc_infoview);
@@ -80,14 +77,14 @@ public class Trip_Undelivered_Line_Change extends MyFlipperView
 			tvFromProduct = (TextView)this.findViewById(R.id.trip_undelivered_lc_from_product);
 			tvToProduct = (TextView)this.findViewById(R.id.trip_undelivered_lc_to_product);
 			etPreset = (MyEditText)this.findViewById(R.id.trip_undelivered_lc_preset);
-			btnBack = (Button)this.findViewById(R.id.trip_undelivered_lc_back);
-			btnNext = (Button)this.findViewById(R.id.trip_undelivered_lc_next);
+            Button btnBack = (Button) this.findViewById(R.id.trip_undelivered_lc_back);
+            Button btnNext = (Button) this.findViewById(R.id.trip_undelivered_lc_next);
 			
 			btnBack.setOnClickListener(onBack);
 			btnNext.setOnClickListener(onNext);
 	
 			// Setup standard decimal format.
-			decf0 = new DecimalFormat("#,##0");
+			decimalFormat = new DecimalFormat("#,##0");
 		}
 		catch (Exception e)
 		{
@@ -104,7 +101,7 @@ public class Trip_Undelivered_Line_Change extends MyFlipperView
 			infoview.resume();
 			
 	    	// Focus on Preset.
-	    	etPreset.setText(decf0.format(Active.vehicle.getHosereelCapacity()));
+	    	etPreset.setText(decimalFormat.format(Active.vehicle.getHosereelCapacity()));
 	    	etPreset.requestFocus();
 	
 	    	return true;
@@ -145,27 +142,26 @@ public class Trip_Undelivered_Line_Change extends MyFlipperView
 			{
 				// Update UI for StockByCompartment.
 				dbProduct sourceProduct = Active.vehicle.getCompartmentProduct(lcSourceCompartmentIdx);
+
 				int sourceCompartment = Active.vehicle.getCompartmentNo(lcSourceCompartmentIdx);
 				int sourceOnboard = Active.vehicle.getCompartmentOnboard(lcSourceCompartmentIdx);
 	
 				dbProduct returnProduct = Active.vehicle.getCompartmentProduct(lcReturnCompartmentIdx);
+
 				int returnCompartment = Active.vehicle.getCompartmentNo(lcReturnCompartmentIdx);
 				int returnCapacity = Active.vehicle.getCompartmentCapacity(lcReturnCompartmentIdx);
 				int returnOnboard = Active.vehicle.getCompartmentOnboard(lcReturnCompartmentIdx);
 				int returnUllage = (returnCapacity - returnOnboard);
 	
 				// From section.
-				tvSourceCompartment.setText(Integer.toString(sourceCompartment));
-		
-				if (sourceProduct == null)
-					tvSourceOnboard.setText(decf0.format(sourceOnboard) + " l");
-				else
-					tvSourceOnboard.setText(decf0.format(sourceOnboard) + " l of " + sourceProduct.Desc);
+				tvSourceCompartment.setText(String.format("%d", sourceCompartment));
+
+                tvSourceOnboard.setText(sourceProduct == null ? decimalFormat.format(sourceOnboard) + " l" : decimalFormat.format(sourceOnboard) + " l of " + sourceProduct.Desc);
 				
 				// To section
-				tvReturnCompartment.setText(Integer.toString(returnCompartment));
+				tvReturnCompartment.setText(String.format("%d", returnCompartment));
 
-				tvReturnUllage.setText(String.format("%s 1%s", decf0.format(returnUllage), returnProduct == null ? "" : " of " + returnProduct.Desc));
+				tvReturnUllage.setText(String.format("%s 1%s", decimalFormat.format(returnUllage), returnProduct == null ? "" : " of " + returnProduct.Desc));
 
 				tlByCompartment.setVisibility(View.VISIBLE);
 				tlNotByCompartment.setVisibility(View.GONE);
@@ -187,7 +183,7 @@ public class Trip_Undelivered_Line_Change extends MyFlipperView
 	}
 
 
-	OnClickListener onBack = new OnClickListener()
+	private final OnClickListener onBack = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -207,7 +203,7 @@ public class Trip_Undelivered_Line_Change extends MyFlipperView
 		}
 	};
 
-	OnClickListener onNext = new OnClickListener()
+	private final OnClickListener onNext = new OnClickListener()
 	{		
 		@Override
 		public void onClick(View paramView)
@@ -225,8 +221,14 @@ public class Trip_Undelivered_Line_Change extends MyFlipperView
 				lineProduct = Active.vehicle.getHosereelProduct();
 				
 				// Find preset value. 
-				try {litres = decf0.parse(etPreset.getText().toString()).intValue();}
-				catch (ParseException e) {e.printStackTrace();}
+				try
+                {
+                    litres = decimalFormat.parse(etPreset.getText().toString()).intValue();
+                }
+				catch (ParseException e)
+                {
+                    e.printStackTrace();
+                }
 
 				//
 				// Validation.
@@ -236,6 +238,7 @@ public class Trip_Undelivered_Line_Change extends MyFlipperView
 				{
 					dbProduct sourceProduct = Active.vehicle.getCompartmentProduct(lcSourceCompartmentIdx);
 					dbProduct returnProduct = Active.vehicle.getCompartmentProduct(lcReturnCompartmentIdx);
+
 					int sourceCompartment = Active.vehicle.getCompartmentNo(lcSourceCompartmentIdx);
 					int sourceOnboard = Active.vehicle.getCompartmentOnboard(lcSourceCompartmentIdx);
 					int returnCapacity = Active.vehicle.getCompartmentCapacity(lcReturnCompartmentIdx);
@@ -243,7 +246,8 @@ public class Trip_Undelivered_Line_Change extends MyFlipperView
 					int returnUllage = returnCapacity - returnOnboard;
 					
 					// Check 'From' and 'To' are different.
-					if (lcSourceCompartmentIdx == lcReturnCompartmentIdx)
+                    //noinspection ConstantConditions
+                    if (lcSourceCompartmentIdx == lcReturnCompartmentIdx)
 					{
 						errorMessage = "Compartment numbers can't be the same";
 						return;
@@ -318,7 +322,7 @@ public class Trip_Undelivered_Line_Change extends MyFlipperView
 		}
 	};
 
-	Trip_MeterMate_Callbacks callbacks = new Trip_MeterMate_Callbacks()
+	private final Trip_MeterMate_Callbacks callbacks = new Trip_MeterMate_Callbacks()
 	{
 		@Override
 		public int getLitres()
@@ -341,12 +345,7 @@ public class Trip_Undelivered_Line_Change extends MyFlipperView
 				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Line_Change: MeterMate onTicketComplete");
 
 				// Read ticket details.
-				int litres;
-				
-				if (MeterMate.getTicketAt15Degrees())
-					litres = (int)MeterMate.getTicketNetVolume();
-				else
-					litres = (int)MeterMate.getTicketGrossVolume();
+				int litres = MeterMate.getTicketAt15Degrees() ? (int) MeterMate.getTicketNetVolume() : (int) MeterMate.getTicketGrossVolume();
 				
 				// Update stock locally.
 				Active.vehicle.recordLineChange(Active.lineChangeProduct, litres, MeterMate.getTicketNo());
