@@ -134,7 +134,10 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 	{
 		try
 		{
-			// Resume updating.
+            // Leave breadcrumb.
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_Delivery_Note: resumeView");
+
+            // Resume updating.
 			infoview.resume();
 			
 			// Mark all non-deliverable products as delivered.
@@ -174,7 +177,10 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 	{
 		try
 		{
-			// Pause updating.
+            // Leave breadcrumb.
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_Delivery_Note: pauseView");
+
+            // Pause updating.
 			infoview.pause();
 		}
 		catch (Exception e)
@@ -189,7 +195,10 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 	{
 		try
 		{
-			DateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm");
+            // Leave breadcrumb.
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_Delivery_Note: updateUI");
+
+            DateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm");
 			
 			// InfoView.
 			infoview.setDefaultTv1("Delivery note");
@@ -438,7 +447,10 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 	{
 		try
 		{
-			// If customer has not paid all, and has not signed, ask for their signature now.
+            // Leave breadcrumb.
+            CrashReporter.leaveBreadcrumb("Trip_Undelivered_Delivery_Note: finishOrder");
+
+            // If customer has not paid all, and has not signed, ask for their signature now.
 			if (Active.order.getOutstanding().compareTo(BigDecimal.ZERO) > 0 && !Active.order.CustomerSignature)
 			{
 				trip.captureCustomersName();
