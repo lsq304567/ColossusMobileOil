@@ -64,6 +64,9 @@ public class Trip_Report extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Report: resumeView");
+
 			// Resume updating.
 			infoview.resume();
 			
@@ -84,6 +87,9 @@ public class Trip_Report extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Report: pauseView");
+
 			// Pause updating.
 			infoview.pause();
 		}
@@ -98,7 +104,10 @@ public class Trip_Report extends MyFlipperView
 	{
 		try
 		{
-			// Update trip no. 
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Report: updateUI");
+
+			// Update trip no.
 			infoview.setDefaultTv1("Trip " + Active.trip.No);
 			infoview.setDefaultTv2("");
 		}
@@ -190,5 +199,4 @@ public class Trip_Report extends MyFlipperView
 			}
 		}
 	};
-
 }
