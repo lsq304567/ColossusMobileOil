@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Colossus Mobile</string>
-    <string name="version">v0.99t20</string>
+    <string name="version">v0.99t21</string>
     <string name="copyright">Copyright \u00A9 2012&#8211;2016 SWIFTsoft</string>
 
     <!-- Connect to licensing server on AZURE -->

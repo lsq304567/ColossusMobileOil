@@ -1,3 +1,14 @@
+V0.99t21
+========
+
+Totaliser values added to EoD report
+
+Added capacity of line product to the infoview
+
+Updated return of Stock to add destination of the returned product
+
+Addition of degree symbol to temperatures
+
 V0.99t20
 ========
 
