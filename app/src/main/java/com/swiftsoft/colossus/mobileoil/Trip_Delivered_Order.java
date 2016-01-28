@@ -142,10 +142,11 @@ public class Trip_Delivered_Order extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Delivered_Order: updateUI");
+
 			if (selectedOrder != null)
 			{
-				DateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm");
-
 				String customer = selectedOrder.CustomerName + "\n" + selectedOrder.CustomerAddress;
 				String delAddress = selectedOrder.DeliveryName + "\n" + selectedOrder.DeliveryAddress;
 
@@ -155,6 +156,8 @@ public class Trip_Delivered_Order extends MyFlipperView
 
 				// If delivery address is different, show it in bold.
 				tvOrderDelAddress.setTypeface(null, customer.equals(delAddress) ? Typeface.NORMAL : Typeface.BOLD);
+
+				CrashReporter.leaveBreadcrumb("Trip_Delivered_Order: updateUI - removing old order lines ...");
 
 				// Remove any old order lines.
 				while (tlOrderProductTable.getChildCount() > 1)
@@ -256,10 +259,13 @@ public class Trip_Delivered_Order extends MyFlipperView
 				else
 				{
 					Bitmap bitmap = BitmapFactory.decodeByteArray(selectedOrder.CustomerSignatureImage, 0, selectedOrder.CustomerSignatureImage.length);
-					
+
+					DateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm");
+
 					tvOrderSignatureName.setText(selectedOrder.CustomerSignatureName);
 					ivOrderSignatureImage.setImageBitmap(bitmap);
 					tvOrderSignatureDateTime.setText(df.format(selectedOrder.CustomerSignatureDateTime));
+                    
 					llOrderSignature.setVisibility(View.VISIBLE);
 				}
 	
