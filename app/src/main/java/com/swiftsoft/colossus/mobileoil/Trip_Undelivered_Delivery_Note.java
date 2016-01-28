@@ -52,13 +52,11 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 	private TextView tvSignatureName;
 	private TextView tvSignatureDateTime;
 	private Button btnPayment;
-	private Button btnSignature;
-	private Button btnNext;
 
     private LinearLayout llPaymentMessages;
     private TextView tvTableValueHeader;
 
-	private DecimalFormat decf2;
+	private DecimalFormat decimalFormat;
 
 	public Trip_Undelivered_Delivery_Note(Context context)
 	{
@@ -112,8 +110,8 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 			tvSignatureName = (TextView)this.findViewById(R.id.trip_undelivered_delivery_note_signature_name);
 			tvSignatureDateTime = (TextView)this.findViewById(R.id.trip_undelivered_delivery_note_signature_datetime);
 			btnPayment = (Button)this.findViewById(R.id.trip_undelivered_delivery_note_payment);
-			btnSignature = (Button)this.findViewById(R.id.trip_undelivered_delivery_note_signature);
-			btnNext = (Button)this.findViewById(R.id.trip_undelivered_delivery_note_next);
+            Button btnSignature = (Button) this.findViewById(R.id.trip_undelivered_delivery_note_signature);
+            Button btnNext = (Button) this.findViewById(R.id.trip_undelivered_delivery_note_next);
 
             llPaymentMessages = (LinearLayout)this.findViewById(R.id.trip_undelivered_delivery_note_payments);
             tvTableValueHeader = (TextView)this.findViewById(R.id.trip_undelivered_delivery_note_table_header_value);
@@ -123,7 +121,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 			btnNext.setOnClickListener(onNext);
 			
 			// Setup standard decimal format.
-			decf2 = new DecimalFormat("#,##0.00");
+			decimalFormat = new DecimalFormat("#,##0.00");
 		}
 		catch (Exception e)
 		{
@@ -212,17 +210,18 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 			{
 				for (dbTripOrderLine line : Active.order.GetTripOrderLines())
 				{
+					@SuppressLint("InflateParams")
 					TableRow tr = (TableRow)inflater.inflate(R.layout.trip_undelivered_delivery_note_tablerow, null);
 		
 					TextView tvDesc = (TextView) tr.findViewById(R.id.trip_undelivered_delivery_note_tablerow_desc);
 					tvDesc.setText(line.Product.Desc);
 					
 					TextView tvDeliveredQty = (TextView) tr.findViewById(R.id.trip_undelivered_delivery_note_tablerow_delivered);
-					tvDeliveredQty.setText(Integer.toString(line.DeliveredQty));
+					tvDeliveredQty.setText(String.format("%d", line.DeliveredQty));
 
 					TextView tvValue = (TextView) tr.findViewById(R.id.trip_undelivered_delivery_note_tablerow_value);
 
-					tvValue.setText(line.getDeliveredQtyVariesFromOrdered() && line.getDeliveredPrice().compareTo(BigDecimal.ZERO) == 0 ? "" : "" + decf2.format(line.getDeliveredNettValue().add(line.getDeliveredSurchargeValue())));
+					tvValue.setText(line.getDeliveredQtyVariesFromOrdered() && line.getDeliveredPrice().compareTo(BigDecimal.ZERO) == 0 ? "" : "" + decimalFormat.format(line.getDeliveredNettValue().add(line.getDeliveredSurchargeValue())));
 
                     tvValue.setVisibility(Active.order.HidePrices ? View.GONE : View.VISIBLE);
 
@@ -232,7 +231,8 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 					// If delivered qty varies too much from the ordered qty, then allow driver to reprice.
 					if (line.getDeliveredQtyVariesFromOrdered())
 					{
-						TableRow tr2 = (TableRow)inflater.inflate(R.layout.trip_undelivered_delivery_note_tablerow2, null);
+						@SuppressLint("InflateParams")
+                        TableRow tr2 = (TableRow)inflater.inflate(R.layout.trip_undelivered_delivery_note_tablerow2, null);
 						
 						Button btnNewPrice = (Button)tr2.findViewById(R.id.trip_undelivered_delivery_note_tablerow2_button);
 						btnNewPrice.setOnClickListener(onNewPrice);
@@ -259,7 +259,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
                 llPaymentMessages.setVisibility(Active.order.HidePrices ? View.GONE : View.VISIBLE);
 				
 				// Update view.
-				tvVat.setText(decf2.format(vat));
+				tvVat.setText(decimalFormat.format(vat));
 				
 				if (accBalance.compareTo(BigDecimal.ZERO) == 0)
 				{
@@ -268,10 +268,10 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 				else
 				{
 					trAccBalanceRow.setVisibility(View.VISIBLE);
-					tvAccBalance.setText(decf2.format(accBalance));
+					tvAccBalance.setText(decimalFormat.format(accBalance));
 				}
 				
-				tvTotal.setText(decf2.format(creditTotal));
+				tvTotal.setText(decimalFormat.format(creditTotal));
 				
 				if (paidOffice.compareTo(BigDecimal.ZERO) == 0)
 				{
@@ -280,7 +280,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 				else
 				{
 					trPaidOfficeRow.setVisibility(View.VISIBLE);
-					tvPaidOffice.setText(decf2.format(paidOffice));
+					tvPaidOffice.setText(decimalFormat.format(paidOffice));
 				}
 				
 				if (paidDriver.compareTo(BigDecimal.ZERO) == 0)
@@ -290,7 +290,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 				else
 				{
 					trPaidDriverRow.setVisibility(View.VISIBLE);
-					tvPaidDriver.setText(decf2.format(paidDriver));
+					tvPaidDriver.setText(decimalFormat.format(paidDriver));
 				}
 				
 				if (discount.compareTo(BigDecimal.ZERO) == 0)
@@ -300,7 +300,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 				else
 				{
 					trDiscountRow.setVisibility(View.VISIBLE);
-					tvDiscount.setText(decf2.format(discount));
+					tvDiscount.setText(decimalFormat.format(discount));
 				}
 
 				if (paidOffice.compareTo(BigDecimal.ZERO) == 0 && paidDriver.compareTo(BigDecimal.ZERO) == 0 && discount.compareTo(BigDecimal.ZERO) == 0)
@@ -312,15 +312,15 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 				{
 					trSubtotalRow.setVisibility(View.VISIBLE);
 					trOutstandingRow.setVisibility(View.VISIBLE);
-					tvOutstanding.setText(decf2.format(outstanding));
+					tvOutstanding.setText(decimalFormat.format(outstanding));
 				}
 
 				if (surcharge.compareTo(BigDecimal.ZERO) != 0 && outstanding.compareTo(BigDecimal.ZERO) > 0)
 				{
                     llCashDiscountMsg.setVisibility(Active.order.HidePrices ? View.GONE : View.VISIBLE);
 
-                    tvCashDiscountMsg1.setText("Please pay driver " + decf2.format(cashTotal.subtract(paidOffice).subtract(surchargeVatAmount)));
-					tvCashDiscountMsg2.setText("to receive a cash discount of " + decf2.format(surcharge.add(surchargeVatAmount)));
+                    tvCashDiscountMsg1.setText(String.format("Please pay driver %s", decimalFormat.format(cashTotal.subtract(paidOffice).subtract(surchargeVatAmount))));
+					tvCashDiscountMsg2.setText(String.format("to receive a cash discount of %s", decimalFormat.format(surcharge.add(surchargeVatAmount))));
 				}
 				else
 				{
@@ -351,7 +351,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 		}
 	}
 	
-	OnClickListener onNewPrice = new OnClickListener()
+	private final OnClickListener onNewPrice = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -374,7 +374,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 		}
 	};
 
-	OnClickListener onPayment = new OnClickListener()
+	private final OnClickListener onPayment = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -394,7 +394,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 		}
 	};
 
-	OnClickListener onSignature = new OnClickListener()
+	private final OnClickListener onSignature = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -414,7 +414,7 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 		}
 	};
 
-	OnClickListener onNext = new OnClickListener()
+	private final OnClickListener onNext = new OnClickListener()
 	{		
 		@Override
 		public void onClick(View paramView)
