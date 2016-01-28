@@ -116,9 +116,9 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
             llPaymentMessages = (LinearLayout)this.findViewById(R.id.trip_undelivered_delivery_note_payments);
             tvTableValueHeader = (TextView)this.findViewById(R.id.trip_undelivered_delivery_note_table_header_value);
 			
-			btnPayment.setOnClickListener(onPayment);
-			btnSignature.setOnClickListener(onSignature);
-			btnNext.setOnClickListener(onNext);
+			btnPayment.setOnClickListener(onClickListener);
+			btnSignature.setOnClickListener(onClickListener);
+			btnNext.setOnClickListener(onClickListener);
 			
 			// Setup standard decimal format.
 			decimalFormat = new DecimalFormat("#,##0.00");
@@ -244,7 +244,8 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
                         TableRow tr2 = (TableRow)inflater.inflate(R.layout.trip_undelivered_delivery_note_tablerow2, null);
 						
 						Button btnNewPrice = (Button)tr2.findViewById(R.id.trip_undelivered_delivery_note_tablerow2_button);
-						btnNewPrice.setOnClickListener(onNewPrice);
+                        
+						btnNewPrice.setOnClickListener(onClickListener);
 						btnNewPrice.setTag(line);
 
 						btnNewPrice.setText(line.getDeliveredPrice().compareTo(BigDecimal.ZERO) == 0 ? "Ordered " + line.OrderedQty + " - tap to price" : "Ordered " + line.OrderedQty);
@@ -359,89 +360,66 @@ public class Trip_Undelivered_Delivery_Note extends MyFlipperView
 			CrashReporter.logHandledException(e);
 		}
 	}
-	
-	private final OnClickListener onNewPrice = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Delivery_Note: onNewPrice");
 
-				// Set Active.orderLine
-				Active.orderLine = (dbTripOrderLine)paramView.getTag();
-				
-				// Show amend price dialog.
-				trip.amendPrice();
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+    private final OnClickListener onClickListener = new OnClickListener()
+    {
+        @Override
+        public void onClick(View view)
+        {
+            try
+            {
+                switch (view.getId())
+                {
+                    case R.id.trip_undelivered_delivery_note_tablerow2_button:
 
-	private final OnClickListener onPayment = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Delivery_Note: onPayment");
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Delivery_Note: onClick - NewPrice");
 
-				// Show payment dialog.
-				trip.acceptPayment(false);
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                        // Set Active.orderLine
+                        Active.orderLine = (dbTripOrderLine)view.getTag();
 
-	private final OnClickListener onSignature = new OnClickListener()
-	{
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Delivery_Note: onSignature");
+                        // Show amend price dialog.
+                        trip.amendPrice();
 
-				// Capture signature.
-				trip.captureCustomersName();
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                        break;
 
-	private final OnClickListener onNext = new OnClickListener()
-	{		
-		@Override
-		public void onClick(View paramView)
-		{
-			try
-			{
-				// Leave breadcrumb.
-				CrashReporter.leaveBreadcrumb("Trip_Undelivered_Delivery_Note: onNext");
-				
-				// Order now complete.
-				finishOrder();
-			}
-			catch (Exception e)
-			{
-				CrashReporter.logHandledException(e);
-			}
-		}
-	};
+                    case R.id.trip_undelivered_delivery_note_payment:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Delivery_Note: onClick - Payment");
+
+                        // Show payment dialog.
+                        trip.acceptPayment(false);
+
+                        break;
+
+                    case R.id.trip_undelivered_delivery_note_next:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Delivery_Note: onClick - Next");
+
+                        // Order now complete.
+                        finishOrder();
+
+                        break;
+
+                    case R.id.trip_undelivered_delivery_note_signature:
+
+                        // Leave breadcrumb.
+                        CrashReporter.leaveBreadcrumb("Trip_Undelivered_Delivery_Note: onClick - Signature");
+
+                        // Capture signature.
+                        trip.captureCustomersName();
+
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                CrashReporter.logHandledException(e);
+            }
+        }
+    };
 
 	public void finishOrder()
 	{
