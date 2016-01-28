@@ -19,8 +19,7 @@ import java.text.DecimalFormat;
 public class Trip_Undelivered_COD extends MyFlipperView
 {
 	private Trip trip;
-	private LayoutInflater inflater;
-	
+
 	private MyInfoView1Line infoview;
 	private TextView tvAmountAgreed;
 	private TableRow trCashRow;
@@ -30,11 +29,8 @@ public class Trip_Undelivered_COD extends MyFlipperView
 	private TableRow trVoucherRow;
 	private TextView tvVoucherAmount;
 	private TextView tvAmountOutstanding;
-	private Button btnBack;
-	private Button btnPayment;
-	private Button btnNext;
-	
-	private DecimalFormat decf2;
+
+	private DecimalFormat decimalFormat;
 	
 	public Trip_Undelivered_COD(Context context)
 	{
@@ -59,7 +55,7 @@ public class Trip_Undelivered_COD extends MyFlipperView
 			trip = (Trip)context;
 	
 			// Inflate layout.
-			inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			inflater.inflate(R.layout.trip_undelivered_cod, this, true);
 			
 			infoview = (MyInfoView1Line)this.findViewById(R.id.trip_undelivered_cod_infoview);
@@ -71,16 +67,16 @@ public class Trip_Undelivered_COD extends MyFlipperView
 			trVoucherRow = (TableRow)this.findViewById(R.id.trip_undelivered_cod_amount_voucher);
 			tvVoucherAmount = (TextView)this.findViewById(R.id.trip_undelivered_cod_amount_voucher_received);
 			tvAmountOutstanding = (TextView)this.findViewById(R.id.trip_undelivered_cod_amount_outstanding);
-			btnBack = (Button)this.findViewById(R.id.trip_undelivered_cod_back);
-			btnPayment = (Button)this.findViewById(R.id.trip_undelivered_cod_payment);
-			btnNext = (Button)this.findViewById(R.id.trip_undelivered_cod_next);
+			Button btnBack = (Button) this.findViewById(R.id.trip_undelivered_cod_back);
+			Button btnPayment = (Button) this.findViewById(R.id.trip_undelivered_cod_payment);
+			Button btnNext = (Button) this.findViewById(R.id.trip_undelivered_cod_next);
 			
 			btnBack.setOnClickListener(onBack);
 			btnPayment.setOnClickListener(onPayment);
 			btnNext.setOnClickListener(onNext);
 			
 			// Setup standard decimal format.
-			decf2 = new DecimalFormat("#,##0.00");
+			decimalFormat = new DecimalFormat("#,##0.00");
 		}
 		catch (Exception e)
 		{
@@ -127,14 +123,14 @@ public class Trip_Undelivered_COD extends MyFlipperView
 			infoview.setDefaultTv1("C.O.D.");
 			infoview.setDefaultTv2("");
 			
-			tvAmountAgreed.setText(decf2.format(Active.order.getCodBeforeDeliveryValue()));
+			tvAmountAgreed.setText(decimalFormat.format(Active.order.getCodBeforeDeliveryValue()));
 			trCashRow.setVisibility(Active.order.getCashReceived().compareTo(BigDecimal.ZERO) == 0 ? View.GONE : View.VISIBLE);
-			tvCashAmount.setText(decf2.format(Active.order.getCashReceived()));
+			tvCashAmount.setText(decimalFormat.format(Active.order.getCashReceived()));
 			trChequeRow.setVisibility(Active.order.getChequeReceived().compareTo(BigDecimal.ZERO) == 0 ? View.GONE : View.VISIBLE);
-			tvChequeAmount.setText(decf2.format(Active.order.getChequeReceived()));
+			tvChequeAmount.setText(decimalFormat.format(Active.order.getChequeReceived()));
 			trVoucherRow.setVisibility(Active.order.getVoucherReceived().compareTo(BigDecimal.ZERO) == 0 ? View.GONE : View.VISIBLE);
-			tvVoucherAmount.setText(decf2.format(Active.order.getVoucherReceived()));
-			tvAmountOutstanding.setText(decf2.format(Active.order.getCodBeforeDeliveryValue().subtract(Active.order.getPaidDriver())));
+			tvVoucherAmount.setText(decimalFormat.format(Active.order.getVoucherReceived()));
+			tvAmountOutstanding.setText(decimalFormat.format(Active.order.getCodBeforeDeliveryValue().subtract(Active.order.getPaidDriver())));
 		}
 		catch (Exception e)
 		{
@@ -142,7 +138,7 @@ public class Trip_Undelivered_COD extends MyFlipperView
 		}
 	}
 
-	OnClickListener onBack = new OnClickListener()
+	private final OnClickListener onBack = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -162,7 +158,7 @@ public class Trip_Undelivered_COD extends MyFlipperView
 		}
 	};
 
-	OnClickListener onPayment = new OnClickListener()
+	private final OnClickListener onPayment = new OnClickListener()
 	{
 		@Override
 		public void onClick(View paramView)
@@ -182,7 +178,7 @@ public class Trip_Undelivered_COD extends MyFlipperView
 		}
 	};
 
-	OnClickListener onNext = new OnClickListener()
+	private final OnClickListener onNext = new OnClickListener()
 	{		
 		@Override
 		public void onClick(View paramView)
@@ -200,7 +196,7 @@ public class Trip_Undelivered_COD extends MyFlipperView
 					// Warn driver COD is not fully paid.
 					AlertDialog.Builder builder = new AlertDialog.Builder(trip);
 					builder.setTitle("COD outstanding");
-					builder.setMessage(decf2.format(unpaidCod) + " outstanding.\n\nAre you sure you wish to continue?");
+					builder.setMessage(decimalFormat.format(unpaidCod) + " outstanding.\n\nAre you sure you wish to continue?");
 					
 					builder.setPositiveButton("Yes", new DialogInterface.OnClickListener()
 					{
