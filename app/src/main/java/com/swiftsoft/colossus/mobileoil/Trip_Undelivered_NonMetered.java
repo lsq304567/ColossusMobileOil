@@ -84,6 +84,9 @@ public class Trip_Undelivered_NonMetered extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Undelivered_NonMetered: resumeView");
+
 			// Resume updating.
 			infoview.resume();
 			
@@ -110,6 +113,9 @@ public class Trip_Undelivered_NonMetered extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Undelivered_NonMetered: pauseView");
+
 			// Pause updating.
 			infoview.pause();
 		}
@@ -124,6 +130,9 @@ public class Trip_Undelivered_NonMetered extends MyFlipperView
 	{
 		try
 		{
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Undelivered_NonMetered: updateUI");
+
 			infoview.setDefaultTv1("Non-Metered Product");
 			infoview.setDefaultTv2("");
 			
@@ -265,11 +274,20 @@ public class Trip_Undelivered_NonMetered extends MyFlipperView
     {
 		try
 		{
-	    	int quantity = -1;
+			// Leave breadcrumb.
+			CrashReporter.leaveBreadcrumb("Trip_Undelivered_NonMetered: validate");
+
+			int quantity = -1;
 	    	
 	    	// Check if value is valid.
-	    	try {quantity = decimalFormat.parse(etDelivered.getText().toString()).intValue();}
-	    	catch (ParseException e) {e.printStackTrace();}
+	    	try
+			{
+				quantity = decimalFormat.parse(etDelivered.getText().toString()).intValue();
+            }
+	    	catch (ParseException e)
+            {
+                e.printStackTrace();
+            }
 	    	   	
 	    	if (quantity < 0)
 	    	{
