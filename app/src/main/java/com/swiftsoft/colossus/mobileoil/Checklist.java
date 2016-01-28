@@ -27,13 +27,13 @@ import org.json.JSONObject;
 
 public class Checklist extends PreferenceActivity
 {
-	MyInfoView1Line infoview;
-	LinearLayout ll1;
-	LinearLayout ll2;
-	TextView message;
-	EditText issues;
-	Button button1;
-	Button button2;
+	private MyInfoView1Line infoview;
+	private LinearLayout ll1;
+	private LinearLayout ll2;
+	private TextView message;
+	private EditText issues;
+	private Button button1;
+	private Button button2;
 
 	private static final String msgChecklistCompleted = "Have you completed\nyour vehicle checklist?";
 	private static final String msgPerformChecklist = "Please complete your vehicle checklist, before starting deliveries";
@@ -60,7 +60,7 @@ public class Checklist extends PreferenceActivity
 	{
 		super.onRestoreInstanceState(state);
 
-        ControlSaver.restore(infoview, "Checklist.Indo", state);
+        ControlSaver.restore(infoview, "Checklist.Info", state);
         ControlSaver.restore(message, "Checklist.Message", state);
         ControlSaver.restore(issues, "Checklist.Issues", state);
         ControlSaver.restore(button1, "Checklist.Button1", state);
@@ -349,7 +349,7 @@ public class Checklist extends PreferenceActivity
 		}
 	}
 
-	void showPrompt1()
+	private void showPrompt1()
 	{
 		ll1.setVisibility(View.VISIBLE);
 		ll2.setVisibility(View.GONE);
@@ -358,7 +358,7 @@ public class Checklist extends PreferenceActivity
 		button2.setText("No");
 	}
 
-	void showPrompt2()
+	private void showPrompt2()
 	{
 		ll1.setVisibility(View.VISIBLE);
 		ll2.setVisibility(View.GONE);
@@ -367,7 +367,7 @@ public class Checklist extends PreferenceActivity
 		button2.setText("No");
 	}
 
-	void showPrompt3()
+	private void showPrompt3()
 	{
 		ll1.setVisibility(View.GONE);
 		ll2.setVisibility(View.VISIBLE);
@@ -378,7 +378,7 @@ public class Checklist extends PreferenceActivity
 		issues.requestFocus();
 	}
 
-	void startTripsActivity()
+	private void startTripsActivity()
 	{
 		try
 		{
